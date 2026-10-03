@@ -1,0 +1,437 @@
+<title>Воронка 2048</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Unbounded:wght@600;800&display=swap">
+<style>
+/* Layout: one narrow column — header with scores, square board, collection strip of every funnel stage */
+:root {
+  --bg: #F6F3FF;
+  --fg: #1E1640;
+  --muted: #6E6690;
+  --board: #D9D0F5;
+  --cell-empty: #E9E3FB;
+  --panel: #FFFFFF;
+  --accent: #FF4F93;
+  --accent-fg: #FFFFFF;
+  --veil: rgba(246, 243, 255, 0.86);
+  --display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #120E24; --fg: #F1ECFF; --muted: #A49CC8; --board: #241C45;
+    --cell-empty: #2F2659; --panel: #1C1638; --accent: #FF6FA8; --accent-fg: #1A0B1F;
+    --veil: rgba(18, 14, 36, 0.86); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #120E24; --fg: #F1ECFF; --muted: #A49CC8; --board: #241C45;
+  --cell-empty: #2F2659; --panel: #1C1638; --accent: #FF6FA8; --accent-fg: #1A0B1F;
+  --veil: rgba(18, 14, 36, 0.86); color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body);
+  padding-inline: 16px; -webkit-tap-highlight-color: transparent;
+}
+.wrap { max-width: 460px; margin: 0 auto; padding-block: 20px 32px; display: flex; flex-direction: column; gap: 16px; }
+
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+h1 { font: 800 clamp(30px, 9vw, 42px)/0.95 var(--display); margin: 0; letter-spacing: -0.02em; }
+h1 span { color: var(--accent); }
+.tag { margin: 6px 0 0; color: var(--muted); font-size: 14px; font-weight: 500; text-wrap: balance; }
+.scores { display: flex; gap: 8px; }
+.score { background: var(--panel); border-radius: 12px; padding: 8px 14px; min-width: 76px; text-align: center; }
+.score b { display: block; font: 600 20px/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.score small { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+.controls { display: flex; gap: 8px; align-items: center; }
+.controls .goal { margin-left: auto; font-size: 13px; color: var(--muted); text-align: right; }
+.goal b { color: var(--fg); }
+button {
+  font: 700 14px var(--body); border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer;
+  background: var(--panel); color: var(--fg);
+}
+button.primary { background: var(--accent); color: var(--accent-fg); }
+button:disabled { opacity: 0.4; cursor: default; }
+button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.board {
+  position: relative; width: 100%; aspect-ratio: 1; background: var(--board); border-radius: 18px;
+  touch-action: none; user-select: none; -webkit-user-select: none; overflow: hidden;
+}
+.cell { position: absolute; top: 0; left: 0; background: var(--cell-empty); border-radius: 12px; }
+.tile { position: absolute; top: 0; left: 0; transition: transform 110ms ease-out; will-change: transform; }
+.board.noanim .tile { transition: none; }
+.tile .in {
+  width: 100%; height: 100%; border-radius: 12px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px; text-align: center;
+}
+.tile .nm { font: 800 calc(var(--cell) * 0.165)/1 var(--body); letter-spacing: -0.01em; padding-inline: 4px; }
+.tile .vl { font: 600 calc(var(--cell) * 0.11)/1 var(--display); opacity: 0.65; font-variant-numeric: tabular-nums; }
+.tile.new .in { animation: pop 170ms ease-out 90ms backwards; }
+.tile.bump .in { animation: bump 200ms ease-out; }
+.tile.gone { z-index: 0; }
+.tile { z-index: 1; }
+@keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes bump { 0% { transform: scale(1); } 45% { transform: scale(1.14); } 100% { transform: scale(1); } }
+
+/* Funnel stages: fixed pairs so each tile reads on either board */
+[data-l="1"] .in, .chip[data-l="1"] { background: #EFEAFF; color: #3B2D7A; }
+[data-l="2"] .in, .chip[data-l="2"] { background: #DED5FF; color: #33266E; }
+[data-l="3"] .in, .chip[data-l="3"] { background: #C9BCFF; color: #2A1E62; }
+[data-l="4"] .in, .chip[data-l="4"] { background: #B3A2FF; color: #22184F; }
+[data-l="5"] .in, .chip[data-l="5"] { background: #FFD0E2; color: #6B1240; }
+[data-l="6"] .in, .chip[data-l="6"] { background: #FFADCB; color: #5E0E37; }
+[data-l="7"] .in, .chip[data-l="7"] { background: #FF86B3; color: #4A0829; }
+[data-l="8"] .in, .chip[data-l="8"] { background: #FF4F93; color: #FFFFFF; }
+[data-l="9"] .in, .chip[data-l="9"] { background: #E0307A; color: #FFFFFF; }
+[data-l="10"] .in, .chip[data-l="10"] { background: #A45BFF; color: #FFFFFF; }
+[data-l="11"] .in, .chip[data-l="11"] { background: #6B35FF; color: #FFFFFF; box-shadow: 0 0 22px rgba(107, 53, 255, 0.55); }
+[data-l="12"] .in, .chip[data-l="12"] { background: #3A1FB8; color: #FFE08A; }
+[data-l="13"] .in, .chip[data-l="13"] { background: #170B4F; color: #FFD45C; box-shadow: 0 0 26px rgba(255, 212, 92, 0.45); }
+
+.overlay {
+  position: absolute; inset: 0; z-index: 5; background: var(--veil); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 24px;
+  animation: fade 250ms ease-out;
+}
+.overlay h2 { font: 800 clamp(24px, 7vw, 34px)/1.05 var(--display); margin: 0; text-wrap: balance; }
+.overlay p { margin: 0; color: var(--muted); font-weight: 500; max-width: 30ch; }
+.overlay .row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+@keyframes fade { from { opacity: 0; } }
+
+.collection h3 { font: 700 11px var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 700 12px var(--body); padding: 6px 10px; border-radius: 999px; }
+.chip.locked { background: var(--cell-empty); color: var(--muted); }
+.hint { font-size: 13px; color: var(--muted); margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tile { transition: none; }
+  .tile.new .in, .tile.bump .in, .overlay { animation: none; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Ворон<span>ка</span></h1>
+      <p class="tag">З'єднуй однакові етапи і доведи курс до аншлагу</p>
+    </div>
+    <div class="scores">
+      <div class="score"><small>Рахунок</small><b id="score">0</b></div>
+      <div class="score"><small>Рекорд</small><b id="best">0</b></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <button id="newBtn" class="primary" type="button">Нова гра</button>
+    <button id="undoBtn" type="button">Назад · 3</button>
+    <div class="goal" id="goal"></div>
+  </div>
+
+  <div class="board" id="board" aria-label="Ігрове поле" tabindex="0"></div>
+
+  <section class="collection">
+    <h3>Етапи воронки</h3>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <p class="hint">Стрілки або свайп. Два однакові етапи зливаються в наступний. Кнопка «Назад» скасовує хід, але таких спроб лише три на гру.</p>
+</div>
+
+<script>
+(function () {
+  const STAGES = [null, "Пост", "Лайк", "Репост", "Підписка", "Лід", "Заявка", "Дзвінок",
+    "Оплата", "Студент", "Відгук", "Аншлаг", "Кейс", "Легенда"];
+  const MAX = STAGES.length - 1;
+  const WIN = 11;
+  const UNDOS = 3;
+  const KEY = "voronka.v1";
+
+  const board = document.getElementById("board");
+  const $score = document.getElementById("score");
+  const $best = document.getElementById("best");
+  const $undo = document.getElementById("undoBtn");
+  const $goal = document.getElementById("goal");
+  const $chips = document.getElementById("chips");
+
+  let grid, score, best = 0, undos, history, won, keepGoing, discovered = 1, nextId = 1;
+  let m = { cell: 0, gap: 0 };
+  const cells = [];
+  let overlay = null;
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(snapshot())); } catch (e) {}
+  }
+  function snapshot() {
+    return { cells: levels(), score, best, undos, won, keepGoing, discovered };
+  }
+  function levels() {
+    return grid.flat().map(t => (t ? t.level : 0));
+  }
+
+  function measure() {
+    const W = board.clientWidth;
+    m.gap = Math.round(W * 0.028);
+    m.cell = (W - m.gap * 5) / 4;
+    board.style.setProperty("--cell", m.cell + "px");
+  }
+  function xy(r, c) {
+    return [m.gap + c * (m.cell + m.gap), m.gap + r * (m.cell + m.gap)];
+  }
+  function size(el) {
+    el.style.width = el.style.height = m.cell + "px";
+  }
+  function place(t) {
+    const [x, y] = xy(t.r, t.c);
+    t.el.style.transform = `translate(${x}px, ${y}px)`;
+  }
+  function layout() {
+    measure();
+    board.classList.add("noanim");
+    cells.forEach(({ el, r, c }) => {
+      size(el);
+      const [x, y] = xy(r, c);
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    grid.flat().forEach(t => { if (t) { size(t.el); place(t); } });
+    requestAnimationFrame(() => board.classList.remove("noanim"));
+  }
+
+  function paint(t) {
+    t.el.dataset.l = t.level;
+    t.el.innerHTML = `<div class="in"><span class="nm">${STAGES[t.level]}</span><span class="vl">${2 ** t.level}</span></div>`;
+  }
+  function makeTile(r, c, level, fresh) {
+    const el = document.createElement("div");
+    el.className = "tile" + (fresh ? " new" : "");
+    const t = { id: nextId++, r, c, level, el };
+    paint(t);
+    size(el);
+    place(t);
+    board.appendChild(el);
+    grid[r][c] = t;
+    return t;
+  }
+
+  function spawn() {
+    const empty = [];
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) if (!grid[r][c]) empty.push([r, c]);
+    if (!empty.length) return;
+    const [r, c] = empty[Math.floor(Math.random() * empty.length)];
+    makeTile(r, c, Math.random() < 0.9 ? 1 : 2, true);
+  }
+
+  function clearBoard() {
+    if (grid) grid.flat().forEach(t => t && t.el.remove());
+    board.querySelectorAll(".tile").forEach(el => el.remove());
+    grid = [[null, null, null, null], [null, null, null, null], [null, null, null, null], [null, null, null, null]];
+  }
+  function fromLevels(arr) {
+    clearBoard();
+    arr.forEach((lv, i) => { if (lv) makeTile(Math.floor(i / 4), i % 4, lv, false); });
+  }
+
+  function newGame() {
+    hideOverlay();
+    clearBoard();
+    score = 0; undos = UNDOS; history = null; won = false; keepGoing = false;
+    spawn(); spawn();
+    update();
+    save();
+  }
+
+  function canMove() {
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+      const t = grid[r][c];
+      if (!t) return true;
+      if (c < 3 && grid[r][c + 1] && grid[r][c + 1].level === t.level) return true;
+      if (r < 3 && grid[r + 1][c] && grid[r + 1][c].level === t.level) return true;
+    }
+    return false;
+  }
+
+  const VEC = { left: [0, -1], right: [0, 1], up: [-1, 0], down: [1, 0] };
+  function move(dir) {
+    if (overlay) return;
+    const [dr, dc] = VEC[dir];
+    const before = { cells: levels(), score };
+    const rows = [0, 1, 2, 3], cols = [0, 1, 2, 3];
+    if (dr === 1) rows.reverse();
+    if (dc === 1) cols.reverse();
+    const merged = new Set();
+    let moved = false, gained = 0;
+
+    for (const r of rows) for (const c of cols) {
+      const t = grid[r][c];
+      if (!t) continue;
+      let nr = r, nc = c, target = null;
+      for (;;) {
+        const tr = nr + dr, tc = nc + dc;
+        if (tr < 0 || tr > 3 || tc < 0 || tc > 3) break;
+        const o = grid[tr][tc];
+        if (!o) { nr = tr; nc = tc; continue; }
+        if (o.level === t.level && o.level < MAX && !merged.has(o.id)) target = o;
+        break;
+      }
+      if (target) {
+        grid[r][c] = null;
+        target.level++;
+        merged.add(target.id);
+        gained += 2 ** target.level;
+        t.r = target.r; t.c = target.c;
+        t.el.classList.add("gone");
+        place(t);
+        setTimeout(() => t.el.remove(), 120);
+        const tg = target;
+        setTimeout(() => {
+          paint(tg);
+          tg.el.classList.remove("new", "bump");
+          void tg.el.offsetWidth;
+          tg.el.classList.add("bump");
+        }, 100);
+        moved = true;
+      } else if (nr !== r || nc !== c) {
+        grid[r][c] = null;
+        grid[nr][nc] = t;
+        t.r = nr; t.c = nc;
+        place(t);
+        moved = true;
+      }
+    }
+    if (!moved) return;
+
+    history = before;
+    score += gained;
+    spawn();
+    update();
+    const top = Math.max(...levels());
+    if (!won && top >= WIN) {
+      won = true;
+      setTimeout(() => showOverlay("win"), 260);
+    } else if (!canMove()) {
+      setTimeout(() => showOverlay("over"), 260);
+    }
+    save();
+  }
+
+  function undo() {
+    if (!history || undos <= 0) return;
+    hideOverlay();
+    fromLevels(history.cells);
+    score = history.score;
+    history = null;
+    undos--;
+    update();
+    save();
+  }
+
+  function update() {
+    const top = Math.max(1, ...levels());
+    if (top > discovered) discovered = top;
+    if (score > best) best = score;
+    $score.textContent = score;
+    $best.textContent = best;
+    $undo.textContent = `Назад · ${undos}`;
+    $undo.disabled = !history || undos <= 0;
+    $goal.innerHTML = top >= MAX
+      ? "Ти <b>Легенда</b>"
+      : `Далі: <b>${STAGES[top + 1]}</b>`;
+    let html = "";
+    for (let i = 1; i <= MAX; i++) {
+      html += i <= discovered
+        ? `<span class="chip" data-l="${i}">${STAGES[i]}</span>`
+        : `<span class="chip locked">${i === discovered + 1 ? "???" : "· · ·"}</span>`;
+    }
+    $chips.innerHTML = html;
+  }
+
+  function showOverlay(kind) {
+    hideOverlay();
+    overlay = document.createElement("div");
+    overlay.className = "overlay";
+    if (kind === "win") {
+      overlay.innerHTML = `<h2>Аншлаг!</h2><p>Курс sold out. Можна грати далі й дійти до «Кейсу» та «Легенди».</p>
+        <div class="row"><button class="primary" data-a="go" type="button">Грати далі</button><button data-a="new" type="button">Нова гра</button></div>`;
+    } else {
+      overlay.innerHTML = `<h2>Воронка забилась</h2><p>Рахунок: ${score}. ${undos > 0 ? "Можна відкотити хід і спробувати інакше." : "Спроби «Назад» закінчились."}</p>
+        <div class="row"><button class="primary" data-a="new" type="button">Нова гра</button>${undos > 0 && history ? `<button data-a="undo" type="button">Назад · ${undos}</button>` : ""}</div>`;
+    }
+    overlay.addEventListener("click", e => {
+      const a = e.target.closest("button")?.dataset.a;
+      if (a === "go") { keepGoing = true; hideOverlay(); save(); }
+      else if (a === "new") newGame();
+      else if (a === "undo") undo();
+    });
+    board.appendChild(overlay);
+  }
+  function hideOverlay() {
+    if (overlay) { overlay.remove(); overlay = null; }
+  }
+
+  // Input: keyboard
+  const KEYS = {
+    ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down",
+    KeyA: "left", KeyD: "right", KeyW: "up", KeyS: "down"
+  };
+  document.addEventListener("keydown", e => {
+    const d = KEYS[e.code];
+    if (!d || e.metaKey || e.ctrlKey || e.altKey) return;
+    e.preventDefault();
+    move(d);
+  });
+
+  // Input: swipe
+  let start = null;
+  board.addEventListener("pointerdown", e => {
+    if (e.target.closest("button")) return;
+    start = { x: e.clientX, y: e.clientY };
+    try { board.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  board.addEventListener("pointerup", e => {
+    if (!start) return;
+    const dx = e.clientX - start.x, dy = e.clientY - start.y;
+    start = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
+    move(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up"));
+  });
+  board.addEventListener("pointercancel", () => { start = null; });
+
+  document.getElementById("newBtn").addEventListener("click", newGame);
+  $undo.addEventListener("click", undo);
+
+  function boot(data) {
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+      const el = document.createElement("div");
+      el.className = "cell";
+      board.appendChild(el);
+      cells.push({ el, r, c });
+    }
+    measure();
+    const s = (data && data.game) || load();
+    if (s && Array.isArray(s.cells) && s.cells.length === 16) {
+      best = s.best || 0;
+      discovered = s.discovered || 1;
+      clearBoard();
+      fromLevels(s.cells);
+      score = s.score || 0; undos = s.undos ?? UNDOS; history = null;
+      won = !!s.won; keepGoing = !!s.keepGoing;
+      update();
+      if (!canMove()) showOverlay("over");
+    } else {
+      newGame();
+    }
+    layout();
+    new ResizeObserver(layout).observe(board);
+    window.claude?.hot?.snapshot?.(() => ({ game: snapshot() }));
+  }
+
+  window.claude?.hot?.ready ? window.claude.hot.ready(boot) : boot(window.claude?.hot?.data ?? {});
+})();
+</script>
