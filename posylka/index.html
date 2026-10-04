@@ -1,0 +1,430 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Посилкомат</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@500;700;800&family=JetBrains+Mono:wght@500;700&family=Rubik+Mono+One&display=swap">
+<style>
+/* Layout: one column that fills the screen — HUD, a sorting belt where parcels slide down, and four hub buttons laid out like the map (west, north, south, east) */
+:root {
+  color-scheme: dark;
+  --bg: #0F1420;
+  --panel: #1A2133;
+  --fg: #EEF1F7;
+  --muted: #8B95AD;
+  --belt: #1C2438;
+  --belt-line: #263049;
+  --kraft: #C8955A;
+  --kraft-edge: #A2753F;
+  --label: #FBFAF6;
+  --label-fg: #1B1F2A;
+  --danger: #FF5A5F;
+  --kyiv: #4C8DFF;
+  --lviv: #33C27F;
+  --odesa: #F2B630;
+  --kharkiv: #A77BFF;
+  --display: "Rubik Mono One", "Arial Black", system-ui, sans-serif;
+  --body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); padding-inline: 16px; -webkit-tap-highlight-color: transparent; }
+.wrap { max-width: 480px; height: 100%; margin: 0 auto; padding-block: 14px; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box; }
+
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+h1 { font: 400 clamp(20px, 6vw, 26px)/1 var(--display); margin: 0; letter-spacing: -0.02em; }
+h1 span { color: var(--odesa); }
+.lives { display: flex; gap: 6px; }
+.life { width: 18px; height: 16px; border-radius: 3px; background: var(--kraft); box-shadow: inset 0 -4px 0 var(--kraft-edge); transition: opacity 200ms, transform 200ms; }
+.life.lost { opacity: 0.18; transform: scale(0.8); }
+
+.hud { display: flex; gap: 8px; }
+.stat { flex: 1; background: var(--panel); border-radius: 10px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.stat small { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.stat b { font: 700 18px var(--mono); font-variant-numeric: tabular-nums; }
+#combo.hot { color: var(--odesa); }
+
+.belt {
+  position: relative; flex: 1; min-height: 280px; border-radius: 16px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
+  background: repeating-linear-gradient(180deg, var(--belt) 0 34px, var(--belt-line) 34px 36px);
+  background-size: 100% 36px;
+  animation: belt 1.2s linear infinite;
+}
+.belt.paused { animation-play-state: paused; }
+.belt::before, .belt::after { content: ""; position: absolute; top: 0; bottom: 0; width: 10px; background: repeating-linear-gradient(180deg, #2E3954 0 8px, #3A4766 8px 16px); z-index: 2; }
+.belt::before { left: 0; } .belt::after { right: 0; }
+@keyframes belt { to { background-position: 0 36px; } }
+.belt.shake { animation: belt 1.2s linear infinite, shake 300ms; }
+@keyframes shake { 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+
+.parcel {
+  position: absolute; top: 0; left: 50%; width: min(250px, 78%); margin-left: calc(min(250px, 78%) / -2);
+  background: var(--kraft); border-radius: 8px; padding: 12px 12px 14px; box-sizing: border-box;
+  box-shadow: inset 0 -6px 0 var(--kraft-edge), 0 10px 20px rgba(0, 0, 0, 0.35);
+  will-change: transform; opacity: 0.55; transition: opacity 150ms;
+}
+.parcel::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 6px; width: 26px; margin-left: -13px; background: rgba(255, 236, 200, 0.22); }
+.parcel.active { opacity: 1; z-index: 3; }
+.parcel.active .lbl { outline: 3px solid var(--fg); outline-offset: 3px; }
+.parcel.out { transition: transform 280ms ease-in, opacity 280ms ease-in; opacity: 0; }
+.parcel.bad { transition: transform 360ms ease-in, opacity 360ms; opacity: 0; filter: grayscale(1); }
+.lbl { position: relative; background: var(--label); color: var(--label-fg); border-radius: 5px; padding: 8px 10px 9px; display: flex; flex-direction: column; gap: 4px; }
+.lbl .to { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6A7085; }
+.lbl .city { font: 800 clamp(19px, 5.6vw, 24px)/1.05 var(--body); letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.lbl .what { font-size: 13px; font-weight: 500; color: #474E63; }
+.lbl .ttn { display: flex; align-items: center; gap: 8px; font: 500 10px var(--mono); color: #6A7085; }
+.lbl .bars { flex: 1; height: 14px; background: repeating-linear-gradient(90deg, #1B1F2A 0 2px, transparent 2px 4px, #1B1F2A 4px 5px, transparent 5px 8px, #1B1F2A 8px 11px, transparent 11px 12px); }
+.sticker { position: absolute; top: -8px; right: 8px; font: 800 10px var(--body); letter-spacing: 0.08em; padding: 4px 7px; border-radius: 4px; transform: rotate(4deg); z-index: 1; }
+.sticker.fragile { background: var(--danger); color: #fff; }
+.sticker.urgent { background: var(--odesa); color: #2A1E00; }
+
+.toast {
+  position: absolute; left: 14px; right: 14px; bottom: 12px; z-index: 4; background: rgba(15, 20, 32, 0.92); border: 1px solid var(--danger);
+  border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 500; text-align: center; animation: toast 2.4s ease forwards; pointer-events: none;
+}
+.toast.good { border-color: var(--lviv); }
+@keyframes toast { 0% { opacity: 0; transform: translateY(8px); } 10%, 80% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+.pop { position: absolute; z-index: 4; font: 700 18px var(--mono); pointer-events: none; animation: pop 700ms ease-out forwards; }
+@keyframes pop { to { opacity: 0; transform: translateY(-40px); } }
+
+.hubs { display: grid; grid-template-columns: 1fr 1.25fr 1fr; grid-template-areas: "w n e" "w s e"; gap: 8px; }
+.hub {
+  font: 800 16px var(--body); border: 0; border-radius: 12px; padding: 12px 8px; cursor: pointer; color: #0F1420;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 52px;
+  transition: transform 80ms, filter 80ms;
+}
+.hub small { font: 700 11px var(--mono); opacity: 0.6; }
+.hub:active, .hub.press { transform: scale(0.96); filter: brightness(1.15); }
+.hub:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+.hub[data-h="lviv"] { grid-area: w; background: var(--lviv); }
+.hub[data-h="kyiv"] { grid-area: n; background: var(--kyiv); }
+.hub[data-h="odesa"] { grid-area: s; background: var(--odesa); }
+.hub[data-h="kharkiv"] { grid-area: e; background: var(--kharkiv); }
+
+.screen {
+  position: absolute; inset: 0; z-index: 6; background: rgba(15, 20, 32, 0.9); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 24px; overflow-y: auto;
+}
+.screen h2 { font: 400 clamp(22px, 7vw, 30px)/1.1 var(--display); margin: 0; text-wrap: balance; }
+.screen p { margin: 0; color: var(--muted); max-width: 34ch; line-height: 1.45; }
+.screen .rank { font: 800 20px var(--body); color: var(--odesa); }
+.screen .nums { display: flex; gap: 18px; font: 500 13px var(--body); color: var(--muted); }
+.screen .nums b { display: block; font: 700 22px var(--mono); color: var(--fg); }
+.go { font: 800 16px var(--body); border: 0; border-radius: 12px; padding: 14px 22px; cursor: pointer; background: var(--odesa); color: #2A1E00; }
+.go:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; font-size: 13px; text-align: left; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; background: var(--c); vertical-align: -1px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .belt { animation: none; }
+  .belt.shake { animation: none; }
+  .parcel.out, .parcel.bad { transition: opacity 150ms; }
+}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <h1>Посилко<span>мат</span></h1>
+    <div class="lives" id="lives" aria-label="Життя"></div>
+  </div>
+  <div class="hud">
+    <div class="stat"><small>Бали</small><b id="score">0</b></div>
+    <div class="stat"><small>Комбо</small><b id="combo">×1</b></div>
+    <div class="stat"><small>Рекорд</small><b id="best">0</b></div>
+  </div>
+
+  <div class="belt paused" id="belt" aria-label="Сортувальна стрічка">
+    <div class="screen" id="screen"></div>
+  </div>
+
+  <div class="hubs">
+    <button class="hub" data-h="lviv" type="button">Львів<small>←</small></button>
+    <button class="hub" data-h="kyiv" type="button">Київ<small>↑</small></button>
+    <button class="hub" data-h="odesa" type="button">Одеса<small>↓</small></button>
+    <button class="hub" data-h="kharkiv" type="button">Харків<small>→</small></button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const HUBS = {
+    kyiv:    { name: "Київ",   region: "Київщина",   to: "до Києва",   dx: 0,    dy: -1,
+               towns: ["Бровари", "Ірпінь", "Буча", "Біла Церква", "Бориспіль", "Обухів", "Фастів", "Вишгород", "Васильків", "Українка"] },
+    lviv:    { name: "Львів",  region: "Львівщина",  to: "до Львова",  dx: -1,   dy: 0,
+               towns: ["Дрогобич", "Трускавець", "Стрий", "Самбір", "Жовква", "Яворів", "Борислав", "Золочів", "Сколе", "Моршин"] },
+    odesa:   { name: "Одеса",  region: "Одещина",    to: "до Одеси",   dx: 0,    dy: 1,
+               towns: ["Ізмаїл", "Чорноморськ", "Білгород-Дністровський", "Южне", "Балта", "Подільськ", "Затока", "Рені", "Болград", "Овідіополь"] },
+    kharkiv: { name: "Харків", region: "Харківщина", to: "до Харкова", dx: 1,    dy: 0,
+               towns: ["Чугуїв", "Ізюм", "Лозова", "Куп'янськ", "Мерефа", "Балаклія", "Богодухів", "Люботин", "Красноград", "Валки"] }
+  };
+  const KEYS_H = Object.keys(HUBS);
+  const STUFF = [
+    "Сало від мами", "Розсада помідорів", "Кросівки з розпродажу", "Банки з консервацією", "Мішок гречки",
+    "Повербанк на 50 000 мАг", "Подарунок самому собі", "Сковорідка, яка «точно не пригорає»", "Худі на два розміри більше",
+    "Вареники, заморожені з любов'ю", "Таємна покупка з OLX", "Книжка, яку ніхто не дочитає", "Документи, дуже терміново",
+    "Чохол для телефона, вже третій", "Кавомашина в кредит", "Набір свічок «Затишна осінь»", "Корм для кота на рік",
+    "Шкарпетки, 30 пар", "Гантелі, куплені в січні", "Ялинкові іграшки в жовтні", "Платівка, хоч програвача нема"
+  ];
+  const RANKS = [
+    [0, "Стажер на складі"], [150, "Оператор відділення"], [400, "Сортувальник"],
+    [800, "Старший сортувальник"], [1500, "Начальник терміналу"], [2500, "Легенда логістики"]
+  ];
+  const KEY = "posylkomat.best";
+
+  const belt = document.getElementById("belt");
+  const screen = document.getElementById("screen");
+  const $score = document.getElementById("score");
+  const $combo = document.getElementById("combo");
+  const $best = document.getElementById("best");
+  const $lives = document.getElementById("lives");
+
+  let best = 0;
+  try { best = +localStorage.getItem(KEY) || 0; } catch (e) {}
+
+  let parcels = [], score, combo, maxCombo, lives, delivered, running = false, last = 0, lastTown = "";
+
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const mult = () => Math.min(5, 1 + Math.floor(combo / 5));
+  const ttn = () => "20" + Array.from({ length: 12 }, () => Math.floor(Math.random() * 10)).join("").replace(/(\d{4})(\d{4})(\d{4})/, " $1 $2 $3");
+
+  function hud() {
+    $score.textContent = score;
+    $combo.textContent = "×" + mult();
+    $combo.classList.toggle("hot", mult() > 1);
+    $best.textContent = best;
+    $lives.innerHTML = [0, 1, 2].map(i => `<span class="life${i >= lives ? " lost" : ""}"></span>`).join("");
+  }
+
+  function spawn() {
+    const hub = pick(KEYS_H);
+    const townChance = delivered < 6 ? 0 : Math.min(0.8, 0.25 + (delivered - 6) * 0.03);
+    let town;
+    do { town = Math.random() < townChance ? pick(HUBS[hub].towns) : HUBS[hub].name; } while (town === lastTown);
+    lastTown = town;
+    const r = Math.random();
+    const kind = delivered > 8 && r < 0.12 ? "urgent" : delivered > 3 && r < 0.3 ? "fragile" : "normal";
+    const base = Math.max(1.7, 5.2 - delivered * 0.07);
+    const dur = kind === "urgent" ? base * 0.65 : base;
+
+    const el = document.createElement("div");
+    el.className = "parcel";
+    el.innerHTML =
+      (kind === "fragile" ? `<span class="sticker fragile">КРИХКЕ</span>` : "") +
+      (kind === "urgent" ? `<span class="sticker urgent">ТЕРМІНОВО</span>` : "") +
+      `<div class="lbl"><span class="to">Отримувач</span><span class="city">${town}</span>` +
+      `<span class="what">${pick(STUFF)}</span><span class="ttn"><span class="bars"></span>${ttn()}</span></div>`;
+    belt.appendChild(el);
+    parcels.push({ el, hub, town, kind, p: 0, dur, done: false });
+    markActive();
+  }
+
+  function markActive() {
+    parcels.forEach((pc, i) => pc.el.classList.toggle("active", i === 0));
+  }
+
+  function pos(pc) {
+    const H = belt.clientHeight, h = pc.el.offsetHeight;
+    return -h + pc.p * H;
+  }
+
+  function frame(t) {
+    if (!running) return;
+    const dt = Math.min(0.05, (t - last) / 1000);
+    last = t;
+    const spacing = Math.max(0.42, 1 - delivered * 0.02);
+    const tail = parcels[parcels.length - 1];
+    if (!tail || tail.p >= spacing) spawn();
+
+    for (const pc of parcels) {
+      pc.p += dt / pc.dur;
+      pc.el.style.transform = `translateY(${pos(pc)}px)`;
+    }
+    const head = parcels[0];
+    if (head && head.p >= 1) {
+      fail(head, null);
+    }
+    if (running) requestAnimationFrame(frame);
+  }
+
+  function remove(pc) {
+    parcels = parcels.filter(x => x !== pc);
+    setTimeout(() => pc.el.remove(), 400);
+    markActive();
+  }
+
+  function route(hubKey) {
+    const btn = document.querySelector(`.hub[data-h="${hubKey}"]`);
+    btn.classList.add("press");
+    setTimeout(() => btn.classList.remove("press"), 120);
+    if (!running) return;
+    const pc = parcels[0];
+    if (!pc) return;
+    if (pc.hub !== hubKey) return fail(pc, hubKey);
+
+    combo++;
+    maxCombo = Math.max(maxCombo, combo);
+    delivered++;
+    const base = pc.kind === "urgent" ? 30 : pc.kind === "fragile" ? 20 : 10;
+    const gain = base * mult();
+    score += gain;
+    const y = pos(pc);
+    const h = HUBS[hubKey];
+    pc.el.classList.add("out");
+    pc.el.style.transform = `translate(${h.dx * 260}px, ${y + h.dy * 260 + (h.dy === 0 ? 120 : 0)}px) scale(0.5)`;
+    popText(`+${gain}`, y);
+    remove(pc);
+    if (combo % 5 === 0 && combo <= 20) toast(`Комбо ×${mult()}! Ти сортуєш як профі`, true);
+    hud();
+  }
+
+  function fail(pc, wrongHub) {
+    const h = HUBS[pc.hub];
+    let msg;
+    if (wrongHub) {
+      const isHub = pc.town === h.name;
+      msg = isHub
+        ? `Посилка для міста ${h.name} поїхала ${HUBS[wrongHub].to}. Клієнт уже пише в підтримку.`
+        : `${pc.town} — це ${h.region}. А посилка поїхала ${HUBS[wrongHub].to}.`;
+      pc.el.style.transform = `translate(${HUBS[wrongHub].dx * 260}px, ${pos(pc) + 60}px) rotate(${HUBS[wrongHub].dx * 25 || 12}deg)`;
+    } else {
+      msg = pick([
+        "Не встигли. Посилка лишилась на складі, а клієнт пише гнівний відгук.",
+        "Посилка застрягла на стрічці. Платне зберігання вже капає.",
+        `${pc.town} чекає, а посилка досі на терміналі.`
+      ]);
+      pc.el.style.transform = `translateY(${pos(pc) + 80}px)`;
+    }
+    pc.el.classList.add("bad");
+    combo = 0;
+    lives--;
+    remove(pc);
+    belt.classList.remove("shake");
+    void belt.offsetWidth;
+    belt.classList.add("shake");
+    toast(msg, false);
+    hud();
+    if (lives <= 0) end(msg);
+  }
+
+  function toast(text, good) {
+    belt.querySelectorAll(".toast").forEach(t => t.remove());
+    const t = document.createElement("div");
+    t.className = "toast" + (good ? " good" : "");
+    t.textContent = text;
+    belt.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+  }
+
+  function popText(text, y) {
+    const p = document.createElement("div");
+    p.className = "pop";
+    p.textContent = text;
+    p.style.left = "calc(50% + min(125px, 39%) + 6px)";
+    p.style.top = Math.max(10, y + 20) + "px";
+    p.style.color = mult() > 1 ? "var(--odesa)" : "var(--fg)";
+    belt.appendChild(p);
+    setTimeout(() => p.remove(), 750);
+  }
+
+  function rankFor(s) {
+    let r = RANKS[0][1];
+    for (const [min, name] of RANKS) if (s >= min) r = name;
+    return r;
+  }
+
+  function start() {
+    parcels.forEach(pc => pc.el.remove());
+    parcels = [];
+    score = 0; combo = 0; maxCombo = 0; lives = 3; delivered = 0; lastTown = "";
+    screen.hidden = true;
+    belt.classList.remove("paused");
+    hud();
+    running = true;
+    last = performance.now();
+    requestAnimationFrame(frame);
+  }
+
+  function end(lastMsg) {
+    running = false;
+    belt.classList.add("paused");
+    const record = score > best;
+    if (record) { best = score; try { localStorage.setItem(KEY, best); } catch (e) {} }
+    hud();
+    setTimeout(() => {
+      screen.innerHTML = `
+        <h2>Зміну закінчено</h2>
+        <div class="rank">${rankFor(score)}</div>
+        <div class="nums"><div><b>${score}</b>бали</div><div><b>${delivered}</b>доставлено</div><div><b>${maxCombo}</b>комбо</div></div>
+        <p>${record ? "Новий рекорд! " : ""}${lastMsg}</p>
+        <button class="go" id="go" type="button">Ще одна зміна</button>`;
+      screen.hidden = false;
+      document.getElementById("go").focus();
+    }, 500);
+  }
+
+  function intro() {
+    screen.innerHTML = `
+      <h2>Посилкомат</h2>
+      <p>Посилки їдуть стрічкою. Відправ кожну в потрібний хаб, поки вона не доїхала до кінця. Спершу на етикетках обласні центри, далі пішли містечка області.</p>
+      <div class="legend">
+        <span style="--c: var(--lviv)">← Львівщина</span><span style="--c: var(--kyiv)">↑ Київщина</span>
+        <span style="--c: var(--odesa)">↓ Одещина</span><span style="--c: var(--kharkiv)">→ Харківщина</span>
+      </div>
+      <p>«Крихке» дає подвійні бали, «Терміново» — потрійні, але їде швидше. Три помилки, і зміна закінчується.</p>
+      <button class="go" id="go" type="button">Почати зміну</button>`;
+    screen.hidden = false;
+  }
+
+  screen.addEventListener("click", e => { if (e.target.id === "go") start(); });
+
+  document.querySelectorAll(".hub").forEach(b => b.addEventListener("click", () => route(b.dataset.h)));
+
+  const KEYMAP = { ArrowLeft: "lviv", ArrowUp: "kyiv", ArrowDown: "odesa", ArrowRight: "kharkiv",
+                   KeyA: "lviv", KeyW: "kyiv", KeyS: "odesa", KeyD: "kharkiv" };
+  document.addEventListener("keydown", e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const h = KEYMAP[e.code];
+    if (h) { e.preventDefault(); route(h); return; }
+    if ((e.code === "Space" || e.code === "Enter") && !running && !screen.hidden && document.activeElement?.id !== "go") {
+      e.preventDefault(); start();
+    }
+  });
+
+  let sw = null;
+  belt.addEventListener("pointerdown", e => {
+    if (e.target.closest("button")) return;
+    sw = { x: e.clientX, y: e.clientY };
+  });
+  belt.addEventListener("pointerup", e => {
+    if (!sw) return;
+    const dx = e.clientX - sw.x, dy = e.clientY - sw.y;
+    sw = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 28) return;
+    route(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "kharkiv" : "lviv") : (dy > 0 ? "odesa" : "kyiv"));
+  });
+  belt.addEventListener("pointercancel", () => { sw = null; });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && running) {
+      running = false;
+      belt.classList.add("paused");
+      screen.innerHTML = `<h2>Перерва</h2><p>Стрічку зупинено. Посилки чекають.</p><button class="go" id="resume" type="button">Продовжити</button>`;
+      screen.hidden = false;
+    }
+  });
+  screen.addEventListener("click", e => {
+    if (e.target.id === "resume") {
+      screen.hidden = true;
+      belt.classList.remove("paused");
+      running = true;
+      last = performance.now();
+      requestAnimationFrame(frame);
+    }
+  });
+
+  lives = 3; score = 0; combo = 0;
+  hud();
+  intro();
+})();
+</script>
