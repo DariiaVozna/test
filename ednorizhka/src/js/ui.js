@@ -54,6 +54,34 @@ function drawMover(c, m, theme) {
   c.fillStyle = '#ffd86b'; starPath(c, m.x + m.w / 2, m.y + 8, 3.4, 1.6, 0); c.fill();
 }
 
+let darkCv = null;
+function drawDarkness(c, by, bh, camPx, t) {
+  if (!darkCv) darkCv = document.createElement('canvas');
+  if (darkCv.width !== cv.width || darkCv.height !== bh) { darkCv.width = cv.width; darkCv.height = bh; }
+  const d = darkCv.getContext('2d'), P = G.P;
+  d.setTransform(1, 0, 0, 1, 0, 0); d.globalCompositeOperation = 'source-over';
+  d.clearRect(0, 0, darkCv.width, darkCv.height); d.fillStyle = 'rgba(12,8,34,.78)'; d.fillRect(0, 0, darkCv.width, darkCv.height);
+  d.globalCompositeOperation = 'destination-out'; d.setTransform(ps, 0, 0, ps, -camPx, 0);
+  const vis = x => x > G.cam - 60 && x < G.cam + viewW + 60;
+  const hole = (x, y, r, a) => { if (!vis(x)) return; const g = d.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(0.55, `rgba(0,0,0,${a * 0.75})`); g.addColorStop(1, 'rgba(0,0,0,0)'); d.fillStyle = g; d.beginPath(); d.arc(x, y, r, 0, TAU); d.fill(); };
+  hole(P.x + P.w / 2, P.y + P.h / 2, 125 + Math.sin(t * 3) * 4, 1);
+  if (save.profile.friend !== 'none') hole(G.friend.x, G.friend.y, 40, 0.7);
+  for (const s of G.stars) if (!s.got) hole(s.x, s.y, s.rainbow ? 40 : 24, 0.85);
+  for (const s of G.drops) if (!s.got) hole(s.x, s.y, 22, 0.8);
+  for (const p of G.powers) if (!p.got) hole(p.x, p.y, 30, 0.85);
+  for (const s of G.shots) hole(s.x, s.y, 46, 0.9);
+  for (const k of G.checks) hole(k.x, k.gy - 30, 34, 0.6);
+  for (const dd of G.decor) if (dd.k === 'mush' || dd.k === 'crystal') hole(dd.x, dd.y - 10, 30, 0.7);
+  for (const e of G.enemies) if (e.k === 'ghost') hole(e.x + e.w / 2, e.y + e.h / 2, 30, 0.7);
+  for (const sg of G.signs) hole(sg.x, sg.gy - 50, 46, 0.75);
+  for (const b of G.buttons) hole(b.x, b.gy - 10, 26, 0.7);
+  for (let tx = Math.floor(G.cam / T) - 1; tx < (G.cam + viewW) / T + 1; tx++) for (let ty = 0; ty < ROWS; ty++) if (tileAt(tx, ty) === 7) hole(tx * T + 12, ty * T + 12, 26, 0.75);
+  hole(G.gate.x, G.gate.gy - 30, 70, 0.9);
+  for (const p of G.parts) if (p.k === 'starpop' || p.k === 'text') hole(p.x, p.y, 22, 0.8);
+  for (const b of G.bolts) hole(b.x, b.y, 22, 0.7);
+  c.setTransform(1, 0, 0, 1, 0, 0); c.drawImage(darkCv, 0, by);
+  c.setTransform(ps, 0, 0, ps, -camPx, by);
+}
 function renderGame(dt) {
   const c = ctx, th = THEMES[G.theme], t = G.t;
   c.setTransform(1, 0, 0, 1, 0, 0);
@@ -75,8 +103,15 @@ function renderGame(dt) {
       let kind, l = false, r = false;
       if (v === 1) { const up = ty > 0 ? G.map[(ty - 1) * G.Wt + tx] : 0; kind = (up === 1 || up === 2 || up === 5) ? 'fill' : 'top'; l = tileAt(tx - 1, ty) !== 1; r = tileAt(tx + 1, ty) !== 1; }
       else if (v === 2) kind = 'block';
+      else if (v === 7) kind = 'qblock';
+      else if (v === 8) kind = 'used';
+      else if (v === 9) kind = G.sw ? 'pinkS' : 'pinkG';
+      else if (v === 10) kind = G.sw ? 'blueG' : 'blueS';
+      else if (v === 11) kind = (ty > 0 && G.map[(ty - 1) * G.Wt + tx] === 11) ? 'door' : 'doorTop';
       else { kind = 'cloud'; l = tileAt(tx - 1, ty) !== 3; r = tileAt(tx + 1, ty) !== 3; }
-      c.drawImage(tileSprite(G.theme, kind, l, r, ps), sx, by + Math.round(ty * T * ps));
+      const bt = (v === 7 || v === 8) ? G.bumps.get(ty * G.Wt + tx) : 0;
+      const bo = bt ? -Math.sin((0.18 - bt) / 0.18 * Math.PI) * 5 : 0;
+      c.drawImage(tileSprite(G.theme, kind, l, r, ps), sx, by + Math.round((ty * T + bo) * ps));
     }
   }
   // світ
@@ -87,6 +122,9 @@ function renderGame(dt) {
   for (const d of G.decor) if (vis(d.x)) drawDecor(c, d, t);
   for (const m of G.movers) if (vis(m.x, 90)) drawMover(c, m, G.theme);
   for (const s of G.springs) if (vis(s.x)) drawSpring(c, s.x, s.gy, s.sq, G.theme);
+  for (const p of G.portals) if (vis(p.x)) drawPortal(c, p, t);
+  for (const b of G.buttons) if (vis(b.x)) drawButton(c, b, G.sw, t);
+  for (const k of G.keys) if (!k.got && vis(k.x)) drawKey(c, k.x, k.y, k.t);
   for (const s of G.signs) if (vis(s.x, 80)) drawSign(c, s.x, s.gy, s.text.replace('{name}', nameOf()));
   for (const k of G.checks) if (vis(k.x)) drawCheck(c, k.x, k.gy, k.on, t);
   if (G.gate && vis(G.gate.x, 60)) {
@@ -122,12 +160,19 @@ function renderGame(dt) {
     else if (e.k === 'squirrel') drawSquirrel(c, cx, e.y + e.h, e.dir, e.t, e.throwT > 0, fl);
     else if (e.k === 'cactus') drawCactus(c, cx, e.y + e.h, e.t);
     else if (e.k === 'bird') drawBird(c, cx, e.y + e.h / 2, e.t, e.dir, fl);
+    else if (e.k === 'frog') drawFrog(c, cx, e.y + e.h, e.dir, e.t, e.air, fl);
+    else if (e.k === 'ghost') drawGhost(c, cx, e.y + e.h / 2, e.t, e.dir, fl);
+    else if (e.k === 'beetle') drawBeetle(c, cx, e.y + e.h, e.dir, e.t, fl);
     else drawBat(c, cx, e.y + e.h / 2, e.t, e.state === 'hang', fl);
   }
   const B = G.boss;
   if (B && (G.bossActive || B.dead || vis(B.x, 120))) {
     if (B.kind === 'hedge') drawBigHedgehog(c, B.x, B.gy, B.dir, B.t, B.state, B.flash > 0, B.rot);
     else if (B.kind === 'dragon') drawDragonBoss(c, B.x, B.y, B.t, B.state, B.dir, B.flash > 0, B.st);
+    else if (B.kind === 'wizard') {
+      for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
+      drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
+    }
     else {
       c.save(); c.globalAlpha = B.alpha;
       drawBoss(c, B.x, B.y, B.t, B.flash > 0, B.dead ? 'happy' : 'angry');
@@ -135,7 +180,7 @@ function renderGame(dt) {
       c.restore();
     }
   }
-  for (const b of G.bolts) { if (b.kind === 'puff') drawPuff(c, b.x, b.y, b.t); else if (b.kind === 'acorn') drawAcorn(c, b.x, b.y, b.t * 10); else if (b.spike) drawSpike(c, b.x, b.y, Math.atan2(b.vy, b.vx)); else drawBolt(c, b.x, b.y, b.t); }
+  for (const b of G.bolts) { if (b.kind === 'magic') drawMagic(c, b.x, b.y, b.t); else if (b.kind === 'puff') drawPuff(c, b.x, b.y, b.t); else if (b.kind === 'acorn') drawAcorn(c, b.x, b.y, b.t * 10); else if (b.spike) drawSpike(c, b.x, b.y, Math.atan2(b.vy, b.vx)); else drawBolt(c, b.x, b.y, b.t); }
 
   const P = G.P;
   if (save.profile.friend === 'cat') drawCat(c, G.friend.x, G.friend.y, G.friend.dir, G.friend.t);
@@ -167,12 +212,14 @@ function renderGame(dt) {
     const k = 1 - p.t / p.life;
     if (p.k === 'spark') { c.globalAlpha = k; sparkle(c, p.x, p.y, p.r * (0.6 + k * 0.4), p.col); }
     else if (p.k === 'puff') { c.globalAlpha = k * 0.7; c.fillStyle = '#fff'; circ(c, p.x - 5 - (1 - k) * 6, p.y - 2, p.r * (1.2 - k * 0.4)); c.fill(); circ(c, p.x + 5 + (1 - k) * 6, p.y - 2, p.r * (1.2 - k * 0.4)); c.fill(); }
+    else if (p.k === 'starpop') { c.globalAlpha = Math.min(1, k * 2); drawStar(c, p.x, p.y, p.t * 3, 7); }
     else if (p.k === 'wind') { c.globalAlpha = k * 0.8; c.strokeStyle = '#ffffff'; c.lineWidth = 2; c.beginPath(); c.moveTo(p.x, p.y); c.lineTo(p.x - p.dir * 18, p.y); c.stroke(); }
     else if (p.k === 'bubble') { c.globalAlpha = k * 0.85; c.strokeStyle = '#ffffff'; c.lineWidth = 1; circ(c, p.x + Math.sin(p.t * 8) * 1.5, p.y, p.r); c.stroke(); }
     else if (p.k === 'text') { c.globalAlpha = k; c.font = '900 12px Nunito, system-ui, sans-serif'; c.textAlign = 'center'; c.lineWidth = 3; c.strokeStyle = '#fff'; c.strokeText(p.text, p.x, p.y); c.fillStyle = p.col; c.fillText(p.text, p.x, p.y); }
     c.globalAlpha = 1;
   }
   for (const f of G.flys) { c.globalAlpha = Math.min(1, (4 - f.t)); drawButterfly(c, f.x, f.y, f.t, f.col); c.globalAlpha = 1; }
+  if (G.dark) drawDarkness(c, by, bh, camPx, t);
   c.restore();
   drawHud(c);
 }
@@ -209,6 +256,12 @@ function drawHud(c) {
   c.fillStyle = '#ffcf2e'; starPath(c, x2 + 20, top + H / 2 + 1, 10, 4.6, 0); c.fill(); c.strokeStyle = '#c98200'; c.lineWidth = 1.6; c.stroke();
   c.fillStyle = INK; c.fillText(txt, x2 + 36, top + H / 2 + 1);
   if (open && !G.boss) { c.save(); c.translate(x2 + 36 + tw + 16, top + H / 2 + 8); c.scale(0.42, 0.42); for (let i = 0; i < 4; i++) { c.strokeStyle = RAINBOW[i]; c.lineWidth = 4; c.beginPath(); c.arc(0, 0, 22 - i * 4, Math.PI, TAU); c.stroke(); } c.restore(); }
+  if (G.hasDoors) {
+    const x3 = x2 + w2 + 10, kt = String(G.keysHeld), kw = c.measureText(kt).width + 50;
+    hudPill(c, x3, top, kw, H, G.keysHeld > 0 ? 'rgba(255,246,200,.95)' : null);
+    c.save(); c.translate(x3 + 6, 0); drawKey(c, 14, top + H / 2, 0); c.restore();
+    c.fillStyle = INK; c.textAlign = 'left'; c.fillText(kt, x3 + 38, top + H / 2 + 1);
+  }
   // бонуси з таймером
   let px = left, py = top + H + 8;
   for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12]]) {
@@ -312,6 +365,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -319,7 +373,7 @@ function showMap() {
   $('recordPill').innerHTML = starSvg + 'Рекорд: ' + (save.record || 0);
   const ol = $('worlds'); ol.innerHTML = '';
   LEVELS.forEach((lv, i) => {
-    if (i === 0 || i === 5 || i === 10) { const h = document.createElement('li'); h.className = 'part'; h.textContent = ['Частина 1 · Король Похмурої Хмари', 'Частина 2 · Пан Колючка', 'Частина 3 · Дракон Чхун'][i / 5]; ol.appendChild(h); }
+    if (i % 5 === 0 && PARTS[i / 5]) { const h = document.createElement('li'); h.className = 'part'; h.textContent = 'Частина ' + (i / 5 + 1) + ' · ' + PARTS[i / 5]; ol.appendChild(h); }
     const li = document.createElement('li'), b = document.createElement('button'); b.type = 'button'; b.className = 'world'; b.id = 'world_' + i;
     const locked = i + 1 > save.unlocked, best = save.best[i];
     if (locked) b.disabled = true;
@@ -355,7 +409,7 @@ function showWin() {
   save.bestR[i] = Math.max(save.bestR[i] || 0, G.rainbows); save.bestF[i] = Math.max(save.bestF[i] || 0, G.defeated); writeSave();
   if (i === LEVELS.length - 1) {
     mode = 'final'; setPlayUi(false);
-    $('finalText').textContent = nameOf() + ' пройшла всі п\'ятнадцять країн. Король Похмурої Хмари, Пан Колючка і Дракон Чхун тепер друзі, а веселка сяє в небі.';
+    $('finalText').textContent = nameOf() + ' пройшла всі країни! ' + PARTS.join(', ').replace(/, ([^,]*)$/, ' і $1') + ' тепер друзі, а веселка сяє в небі.';
     const sum = o => Object.values(o).reduce((a, b) => a + b, 0);
     $('fStars').textContent = save.record; $('fRain').textContent = sum(save.bestR); $('fFoes').textContent = sum(save.bestF);
     show('scrFinal'); return;
@@ -364,6 +418,7 @@ function showWin() {
   $('winTitle').textContent = nameOf() + ' пройшла рівень!';
   $('winText').textContent = LEVELS[i].name + ' позаду. Наступна країна: ' + LEVELS[i + 1].name + '.';
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
+  if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 9) { $('winTitle').textContent = 'Пан Колючка тепер добрий!'; $('winText').textContent = 'Але Дракон Чхун застудився, і його «Апчхи!» розвіяло зірочки по нових країнах. Наступна країна: ' + LEVELS[10].name + '.'; }
   $('sStars').textContent = G.points; $('sRain').textContent = G.rainbows; $('sFoes').textContent = G.defeated;
   show('scrWin');

@@ -682,6 +682,223 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  {
+    id: 'cave', theme: 'cave', name: 'Світлячкова печера', blurb: 'Темно, світлячки й чарівні скриньки', w: 170, dark: true,
+    build(L) {
+      L.ground(0, 26);
+      L.sign(5, 'Стукни головою в золоту скриньку знизу!');
+      L.qblock(9, 6, 'star'); L.qblock(10, 6, 'star5'); L.qblock(11, 6, 'star');
+      L.row(14, 9, 4);
+      L.enemy('bat', 18, 4);
+      L.enemy('ghost', 22, 6);
+      L.ground(29, 56);
+      L.qblock(32, 6, 'shield');
+      L.enemy('beetle', 36, 10);
+      L.block(39, 7, 3); L.row(39, 6, 3);
+      L.enemy('frog', 45, 10);
+      L.spring(49);
+      L.cloud(51, 3, 4); L.row(51, 2, 3); L.rainbow(54, 1);
+      L.mover(57, 8, 2, 1, 0, 3); L.row(56, 7, 4);
+      L.ground(60, 90);
+      L.check(62);
+      L.qblock(66, 6, 'star5');
+      L.enemy('ghost', 70, 5);
+      L.enemy('beetle', 74, 10);
+      L.row(72, 9, 4);
+      L.qblock(79, 6, 'candy');
+      L.enemy('frog', 83, 10);
+      L.enemy('bat', 87, 4);
+      L.ground(93, 125);
+      L.row(95, 9, 3);
+      L.qblock(99, 6, 'star'); L.qblock(100, 6, 'rainbow'); L.qblock(101, 6, 'star');
+      L.enemy('beetle', 105, 10);
+      L.check(110);
+      L.enemy('ghost', 114, 6);
+      L.block(117, 7, 3); L.row(117, 6, 3);
+      L.enemy('frog', 121, 10);
+      L.ground(128, 170);
+      L.enemy('bat', 133, 4);
+      L.qblock(137, 6, 'magnet');
+      L.row(139, 9, 5);
+      L.enemy('beetle', 146, 10);
+      L.qblock(150, 6, 'star5');
+      L.sign(156, 'Ворота вже близько!');
+      L.gate(163);
+    }
+  },
+  {
+    id: 'portal', theme: 'portal', name: 'Острів порталів', blurb: 'Портали переносять у різні місця', w: 170,
+    build(L) {
+      L.ground(0, 28);
+      L.sign(5, 'Заходь у портал, і він перенесе тебе!');
+      L.row(8, 9, 3);
+      L.qblock(12, 6, 'star5');
+      L.portal(18, 31, null, 4);
+      L.ground(28, 36, 4);
+      L.row(29, 3, 3); L.rainbow(33, 2);
+      L.ground(36, 60);
+      L.enemy('frog', 40, 10);
+      L.qblock(43, 6, 'star5');
+      L.enemy('ghost', 48, 6);
+      L.block(51, 7, 3); L.row(51, 6, 3);
+      L.power('shield', 55, 8);
+      L.portal(58, 70);
+      L.ground(68, 110);
+      L.check(72);
+      L.enemy('beetle', 76, 10);
+      L.qblock(79, 6, 'candy');
+      L.row(80, 9, 4);
+      L.enemy('frog', 84, 10);
+      L.portal(87, 95);
+      L.block(90, 0, 2, 10);
+      L.enemy('ghost', 100, 6);
+      L.row(97, 9, 4);
+      L.qblock(103, 6, 'star5');
+      L.ground(113, 140);
+      L.check(115);
+      L.enemy('frog', 119, 10);
+      L.portal(124, 131, null, 3);
+      L.cloud(129, 3, 6); L.row(129, 2, 4); L.rainbow(134, 1);
+      L.enemy('beetle', 136, 10);
+      L.ground(143, 170);
+      L.enemy('frog', 148, 10);
+      L.qblock(152, 6, 'magnet');
+      L.row(150, 9, 4);
+      L.sign(157, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'button', theme: 'button', name: 'Місто кнопок', blurb: 'Кнопки вмикають рожеві й блакитні мости', w: 170,
+    build(L) {
+      L.ground(0, 24);
+      L.sign(4, 'Стрибни на кнопку, і рожеві та блакитні блоки поміняються!');
+      L.button(11);
+      L.row(14, 9, 4);
+      L.qblock(18, 6, 'star5');
+      L.swblocks(24, 10, 8, 'pink'); L.row(25, 8, 6);
+      L.ground(32, 60);
+      L.enemy('beetle', 36, 10);
+      L.qblock(39, 6, 'star5');
+      L.button(44);
+      L.swblocks(50, 6, 2, 'pink', 4);
+      L.swblocks(53, 8, 2, 'blue'); L.swblocks(55, 6, 2, 'blue'); L.row(55, 5, 2); L.rainbow(57, 3);
+      L.swblocks(60, 10, 8, 'blue'); L.enemy('ghost', 64, 6); L.row(61, 8, 6);
+      L.ground(68, 96);
+      L.check(70);
+      L.button(74);
+      L.enemy('frog', 79, 10);
+      L.qblock(82, 6, 'candy');
+      L.swblocks(84, 6, 3, 'pink'); L.row(84, 5, 3);
+      L.swblocks(88, 7, 3, 'blue'); L.row(88, 6, 3);
+      L.button(93);
+      L.swblocks(96, 10, 8, 'pink'); L.row(97, 8, 6);
+      L.ground(104, 133);
+      L.enemy('beetle', 108, 10);
+      L.check(110);
+      L.button(114);
+      L.enemy('frog', 118, 10);
+      L.row(116, 9, 4);
+      L.qblock(121, 6, 'star5');
+      L.swblocks(124, 6, 3, 'blue'); L.row(124, 5, 3);
+      L.swblocks(127, 7, 2, 'pink'); L.row(127, 6, 2);
+      L.button(131);
+      L.swblocks(133, 10, 8, 'blue'); L.row(134, 8, 6);
+      L.ground(141, 170);
+      L.enemy('ghost', 146, 6);
+      L.qblock(151, 6, 'magnet');
+      L.row(149, 9, 4);
+      L.sign(157, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'maze', theme: 'maze', name: 'Лабіринт ключиків', blurb: 'Знайди ключики, щоб відчинити двері', w: 170,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(4, 'Двері відчиняє ключик. Знайди його!');
+      L.key(11, 9);
+      L.row(13, 9, 4);
+      L.qblock(15, 6, 'star5');
+      L.door(20);
+      L.row(23, 9, 3);
+      L.enemy('beetle', 25, 10);
+      L.ground(33, 70);
+      L.enemy('frog', 37, 10);
+      L.spring(40);
+      L.cloud(42, 4, 4); L.key(44, 3); L.row(42, 3, 2);
+      L.door(50);
+      L.enemy('ghost', 55, 6);
+      L.row(53, 9, 3);
+      L.block(58, 7, 3); L.row(58, 6, 3);
+      L.qblock(63, 6, 'shield');
+      L.check(66);
+      L.ground(73, 116);
+      L.enemy('frog', 77, 10); L.enemy('beetle', 81, 10);
+      L.key(85, 9);
+      L.row(87, 9, 2);
+      L.door(90);
+      L.qblock(94, 6, 'rainbow');
+      L.row(93, 9, 3);
+      L.enemy('ghost', 97, 5);
+      L.spring(99);
+      L.block(101, 5, 4); L.key(104, 4); L.row(101, 4, 2);
+      L.key(107, 9);
+      L.door(109); L.door(111);
+      L.ground(119, 145);
+      L.check(121);
+      L.enemy('frog', 124, 10);
+      L.qblock(126, 6, 'candy');
+      L.row(128, 9, 3);
+      L.key(132, 9);
+      L.enemy('beetle', 135, 10);
+      L.door(139);
+      L.row(141, 9, 3);
+      L.ground(148, 170);
+      L.enemy('ghost', 151, 6);
+      L.qblock(154, 6, 'magnet');
+      L.row(152, 9, 3);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'wizard', theme: 'wizard', name: 'Вежа Чарівника', blurb: 'Битва з Чарівником Плутанком', w: 172, boss: 'wizard',
+    build(L) {
+      L.ground(0, 30);
+      L.sign(5, 'Вежа Чарівника Плутанка. Тут усе перемішалося!');
+      L.qblock(10, 6, 'star5');
+      L.row(13, 9, 4);
+      L.enemy('ghost', 18, 6);
+      L.button(24);
+      L.swblocks(30, 10, 4, 'pink'); L.row(30, 8, 4);
+      L.ground(34, 64);
+      L.enemy('frog', 39, 10);
+      L.qblock(42, 6, 'shield');
+      L.key(45, 9);
+      L.door(50);
+      L.enemy('beetle', 54, 10);
+      L.block(57, 7, 3); L.row(57, 6, 3);
+      L.portal(61, 74);
+      L.ground(71, 100);
+      L.check(77);
+      L.enemy('ghost', 81, 6);
+      L.qblock(84, 6, 'candy');
+      L.enemy('frog', 88, 10);
+      L.spring(91);
+      L.cloud(93, 3, 4); L.row(93, 2, 3); L.rainbow(96, 1);
+      L.ground(103, 172);
+      L.enemy('beetle', 108, 10);
+      L.qblock(112, 6, 'magnet');
+      L.row(110, 9, 3);
+      L.sign(121, 'Плутанко! Стріляй, коли він чаклує або сміється');
+      L.check(125);
+      L.arena(129, 172);
+      L.cloud(137, 7, 3); L.cloud(149, 7, 4); L.cloud(160, 7, 3);
+      L.power('shield', 146, 9);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR = {
@@ -699,13 +916,18 @@ const DECOR = {
   balloons: (R, x, y) => R() < 0.5 ? { k: 'tulip', x, y, c: ['#ff5c8a', '#ffa83b', '#ffe14d', '#b28bff'][Math.floor(R() * 4)] } : { k: 'flower', x, y, c: ['#ffffff', '#ff7ab8', '#ffd54a'][Math.floor(R() * 3)] },
   toys: (R, x, y) => R() < 0.5 ? { k: 'ball', x, y } : { k: 'duck', x, y },
   desert: (R, x, y) => R() < 0.5 ? { k: 'cactusS', x, y } : { k: 'tuft', x, y },
+  cave: (R, x, y) => R() < 0.55 ? { k: 'mush', x, y, c: ['#5fd3ff', '#b48cff', '#ff9fd9'][Math.floor(R() * 3)], glow: true } : { k: 'crystal', x, y },
+  portal: (R, x, y) => R() < 0.5 ? { k: 'tulip', x, y, c: ['#ff5cc8', '#b28bff', '#4cb6ff'][Math.floor(R() * 3)] } : { k: 'gem', x, y, c: ['#ffb3e6', '#a8d8ff', '#c9b6ff'][Math.floor(R() * 3)] },
+  button: (R, x, y) => R() < 0.5 ? { k: 'flower', x, y, c: ['#ff7ab8', '#4cb6ff', '#ffd54a'][Math.floor(R() * 3)] } : { k: 'ball', x, y },
+  maze: (R, x, y) => R() < 0.5 ? { k: 'tulip', x, y, c: ['#ff5c8a', '#ffa83b', '#ffe14d', '#b28bff'][Math.floor(R() * 4)] } : { k: 'flower', x, y, c: ['#ffffff', '#ff7ab8', '#ffd54a'][Math.floor(R() * 3)] },
+  wizard: (R, x, y) => R() < 0.5 ? { k: 'gem', x, y, c: ['#ffb3e6', '#a8d8ff', '#c9b6ff'][Math.floor(R() * 3)] } : { k: 'torch', x, y },
   tower: (R, x, y) => R() < 0.5 ? { k: 'torch', x, y } : { k: 'gem', x, y, c: ['#ffb3e6', '#a8d8ff', '#c9b6ff'][Math.floor(R() * 3)] },
 };
 
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), gate: null, arena: null, decor: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -726,6 +948,18 @@ function buildLevel(idx) {
     water(x0, x1, row) { L.water.push({ x0: x0 * T, x1: x1 * T, y: row * T + 6 }); },
     crumble(x, row, w) { L.movers.push({ crumble: true, bx: x * T, by: row * T, w: w * T, ax: 0, ay: 0, period: 1, state: 'idle', st: 0, vy: 0 }); },
     balloon(x) { later.push(() => L.movers.push({ balloon: true, bx: x * T, by: groundY(x) - 2, w: 2 * T, ax: 0, ay: 0, period: 1, state: 'wait', st: Math.random() * 0.8 })); },
+    qblock(x, row, content) { set(x, row, 7); L.qContent.set(row * W + x, content || 'star'); },
+    key(x, row) { L.keys.push({ x: x * T + 12, y: row * T + 12, got: false, t: x }); },
+    door(x, top) { top = top == null ? 6 : top; for (let y = 0; y < top; y++) set(x, y, 2); for (let y = top; y < 10; y++) set(x, y, 11); L.hasDoors = true; },
+    swblocks(x, row, w, color, h) { h = h || 1; for (let i = 0; i < w; i++) for (let j = 0; j < h; j++) set(x + i, row + j, color === 'pink' ? 9 : 10); },
+    button(x) { later.push(() => L.buttons.push({ x: x * T + 12, gy: groundY(x), pt: 0, down: false })); },
+    portal(xa, xb, rowA, rowB) {
+      later.push(() => {
+        const i = L.portals.length, pair = i / 2;
+        L.portals.push({ x: xa * T + 12, gy: rowA != null ? rowA * T : groundY(xa), to: i + 1, pair });
+        L.portals.push({ x: xb * T + 12, gy: rowB != null ? rowB * T : groundY(xb), to: i, pair });
+      });
+    },
     belt(x, row, w, dir) { for (let i = 0; i < w; i++) { set(x + i, row, 5); L.beltDir[row * W + x + i] = dir; } L.belts.push({ x: x * T, y: row * T, w: w * T, dir }); },
     wind(x0, x1, top) {
       later.push(() => {
@@ -740,7 +974,7 @@ function buildLevel(idx) {
   const normal = L.stars.filter(s => !s.rainbow).length;
   L.total = normal;
   L.need = def.boss ? 0 : Math.max(5, Math.round(normal * (def.needK || 0.5)));
-  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, L.gate].filter(Boolean).map(o => o.x);
+  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, L.gate].filter(Boolean).map(o => o.x);
   for (let x = 1; x < W - 1; x++) {
     for (let y = 1; y < ROWS; y++) {
       if (map[y * W + x] === 1 && map[(y - 1) * W + x] === 0) {

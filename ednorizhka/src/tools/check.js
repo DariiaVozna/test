@@ -12,9 +12,11 @@ var viewW = 600; function showLose() {} function showWin() {} function writeSave
 function press(k) { In.jumpP = k; }
 function runLevel(idx, maxT) {
   startLevel(idx); mode = 'play';
-  const P = G.P; let t = 0, cool = 0, stuck = 0, lastX = 0;
+  const P = G.P; let t = 0, cool = 0, stuck = 0, lastX = 0, back = 0;
   while (t < maxT && !G.done) {
     In.left = false; In.right = true; In.jumpP = false; In.shootP = false; In.shootR = false;
+    if (stuck > 3 && G.hasDoors && G.keysHeld === 0) { back = 2.5; stuck = 0; }
+    if (back > 0) { back -= STEP; In.left = true; In.right = false; }
     const wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
     const wall = solid(tileAt(Math.floor((P.x + P.w + 4) / T), Math.floor((P.y + P.h - 4) / T)));
     let gap = false;

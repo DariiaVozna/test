@@ -5,8 +5,7 @@ set -e
 cd "$(dirname "$0")"
 
 # Порядок важливий: малюнки й світи → рівні → рушій → екрани
-JS="js/art.js js/world.js js/art2.js js/art3.js js/levels.js js/engine.js js/ui.js"
-[ -f js/art4.js ] && JS="js/art.js js/world.js js/art2.js js/art3.js js/art4.js js/levels.js js/engine.js js/ui.js"
+JS="js/art.js js/world.js js/art2.js js/art3.js js/art4.js js/levels.js js/engine.js js/ui.js"
 
 {
   printf '<!doctype html>\n<html lang="uk">\n<head>\n<meta charset="utf-8">\n'

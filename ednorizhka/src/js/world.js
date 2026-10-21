@@ -15,6 +15,11 @@ const THEMES = {
   toys: { sky: ['#ffe9d6', '#fff1e6', '#fff8f0'], panel: '#5a3a6a', top: '#e3a868', topHi: '#f6c890', topLo: '#b9783f', fill: '#d99a5c', fillLo: '#c3844a', dots: [], block: 'abc', ice: false, topStyle: 'plank', fillStyle: 'planks' },
   desert: { sky: ['#ffd98a', '#ffe9b8', '#fff6dc'], panel: '#7a4a1e', top: '#ffe0a0', topHi: '#fff2cc', topLo: '#e6b866', fill: '#eab86a', fillLo: '#d49e4e', dots: ['#f6d08e', '#c98d45', '#fff0c0'], block: 'sandstone', ice: false, topStyle: 'sand', dotShape: 'dot' },
   tower: { sky: ['#f7a8c8', '#ffc9d6', '#ffe6d6'], panel: '#4a2040', top: '#f3c4d4', topHi: '#ffe4ec', topLo: '#cc8fa6', fill: '#b8718c', fillLo: '#9c5a74', dots: [], block: 'rose', ice: false, topStyle: 'stone', fillStyle: 'bricks' },
+  cave: { sky: ['#140d2a', '#21173f', '#2d1f52'], panel: '#0a0618', top: '#5fd3b8', topHi: '#9ff0dc', topLo: '#2f9e86', fill: '#4a3d6b', fillLo: '#3a2f57', dots: ['#5b4c80', '#6e5c96', '#8ef0d8'], block: 'cavestone', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  portal: { sky: ['#ffb3d9', '#d9c6ff', '#b8e8ff'], panel: '#3a2a6a', top: '#8fe3c8', topHi: '#c6f5e6', topLo: '#4fb89a', fill: '#7d6bc9', fillLo: '#6a58b5', dots: ['#9f8de0', '#c9b6ff', '#ffe1f3'], block: 'rune', ice: false, topStyle: 'grass', dotShape: 'dot' },
+  button: { sky: ['#9fe0ff', '#d6f3ff', '#fff4dc'], panel: '#2a4a7a', top: '#ffd6e8', topHi: '#fff0f6', topLo: '#f0a8c8', fill: '#ffe9b8', fillLo: '#f5d48f', dots: [], block: 'gift', ice: false, topStyle: 'stone', fillStyle: 'checker' },
+  maze: { sky: ['#bfe8ff', '#e6f7ff', '#f7fff0'], panel: '#2f5a3a', top: '#ddd6c8', topHi: '#f4f0e8', topLo: '#b8ae9c', fill: '#a89a84', fillLo: '#94866f', dots: ['#c4b8a4', '#8a7c66', '#e0d6c4'], block: 'hedge', ice: false, topStyle: 'sand', dotShape: 'pebble' },
+  wizard: { sky: ['#0f1440', '#26206a', '#4a3a8e'], panel: '#080a24', top: '#b9a8ff', topHi: '#ddd4ff', topLo: '#7d6bc9', fill: '#4a3a8e', fillLo: '#3a2c75', dots: [], block: 'starblock', ice: false, topStyle: 'stone', fillStyle: 'bricks' },
   palace: { sky: ['#dcc0ff', '#f3e0ff', '#fff0fa'], panel: '#3b2a63', top: '#efe6ff', topHi: '#ffffff', topLo: '#c9b4f2', fill: '#c4b0f5', fillLo: '#a993e8', dots: [], block: 'gem', ice: false, topStyle: 'crystal', fillStyle: 'facets' },
 };
 
@@ -43,6 +48,8 @@ function tileSprite(theme, kind, l, r, ps) {
       c.strokeStyle = 'rgba(255,255,255,.45)'; c.lineWidth = 1.2;
       c.beginPath(); c.moveTo(0, 6 + R() * 4); c.lineTo(T * 0.55, T); c.moveTo(T * 0.4, 0); c.lineTo(T, T * 0.6); c.stroke();
       c.fillStyle = 'rgba(255,255,255,.22)'; c.beginPath(); c.moveTo(4, 5); c.lineTo(12, 5); c.lineTo(4, 14); c.closePath(); c.fill();
+    } else if (fs === 'checker') {
+      c.fillStyle = th.fillLo; c.globalAlpha = 0.55; c.fillRect(0, 0, 12, 12); c.fillRect(12, 12, 12, 12); c.globalAlpha = 1;
     } else if (fs === 'planks') {
       c.strokeStyle = th.fillLo; c.lineWidth = 1.3;
       for (let y = 6; y < T; y += 7) { c.beginPath(); c.moveTo(0, y); c.lineTo(T + 1, y); c.stroke(); }
@@ -133,6 +140,17 @@ function tileSprite(theme, kind, l, r, ps) {
       rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#c7ecff'; c.fill(); c.stroke();
       c.fillStyle = 'rgba(255,255,255,.85)'; c.beginPath(); c.moveTo(4, 4); c.lineTo(12, 4); c.lineTo(4, 12); c.closePath(); c.fill();
       c.strokeStyle = 'rgba(255,255,255,.9)'; c.lineWidth = 1.3; c.beginPath(); c.moveTo(14, 19); c.lineTo(19, 14); c.stroke();
+    } else if (b === 'cavestone') {
+      rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#5b4c80'; c.fill(); c.stroke();
+      c.fillStyle = '#8ef0d8'; for (const [dx, h] of [[7, 8], [11, 12], [15, 7]]) { c.beginPath(); c.moveTo(dx - 2, 18); c.lineTo(dx, 18 - h); c.lineTo(dx + 2, 18); c.closePath(); c.fill(); }
+      c.fillStyle = 'rgba(255,255,255,.25)'; ell(c, 7, 5, 3, 1.2, -0.3); c.fill();
+    } else if (b === 'rune') {
+      rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#8f7fe0'; c.fill(); c.stroke();
+      c.strokeStyle = '#ffd1f2'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(8, 6); c.lineTo(12, 18); c.lineTo(16, 6); c.moveTo(9, 12); c.lineTo(15, 12); c.stroke();
+    } else if (b === 'hedge') {
+      rr(c, 0.5, 0.5, T - 1, T - 1, 6); c.fillStyle = '#4fae5a'; c.fill(); c.stroke();
+      c.fillStyle = '#6fcf7a'; for (const [dx, dy, r0] of [[6, 7, 4], [15, 6, 4.5], [10, 15, 4], [19, 16, 3.5], [4, 18, 3]]) { circ(c, dx, dy, r0); c.fill(); }
+      c.fillStyle = '#3a8f48'; circ(c, 13, 11, 1.6); c.fill(); circ(c, 7, 13, 1.2); c.fill();
     } else if (b === 'wood') {
       rr(c, 1, 1, T - 2, T - 2, 5); c.fillStyle = '#c98d55'; c.fill(); c.stroke();
       c.strokeStyle = '#8a5a3a'; c.lineWidth = 1.1; for (const r0 of [8, 5, 2]) { circ(c, T / 2, T / 2, r0); c.stroke(); }
@@ -180,6 +198,30 @@ function tileSprite(theme, kind, l, r, ps) {
       c.fillStyle = '#a597cc'; rr(c, 3.5, 3.5, T - 7, 6, 2); c.fill();
       c.fillStyle = '#6c5f96'; rr(c, 3.5, 13, T - 7, 7, 2); c.fill();
     }
+  } else if (kind === 'qblock' || kind === 'used') {
+    c.strokeStyle = INK; c.lineWidth = 1.4;
+    rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = kind === 'qblock' ? '#ffcf3d' : '#c9a06a'; c.fill(); c.stroke();
+    c.fillStyle = kind === 'qblock' ? '#ffe68a' : '#d9b886'; rr(c, 3.5, 3.5, T - 7, 4, 2); c.fill();
+    c.fillStyle = kind === 'qblock' ? '#c98d00' : '#a87c4a'; for (const [dx, dy] of [[5, 5], [19, 5], [5, 19], [19, 19]]) { circ(c, dx, dy, 1.1); c.fill(); }
+    if (kind === 'qblock') { c.fillStyle = '#ffffff'; c.strokeStyle = '#c98d00'; c.lineWidth = 1; starPath(c, T / 2, T / 2 + 1, 6, 2.7, 0); c.fill(); c.stroke(); }
+  } else if (kind === 'pinkS' || kind === 'blueS') {
+    const col = kind === 'pinkS' ? ['#ff7ab8', '#ffb3d6'] : ['#4cb6ff', '#a8dcff'];
+    c.strokeStyle = INK; c.lineWidth = 1.4; rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = col[0]; c.fill(); c.stroke();
+    c.fillStyle = col[1]; rr(c, 4, 4, T - 8, T - 8, 3); c.fill();
+    c.fillStyle = col[0]; starPath(c, T / 2, T / 2 + 0.5, 4.5, 2, 0); c.fill();
+  } else if (kind === 'pinkG' || kind === 'blueG') {
+    const col = kind === 'pinkG' ? '#ff7ab8' : '#4cb6ff';
+    c.fillStyle = col; c.globalAlpha = 0.14; rr(c, 1.5, 1.5, T - 3, T - 3, 4); c.fill(); c.globalAlpha = 1;
+    c.strokeStyle = col; c.lineWidth = 1.5; c.setLineDash([3, 3]); rr(c, 1.5, 1.5, T - 3, T - 3, 4); c.stroke(); c.setLineDash([]);
+  } else if (kind === 'door' || kind === 'doorTop') {
+    c.fillStyle = '#b8783e'; c.fillRect(0, 0, T, T);
+    c.strokeStyle = '#8a5a2a'; c.lineWidth = 1.2; c.beginPath(); for (const x of [6, 12, 18]) { c.moveTo(x, 0); c.lineTo(x, T); } c.stroke();
+    c.strokeStyle = INK; c.lineWidth = 1.4; c.beginPath(); c.moveTo(0.7, 0); c.lineTo(0.7, T); c.moveTo(T - 0.7, 0); c.lineTo(T - 0.7, T); if (kind === 'doorTop') { c.moveTo(0, 0.7); c.lineTo(T, 0.7); } c.stroke();
+    if (kind === 'doorTop') {
+      c.fillStyle = '#ffcc33'; c.strokeStyle = INK; c.lineWidth = 1; rr(c, 6, 10, 12, 10, 2); c.fill(); c.stroke();
+      c.beginPath(); c.arc(12, 10, 3.6, Math.PI, TAU); c.lineWidth = 1.8; c.stroke();
+      c.fillStyle = INK; circ(c, 12, 14, 1.4); c.fill(); c.fillRect(11.4, 14, 1.2, 3);
+    } else { c.fillStyle = '#6b6b80'; c.fillRect(1, 9, T - 2, 3); c.fillStyle = '#9a9ab0'; circ(c, 5, 10.5, 1); c.fill(); circ(c, 19, 10.5, 1); c.fill(); }
   } else if (kind === 'cloud') {
     if (theme === 'lagoon' || theme === 'toys' || theme === 'desert') {
       const x0 = l ? 2 : -1, x1 = r ? T - 2 : T + 1;
@@ -187,8 +229,8 @@ function tileSprite(theme, kind, l, r, ps) {
       c.strokeStyle = '#a8743f'; c.lineWidth = 1; c.beginPath(); for (let x = 6; x < T; x += 6) { c.moveTo(x, 4); c.lineTo(x, 11); } c.stroke();
       c.fillStyle = 'rgba(255,255,255,.35)'; c.fillRect(x0 + 1, 4.5, x1 - x0 - 2, 1.4);
     } else {
-      const col = { forest: '#c9c1f0', castle: '#d7d0ef', space: '#c9bcff', palace: '#f6eeff', volcano: '#fff1f6', tower: '#ffe6ef', autumn: '#fff3e6' }[theme] || '#ffffff';
-      const lo = { forest: '#9a8fd0', space: '#8f7fe0', volcano: '#f5c6d8', tower: '#f5c6d8', autumn: '#f2d6b8' }[theme] || '#c9dcf5';
+      const col = { forest: '#c9c1f0', castle: '#d7d0ef', space: '#c9bcff', palace: '#f6eeff', volcano: '#fff1f6', tower: '#ffe6ef', autumn: '#fff3e6', cave: '#bfa8ff', portal: '#ffe6f7', wizard: '#c9bcff' }[theme] || '#ffffff';
+      const lo = { forest: '#9a8fd0', space: '#8f7fe0', volcano: '#f5c6d8', tower: '#f5c6d8', autumn: '#f2d6b8', cave: '#8f7fe0', portal: '#f5c6e8', wizard: '#8f7fe0' }[theme] || '#c9dcf5';
       const puffs = [];
       for (let x = 3; x <= T - 3; x += 6) puffs.push([x, 7, 4.6]);
       if (l) puffs.push([4, 9, 4]); if (r) puffs.push([T - 4, 9, 4]);
@@ -275,6 +317,11 @@ function drawBackground(c, theme, camX, viewW, t, flash) {
   else if (theme === 'toys') bgToys(c, viewW, camX, t);
   else if (theme === 'desert') bgDesert(c, viewW, camX, t);
   else if (theme === 'tower') bgTower(c, viewW, camX, t);
+  else if (theme === 'cave') bgCave(c, viewW, camX, t);
+  else if (theme === 'portal') bgPortal(c, viewW, camX, t);
+  else if (theme === 'button') bgButton(c, viewW, camX, t);
+  else if (theme === 'maze') bgMaze(c, viewW, camX, t);
+  else if (theme === 'wizard') bgWizard(c, viewW, camX, t);
   if (flash > 0) { c.fillStyle = `rgba(255,255,255,${Math.min(0.6, flash)})`; c.fillRect(0, 0, viewW + 1, VIEW_H); }
 }
 

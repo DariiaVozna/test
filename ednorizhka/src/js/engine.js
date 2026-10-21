@@ -32,6 +32,10 @@ const Snd = {
   boing() { this.tone(220, 0.25, 'triangle', 0.12, 660); this.tone(330, 0.2, 'sine', 0.06, 880, 0.03); },
   swim() { this.tone(480, 0.12, 'sine', 0.08, 720); },
   sneeze() { this.tone(900, 0.1, 'square', 0.05, 1500); this.tone(260, 0.4, 'sawtooth', 0.08, 70, 0.12); },
+  portal() { this.seq([0, 7, 12, 19], 660, 0.04, 'sine', 0.09); },
+  bump() { this.tone(300, 0.08, 'square', 0.06, 200); },
+  click() { this.tone(500, 0.08, 'square', 0.06, 900); this.tone(900, 0.1, 'triangle', 0.06, null, 0.05); },
+  door() { this.seq([0, 4, 7, 12], 392, 0.07, 'triangle', 0.1); },
   splash() { this.tone(900, 0.18, 'triangle', 0.05, 300); this.tone(300, 0.2, 'sine', 0.06, 150); },
 };
 const TUNES = {
@@ -50,6 +54,11 @@ const TUNES = {
   toys: { base: 783.99, ms: 190, n: [0, null, 4, null, 7, null, 4, null, 0, null, 4, null, 7, null, null, null, 2, null, 5, null, 9, null, 5, null, 2, null, 5, null, 7, null, null, null], b: [0, -5, -3, -5] },
   desert: { base: 440, ms: 200, n: [0, 1, 4, null, 5, 4, 1, null, 0, null, 7, null, 5, 4, null, null, 0, 1, 4, null, 7, 8, 7, null, 5, 4, 1, null, 0, null, null, null], b: [0, -5, -4, -5] },
   tower: { base: 523.25, ms: 180, n: [0, null, 7, null, 12, null, 10, 7, null, 5, null, 7, 3, null, null, null, 0, null, 7, null, 12, null, 15, 14, null, 12, null, 10, 7, null, null, null], b: [0, -4, -2, -5] },
+  cave: { base: 440, ms: 240, n: [0, null, 7, null, 3, null, 7, null, 12, null, 10, null, 7, null, null, null, 5, null, 8, null, 12, null, 8, null, 7, null, 3, null, 0, null, null, null], b: [0, -4, -2, -5] },
+  portal: { base: 587.33, ms: 200, n: [0, 7, 12, null, 11, 7, 4, null, 5, 9, 12, null, 14, null, null, null, 0, 7, 12, null, 16, 14, 12, null, 11, 9, 7, null, 4, null, null, null], b: [0, -3, -5, -7] },
+  button: { base: 523.25, ms: 170, n: [0, null, 0, 4, null, 4, 7, null, 7, null, 4, null, 0, null, null, null, 2, null, 2, 5, null, 5, 9, null, 7, null, 4, null, 0, null, null, null], b: [0, -5, -3, -7] },
+  maze: { base: 587.33, ms: 210, n: [0, null, 4, null, 2, null, 5, null, 4, null, 7, null, 5, null, null, null, 7, null, 5, null, 4, null, 2, null, 0, null, 2, null, 0, null, null, null], b: [0, -5, -7, -3] },
+  wizard: { base: 493.88, ms: 190, n: [0, null, 3, 7, null, 10, 7, null, 8, null, 7, 3, null, 2, null, null, 0, null, 3, 7, null, 12, 10, null, 8, null, 7, null, 3, null, null, null], b: [0, -4, -2, -5] },
   boss: { base: 392, ms: 150, n: [0, null, 0, 3, null, 0, 7, null, 6, null, 5, null, 3, null, null, null, 0, null, 0, 3, null, 0, 8, null, 7, null, 5, null, 3, null, 2, null], b: [0, 0, -2, -4] },
   victory: { base: 523.25, ms: 170, n: [0, 4, 7, 12, null, 7, 12, 16, null, 12, 16, 19, null, null, 24, null], b: [0, -5, -3, -7] },
 };
@@ -88,14 +97,14 @@ let G = null;
 let mode = 'create';
 
 function tileAt(tx, ty) { if (tx < 0 || tx >= G.Wt) return 1; if (ty < 0 || ty >= ROWS) return 0; return G.map[ty * G.Wt + tx]; }
-const solid = v => v === 1 || v === 2 || v === 5;
+const solid = v => v === 1 || v === 2 || v === 5 || v === 7 || v === 8 || v === 11 || (v === 9 && G.sw) || (v === 10 && !G.sw);
 
 function moveBody(b, dt) {
-  let hitX = false;
+  let hitX = false; b.sideHit = null; b.headHit = null;
   b.x += b.vx * dt;
   const top = Math.floor(b.y / T), bot = Math.floor((b.y + b.h - 0.01) / T);
-  if (b.vx > 0) { const tx = Math.floor((b.x + b.w) / T); for (let ty = top; ty <= bot; ty++) if (solid(tileAt(tx, ty))) { b.x = tx * T - b.w - 0.01; b.vx = 0; hitX = true; break; } }
-  else if (b.vx < 0) { const tx = Math.floor(b.x / T); for (let ty = top; ty <= bot; ty++) if (solid(tileAt(tx, ty))) { b.x = (tx + 1) * T + 0.01; b.vx = 0; hitX = true; break; } }
+  if (b.vx > 0) { const tx = Math.floor((b.x + b.w) / T); for (let ty = top; ty <= bot; ty++) if (solid(tileAt(tx, ty))) { b.x = tx * T - b.w - 0.01; b.vx = 0; hitX = true; b.sideHit = { tx, ty }; break; } }
+  else if (b.vx < 0) { const tx = Math.floor(b.x / T); for (let ty = top; ty <= bot; ty++) if (solid(tileAt(tx, ty))) { b.x = (tx + 1) * T + 0.01; b.vx = 0; hitX = true; b.sideHit = { tx, ty }; break; } }
   const prevB = b.y + b.h;
   b.y += b.vy * dt; b.onGround = false; b.groundTile = 0;
   const l = Math.floor(b.x / T), r = Math.floor((b.x + b.w - 0.01) / T);
@@ -103,11 +112,14 @@ function moveBody(b, dt) {
     const ty = Math.floor((b.y + b.h) / T);
     for (let tx = l; tx <= r; tx++) { const v = tileAt(tx, ty); if (solid(v) || (v === 3 && prevB <= ty * T + 0.5)) { b.y = ty * T - b.h; b.vy = 0; b.onGround = true; b.groundTile = v; break; } }
   } else if (b.vy < 0) {
-    const ty = Math.floor(b.y / T);
-    for (let tx = l; tx <= r; tx++) if (solid(tileAt(tx, ty))) { b.y = (ty + 1) * T; b.vy = 0; break; }
+    const ty = Math.floor(b.y / T), cx = Math.floor((b.x + b.w / 2) / T);
+    let hx = solid(tileAt(cx, ty)) ? cx : -1;
+    if (hx < 0) for (let tx = l; tx <= r; tx++) if (solid(tileAt(tx, ty))) { hx = tx; break; }
+    if (hx >= 0) { b.y = (ty + 1) * T; b.vy = 0; b.headHit = { tx: hx, ty }; }
   }
   return hitX;
 }
+
 const overlap = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 function circleRect(s, e, pad) { pad = pad || 0; const cx = Math.max(e.x - pad, Math.min(s.x, e.x + e.w + pad)), cy = Math.max(e.y - pad, Math.min(s.y, e.y + e.h + pad)); return (s.x - cx) ** 2 + (s.y - cy) ** 2 < s.r * s.r; }
 
@@ -124,6 +136,9 @@ function spawnEnemy(e) {
   if (e.k === 'squirrel') return Object.assign(b, { w: 18, h: 22, x: e.tx * T + 3, y: e.ty * T - 22, cool: 1 + Math.random(), throwT: 0 });
   if (e.k === 'cactus') return Object.assign(b, { w: 16, h: 26, x: e.tx * T + 4, y: e.ty * T - 26 });
   if (e.k === 'bird') return hover(22, 16, 4, 0.7, 4);
+  if (e.k === 'ghost') return hover(20, 18, 2.5, 0.8, 6);
+  if (e.k === 'beetle') return Object.assign(b, { w: 22, h: 14, x: e.tx * T + 1, y: e.ty * T - 14, speed: 34 });
+  if (e.k === 'frog') return Object.assign(b, { w: 20, h: 16, x: e.tx * T + 2, y: e.ty * T - 16, cool: 0.8 + Math.random(), air: false });
   if (e.k === 'cloud') return hover(28, 20, 2.2, 0.9, 7);
   if (e.k === 'bee') return hover(20, 16, 2.2, 1.3, 9);
   if (e.k === 'ufo') return hover(28, 16, 2.6, 0.8, 5);
@@ -150,9 +165,15 @@ function startLevel(idx) {
     friend: { x: P.x - 20, y: P.y - 20, t: 0, dir: 1 },
     springs: L.springs.map(s => Object.assign({}, s)), water: L.water, grav: L.def.grav || 1, caramel: !!L.def.caramel, swimHint: false,
     winds: L.winds, belts: L.belts, beltDir: L.beltDir, gust: null,
+    qContent: L.qContent, qLeft: new Map(), bumps: new Map(), portals: L.portals.map(p => Object.assign({}, p)), buttons: L.buttons.map(b => Object.assign({}, b)), keys: L.keys.map(k => Object.assign({}, k)), keysHeld: 0, hasDoors: L.hasDoors, sw: false, dark: !!L.def.dark,
   };
   const bk = L.def.boss;
   if (bk === 'hedge') G.boss = { kind: 'hedge', name: 'Пан Колючка', acc: 'Пана Колючку', x: L.arena.x0 + 28 * T, gy: 10 * T, y: 10 * T - 21, hw: 28, hh: 22, hp: 16, max: 16, t: 0, st: 0, state: 'wait', dir: -1, rot: 0, flash: 0, dead: false, deadT: 0, alpha: 1, throwT: 2.5, rolls: 0, hinted: false };
+  else if (bk === 'wizard') {
+    const A = L.arena, cx = (A.x0 + A.x1) / 2;
+    const spots = [{ x: A.x0 + 7 * T, fy: 10 * T }, { x: A.x1 - 7 * T, fy: 10 * T }, { x: cx, fy: 10 * T }, { x: cx, fy: 7 * T }];
+    G.boss = { kind: 'wizard', name: 'Чарівник Плутанко', acc: 'Чарівника Плутанка', win: ' Тепер він показує тільки добрі фокуси.', spots, spot: 2, x: cx, fy: 10 * T, y: 10 * T - 28, hw: 16, hh: 28, hp: 22, max: 22, t: 0, st: 0, state: 'wait', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, clones: [], cloneHint: false };
+  }
   else if (bk === 'dragon') G.boss = { kind: 'dragon', name: 'Дракон Чхун', acc: 'Дракона Чхуна', win: ' Він одужав і більше не чхає.', x: L.arena.x0 + 30 * T, gy: 10 * T, y: 10 * T - 26, hw: 32, hh: 24, hp: 24, max: 24, t: 0, st: 0, state: 'sleep', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, dropT: 1.2 };
   else if (bk) G.boss = { kind: 'cloud', name: 'Король Похмурої Хмари', acc: 'Короля Похмурої Хмари', x: (L.arena.x0 + L.arena.x1) / 2, y: 62, hw: 46, hh: 28, hp: 14, max: 14, t: 0, phase: 'wait', pt: 0, boltT: 2.4, minionT: 5, diveT: 7, flash: 0, dead: false, deadT: 0, alpha: 1 };
   G.cam = 0;
@@ -192,7 +213,7 @@ function fire(big) {
   }
 }
 
-const FLYERS = { cloud: 1, bat: 1, bee: 1, ufo: 1, bird: 1 }, SWIMMERS = { fish: 1, jelly: 1 };
+const FLYERS = { cloud: 1, bat: 1, bee: 1, ufo: 1, bird: 1, ghost: 1 }, SWIMMERS = { fish: 1, jelly: 1 };
 function bubbles(x, y, n) { for (let i = 0; i < n; i++) G.parts.push({ k: 'bubble', x: x + (Math.random() - 0.5) * 8, y, vx: (Math.random() - 0.5) * 10, vy: -30 - Math.random() * 30, t: 0, life: 0.8 + Math.random() * 0.6, r: 1.2 + Math.random() * 1.8 }); }
 function defeat(e) {
   e.dead = true; G.defeated++; Snd.pop();
@@ -267,6 +288,24 @@ function updatePlayer(dt) {
       Snd.boing(); burst(s.x, top, 8, ['#fff', '#ffd6ea', '#ffe14d'], 90);
     }
   }
+  if (P.headHit && tileAt(P.headHit.tx, P.headHit.ty) === 7) bumpBlock(P.headHit.tx, P.headHit.ty);
+  if (P.sideHit && tileAt(P.sideHit.tx, P.sideHit.ty) === 11) tryDoor(P.sideHit.tx, P.sideHit.ty);
+  const pcxP = P.x + P.w / 2;
+  if (P.portalLock && !(Math.abs(pcxP - P.portalLock.x) < 14 && P.y + P.h > P.portalLock.gy - 44 && P.y < P.portalLock.gy)) P.portalLock = null;
+  for (const p of G.portals) {
+    if (p === P.portalLock || !(Math.abs(pcxP - p.x) < 12 && P.y + P.h > p.gy - 44 && P.y < p.gy)) continue;
+    const q = G.portals[p.to];
+    burst(p.x, p.gy - 22, 14, [PORTAL_COLS[p.pair % 3][0], '#fff'], 120);
+    P.x = q.x - P.w / 2; P.y = q.gy - P.h; P.vy = 0; P.onMover = null; P.portalLock = q;
+    burst(q.x, q.gy - 22, 18, [PORTAL_COLS[q.pair % 3][0], '#fff'], 140); Snd.portal();
+    G.cam = Math.max(G.arenaLock ? G.arena.x0 - T : 0, Math.min(Math.max(0, G.Wpx - viewW), q.x - viewW * 0.42));
+    break;
+  }
+  for (const b of G.buttons) {
+    const on = P.vy >= 0 && P.y + P.h >= b.gy - 12 && P.y + P.h <= b.gy + 2 && Math.abs(pcxP - b.x) < 14;
+    if (on && !b.down) { b.down = true; b.pt = 0.25; P.vy = -280; P.cut = true; P.onGround = false; toggleSwitch(); }
+    else if (!on && P.y + P.h < b.gy - 16) b.down = false;
+  }
   if (P.y < -44) { P.y = -44; if (P.vy < 0) P.vy = 0; }
   const minX = G.arenaLock ? G.arena.x0 : 0;
   if (P.x < minX) { P.x = minX; if (P.vx < 0) P.vx = 0; }
@@ -286,7 +325,7 @@ function updatePlayer(dt) {
   P.blinkT -= dt; if (P.blinkT < 0) { P.blink = 0.12; P.blinkT = 2 + Math.random() * 3; } if (P.blink > 0) P.blink -= dt;
 }
 
-const WALKERS = { snail: 1, hedgehog: 1, crab: 1, mush: 1, soldier: 1, mouse: 1, scorp: 1 }, HOVER = { cloud: 1, bee: 1, ufo: 1, fish: 1, bird: 1 }, NO_STOMP = { hedgehog: 1, spark: 1, cactus: 1 }, IMMUNE = { hedgehog: 1, cactus: 1 };
+const WALKERS = { snail: 1, hedgehog: 1, crab: 1, mush: 1, soldier: 1, mouse: 1, scorp: 1, beetle: 1 }, HOVER = { cloud: 1, bee: 1, ufo: 1, fish: 1, bird: 1, ghost: 1 }, NO_STOMP = { hedgehog: 1, spark: 1, cactus: 1 }, IMMUNE = { hedgehog: 1, cactus: 1 };
 function updateEnemy(e, dt) {
   e.t += dt; if (e.flash > 0) e.flash -= dt;
   const P = G.P;
@@ -298,6 +337,15 @@ function updateEnemy(e, dt) {
   } else if (HOVER[e.k]) {
     e.x = e.hx + Math.sin(e.t * e.speed) * e.range - e.w / 2; e.dir = Math.cos(e.t * e.speed) >= 0 ? 1 : -1;
     e.y = e.hy + Math.sin(e.t * 2.3) * e.bob - e.h / 2;
+  } else if (e.k === 'frog') {
+    const pcx = P.x + P.w / 2, cx = e.x + e.w / 2;
+    if (e.onGround) {
+      e.vx = 0; e.air = false; e.cool -= dt;
+      if (e.cool <= 0 && Math.abs(pcx - cx) < 260) { e.dir = pcx < cx ? -1 : 1; e.vy = -400; e.vx = e.dir * 95; e.cool = 1.5; e.air = true; }
+    }
+    e.vy = Math.min(e.vy + GRAV * dt, 600);
+    if (moveBody(e, dt)) { e.dir *= -1; e.vx = 0; }
+    if (e.y > VIEW_H + 40) e.dead = true;
   } else if (e.k === 'squirrel') {
     const pcx = P.x + P.w / 2, cx = e.x + e.w / 2, d = Math.abs(pcx - cx);
     e.dir = pcx < cx ? -1 : 1; e.cool -= dt; if (e.throwT > 0) e.throwT -= dt;
@@ -330,6 +378,7 @@ function updateBoss(dt) {
   if (!B) return;
   if (B.kind === 'hedge') return updateHedgeBoss(dt);
   if (B.kind === 'dragon') return updateDragonBoss(dt);
+  if (B.kind === 'wizard') return updateWizardBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -366,13 +415,52 @@ function hitBoss(d) {
   B.hp -= d; B.flash = 0.18; Snd.bossHit(); burst(B.x, B.y, 8, ['#fff', '#ffe14d'], 120);
   if (B.hp <= 0) {
     B.dead = true; B.hp = 0; G.bossDefeated = true; G.bolts = [];
-    if (B.kind === 'hedge' || B.kind === 'dragon') B.state = 'happy';
+    if (B.kind === 'hedge' || B.kind === 'dragon' || B.kind === 'wizard') B.state = 'happy';
+    if (B.kind === 'wizard') { B.clones = []; B.alpha = 1; }
     G.gust = null;
     G.enemies.forEach(e => { if (e.minion && !e.dead) defeat(e); });
     for (let i = 0; i < 18; i++) G.drops.push({ x: B.x + (Math.random() - 0.5) * 60, y: B.y, vx: (Math.random() - 0.5) * 260, vy: -150 - Math.random() * 250, t: 0, got: false });
     burst(B.x, B.y, 40, RAINBOW, 220); G.flash = 0.8; Snd.win();
     say(nameOf() + ' перемогла ' + B.acc + '!' + (B.win || (B.kind === 'hedge' ? ' Тепер він добрий.' : '')) + ' Ворота відчинилися.', 4);
     Music.start('victory');
+  }
+}
+function updateWizardBoss(dt) {
+  const B = G.boss, P = G.P, A = G.arena;
+  B.t += dt; if (B.flash > 0) B.flash -= dt;
+  B.y = B.fy - 28;
+  if (B.dead) { B.deadT += dt; return; }
+  if (!G.bossActive) {
+    if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.state = 'laugh'; B.st = 0; Music.start('boss'); say('Плутанко: «Хі-хі! Зараз я все переплутаю!»', 2.6); G.flash = 0.4; }
+    return;
+  }
+  B.st += dt;
+  const pcx = P.x + P.w / 2, angry = B.hp <= B.max / 2;
+  B.dir = pcx < B.x ? -1 : 1;
+  if (B.state === 'vanish') {
+    B.alpha = Math.max(0, 1 - B.st / 0.45); for (const cl of B.clones) cl.alpha = Math.min(cl.alpha, B.alpha * 0.8);
+    if (B.st > 0.45) {
+      const opts = B.spots.map((s, i) => i).filter(i => i !== B.spot && Math.abs(B.spots[i].x - pcx) > 70);
+      const pick = opts.length ? opts[Math.floor(Math.random() * opts.length)] : (B.spot + 1) % B.spots.length;
+      B.spot = pick; B.x = B.spots[pick].x; B.fy = B.spots[pick].fy; B.y = B.fy - 28;
+      B.clones = angry ? B.spots.map((s, i) => i).filter(i => i !== pick).sort(() => Math.random() - 0.5).slice(0, 2).map(i => ({ x: B.spots[i].x, fy: B.spots[i].fy, alpha: 0, dead: false })) : [];
+      B.state = 'appear'; B.st = 0; Snd.portal(); burst(B.x, B.y, 16, ['#fff', '#c9b6ff', '#ffd23f'], 130);
+    }
+  } else if (B.state === 'appear') {
+    B.alpha = Math.min(1, B.st / 0.5); for (const cl of B.clones) if (!cl.dead) cl.alpha = B.alpha * 0.8;
+    if (B.st > 0.5) { B.state = 'cast'; B.st = 0; }
+  } else if (B.state === 'cast') {
+    if (B.st > (angry ? 0.8 : 1.0)) {
+      const wx = B.x + B.dir * 22, wy = B.fy - 46, base = Math.atan2((P.y + P.h / 2) - wy, pcx - wx);
+      for (const d of angry ? [-0.5, -0.25, 0, 0.25, 0.5] : [-0.3, 0, 0.3]) G.bolts.push({ kind: 'magic', x: wx, y: wy, vx: Math.cos(base + d) * 125, vy: Math.sin(base + d) * 125, t: 0 });
+      Snd.tone(1200, 0.25, 'sine', 0.06, 2000); B.state = 'laugh'; B.st = 0;
+    }
+  } else if (B.state === 'laugh') {
+    if (B.st > (angry ? 1.3 : 1.8)) { B.state = 'vanish'; B.st = 0; }
+  }
+  if ((B.state === 'cast' || B.state === 'laugh') && overlap(P, { x: B.x - 14, y: B.fy - 56, w: 28, h: 56 })) {
+    if (P.vy > 40 && P.y + P.h - (B.fy - 56) < 18) { hitBoss(2); P.vy = -480; P.cut = true; }
+    else hurtPlayer(false);
   }
 }
 function updateDragonBoss(dt) {
@@ -491,6 +579,9 @@ function update(dt) {
       else { P.magnetT = 12; say('Магніт! Зірочки самі летять до тебе'); }
     }
   }
+  for (const k of G.keys) { if (k.got) continue; k.t += dt; if (Math.abs(k.x - pcx) < 24 && Math.abs(k.y - pcy) < 30) { k.got = true; G.keysHeld++; Snd.power(); burst(k.x, k.y, 14, ['#ffcc33', '#fff'], 120); say(G.keysHeld > 1 ? 'Ключиків: ' + G.keysHeld : 'Ключик! Тепер можна відчинити двері', 1.8); } }
+  for (const [i, v] of G.bumps) { if (v - dt <= 0) G.bumps.delete(i); else G.bumps.set(i, v - dt); }
+  for (const b of G.buttons) if (b.pt > 0) b.pt -= dt;
   for (const c of G.checks) if (!c.on && Math.abs(pcx - c.x) < 16 && P.y + P.h > c.gy - 44) { c.on = true; P.check = { x: c.x - 11, y: c.gy - 30 }; Snd.check(); burst(c.x + 8, c.gy - 34, 12, RAINBOW, 110); say('Прапорець піднято!', 1.6); }
 
   // постріли
@@ -504,9 +595,14 @@ function update(dt) {
       if (IMMUNE[e.k]) { Snd.tink(); burst(s.x, s.y, 4, ['#fff'], 70); if (s.big) s.life = 0; else { s.vx *= -0.7; s.life = Math.min(s.life, 0.25); } }
       else { e.hp -= s.dmg; e.flash = 0.15; if (e.hp <= 0) defeat(e); if (!s.big) s.life = 0; }
     }
-    for (const b of G.bolts) if (b.kind === 'puff' && !b.dead && s.life > 0 && Math.abs(s.x - b.x) < 9 + s.r && Math.abs(s.y - b.y) < 8 + s.r) { b.dead = true; if (!s.big) s.life = 0; burst(b.x, b.y, 8, ['#fff', '#e8dcff'], 90); Snd.pop(); }
+    for (const b of G.bolts) if ((b.kind === 'puff' || b.kind === 'magic') && !b.dead && s.life > 0 && Math.abs(s.x - b.x) < 9 + s.r && Math.abs(s.y - b.y) < 8 + s.r) { b.dead = true; if (!s.big) s.life = 0; burst(b.x, b.y, 8, ['#fff', '#e8dcff'], 90); Snd.pop(); }
     const B = G.boss;
-    if (B && G.bossActive && !B.dead && s.life > 0 && !s.hit.has(B) && Math.abs(s.x - B.x) < B.hw + s.r && Math.abs(s.y - B.y) < B.hh + s.r) {
+    if (B && B.kind === 'wizard' && G.bossActive && !B.dead && s.life > 0) for (const cl of B.clones) {
+      if (cl.dead || cl.alpha < 0.4 || s.life <= 0 || Math.abs(s.x - cl.x) > 16 + s.r || Math.abs(s.y - (cl.fy - 28)) > 28 + s.r) continue;
+      cl.dead = true; s.life = 0; burst(cl.x, cl.fy - 28, 16, ['#fff', '#c9b6ff', '#ffd23f'], 140); Snd.pop();
+      if (!B.cloneHint) { B.cloneHint = true; say('Пуф! Це був двійник. У справжнього Плутанка золота зірка на капелюсі', 3); }
+    }
+    if (B && G.bossActive && !B.dead && s.life > 0 && (B.kind !== 'wizard' || B.state === 'cast' || B.state === 'laugh') && !s.hit.has(B) && Math.abs(s.x - B.x) < B.hw + s.r && Math.abs(s.y - B.y) < B.hh + s.r) {
       s.hit.add(B);
       if (B.kind === 'hedge' && B.state !== 'dizzy') {
         Snd.tink(); burst(s.x, s.y, 4, ['#fff'], 70); s.vx *= -0.6; s.life = Math.min(s.life, 0.25);
@@ -518,8 +614,8 @@ function update(dt) {
   for (const b of G.bolts) {
     b.t += dt; if (b.g) b.vy += b.g * dt; else if (b.spike) b.vy += 900 * dt; b.x += b.vx * dt; b.y += b.vy * dt;
     const roll = b.kind === 'puff' && !b.fall;
-    const gone = roll ? (b.t > 4.5 || (G.arena && (b.x < G.arena.x0 || b.x > G.arena.x1))) : (solid(tileAt(Math.floor(b.x / T), Math.floor((b.y + (b.kind ? 5 : 10)) / T))) || b.y > VIEW_H);
-    const hb = b.kind === 'puff' ? { x: b.x - 7, y: b.y - 6, w: 14, h: 12 } : b.kind === 'acorn' ? { x: b.x - 4, y: b.y - 4, w: 8, h: 8 } : { x: b.x - 4, y: b.y - 9, w: 8, h: 18 };
+    const gone = (roll || b.kind === 'magic') ? (b.t > 4.5 || (G.arena && (b.x < G.arena.x0 || b.x > G.arena.x1)) || (b.kind === 'magic' && (b.y > VIEW_H || solid(tileAt(Math.floor(b.x / T), Math.floor(b.y / T)))))) : (solid(tileAt(Math.floor(b.x / T), Math.floor((b.y + (b.kind ? 5 : 10)) / T))) || b.y > VIEW_H);
+    const hb = b.kind === 'magic' ? { x: b.x - 5, y: b.y - 5, w: 10, h: 10 } : b.kind === 'puff' ? { x: b.x - 7, y: b.y - 6, w: 14, h: 12 } : b.kind === 'acorn' ? { x: b.x - 4, y: b.y - 4, w: 8, h: 8 } : { x: b.x - 4, y: b.y - 9, w: 8, h: 18 };
     if (gone) { b.dead = true; burst(b.x, b.y + 4, 6, b.kind === 'puff' ? ['#fff', '#e8dcff'] : ['#ffe14d', '#fff'], 80); }
     else if (overlap(P, hb)) { b.dead = true; hurtPlayer(false); }
   }
@@ -551,6 +647,40 @@ function update(dt) {
   if (G.flash > 0) G.flash -= dt;
   if (G.msg) { G.msg.t -= dt; if (G.msg.t <= 0) G.msg = null; }
   updateParts(dt);
+}
+function giveStar(x, y) {
+  G.points += 1; G.combo = G.comboT > 0 ? G.combo + 1 : 0; G.comboT = 0.7; Snd.star(G.combo);
+  G.parts.push({ k: 'starpop', x, y, vx: 0, vy: -170, t: 0, life: 0.55 });
+}
+function bumpBlock(tx, ty) {
+  const i = ty * G.Wt + tx, cnt = G.qContent.get(i) || 'star', x = tx * T + 12, y = ty * T - 8;
+  G.bumps.set(i, 0.18); Snd.bump();
+  if (cnt === 'star5') { const left = (G.qLeft.has(i) ? G.qLeft.get(i) : 5) - 1; G.qLeft.set(i, left); giveStar(x, y); if (left <= 0) G.map[i] = 8; }
+  else {
+    G.map[i] = 8;
+    if (cnt === 'star') giveStar(x, y);
+    else if (cnt === 'rainbow') { G.points += 10; G.rainbows++; Snd.rainbow(); floatText(x, y - 10, '+10', '#ff4fa3'); burst(x, y, 18, RAINBOW, 160); }
+    else { G.powers.push({ k: cnt, x, y: ty * T - 14, t: 0 }); Snd.power(); }
+  }
+  for (const e of G.enemies) if (!e.dead && Math.abs(e.x + e.w / 2 - x) < 18 && Math.abs(e.y + e.h - ty * T) < 5) defeat(e);
+}
+function tryDoor(tx, ty) {
+  if (G.keysHeld <= 0) { if (!G.msg || G.msg.t < 0.4) say('Потрібен ключик! Пошукай його', 1.6); return; }
+  G.keysHeld--; Snd.door();
+  let y0 = ty; while (y0 > 0 && G.map[(y0 - 1) * G.Wt + tx] === 11) y0--;
+  for (let y = y0; y < ROWS && G.map[y * G.Wt + tx] === 11; y++) { G.map[y * G.Wt + tx] = 0; burst(tx * T + 12, y * T + 12, 6, ['#ffcc33', '#fff', '#b8783e'], 110); }
+  say('Двері відчинилися!', 1.4);
+}
+function toggleSwitch() {
+  G.sw = !G.sw; Snd.click(); G.flash = 0.08;
+  const P = G.P;
+  for (let k = 0; k < 4; k++) {
+    let top = -1;
+    for (let ty = Math.floor(P.y / T); ty <= Math.floor((P.y + P.h - 0.01) / T); ty++) for (let tx = Math.floor(P.x / T); tx <= Math.floor((P.x + P.w - 0.01) / T); tx++) if (solid(tileAt(tx, ty)) && (top < 0 || ty < top)) top = ty;
+    if (top < 0) break;
+    P.y = top * T - P.h; P.vy = Math.min(P.vy, 0);
+  }
+  for (const e of G.enemies) if (!e.dead && solid(tileAt(Math.floor((e.x + e.w / 2) / T), Math.floor((e.y + e.h / 2) / T)))) defeat(e);
 }
 function updatePlatform(m, dt) {
   const y0 = m.y; m.dx = 0; m.dy = 0; m.st += dt;
