@@ -1,0 +1,258 @@
+<title>Зоряна Єдиноріжка</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nunito:wght@700;800;900&display=swap">
+<style>
+/* Layout: повноекранна canvas-гра; меню — картки-наліпки поверх пастельного неба; сенсорний пульт унизу */
+:root {
+  --ink: #3b1f4f; --ink-2: #74568a; --paper: #fffafd; --line: #f1d3e6;
+  --pink: #ff4fa3; --pink-d: #cf2a7c; --gold: #ffc23d; --gold-d: #cf8f00; --mint: #2fc7a4; --mint-d: #1b9478;
+  --night: #2a1640; --veil: rgba(42, 22, 64, .62);
+  --f-display: 'Comfortaa', 'Nunito', system-ui, sans-serif;
+  --f-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--night); color: var(--ink); font-family: var(--f-body); font-weight: 700; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
+#app { position: fixed; inset: 0; touch-action: none; }
+#game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#safeProbe { position: fixed; visibility: hidden; pointer-events: none; padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+
+.screen { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; -webkit-overflow-scrolling: touch;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(24px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; align-items: center; }
+.sky { background:
+  radial-gradient(circle at 12% 18%, rgba(255,255,255,.9) 0 2px, transparent 3px),
+  radial-gradient(circle at 78% 9%, rgba(255,255,255,.9) 0 2.5px, transparent 3.5px),
+  radial-gradient(circle at 88% 42%, rgba(255,255,255,.8) 0 2px, transparent 3px),
+  radial-gradient(circle at 30% 70%, rgba(255,255,255,.7) 0 1.5px, transparent 2.5px),
+  radial-gradient(ellipse at 50% 120%, #fff4d6 0%, transparent 55%),
+  linear-gradient(170deg, #ffc6e4 0%, #e6d7ff 52%, #c8e6ff 100%); }
+.veil { background: var(--veil); }
+.inner { width: min(100%, 940px); margin-block: auto; display: flex; flex-direction: column; gap: 16px; }
+
+.brand { text-align: center; }
+.brand h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(30px, 6vw, 50px); line-height: 1.05; margin: 4px 0 6px; letter-spacing: -.01em; text-wrap: balance;
+  color: #fff; -webkit-text-stroke: 0; text-shadow: 0 2px 0 var(--pink-d), 0 4px 0 var(--pink-d), 0 6px 0 #9d1f5f, 0 10px 18px rgba(120,30,90,.3); }
+.brand p { margin: 0; font-size: 17px; color: var(--ink-2); font-weight: 800; }
+
+.card { background: var(--paper); border: 4px solid #fff; border-radius: 28px; box-shadow: 0 7px 0 #ebbcd8, 0 18px 40px rgba(59,31,79,.18); padding: 18px; }
+.create { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 20px; align-items: start; }
+@media (max-width: 720px) { .create { grid-template-columns: minmax(0, 1fr); } }
+.stage { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 5 / 4; max-width: 100%; background: #ffe4f1; border: 3px solid #fff; box-shadow: inset 0 0 0 2px var(--line); }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+@media (max-width: 720px) { .stage { aspect-ratio: 16 / 10; } }
+
+.opts { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.lbl { display: block; font-size: 13px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 8px; }
+.field input { width: 100%; box-sizing: border-box; font: 900 24px var(--f-body); color: var(--ink); padding: 12px 16px; border-radius: 18px; border: 3px solid var(--line); background: #fff; outline: none; -webkit-user-select: text; user-select: text; }
+.field input:focus { border-color: var(--pink); box-shadow: 0 0 0 4px rgba(255,79,163,.18); }
+.field input::placeholder { color: #c7b1d3; }
+.err { margin: -6px 0 0; color: var(--pink-d); font-weight: 900; }
+.swatches, .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 46px; height: 46px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--line), 0 3px 0 rgba(59,31,79,.12); cursor: pointer; padding: 0; transition: transform .12s; }
+@media (max-width: 420px) { .sw { width: 40px; height: 40px; } .swatches { gap: 8px; } }
+.sw[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--pink), 0 4px 0 var(--pink-d); transform: scale(1.1); }
+.chip { font: 800 15px var(--f-body); color: var(--ink); padding: 9px 14px; border-radius: 999px; border: 2px solid var(--line); background: #fff; cursor: pointer; transition: transform .1s; }
+.chip[aria-pressed="true"] { background: var(--pink); border-color: var(--pink); color: #fff; box-shadow: 0 3px 0 var(--pink-d); }
+.chip:active, .sw:active { transform: scale(.95); }
+.hint { margin: 8px 0 0; font-size: 14px; color: var(--ink-2); }
+
+.btn { font: 900 18px var(--f-body); border: 0; border-radius: 18px; padding: 13px 22px; background: var(--pink); color: #fff; box-shadow: 0 5px 0 var(--pink-d); cursor: pointer; transition: transform .08s, box-shadow .08s; }
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--pink-d); }
+.btn.big { font-size: 22px; padding: 16px 28px; width: 100%; }
+.btn.gold { background: var(--gold); color: var(--ink); box-shadow: 0 5px 0 var(--gold-d); }
+.btn.gold:active { box-shadow: 0 2px 0 var(--gold-d); }
+.btn.ghost { background: #fff; color: var(--ink); box-shadow: 0 4px 0 var(--line); border: 2px solid var(--line); }
+.btn.ghost:active { box-shadow: 0 1px 0 var(--line); }
+:focus-visible { outline: 3px solid #4d7dff; outline-offset: 3px; }
+
+.maphead { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 18px; align-items: center; }
+.maphead .stage { aspect-ratio: 1 / 1; }
+@media (max-width: 560px) { .maphead { grid-template-columns: 110px minmax(0, 1fr); gap: 12px; } }
+.maphead h2 { font-family: var(--f-display); font-size: clamp(24px, 4.5vw, 34px); margin: 0 0 6px; line-height: 1.1; overflow-wrap: anywhere; }
+.story { margin: 0 0 10px; font-size: 16px; line-height: 1.45; color: var(--ink-2); max-width: 60ch; }
+.mh-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.pill { display: inline-flex; align-items: center; gap: 6px; background: #fff3c8; border: 2px solid #ffe08a; color: var(--ink); font-weight: 900; padding: 6px 12px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.pill svg { width: 18px; height: 18px; }
+
+.worlds { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 14px; }
+.worlds .part { grid-column: 1 / -1; font-family: var(--f-display); font-weight: 700; font-size: 19px; color: var(--ink); padding: 6px 4px 0; }
+.world { width: 100%; text-align: left; font: inherit; color: var(--ink); background: var(--paper); border: 4px solid #fff; border-radius: 22px; padding: 0; overflow: hidden; cursor: pointer; box-shadow: 0 6px 0 #ebbcd8, 0 12px 24px rgba(59,31,79,.14); display: flex; flex-direction: column; transition: transform .1s; }
+.world:active { transform: translateY(3px); }
+.world .thumb { position: relative; aspect-ratio: 16 / 9; max-width: 100%; }
+.world .thumb canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.world .num { position: absolute; left: 10px; top: 8px; width: 30px; height: 30px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-weight: 900; font-size: 16px; box-shadow: 0 2px 0 rgba(59,31,79,.2); }
+.world .wbody { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 4px; }
+.world .wname { font-weight: 900; font-size: 17px; line-height: 1.2; }
+.world .wblurb { font-size: 14px; color: var(--ink-2); line-height: 1.3; }
+.world .wstat { margin-top: 4px; font-size: 14px; font-weight: 900; color: var(--pink-d); font-variant-numeric: tabular-nums; }
+.world[disabled] { cursor: default; box-shadow: 0 6px 0 #e3d7e9; }
+.world[disabled] .thumb { filter: grayscale(.85) brightness(.9); }
+.world[disabled] .wstat { color: var(--ink-2); }
+.world .lock { position: absolute; inset: 0; display: grid; place-items: center; }
+.world .lock svg { width: 40px; height: 40px; filter: drop-shadow(0 3px 0 rgba(59,31,79,.3)); }
+.keys { margin: 4px 0 0; text-align: center; font-size: 14px; color: var(--ink-2); }
+.tip { margin: 0; text-align: center; font-size: 14px; color: var(--ink-2); }
+
+.modal { width: min(100%, 440px); text-align: center; display: flex; flex-direction: column; gap: 14px; margin-block: auto; }
+.modal h2 { font-family: var(--f-display); font-size: clamp(24px, 5vw, 32px); margin: 0; line-height: 1.15; text-wrap: balance; }
+.modal p { margin: 0; font-size: 17px; line-height: 1.45; color: var(--ink-2); }
+.modal .btns { display: flex; flex-direction: column; gap: 12px; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.stat { background: #fff4fa; border: 2px solid var(--line); border-radius: 16px; padding: 10px 6px; }
+.stat b { display: block; font-size: 26px; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--ink); }
+.stat span { font-size: 12px; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); }
+
+#topBtns { position: absolute; right: calc(12px + env(safe-area-inset-right, 0px)); top: calc(10px + env(safe-area-inset-top, 0px)); display: flex; gap: 10px; z-index: 5; }
+.ibtn { width: 46px; height: 46px; border-radius: 50%; border: 3px solid #fff; background: rgba(255,255,255,.82); color: var(--ink); display: grid; place-items: center; cursor: pointer; box-shadow: 0 3px 0 rgba(59,31,79,.25); padding: 0; }
+.ibtn svg { width: 22px; height: 22px; }
+.ibtn:active { transform: translateY(2px); }
+
+#pad { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; pointer-events: none; display: flex; justify-content: space-between; align-items: flex-end;
+  padding-left: max(18px, calc(env(safe-area-inset-left, 0px) + 10px)); padding-right: max(18px, calc(env(safe-area-inset-right, 0px) + 10px));
+  padding-block: 0 calc(14px + env(safe-area-inset-bottom, 0px)); }
+#pad.below { top: var(--padTop, 60%); align-items: center; padding-block: 8px calc(10px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(180deg, rgba(0,0,0,.08), transparent 30%); }
+.dpad, .act { display: flex; gap: 14px; pointer-events: auto; align-items: flex-end; touch-action: none; }
+.pbtn { width: 74px; height: 74px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: var(--ink);
+  background: rgba(255,255,255,.42); border: 3px solid rgba(255,255,255,.9); box-shadow: 0 4px 0 rgba(59,31,79,.25); touch-action: none; transition: transform .06s, background .06s; }
+.pbtn svg { width: 30px; height: 30px; }
+.pbtn span { font-size: 11px; font-weight: 900; line-height: 1; }
+.pbtn.on { background: rgba(255,255,255,.85); transform: scale(.93); }
+.pbtn.jump { width: 88px; height: 88px; background: rgba(255,79,163,.55); color: #fff; }
+.pbtn.jump.on { background: rgba(255,79,163,.9); }
+.pbtn.horn { background: rgba(255,194,61,.6); margin-bottom: 26px; }
+.pbtn.horn.on { background: rgba(255,194,61,.95); }
+#pad.below .dpad { gap: 12px; align-items: center; }
+#pad.below .pbtn { width: min(88px, 23vw); height: min(88px, 23vw); }
+#pad.below .act { flex-direction: column; align-items: flex-end; gap: 12px; }
+#pad.below .pbtn.horn { margin: 0 min(64px, 14vw) 0 0; width: min(80px, 21vw); height: min(80px, 21vw); }
+#pad.below .pbtn.jump { width: min(100px, 26vw); height: min(100px, 26vw); }
+@media (max-height: 520px) { .modal { padding: 14px 16px; } .modal { gap: 10px; } .modal h2 { font-size: 22px; } .modal p { font-size: 15px; } .stat { padding: 6px; } .stat b { font-size: 20px; } .btn.big { font-size: 19px; padding: 11px 22px; } }
+@media (prefers-reduced-motion: reduce) { .btn, .chip, .sw, .pbtn, .world { transition: none; } }
+</style>
+
+<div id="app">
+  <canvas id="game" aria-label="Ігрове поле"></canvas>
+  <div id="safeProbe"></div>
+
+  <div id="topBtns" hidden>
+    <button class="ibtn" id="btnSound" type="button" aria-label="Вимкнути звук"></button>
+    <button class="ibtn" id="btnPause" type="button" aria-label="Пауза">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.5" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.5" fill="currentColor"/></svg>
+    </button>
+  </div>
+
+  <div id="pad" hidden>
+    <div class="dpad" id="dpad">
+      <div class="pbtn" id="bLeft" aria-label="Ліворуч"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 4.5 7 12l8.5 7.5" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="pbtn" id="bRight" aria-label="Праворуч"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 4.5 17 12l-8.5 7.5" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="act">
+      <div class="pbtn horn" id="bHorn" aria-label="Постріл рогом"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20 18.5 3.5 12 21Z" fill="#ffe27a" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.6 17.6l5.6 1.2M11 14.3l4.6.9M13.2 11.2l3.4.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Ріг</span></div>
+      <div class="pbtn jump" id="bJump" aria-label="Стрибок"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 15.5 12 7l7.5 8.5" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Стрибок</span></div>
+    </div>
+  </div>
+
+  <section id="scrCreate" class="screen sky" aria-label="Створення єдиноріжки">
+    <div class="inner">
+      <header class="brand">
+        <h1>Зоряна Єдиноріжка</h1>
+        <p>Створи свою єдиноріжку і поверни веселку в небо</p>
+      </header>
+      <div class="create card">
+        <div class="stage"><canvas id="preview" aria-label="Твоя єдиноріжка"></canvas></div>
+        <div class="opts">
+          <div class="field">
+            <label class="lbl" for="inName">Як звати твою єдиноріжку?</label>
+            <input id="inName" maxlength="14" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Наприклад, Іскорка" enterkeyhint="done">
+          </div>
+          <p class="err" id="nameErr" hidden>Спочатку придумай ім'я</p>
+          <div><span class="lbl">Колір</span><div class="swatches" id="swBody"></div></div>
+          <div><span class="lbl">Грива і хвіст</span><div class="swatches" id="swMane"></div></div>
+          <div><span class="lbl">Прикраси</span><div class="chips" id="chAcc"></div></div>
+          <div><span class="lbl">Друг у подорожі</span><div class="chips" id="chFriend"></div></div>
+          <div><span class="lbl">Режим</span><div class="chips" id="chMode"></div><p class="hint" id="modeHint"></p></div>
+          <button class="btn big" id="btnGo" type="button">Вирушаймо!</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="scrMap" class="screen sky" hidden aria-label="Мапа країн">
+    <div class="inner">
+      <div class="maphead card">
+        <div class="stage"><canvas id="mapPreview" aria-hidden="true"></canvas></div>
+        <div>
+          <h2 id="mapName"></h2>
+          <p class="story">Король Похмурої Хмари сховав веселку, Пан Колючка заховав чарівні зірочки, а Дракон Чхун їх розчхав. Збирай зірочки, відчиняй зоряні ворота і пройди всі п'ятнадцять країн.</p>
+          <div class="mh-row">
+            <span class="pill" id="recordPill"></span>
+            <button class="btn ghost" id="btnEdit" type="button">Змінити єдиноріжку</button>
+          </div>
+        </div>
+      </div>
+      <ol class="worlds" id="worlds"></ol>
+      <p class="tip" id="rotateTip" hidden>На телефоні зручніше грати, якщо повернути його боком.</p>
+      <p class="keys" id="keysHint">Клавіатура: стрілки — бігти, пробіл — стрибок, X — ріг (затисни, щоб зарядити велику кулю), P — пауза.</p>
+    </div>
+  </section>
+
+  <section id="scrPause" class="screen veil" hidden aria-label="Пауза">
+    <div class="modal card">
+      <h2>Пауза</h2>
+      <p id="pauseText"></p>
+      <div class="btns">
+        <button class="btn big" id="btnResume" type="button">Грати далі</button>
+        <button class="btn ghost" id="btnRestart" type="button">Почати рівень спочатку</button>
+        <button class="btn ghost" id="btnSound2" type="button">Вимкнути звук</button>
+        <button class="btn ghost" id="btnToMap" type="button">До мапи</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="scrWin" class="screen veil" hidden aria-label="Рівень пройдено">
+    <div class="modal card">
+      <h2 id="winTitle"></h2>
+      <p id="winText"></p>
+      <div class="stats">
+        <div class="stat"><b id="sStars">0</b><span>зірочок</span></div>
+        <div class="stat"><b id="sRain">0</b><span>веселкових</span></div>
+        <div class="stat"><b id="sFoes">0</b><span>переможено</span></div>
+      </div>
+      <div class="btns">
+        <button class="btn big" id="btnNext" type="button">Далі</button>
+        <button class="btn ghost" id="btnWinMap" type="button">До мапи</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="scrLose" class="screen veil" hidden aria-label="Серця закінчилися">
+    <div class="modal card">
+      <h2>Ой! Серця закінчилися</h2>
+      <p id="loseText"></p>
+      <div class="btns">
+        <button class="btn big" id="btnContinue" type="button">Продовжити з прапорця</button>
+        <button class="btn ghost" id="btnLoseRestart" type="button">Почати рівень спочатку</button>
+        <button class="btn ghost" id="btnLoseMap" type="button">До мапи</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="scrFinal" class="screen veil" hidden aria-label="Перемога">
+    <div class="modal card">
+      <h2>Усі країни врятовано!</h2>
+      <p id="finalText"></p>
+      <div class="stats">
+        <div class="stat"><b id="fStars">0</b><span>зірочок</span></div>
+        <div class="stat"><b id="fRain">0</b><span>веселкових</span></div>
+        <div class="stat"><b id="fFoes">0</b><span>переможено</span></div>
+      </div>
+      <div class="btns">
+        <button class="btn big gold" id="btnFinalMap" type="button">До мапи</button>
+      </div>
+    </div>
+  </section>
+</div>
