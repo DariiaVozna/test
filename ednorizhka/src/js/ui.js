@@ -37,6 +37,7 @@ function resize() {
 function drawMover(c, m, theme) {
   if (m.crumble) return drawCrumble(c, m, G.t, theme);
   if (m.balloon) return drawBalloonLift(c, m, G.t);
+  if (drawMover2(c, m, theme)) return;
   if (theme === 'space') {
     c.fillStyle = '#9c93c9'; c.strokeStyle = INK; c.lineWidth = 1.6; rr(c, m.x, m.y + 2, m.w, 12, 6); c.fill(); c.stroke();
     c.fillStyle = '#7d73b3'; ell(c, m.x + m.w * 0.3, m.y + 8, 3.4, 2); c.fill(); ell(c, m.x + m.w * 0.72, m.y + 7, 2.4, 1.5); c.fill();
@@ -101,15 +102,16 @@ function renderGame(dt) {
     for (let ty = 0; ty < ROWS; ty++) {
       const v = G.map[ty * G.Wt + tx]; if (!v || v === 5) continue;
       let kind, l = false, r = false;
-      if (v === 1) { const up = ty > 0 ? G.map[(ty - 1) * G.Wt + tx] : 0; kind = (up === 1 || up === 2 || up === 5) ? 'fill' : 'top'; l = tileAt(tx - 1, ty) !== 1; r = tileAt(tx + 1, ty) !== 1; }
+      if (v === 1) { const up = ty > 0 ? G.map[(ty - 1) * G.Wt + tx] : 0; kind = (up === 1 || up === 2 || up === 5 || up === 12) ? 'fill' : 'top'; l = tileAt(tx - 1, ty) !== 1; r = tileAt(tx + 1, ty) !== 1; }
       else if (v === 2) kind = 'block';
       else if (v === 7) kind = 'qblock';
       else if (v === 8) kind = 'used';
       else if (v === 9) kind = G.sw ? 'pinkS' : 'pinkG';
       else if (v === 10) kind = G.sw ? 'blueG' : 'blueS';
       else if (v === 11) kind = (ty > 0 && G.map[(ty - 1) * G.Wt + tx] === 11) ? 'door' : 'doorTop';
+      else if (v === 12) kind = 'bounce';
       else { kind = 'cloud'; l = tileAt(tx - 1, ty) !== 3; r = tileAt(tx + 1, ty) !== 3; }
-      const bt = (v === 7 || v === 8) ? G.bumps.get(ty * G.Wt + tx) : 0;
+      const bt = (v === 7 || v === 8 || v === 12) ? G.bumps.get(ty * G.Wt + tx) : 0;
       const bo = bt ? -Math.sin((0.18 - bt) / 0.18 * Math.PI) * 5 : 0;
       c.drawImage(tileSprite(G.theme, kind, l, r, ps), sx, by + Math.round((ty * T + bo) * ps));
     }
@@ -118,8 +120,11 @@ function renderGame(dt) {
   c.setTransform(ps, 0, 0, ps, -camPx, by);
   const vis = (x, m) => x > G.cam - (m || 40) && x < G.cam + viewW + (m || 40);
   for (const b of G.belts) if (b.x < G.cam + viewW + 20 && b.x + b.w > G.cam - 20) drawBelt(c, b, t);
-  for (const z of G.winds) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) drawWind(c, z, t, G.theme);
+  for (const z of G.winds) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) { if (z.cyc) drawGeyser(c, z, t, G.t); else drawWind(c, z, t, G.theme); }
+  for (const w of G.wheels) if (vis(w.cx, w.r + 60)) drawWheelStruct(c, w, t, G.theme);
   for (const d of G.decor) if (vis(d.x)) drawDecor(c, d, t);
+  for (const v of G.vines) if (vis(v.x)) drawVine(c, v, t);
+  for (const l of G.launchers) if (vis(l.x)) drawLauncher(c, l, t);
   for (const m of G.movers) if (vis(m.x, 90)) drawMover(c, m, G.theme);
   for (const s of G.springs) if (vis(s.x)) drawSpring(c, s.x, s.gy, s.sq, G.theme);
   for (const p of G.portals) if (vis(p.x)) drawPortal(c, p, t);
@@ -163,12 +168,15 @@ function renderGame(dt) {
     else if (e.k === 'frog') drawFrog(c, cx, e.y + e.h, e.dir, e.t, e.air, fl);
     else if (e.k === 'ghost') drawGhost(c, cx, e.y + e.h / 2, e.t, e.dir, fl);
     else if (e.k === 'beetle') drawBeetle(c, cx, e.y + e.h, e.dir, e.t, fl);
+    else if (drawEnemy2(c, e, cx, fl)) { }
     else drawBat(c, cx, e.y + e.h / 2, e.t, e.state === 'hang', fl);
   }
   const B = G.boss;
   if (B && (G.bossActive || B.dead || vis(B.x, 120))) {
     if (B.kind === 'hedge') drawBigHedgehog(c, B.x, B.gy, B.dir, B.t, B.state, B.flash > 0, B.rot);
     else if (B.kind === 'dragon') drawDragonBoss(c, B.x, B.y, B.t, B.state, B.dir, B.flash > 0, B.st);
+    else if (B.kind === 'medusa') drawMedusa(c, B, B.t);
+    else if (B.kind === 'robot') drawRobot(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -180,7 +188,7 @@ function renderGame(dt) {
       c.restore();
     }
   }
-  for (const b of G.bolts) { if (b.kind === 'magic') drawMagic(c, b.x, b.y, b.t); else if (b.kind === 'puff') drawPuff(c, b.x, b.y, b.t); else if (b.kind === 'acorn') drawAcorn(c, b.x, b.y, b.t * 10); else if (b.spike) drawSpike(c, b.x, b.y, Math.atan2(b.vy, b.vx)); else drawBolt(c, b.x, b.y, b.t); }
+  for (const b of G.bolts) { if (drawBolt2(c, b)) { } else if (b.kind === 'magic') drawMagic(c, b.x, b.y, b.t); else if (b.kind === 'puff') drawPuff(c, b.x, b.y, b.t); else if (b.kind === 'acorn') drawAcorn(c, b.x, b.y, b.t * 10); else if (b.spike) drawSpike(c, b.x, b.y, Math.atan2(b.vy, b.vx)); else drawBolt(c, b.x, b.y, b.t); }
 
   const P = G.P;
   if (save.profile.friend === 'cat') drawCat(c, G.friend.x, G.friend.y, G.friend.dir, G.friend.t);
@@ -192,6 +200,7 @@ function renderGame(dt) {
     c.restore();
   }
   const blinkHide = P.inv > 0 && Math.floor(P.inv * 14) % 2 === 0;
+  if (!P.inCannon) {
   drawUnicorn(c, { x: pcx, y: P.y + P.h + 1, dir: P.dir, t: P.t, run: P.onGround ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround, s: 0.8, prof: save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
   // ім'я над головою
   c.font = '900 9px Nunito, system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
@@ -199,6 +208,7 @@ function renderGame(dt) {
   c.fillStyle = 'rgba(255,255,255,.9)'; rr(c, pcx - nw / 2, ny - 6.5, nw, 13, 6.5); c.fill();
   c.strokeStyle = '#ff4fa3'; c.lineWidth = 1; c.stroke();
   c.fillStyle = INK; c.fillText(nm, pcx, ny + 0.5);
+  }
 
   for (const z of G.water) drawWater(c, z, G.cam, viewW, t);
   for (const s of G.shots) {
@@ -215,7 +225,8 @@ function renderGame(dt) {
     else if (p.k === 'starpop') { c.globalAlpha = Math.min(1, k * 2); drawStar(c, p.x, p.y, p.t * 3, 7); }
     else if (p.k === 'wind') { c.globalAlpha = k * 0.8; c.strokeStyle = '#ffffff'; c.lineWidth = 2; c.beginPath(); c.moveTo(p.x, p.y); c.lineTo(p.x - p.dir * 18, p.y); c.stroke(); }
     else if (p.k === 'bubble') { c.globalAlpha = k * 0.85; c.strokeStyle = '#ffffff'; c.lineWidth = 1; circ(c, p.x + Math.sin(p.t * 8) * 1.5, p.y, p.r); c.stroke(); }
-    else if (p.k === 'text') { c.globalAlpha = k; c.font = '900 12px Nunito, system-ui, sans-serif'; c.textAlign = 'center'; c.lineWidth = 3; c.strokeStyle = '#fff'; c.strokeText(p.text, p.x, p.y); c.fillStyle = p.col; c.fillText(p.text, p.x, p.y); }
+    else if (p.k === 'note') drawPart2(c, p, k);
+    else if (p.k === 'text') { c.globalAlpha = k; c.font = '900 12px Nunito, system-ui, sans-serif'; c.textAlign = 'center'; c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = '#fff'; c.strokeText(p.text, p.x, p.y); c.fillStyle = p.col; c.fillText(p.text, p.x, p.y); }
     c.globalAlpha = 1;
   }
   for (const f of G.flys) { c.globalAlpha = Math.min(1, (4 - f.t)); drawButterfly(c, f.x, f.y, f.t, f.col); c.globalAlpha = 1; }
@@ -276,7 +287,7 @@ function drawHud(c) {
   if (B && G.bossActive && !B.dead) {
     const bw = Math.min(280, SW * 0.6), bx = (SW - bw) / 2, byy = top + H + 12;
     c.font = '900 13px Nunito, system-ui, sans-serif'; c.textAlign = 'center';
-    c.lineWidth = 3; c.strokeStyle = 'rgba(42,22,64,.7)'; c.strokeText(B.name, SW / 2, byy); c.fillStyle = '#fff'; c.fillText(B.name, SW / 2, byy);
+    c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = 'rgba(42,22,64,.7)'; c.strokeText(B.name, SW / 2, byy); c.fillStyle = '#fff'; c.fillText(B.name, SW / 2, byy);
     hudPill(c, bx, byy + 10, bw, 16, 'rgba(42,22,64,.7)');
     const g = c.createLinearGradient(bx, 0, bx + bw, 0); RAINBOW.forEach((col, i) => g.addColorStop(i / 5, col));
     c.fillStyle = g; rr(c, bx + 3, byy + 13, Math.max(10, (bw - 6) * B.hp / B.max), 10, 5); c.fill();
@@ -365,7 +376,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -419,6 +430,8 @@ function showWin() {
   $('winText').textContent = LEVELS[i].name + ' позаду. Наступна країна: ' + LEVELS[i + 1].name + '.';
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
+  if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 24) { $('winTitle').textContent = 'Медуза Желейка подобрішала!'; $('winText').textContent = 'Але Робот Брязкало забирає всі зірочки на свою фабрику. Треба його зупинити! Наступна країна: ' + LEVELS[25].name + '.'; }
   if (i === 9) { $('winTitle').textContent = 'Пан Колючка тепер добрий!'; $('winText').textContent = 'Але Дракон Чхун застудився, і його «Апчхи!» розвіяло зірочки по нових країнах. Наступна країна: ' + LEVELS[10].name + '.'; }
   $('sStars').textContent = G.points; $('sRain').textContent = G.rainbows; $('sFoes').textContent = G.defeated;
   show('scrWin');
@@ -430,7 +443,7 @@ function showLose() {
 }
 function continueFromCheck() {
   const P = G.P; P.hearts = 3; P.x = P.check.x; P.y = P.check.y; P.vx = P.vy = 0; P.inv = 2; P.safe = { x: P.x, y: P.y };
-  if (G.bossActive && G.boss && !G.boss.dead) { G.bolts = []; if (G.boss.kind === 'hedge') { G.boss.state = 'walk'; G.boss.st = 0; G.boss.x = Math.max(G.boss.x, G.arena.x0 + 14 * T); } if (G.boss.kind === 'dragon') { G.boss.state = 'takeoff'; G.boss.st = 0; G.gust = null; } }
+  if (G.bossActive && G.boss && !G.boss.dead) { G.bolts = []; if (G.boss.kind === 'hedge') { G.boss.state = 'walk'; G.boss.st = 0; G.boss.x = Math.max(G.boss.x, G.arena.x0 + 14 * T); } if (G.boss.kind === 'dragon') { G.boss.state = 'takeoff'; G.boss.st = 0; G.gust = null; } resetBoss2(G.boss); }
   mode = 'play'; show(null); setPlayUi(true);
 }
 function soundIcon() {

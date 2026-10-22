@@ -141,6 +141,11 @@ function drawCrumble(c, m, t, theme) {
     c.fillStyle = '#e6a9bf'; rr(c, 0, 1, m.w, 11, 3); c.fill(); c.stroke();
     c.strokeStyle = '#a85d7a'; c.lineWidth = 1; c.beginPath(); c.moveTo(m.w * 0.3, 1); c.lineTo(m.w * 0.36, 6); c.lineTo(m.w * 0.3, 12); c.moveTo(m.w * 0.7, 1); c.lineTo(m.w * 0.64, 7); c.stroke();
     c.fillStyle = 'rgba(255,255,255,.5)'; c.fillRect(3, 2.5, m.w - 6, 1.4);
+  } else if (theme === 'snow') {
+    c.fillStyle = '#c7ecff'; rr(c, 0, 1, m.w, 11, 4); c.fill(); c.stroke();
+    c.fillStyle = '#ffffff'; rr(c, 1, 0, m.w - 2, 4, 2); c.fill();
+    c.strokeStyle = '#7fb8e6'; c.lineWidth = 1; c.beginPath(); c.moveTo(m.w * 0.35, 4); c.lineTo(m.w * 0.42, 8); c.lineTo(m.w * 0.36, 12); c.moveTo(m.w * 0.7, 4); c.lineTo(m.w * 0.64, 9); c.stroke();
+    c.fillStyle = '#ffffff'; for (let x = 4; x < m.w - 2; x += 9) { c.beginPath(); c.moveTo(x, 12); c.lineTo(x + 3, 12); c.lineTo(x + 1.5, 16); c.closePath(); c.fill(); }
   } else {
     c.fillStyle = '#8a5a3a'; rr(c, 0, 4, m.w, 7, 3.5); c.fill(); c.stroke();
     c.lineWidth = 0.8;
@@ -306,6 +311,7 @@ function drawDecor3(c, d, t) {
       c.strokeStyle = '#c9a05a'; c.lineWidth = 1.4; c.beginPath();
       for (let i = -2; i <= 2; i++) { c.moveTo(x + i * 1.5, y); c.lineTo(x + i * 3 + Math.sin(t * 2 + i) * 0.8, y - 7 - (2 - Math.abs(i)) * 2); }
       c.stroke(); break;
+    default: drawDecor5(c, d, t);
   }
 }
 
