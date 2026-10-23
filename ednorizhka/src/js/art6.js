@@ -209,6 +209,7 @@ function drawWheelStruct(c, w, t, theme) {
 }
 function drawMover2(c, m, theme) {
   if (m.bubble) { drawBubblePlat(c, m, G.t); return true; }
+  if (m.cart) { drawCart(c, m, G.t); return true; }
   c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4;
   if (m.circ && theme !== 'factory') {
     const cx = m.x + m.w / 2;
@@ -223,7 +224,7 @@ function drawMover2(c, m, theme) {
     c.fillStyle = '#e6ebf5'; c.fillRect(m.x + 2, m.y + 2.5, m.w - 4, 3);
     rr(c, m.x, m.y + 1, m.w, 10, 3); c.stroke();
     c.fillStyle = '#6e7a96'; circ(c, m.x + 4, m.y + 8, 1.2); c.fill(); circ(c, m.x + m.w - 4, m.y + 8, 1.2); c.fill();
-  } else if (theme === 'pirate' || theme === 'jungle') {
+  } else if (theme === 'pirate' || theme === 'jungle' || theme === 'mine' || theme === 'burrow') {
     c.fillStyle = '#c98d55'; rr(c, m.x, m.y + 2, m.w, 9, 3); c.fill(); c.stroke();
     c.strokeStyle = '#8a5a30'; c.lineWidth = 1; c.beginPath(); for (let x = m.x + 8; x < m.x + m.w - 2; x += 8) { c.moveTo(x, m.y + 3); c.lineTo(x, m.y + 10); } c.stroke();
     c.strokeStyle = theme === 'jungle' ? '#4fae5a' : '#e6c27a'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(m.x + 4, m.y + 6.5); c.lineTo(m.x + m.w - 4, m.y + 6.5); c.stroke();
@@ -281,7 +282,7 @@ function drawBlock3(c, b) {
     c.fillStyle = '#d6deee'; rr(c, 3.5, 3.5, T - 7, 5, 2); c.fill();
     c.fillStyle = '#7d8aa6'; for (const [x, y] of [[5, 5], [19, 5], [5, 19], [19, 19]]) { circ(c, x, y, 1.3); c.fill(); }
     c.strokeStyle = '#8f9cb8'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(6, 13); c.lineTo(18, 13); c.stroke();
-  } else return false;
+  } else return drawBlock4(c, b);
   return true;
 }
 
@@ -325,6 +326,7 @@ function drawDecor6(c, d, t) {
       c.fillStyle = '#e3b26b'; rr(c, x - 7, y - 12, 14, 12, 2); c.fill(); c.stroke();
       c.strokeStyle = '#a8743f'; c.beginPath(); c.moveTo(x - 7, y - 6); c.lineTo(x + 7, y - 6); c.stroke();
       c.fillStyle = '#ff7ab8'; heartPath(c, x, y - 9, 5); c.fill(); break;
+    default: drawDecor7(c, d, t);
   }
 }
 
@@ -432,7 +434,7 @@ function drawEnemy2(c, e, cx, fl) {
     case 'snowman': drawSnowman(c, cx, e.y + e.h, e.dir, e.t, e.throwT > 0, fl); return true;
     case 'penguin': drawPenguin(c, cx, e.y + e.h, e.dir, e.t, fl); return true;
   }
-  return false;
+  return drawEnemy3(c, e, cx, fl);
 }
 function drawBolt2(c, b) {
   switch (b.kind) {
@@ -442,6 +444,7 @@ function drawBolt2(c, b) {
     case 'snowball': drawSnowball(c, b.x, b.y); return true;
     case 'gear': drawGearBolt(c, b.x, b.y, b.t); return true;
     case 'wave': drawWave(c, b.x, b.y, b.t, b.vx > 0 ? 1 : -1); return true;
+    case 'rock': drawRock(c, b.x, b.y, b.t); return true;
   }
   return false;
 }

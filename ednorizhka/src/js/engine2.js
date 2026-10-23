@@ -18,8 +18,8 @@ Object.assign(TUNES, {
 Object.assign(WALKERS, { ginger: 1, penguin: 1, dino: 1 });
 Object.assign(HOVER, { parrot: 1, gull: 1, note: 1 });
 Object.assign(FLYERS, { parrot: 1, gull: 1, note: 1, ptero: 1 });
-const ENEMY2 = { monkey: 1, snowman: 1, cannon: 1, bouncer: 1 };
-const SHOOTABLE = { puff: 1, magic: 1, bub: 1, ball: 1, snowball: 1 };
+const ENEMY2 = { monkey: 1, snowman: 1, cannon: 1, bouncer: 1, mole: 1 };
+const SHOOTABLE = { puff: 1, magic: 1, bub: 1, ball: 1, snowball: 1, rock: 1 };
 
 function spawnEnemy2(e, b, hover) {
   const g = (w, h, o) => Object.assign(b, { w, h, x: e.tx * T + (T - w) / 2, y: e.ty * T - h }, o);
@@ -35,7 +35,7 @@ function spawnEnemy2(e, b, hover) {
     case 'note': return hover(18, 20, 2.4, 1.1, 10);
     case 'ptero': return Object.assign(b, { w: 26, h: 16, hx: e.tx * T + 12, hy: e.ty * T + 12, x: e.tx * T - 1, y: e.ty * T + 4, state: 'hang', st: 0, cool: 0 });
   }
-  return null;
+  return spawnEnemy3(e, b, hover, g);
 }
 
 function updateEnemy2(e, dt) {
@@ -63,7 +63,7 @@ function updateEnemy2(e, dt) {
       e.vy = -330;
     }
     if (e.y > VIEW_H + 40) e.dead = true;
-  }
+  } else if (e.k === 'mole') updateMole(e, dt);
 }
 
 /* Ліани: тримай «Стрибок», щоб лізти; вбік, щоб зістрибнути */
@@ -140,6 +140,7 @@ function update2(dt) {
       }
     } else if (L.st > 1.2) L.state = 'idle';
   }
+  update3(dt);
 }
 
 /* Бульбашки-платформи */
@@ -263,5 +264,6 @@ function armored2(s, B) {
 }
 function resetBoss2(B) {
   if (B.kind === 'medusa') { B.state = 'float'; B.st = 0; }
+  if (B.kind === 'moleking') { B.state = 'dig'; B.st = 0; }
   if (B.kind === 'robot') { B.state = 'walk'; B.st = 0; B.y = B.gy - 32; B.vx = B.vy = 0; B.x = Math.max(B.x, G.arena.x0 + 14 * T); }
 }
