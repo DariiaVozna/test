@@ -9,7 +9,7 @@ JS="js/art.js js/world.js js/art2.js js/art3.js js/art4.js js/art5.js js/art6.js
 
 {
   printf '<!doctype html>\n<html lang="uk">\n<head>\n<meta charset="utf-8">\n'
-  printf '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+  printf '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">\n'
   printf '<meta name="theme-color" content="#ffc6e4">\n'
   printf '<style>html{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%%}[hidden]{display:none!important}</style>\n'
   awk '/<div id="app">/{exit} {print}' head.html | grep -v 'claude:viewport-fit-sides'

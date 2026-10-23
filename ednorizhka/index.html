@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#ffc6e4">
 <style>html{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Зоряна Єдиноріжка</title>
@@ -20,6 +20,7 @@
   color-scheme: light;
 }
 html, body { height: 100%; overflow: hidden; }
+html { touch-action: manipulation; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body { background: var(--night); color: var(--ink); font-family: var(--f-body); font-weight: 700; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
 #app { position: fixed; inset: 0; touch-action: none; }
 #game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -4424,7 +4425,7 @@ function pollInput() {
 }
 
 /* ===== Стан гри ===== */
-const SPEED = 150, JUMP = 540, GRAV = 1500, STEP = 1 / 60;
+const SPEED = 150, JUMP = 580, GRAV = 1500, STEP = 1 / 60;
 let G = null;
 let mode = 'create';
 
@@ -4600,7 +4601,7 @@ function updatePlayer(dt) {
   } else {
     if (P.jumpBuf > 0 && P.coyote > 0) { P.vy = -JUMP; P.jumpBuf = 0; P.coyote = 0; P.onGround = false; P.onMover = null; P.cut = false; Snd.jump(); G.parts.push({ k: 'puff', x: P.x + P.w / 2, y: P.y + P.h, vx: 0, vy: 0, t: 0, life: 0.35, r: 6 }); }
     else if (P.jumpBuf > 0 && P.wingsT > 0 && !P.onGround) { P.vy = Math.min(P.vy, -340); P.jumpBuf = 0; P.cut = true; Snd.flap(); burst(P.x + 4, P.y + 8, 4, ['#fff'], 60); }
-    if (!In.jump && P.vy < -200 && !P.cut) { P.vy = -200; P.cut = true; }
+    if (!In.jump && P.vy < -340 && !P.cut) { P.vy = -340; P.cut = true; }
     const glide = P.wingsT > 0 && In.jump && P.vy > 0;
     P.vy = Math.min(P.vy + (glide ? 450 : GRAV * G.grav) * dt, P.wingsT > 0 ? 230 : (G.grav < 1 ? 470 : 620));
     const wx = P.x + P.w / 2, wy = P.y + P.h / 2;
@@ -5848,7 +5849,26 @@ function holdButton(id, key) {
 }
 holdButton('bJump', 'jump'); holdButton('bHorn', 'shoot');
 $('pad').addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('gesturestart', e => e.preventDefault());
+/* Захист від випадкового збільшення екрана: діти тиснуть двома пальцями одразу або двічі поспіль */
+for (const ev of ['gesturestart', 'gesturechange', 'gestureend']) document.addEventListener(ev, e => e.preventDefault());
+document.addEventListener('dblclick', e => e.preventDefault());
+document.addEventListener('touchmove', e => { if (e.touches.length > 1 || mode === 'play') e.preventDefault(); }, { passive: false });
+let lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = performance.now();
+  if (now - lastTouchEnd < 380 && e.target.closest && e.target.closest('#pad, #game, #topBtns')) e.preventDefault();
+  lastTouchEnd = now;
+}, { passive: false });
+/* Якщо екран усе ж збільшився — ставимо гру на паузу й повертаємо звичайний масштаб */
+let zoomFix = false;
+function zoomGuard() {
+  const vv = window.visualViewport;
+  if (!vv || vv.scale < 1.03) return;
+  if (mode === 'play') pauseGame();
+  const meta = document.querySelector('meta[name=viewport]');
+  if (meta) { zoomFix = !zoomFix; meta.setAttribute('content', 'width=device-width, initial-scale=1' + (zoomFix ? '.0' : '') + ', minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'); }
+}
+if (window.visualViewport) { visualViewport.addEventListener('resize', zoomGuard); setInterval(zoomGuard, 1500); }
 document.addEventListener('visibilitychange', () => { if (document.hidden) pauseGame(); });
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', () => setTimeout(resize, 200));

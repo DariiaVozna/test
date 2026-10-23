@@ -92,7 +92,7 @@ function pollInput() {
 }
 
 /* ===== Стан гри ===== */
-const SPEED = 150, JUMP = 540, GRAV = 1500, STEP = 1 / 60;
+const SPEED = 150, JUMP = 580, GRAV = 1500, STEP = 1 / 60;
 let G = null;
 let mode = 'create';
 
@@ -268,7 +268,7 @@ function updatePlayer(dt) {
   } else {
     if (P.jumpBuf > 0 && P.coyote > 0) { P.vy = -JUMP; P.jumpBuf = 0; P.coyote = 0; P.onGround = false; P.onMover = null; P.cut = false; Snd.jump(); G.parts.push({ k: 'puff', x: P.x + P.w / 2, y: P.y + P.h, vx: 0, vy: 0, t: 0, life: 0.35, r: 6 }); }
     else if (P.jumpBuf > 0 && P.wingsT > 0 && !P.onGround) { P.vy = Math.min(P.vy, -340); P.jumpBuf = 0; P.cut = true; Snd.flap(); burst(P.x + 4, P.y + 8, 4, ['#fff'], 60); }
-    if (!In.jump && P.vy < -200 && !P.cut) { P.vy = -200; P.cut = true; }
+    if (!In.jump && P.vy < -340 && !P.cut) { P.vy = -340; P.cut = true; }
     const glide = P.wingsT > 0 && In.jump && P.vy > 0;
     P.vy = Math.min(P.vy + (glide ? 450 : GRAV * G.grav) * dt, P.wingsT > 0 ? 230 : (G.grav < 1 ? 470 : 620));
     const wx = P.x + P.w / 2, wy = P.y + P.h / 2;

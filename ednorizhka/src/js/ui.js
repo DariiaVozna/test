@@ -511,7 +511,26 @@ function holdButton(id, key) {
 }
 holdButton('bJump', 'jump'); holdButton('bHorn', 'shoot');
 $('pad').addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('gesturestart', e => e.preventDefault());
+/* Захист від випадкового збільшення екрана: діти тиснуть двома пальцями одразу або двічі поспіль */
+for (const ev of ['gesturestart', 'gesturechange', 'gestureend']) document.addEventListener(ev, e => e.preventDefault());
+document.addEventListener('dblclick', e => e.preventDefault());
+document.addEventListener('touchmove', e => { if (e.touches.length > 1 || mode === 'play') e.preventDefault(); }, { passive: false });
+let lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = performance.now();
+  if (now - lastTouchEnd < 380 && e.target.closest && e.target.closest('#pad, #game, #topBtns')) e.preventDefault();
+  lastTouchEnd = now;
+}, { passive: false });
+/* Якщо екран усе ж збільшився — ставимо гру на паузу й повертаємо звичайний масштаб */
+let zoomFix = false;
+function zoomGuard() {
+  const vv = window.visualViewport;
+  if (!vv || vv.scale < 1.03) return;
+  if (mode === 'play') pauseGame();
+  const meta = document.querySelector('meta[name=viewport]');
+  if (meta) { zoomFix = !zoomFix; meta.setAttribute('content', 'width=device-width, initial-scale=1' + (zoomFix ? '.0' : '') + ', minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'); }
+}
+if (window.visualViewport) { visualViewport.addEventListener('resize', zoomGuard); setInterval(zoomGuard, 1500); }
 document.addEventListener('visibilitychange', () => { if (document.hidden) pauseGame(); });
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', () => setTimeout(resize, 200));
