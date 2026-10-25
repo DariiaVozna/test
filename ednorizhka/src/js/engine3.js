@@ -17,7 +17,7 @@ function spawnEnemy3(e, b, hover, g) {
     case 'mole': return g(22, 18, { state: 'hide', st: Math.random() * 1.5, k: 0, ghost: true });
     case 'owl': return Object.assign(b, { w: 22, h: 22, hx: e.tx * T + 12, hy: e.ty * T + 12, x: e.tx * T + 1, y: e.ty * T + 1, state: 'hang', st: 0, cool: 0.5 });
   }
-  return null;
+  return spawnEnemy4(e, b, hover, g);
 }
 
 /* Кротик: ховається в нірці, визирає, вилазить. Поки він у нірці, його не зачепиш */
@@ -77,6 +77,7 @@ function update3(dt) {
     if (m.state !== 'go' || Math.abs(P.x + P.w / 2 - (m.x + m.w / 2)) > 70) P.ride = null;
     else { if (P.onMover !== m) P.x += m.dx; P.x = clamp(P.x, m.x + 3, m.x + m.w - P.w - 3); }
   }
+  update4(dt);
 }
 
 function updateCart(m, dt) {

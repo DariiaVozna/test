@@ -1515,6 +1515,193 @@ const LEVELS = [
       L.power('shield', 146, 9);
       L.gate(168);
     }
+  },  {
+    id: 'peaks', theme: 'peaks', name: 'Канатні гори', blurb: 'Канатна дорога через долини, кізоньки бодаються', w: 170,
+    build(L) {
+      L.ground(0, 22, 6);
+      L.sign(4, 'Підійди до ручки — канатна дорога перенесе через долину!');
+      L.row(8, 5, 3);
+      L.enemy('goat', 12, 6);
+      L.zip(19, 37, 6, 7); L.row(24, 5, 10);
+      L.ground(34, 60, 7);
+      L.qblock(42, 3, 'star5');
+      L.enemy('goat', 46, 7);
+      L.enemy('bird', 50, 3);
+      L.row(51, 6, 3);
+      L.zip(56, 73, 7, 6); L.row(60, 5, 9);
+      L.ground(70, 96, 6);
+      L.check(75);
+      L.enemy('goat', 80, 6);
+      L.qblock(84, 2, 'shield');
+      L.row(86, 5, 3);
+      L.enemy('bird', 90, 2);
+      L.zip(92, 110, 6, 8); L.row(97, 6, 10);
+      L.ground(107, 136, 8);
+      L.check(113);
+      L.enemy('goat', 117, 8);
+      L.qblock(120, 4, 'star'); L.qblock(121, 4, 'rainbow'); L.qblock(122, 4, 'star');
+      L.row(124, 7, 4);
+      L.enemy('goat', 130, 8);
+      L.ground(139, 170, 8);
+      L.enemy('bird', 143, 4);
+      L.qblock(146, 4, 'magnet');
+      L.row(148, 7, 4);
+      L.enemy('goat', 154, 8);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'windmill', theme: 'windmill', name: 'Долина вітряків', blurb: 'Попутний вітер переносить через широкі ями', w: 170,
+    build(L) {
+      L.ground(0, 24);
+      L.sign(4, 'Вітер дме вперед! Розбіжись і стрибай — він перенесе через яму');
+      L.row(7, 9, 3);
+      L.breeze(17, 32); L.arc(25, 7, 6, 2);
+      L.ground(31, 58);
+      L.enemy('mouse', 36, 10);
+      L.qblock(39, 6, 'star5');
+      L.wheel(47, 5, 3.5, 4, 10); L.rainbow(46, 0);
+      L.enemy('bird', 53, 5);
+      L.breeze(51, 66); L.arc(59, 7, 6, 2);
+      L.ground(65, 96);
+      L.check(67);
+      L.enemy('mouse', 72, 10);
+      L.qblock(75, 6, 'shield');
+      L.row(77, 9, 3);
+      L.enemy('bee', 82, 7);
+      L.wheel(86, 5, 3, 3, 9); L.star(85, 1);
+      L.breeze(89, 104); L.arc(97, 7, 6, 2);
+      L.ground(103, 134);
+      L.check(105);
+      L.enemy('mouse', 109, 10);
+      L.qblock(112, 6, 'star'); L.qblock(113, 6, 'rainbow'); L.qblock(114, 6, 'star');
+      L.enemy('bird', 118, 5);
+      L.row(120, 9, 3);
+      L.breeze(124, 141); L.arc(135, 7, 6, 2);
+      L.ground(141, 170);
+      L.enemy('mouse', 146, 10);
+      L.qblock(149, 6, 'magnet');
+      L.row(151, 9, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'tiny', theme: 'tiny', name: 'Країна велетенських квітів', blurb: 'Грибочок зменшує, і можна пролізти в нірку', w: 170,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(4, 'Чарівний грибочок зменшує! Маленька єдиноріжка пролізе в нірку');
+      L.row(7, 9, 3);
+      L.power('mini', 12, 9);
+      L.block(16, 0, 6, 9); L.row(16, 9, 6);
+      L.enemy('ant', 25, 10);
+      L.ground(33, 64);
+      L.enemy('beetle', 37, 10);
+      L.qblock(40, 6, 'star5');
+      L.power('mini', 45, 9);
+      L.block(48, 0, 5, 9); L.row(48, 9, 5);
+      L.enemy('ant', 56, 10);
+      L.row(58, 9, 3);
+      L.ground(67, 100);
+      L.check(69);
+      L.enemy('bee', 74, 7);
+      L.qblock(77, 6, 'shield');
+      L.cloud(80, 6, 3); L.row(80, 5, 3);
+      L.power('mini', 85, 9);
+      L.block(88, 0, 6, 9); L.row(88, 9, 6);
+      L.enemy('ant', 96, 10);
+      L.mover(101, 8, 2, 1, 0, 3); L.row(100, 7, 4);
+      L.ground(104, 136);
+      L.enemy('beetle', 108, 10);
+      L.qblock(111, 6, 'star'); L.qblock(112, 6, 'rainbow'); L.qblock(113, 6, 'star');
+      L.check(116);
+      L.enemy('ant', 120, 10);
+      L.power('mini', 123, 9);
+      L.block(126, 0, 5, 9); L.row(126, 9, 5);
+      L.ground(139, 170);
+      L.enemy('bee', 143, 7);
+      L.qblock(146, 6, 'magnet');
+      L.row(148, 9, 4);
+      L.enemy('ant', 153, 10);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'swing', theme: 'swing', name: 'Ліс гойдалок', blurb: 'Гойдалки над ярами, павучки спускаються на павутинках', w: 170, needK: 0.42,
+    build(L) {
+      L.ground(0, 26);
+      L.sign(4, 'Стрибай на гойдалку — вона перенесе далі!');
+      L.row(7, 9, 3);
+      L.swing(14, 1, 6, 0.6, 3.2); L.row(11, 6, 7);
+      L.enemy('spider', 21, 6);
+      L.swing(28, 2, 6, 0.55, 3.4);
+      L.ground(30, 60);
+      L.qblock(34, 6, 'star5');
+      L.row(36, 9, 3);
+      L.enemy('owl', 39, 3);
+      L.enemy('spider', 43, 6);
+      L.swing(48, 1, 5, 0.7, 3); L.cloud(52, 3, 4); L.row(52, 2, 4); L.rainbow(57, 1);
+      L.swing(61, 2, 6, 0.5, 3.4);
+      L.ground(63, 96);
+      L.check(65);
+      L.row(66, 9, 3);
+      L.enemy('spider', 70, 6);
+      L.qblock(73, 6, 'shield');
+      L.row(75, 9, 4);
+      L.enemy('owl', 80, 3);
+      L.swing(84, 1, 6, 0.6, 3.2); L.row(81, 6, 7);
+      L.enemy('spider', 90, 6);
+      L.swing(98, 2, 6, 0.55, 3.4);
+      L.ground(100, 132);
+      L.check(102);
+      L.enemy('owl', 106, 3);
+      L.row(104, 9, 3);
+      L.qblock(109, 6, 'star'); L.qblock(110, 6, 'rainbow'); L.qblock(111, 6, 'star');
+      L.enemy('spider', 115, 6);
+      L.row(116, 9, 3);
+      L.swing(120, 1, 5, 0.7, 3); L.cloud(124, 3, 4); L.row(124, 2, 4);
+      L.swing(134, 2, 6, 0.55, 3.4);
+      L.ground(136, 170);
+      L.row(138, 9, 3);
+      L.enemy('spider', 141, 6);
+      L.qblock(145, 6, 'magnet');
+      L.row(147, 9, 4);
+      L.enemy('owl', 151, 3);
+      L.sign(157, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'dream', theme: 'dream', name: 'Країна снів', blurb: 'Битва з Будильником Дзеленчиком', w: 172, boss: 'clock',
+    build(L) {
+      L.ground(0, 28);
+      L.sign(5, 'Країна снів. Подушки підкидають, а на овечок можна стрибати');
+      L.jelly(9, 10, 3); L.row(9, 5, 3);
+      L.sheep(14, 26); L.cloud(19, 5, 4); L.row(19, 4, 4);
+      L.ground(31, 64);
+      L.qblock(34, 6, 'star5');
+      L.enemy('owl', 38, 4);
+      L.sheep(42, 56); L.cloud(47, 5, 4); L.row(47, 4, 4); L.rainbow(52, 3);
+      L.enemy('ghost', 59, 6);
+      L.ground(67, 100);
+      L.check(69);
+      L.jelly(73, 10, 2); L.block(75, 5, 2, 5); L.row(75, 4, 2);
+      L.enemy('owl', 82, 4);
+      L.qblock(86, 6, 'candy');
+      L.sheep(88, 99); L.cloud(92, 5, 3); L.row(92, 4, 3);
+      L.ground(103, 172);
+      L.enemy('ghost', 108, 6);
+      L.qblock(112, 6, 'magnet');
+      L.row(110, 9, 3);
+      L.sign(121, 'Будильник Дзеленчик! Чекай, поки задрімає, і тоді стріляй');
+      L.check(125);
+      L.arena(129, 172);
+      L.cloud(137, 6, 3); L.cloud(149, 6, 4); L.cloud(160, 6, 3);
+      L.power('shield', 146, 9);
+      L.gate(168);
+    }
   },
 ];
 
@@ -1553,13 +1740,18 @@ const DECOR = {
   rainbow: (R, x, y) => R() < 0.5 ? { k: 'twinkle', x, y } : { k: 'flower', x, y, c: ['#ff9fd0', '#ffd54a', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] },
   mine: (R, x, y) => R() < 0.5 ? { k: 'crystal', x, y } : { k: 'gem', x, y, c: ['#ffb3e6', '#a8d8ff', '#ffe9a8'][Math.floor(R() * 3)] },
   burrow: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'root', x, y } : r < 0.7 ? { k: 'carrot', x, y } : { k: 'mush', x, y, c: ['#ff9fd9', '#5fd3ff', '#ffb347'][Math.floor(R() * 3)], glow: true }; },
+  peaks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'pine', x, y } : r < 0.75 ? { k: 'edelweiss', x, y } : { k: 'rock', x, y }; },
+  windmill: (R, x, y) => R() < 0.5 ? { k: 'wheat', x, y } : { k: 'tulip', x, y, c: ['#ff5c8a', '#ffa83b', '#ffe14d', '#b28bff'][Math.floor(R() * 4)] },
+  tiny: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'dewdrop', x, y } : r < 0.7 ? { k: 'clover', x, y } : { k: 'mush', x, y, c: ['#ff6b8a', '#ffb347', '#b48cff'][Math.floor(R() * 3)], glow: false }; },
+  swing: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'leafpile', x, y } : r < 0.7 ? { k: 'mush', x, y, c: ['#ff6b8a', '#ffb347', '#e85d3a'][Math.floor(R() * 3)], glow: false } : { k: 'flower', x, y, c: ['#ffffff', '#ff7ab8', '#ffd54a'][Math.floor(R() * 3)] }; },
+  dream: (R, x, y) => R() < 0.5 ? { k: 'zzz', x, y } : { k: 'twinkle', x, y },
   factory: (R, x, y) => R() < 0.5 ? { k: 'gearS', x, y, c: ['#ffb347', '#9fd8ff', '#ff9fcb'][Math.floor(R() * 3)] } : { k: 'crate2', x, y },
 };
 
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -1600,6 +1792,10 @@ function buildLevel(idx) {
       for (let i = 0; i < n; i++) { const ph = i * TAU / n; L.movers.push({ circ: true, cx: C.cx, cy: C.cy, r: C.r, ph, period, w, bx: C.cx + Math.cos(ph) * C.r - w / 2, by: C.cy + Math.sin(ph) * C.r, ax: 0, ay: 0 }); }
     },
     geyser(x0, x1, top, cyc, on) { later.push(() => L.winds.push({ x0: x0 * T, x1: x1 * T, y: top * T, y1: groundY(x0), cyc: cyc || 3.2, on: on || 1.5, ph: (x0 * 0.7) % 3 })); },
+    zip(x0, x1, top0, top1) { const z = { x0: x0 * T + 12, y0: top0 * T - 34, x1: x1 * T + 12, y1: top1 * T - 46, gy0: top0 * T, gy1: top1 * T, state: 'idle', d: 0, v: 0 }; z.len = Math.hypot(z.x1 - z.x0, z.y1 - z.y0); z.hx = z.x0; z.hy = z.y0 + 8; L.zips.push(z); },
+    breeze(x0, x1) { L.breezes.push({ x0: x0 * T, x1: x1 * T, p: 170 }); },
+    swing(cx, cy, len, amp, period) { const px = cx * T + 12, py = cy * T, l = len * T, w = 2 * T; L.movers.push({ swing: true, px, py, len: l, amp, period, ph: 0, w, bx: px - w / 2, by: py + l, ax: 0, ay: 0 }); },
+    sheep(x0, x1) { later.push(() => { const gy = groundY(x0); L.movers.push({ sheep: true, bx: x0 * T, by: gy - 34, w: 2 * T, minX: x0 * T, maxX: x1 * T, dir: 1, speed: 34, ax: 0, ay: 0, period: 1 }); }); },
     bean(x, h) { later.push(() => { const gy = groundY(x); L.beans.push({ x: x * T + 12, tx: x, gy, row: gy / T, h: h || 3, grown: false, t: 0, placed: 0 }); }); },
     lantern(x, row) { later.push(() => { const gy = groundY(x), hang = row != null; L.lanterns.push({ x: x * T + 12, y: hang ? row * T + 12 : gy - 22, gy, hang, lit: false, col: LANTERN_COLS[L.lanterns.length % LANTERN_COLS.length] }); }); },
     blink(x, row, w) { for (let i = 0; i < (w || 1); i++) set(x + i, row, 13); },

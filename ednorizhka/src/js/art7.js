@@ -242,7 +242,7 @@ function drawBlock4(c, b) {
   } else if (b === 'roots') {
     rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#9a6a42'; c.fill(); c.stroke();
     c.strokeStyle = '#6e4428'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(4, 3); c.quadraticCurveTo(10, 12, 6, T - 3); c.moveTo(14, 3); c.quadraticCurveTo(20, 10, 17, T - 3); c.moveTo(10, 12); c.lineTo(15, 15); c.stroke();
-  } else return false;
+  } else return drawBlock5(c, b);
   return true;
 }
 
@@ -272,6 +272,7 @@ function drawDecor7(c, d, t) {
     case 'root':
       c.strokeStyle = '#8a5a30'; c.lineWidth = 2.2; c.beginPath(); c.moveTo(x - 8, y); c.quadraticCurveTo(x - 2, y - 10, x + 4, y - 6); c.quadraticCurveTo(x + 8, y - 4, x + 9, y); c.stroke();
       c.fillStyle = '#7fd46a'; ell(c, x + 4, y - 8, 3, 1.6, -0.4); c.fill(); c.lineWidth = 0.8; c.strokeStyle = INK; c.stroke(); break;
+    default: drawDecor8(c, d, t);
   }
 }
 
@@ -370,5 +371,5 @@ function drawEnemy3(c, e, cx, fl) {
     case 'owl': drawOwl(c, cx, e.y + e.h / 2, e.t, e.dir, fl, e.state === 'hang'); return true;
     case 'mole': drawMoleE(c, e, e.t, fl); return true;
   }
-  return false;
+  return drawEnemy4(c, e, cx, fl);
 }

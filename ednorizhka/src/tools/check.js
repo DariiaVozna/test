@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -46,7 +46,7 @@ function fightBoss(idx) {
     const pcx = P.x + P.w / 2;
     if (G.bossActive && !B.dead) {
       const dx = B.x - pcx; P.dir = dx > 0 ? 1 : -1;
-      const danger = G.bolts.find(b => Math.abs(b.x - pcx) < 50 && Math.abs(b.y - (P.y + P.h / 2)) < 60);
+      const danger = G.bolts.find(b => !b.high && Math.abs(b.x - pcx) < 50 && Math.abs(b.y - (P.y + P.h / 2)) < 60);
       if ((B.state === 'roll' && Math.abs(dx) < 80) || danger) { if (P.onGround) { In.jumpP = true; In.jump = true; } }
       if (Math.abs(dx) > 70) { if (dx > 0) In.right = true; else In.left = true; }
       else if (Math.abs(dx) < 40) { if (dx > 0) In.left = true; else In.right = true; }

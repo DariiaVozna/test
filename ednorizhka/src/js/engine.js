@@ -167,6 +167,7 @@ function startLevel(idx) {
     springs: L.springs.map(s => Object.assign({}, s)), water: L.water, grav: L.def.grav || 1, caramel: !!L.def.caramel, swimHint: false,
     winds: L.winds, belts: L.belts, beltDir: L.beltDir, gust: null,
     qContent: L.qContent, qLeft: new Map(), bumps: new Map(), portals: L.portals.map(p => Object.assign({}, p)), buttons: L.buttons.map(b => Object.assign({}, b)), keys: L.keys.map(k => Object.assign({}, k)), keysHeld: 0, hasDoors: L.hasDoors, sw: false, dark: !!L.def.dark,
+    zips: L.zips.map(z => Object.assign({}, z)), breezes: L.breezes,
     vines: L.vines, launchers: L.launchers.map(l => Object.assign({}, l)), wheels: L.wheels,
     beans: L.beans.map(b => Object.assign({}, b)), lanterns: L.lanterns.map(l => Object.assign({}, l)), rails: L.rails, blinkOn: true, blinkWarn: false,
   };
@@ -241,6 +242,7 @@ function waterAt(x, y) { for (const z of G.water) if (x >= z.x0 && x <= z.x1 && 
 function updatePlayer(dt) {
   const P = G.P;
   if (P.inCannon) return holdInCannon(P, dt);
+  if (P.zip) return rideZip(P, dt);
   let ax = (In.right ? 1 : 0) - (In.left ? 1 : 0);
   if (P.hurtT > 0) { P.hurtT -= dt; ax = 0; }
   if (ax) P.dir = ax;
@@ -281,6 +283,7 @@ function updatePlayer(dt) {
   let carry = 0;
   if (P.onGround && P.groundTile === 5) carry += (G.beltDir[Math.floor((P.y + P.h + 2) / T) * G.Wt + Math.floor((P.x + P.w / 2) / T)] || 0) * 70;
   if (G.gust && G.gust.t > 0) carry += G.gust.dir * 170;
+  carry += breezeAt(P);
   P.vx += carry;
   moveBody(P, dt);
   if (P.vx !== 0) P.vx -= carry;
@@ -317,7 +320,7 @@ function updatePlayer(dt) {
   if (P.y < -44) { P.y = -44; if (P.vy < 0) P.vy = 0; }
   const minX = G.arenaLock ? G.arena.x0 : 0;
   if (P.x < minX) { P.x = minX; if (P.vx < 0) P.vx = 0; }
-  if (P.onGround && !P.onMover) {
+  if (P.onGround && !P.onMover && !P.mini) {
     const ty = Math.floor((P.y + P.h + 2) / T);
     const firm = v => solid(v) && v !== 13;
     if (firm(tileAt(Math.floor((P.x - 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w + 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w / 2) / T), ty))) P.safe = { x: P.x, y: P.y };
@@ -392,6 +395,7 @@ function updateBoss(dt) {
   if (B.kind === 'medusa') return updateMedusaBoss(dt);
   if (B.kind === 'robot') return updateRobotBoss(dt);
   if (B.kind === 'moleking') return updateMoleBoss(dt);
+  if (B.kind === 'clock') return updateClockBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -566,9 +570,10 @@ function update(dt) {
   G.t += dt;
   const P = G.P;
   for (const m of G.movers) {
-    if (m.crumble || m.balloon || m.bubble || m.cart) { updatePlatform(m, dt); continue; }
+    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep) { updatePlatform(m, dt); continue; }
     let nx, ny;
     if (m.circ) { const a = G.t * TAU / m.period + m.ph; nx = m.cx + Math.cos(a) * m.r - m.w / 2; ny = m.cy + Math.sin(a) * m.r; }
+    else if (m.swing) { const a = m.amp * Math.sin(G.t * TAU / m.period + m.ph); nx = m.px + Math.sin(a) * m.len - m.w / 2; ny = m.py + Math.cos(a) * m.len; }
     else { const ph = Math.sin(G.t * TAU / m.period); nx = m.bx + ph * m.ax; ny = m.by + ph * m.ay; }
     m.dx = nx - m.x; m.dy = ny - m.y; m.x = nx; m.y = ny;
   }
@@ -597,6 +602,7 @@ function update(dt) {
       if (p.k === 'wings') { P.wingsT = 10; say('Крила! У повітрі тисни стрибок ще раз'); }
       else if (p.k === 'shield') { P.shield = true; say('Веселковий щит береже від одного удару'); }
       else if (p.k === 'candy') { P.candyT = 15; say('Цукерка! Ріг стріляє трьома іскорками'); }
+      else if (p.k === 'mini') { setMini(P, true, 14); say('Ти маленька! Тепер можна пролізти в нірку', 2.2); }
       else { P.magnetT = 12; say('Магніт! Зірочки самі летять до тебе'); }
     }
   }
@@ -635,7 +641,7 @@ function update(dt) {
   G.shots = G.shots.filter(s => s.life > 0);
   for (const b of G.bolts) {
     b.t += dt; if (b.g) b.vy += b.g * dt; else if (b.spike) b.vy += 900 * dt; if (b.kind === 'bub') b.vy = Math.sin(b.t * 3.2) * 28 + b.sink; b.x += b.vx * dt; b.y += b.vy * dt;
-    const roll = (b.kind === 'puff' && !b.fall) || b.kind === 'wave', floaty = b.kind === 'magic' || b.kind === 'bub';
+    const roll = (b.kind === 'puff' && !b.fall) || b.kind === 'wave' || b.kind === 'ringw', floaty = b.kind === 'magic' || b.kind === 'bub';
     const gone = (roll || floaty) ? (b.t > (b.kind === 'bub' ? 6 : 4.5) || (G.arena && (b.x < G.arena.x0 || b.x > G.arena.x1)) || (floaty && (b.y > VIEW_H || solid(tileAt(Math.floor(b.x / T), Math.floor(b.y / T)))))) : (solid(tileAt(Math.floor(b.x / T), Math.floor((b.y + (b.kind ? 5 : 10)) / T))) || b.y > VIEW_H || b.t > 6);
     const hb = b.r ? { x: b.x - b.r, y: b.y - b.r, w: b.r * 2, h: b.r * 2 } : b.kind === 'magic' ? { x: b.x - 5, y: b.y - 5, w: 10, h: 10 } : b.kind === 'puff' ? { x: b.x - 7, y: b.y - 6, w: 14, h: 12 } : b.kind === 'acorn' ? { x: b.x - 4, y: b.y - 4, w: 8, h: 8 } : { x: b.x - 4, y: b.y - 9, w: 8, h: 18 };
     if (gone) { b.dead = true; burst(b.x, b.y + 4, 6, b.kind === 'puff' ? ['#fff', '#e8dcff'] : ['#ffe14d', '#fff'], 80); }
@@ -707,6 +713,7 @@ function toggleSwitch() {
 function updatePlatform(m, dt) {
   if (m.bubble) return updateBubble(m, dt);
   if (m.cart) return updateCart(m, dt);
+  if (m.sheep) return updateSheep(m, dt);
   const y0 = m.y; m.dx = 0; m.dy = 0; m.st += dt;
   if (m.crumble) {
     if (m.state === 'idle') { m.y = m.by; if (G.P.onMover === m) { m.state = 'shake'; m.st = 0; Snd.tone(240, 0.25, 'triangle', 0.05, 150); } }

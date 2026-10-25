@@ -190,6 +190,7 @@ function drawLauncher(c, L, t) {
 
 /* Колесо огляду та шестерні-платформи */
 function drawWheelStruct(c, w, t, theme) {
+  if (theme === 'windmill') return drawWindmillStruct(c, w, t);
   const cx = w.cx, cy = w.cy, gy = 10 * T;
   c.save(); c.lineCap = 'round'; c.lineJoin = 'round';
   if (theme === 'factory') {
@@ -208,6 +209,7 @@ function drawWheelStruct(c, w, t, theme) {
   c.restore();
 }
 function drawMover2(c, m, theme) {
+  if (m.swing || m.sheep || (m.circ && theme === 'windmill')) return drawMover3(c, m, theme);
   if (m.bubble) { drawBubblePlat(c, m, G.t); return true; }
   if (m.cart) { drawCart(c, m, G.t); return true; }
   c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4;
@@ -445,6 +447,7 @@ function drawBolt2(c, b) {
     case 'gear': drawGearBolt(c, b.x, b.y, b.t); return true;
     case 'wave': drawWave(c, b.x, b.y, b.t, b.vx > 0 ? 1 : -1); return true;
     case 'rock': drawRock(c, b.x, b.y, b.t); return true;
+    case 'ringw': drawRingWave(c, b); return true;
   }
   return false;
 }

@@ -64,6 +64,7 @@ function updateEnemy2(e, dt) {
     }
     if (e.y > VIEW_H + 40) e.dead = true;
   } else if (e.k === 'mole') updateMole(e, dt);
+  else updateEnemy4(e, dt);
 }
 
 /* Ліани: тримай «Стрибок», щоб лізти; вбік, щоб зістрибнути */
@@ -255,6 +256,11 @@ function armored2(s, B) {
     else if (!B.hinted) { B.hinted = true; say('Бульбашковий щит тоншає! Ще ' + B.shield + '!', 1.6); }
     return true;
   }
+  if (B.kind === 'clock' && B.state !== 'sleep' && B.state !== 'yawn') {
+    Snd.tink(); burst(s.x, s.y, 4, ['#fff'], 70); s.vx *= -0.6; s.life = Math.min(s.life, 0.25);
+    if (!B.armHint) { B.armHint = true; say('Дзеленчик не спить! Зачекай, поки він задрімає', 2.4); }
+    return true;
+  }
   if (B.kind === 'robot' && B.state !== 'open') {
     Snd.tink(); burst(s.x, s.y, 4, ['#fff'], 70); s.vx *= -0.6; s.life = Math.min(s.life, 0.25);
     if (!B.hinted) { B.hinted = true; say('Броня! Стріляй, коли на животі відчиниться віконце', 2.6); }
@@ -265,5 +271,6 @@ function armored2(s, B) {
 function resetBoss2(B) {
   if (B.kind === 'medusa') { B.state = 'float'; B.st = 0; }
   if (B.kind === 'moleking') { B.state = 'dig'; B.st = 0; }
+  if (B.kind === 'clock') { B.state = 'wake'; B.st = 0; B.air = false; B.y = B.gy - 34; }
   if (B.kind === 'robot') { B.state = 'walk'; B.st = 0; B.y = B.gy - 32; B.vx = B.vy = 0; B.x = Math.max(B.x, G.arena.x0 + 14 * T); }
 }

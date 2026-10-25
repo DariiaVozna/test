@@ -35,9 +35,14 @@ const THEMES = {
   rainbow: { sky: ['#ffd1ec', '#e6e0ff', '#d6f4ff'], panel: '#3a2f6a', top: '#ffffff', topHi: '#ffffff', topLo: '#e6e0ff', fill: '#fff4fa', fillLo: '#f2e6ff', dots: [], block: 'prism', ice: false, topStyle: 'snow', fillStyle: 'rainbowfill' },
   mine: { sky: ['#3a2f4a', '#5a4a6a', '#7a6a8a'], panel: '#1d1626', top: '#9a8aa6', topHi: '#c9bcd6', topLo: '#6e5f80', fill: '#6b5a7a', fillLo: '#584a68', dots: ['#7fd6ff', '#ff9fd0', '#ffe14d'], block: 'ore', ice: false, topStyle: 'stone', dotShape: 'dot' },
   burrow: { sky: ['#5a3a28', '#7a5038', '#9a6a48'], panel: '#2a1a12', top: '#b8865a', topHi: '#d9a878', topLo: '#8a5a36', fill: '#7a4f30', fillLo: '#633f26', dots: ['#9a6a42', '#5a3a24', '#c99060'], block: 'roots', ice: false, topStyle: 'sand', dotShape: 'pebble' },
+  peaks: { sky: ['#9fd4ff', '#d6eeff', '#fff6e6'], panel: '#2a3a5a', top: '#7fcf6a', topHi: '#b0ef9a', topLo: '#4f9a48', fill: '#a89a8a', fillLo: '#8f8172', dots: ['#c9bcae', '#7d7064', '#e6ddd2'], block: 'rockblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  windmill: { sky: ['#9fdcff', '#d6f2ff', '#fff3d6'], panel: '#3a4a2a', top: '#86df73', topHi: '#b8f2a6', topLo: '#4fb055', fill: '#c99a5a', fillLo: '#ad7f45', dots: ['#e0b878', '#8a5a36', '#f2d6a0'], block: 'haybale', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  tiny: { sky: ['#bfeeff', '#e6fbff', '#f6ffe6'], panel: '#24502f', top: '#8fe36a', topHi: '#c6f5a8', topLo: '#4fb055', fill: '#9a6a42', fillLo: '#7e5432', dots: ['#c99060', '#6e4428', '#e0b080'], block: 'trunk', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  swing: { sky: ['#ffc9a0', '#ffe2c4', '#eef7d6'], panel: '#4a3020', top: '#a8d46a', topHi: '#d0ef9c', topLo: '#6fa040', fill: '#8a5a3a', fillLo: '#6e4529', dots: ['#c08458', '#5a3a24', '#e0a070'], block: 'wood', ice: false, topStyle: 'leaves', dotShape: 'pebble' },
+  dream: { sky: ['#2a2a6e', '#5a4aa0', '#9a7ad0'], panel: '#14123a', top: '#f2eaff', topHi: '#ffffff', topLo: '#c9b6ff', fill: '#9a86d9', fillLo: '#8573c6', dots: ['#fff6c8', '#ffd6f0', '#c9f0ff'], block: 'pillowblock', ice: false, topStyle: 'snow', dotShape: 'dot' },
   factory: { sky: ['#b8c6e6', '#dbe3f2', '#f4f2fa'], panel: '#2a3040', top: '#9aa6c0', topHi: '#c9d2e6', topLo: '#6e7a96', fill: '#8a96b3', fillLo: '#76829f', dots: [], block: 'metal', ice: false, topStyle: 'stone', fillStyle: 'rivets' },
 };
-const PLANKS = { mine: ['#c98d55', '#8a5a30'], burrow: ['#c98d55', '#8a5a30'], lagoon: ['#d9a36c', '#a8743f'], desert: ['#d9a36c', '#a8743f'], toys: ['#ffcf6b', '#a8743f'], jungle: ['#c98d55', '#8a5a30'], pirate: ['#d9a36c', '#a8743f'], bakery: ['#f3c27a', '#c98d45'], circus: ['#ff9fb0', '#c9304f'], dino: ['#c9b49a', '#9c8670'], factory: ['#c9d2e6', '#7d8aa6'] };
+const PLANKS = { peaks: ['#c98d55', '#8a5a30'], windmill: ['#e3b26b', '#a8743f'], swing: ['#c98d55', '#8a5a30'], mine: ['#c98d55', '#8a5a30'], burrow: ['#c98d55', '#8a5a30'], lagoon: ['#d9a36c', '#a8743f'], desert: ['#d9a36c', '#a8743f'], toys: ['#ffcf6b', '#a8743f'], jungle: ['#c98d55', '#8a5a30'], pirate: ['#d9a36c', '#a8743f'], bakery: ['#f3c27a', '#c98d45'], circus: ['#ff9fb0', '#c9304f'], dino: ['#c9b49a', '#9c8670'], factory: ['#c9d2e6', '#7d8aa6'] };
 
 /* Спрайт плитки: kind = top | fill | block | cloud; l/r = відкритий край зліва/справа */
 const tileCache = new Map();
@@ -255,7 +260,7 @@ function tileSprite(theme, kind, l, r, ps) {
       c.fillStyle = INK; circ(c, 12, 14, 1.4); c.fill(); c.fillRect(11.4, 14, 1.2, 3);
     } else { c.fillStyle = '#6b6b80'; c.fillRect(1, 9, T - 2, 3); c.fillStyle = '#9a9ab0'; circ(c, 5, 10.5, 1); c.fill(); circ(c, 19, 10.5, 1); c.fill(); }
   } else if (kind === 'cloud') {
-    if (theme === 'beans') {
+    if (theme === 'beans' || theme === 'tiny') {
       drawLeafTile(c, l, r);
     } else if (PLANKS[theme]) {
       const x0 = l ? 2 : -1, x1 = r ? T - 2 : T + 1;

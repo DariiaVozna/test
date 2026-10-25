@@ -126,10 +126,12 @@ function renderGame(dt) {
   for (const z of G.winds) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) { if (z.cyc) drawGeyser(c, z, t, G.t); else drawWind(c, z, t, G.theme); }
   for (const w of G.wheels) if (vis(w.cx, w.r + 60)) drawWheelStruct(c, w, t, G.theme);
   for (const r of G.rails) if (r.x1 > G.cam - 40 && r.x0 < G.cam + viewW + 40) drawRails(c, r);
+  for (const z of G.breezes) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) drawBreeze(c, z, t);
   for (const d of G.decor) if (vis(d.x)) drawDecor(c, d, t);
   for (const v of G.vines) if (vis(v.x)) drawVine(c, v, t);
   for (const l of G.launchers) if (vis(l.x)) drawLauncher(c, l, t);
   for (const b of G.beans) if (vis(b.x)) drawBean(c, b, t);
+  for (const z of G.zips) if (Math.max(z.x0, z.x1) > G.cam - 40 && Math.min(z.x0, z.x1) < G.cam + viewW + 40) drawZip(c, z, t);
   for (const l of G.lanterns) if (vis(l.x)) drawLanternObj(c, l, t);
   for (const m of G.movers) if (vis(m.x, 90)) drawMover(c, m, G.theme);
   for (const s of G.springs) if (vis(s.x)) drawSpring(c, s.x, s.gy, s.sq, G.theme);
@@ -184,6 +186,7 @@ function renderGame(dt) {
     else if (B.kind === 'medusa') drawMedusa(c, B, B.t);
     else if (B.kind === 'robot') drawRobot(c, B, B.t);
     else if (B.kind === 'moleking') drawMoleKing(c, B, B.t);
+    else if (B.kind === 'clock') drawClockBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -209,11 +212,11 @@ function renderGame(dt) {
   const blinkHide = P.inv > 0 && Math.floor(P.inv * 14) % 2 === 0;
   if (!P.inCannon) {
   const cartM = P.ride || (P.onMover && P.onMover.cart ? P.onMover : null);
-  drawUnicorn(c, { x: pcx, y: P.y + P.h + 1, dir: P.dir, t: P.t, run: P.onGround ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround, s: 0.8, prof: save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
+  drawUnicorn(c, { x: pcx, y: P.y + P.h + 1, dir: P.dir, t: P.t, run: P.onGround ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround, s: P.mini ? 0.42 : 0.8, prof: save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
   if (cartM) cartBody(c, cartM);
   // ім'я над головою
   c.font = '900 9px Nunito, system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
-  const nm = nameOf(), nw = c.measureText(nm).width + 10, ny = P.y - 19;
+  const nm = nameOf(), nw = c.measureText(nm).width + 10, ny = P.y - (P.mini ? 12 : 19);
   c.fillStyle = 'rgba(255,255,255,.9)'; rr(c, pcx - nw / 2, ny - 6.5, nw, 13, 6.5); c.fill();
   c.strokeStyle = '#ff4fa3'; c.lineWidth = 1; c.stroke();
   c.fillStyle = INK; c.fillText(nm, pcx, ny + 0.5);
@@ -284,7 +287,7 @@ function drawHud(c) {
   }
   // бонуси з таймером
   let px = left, py = top + H + 8;
-  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12]]) {
+  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14]]) {
     if (v <= 0) continue;
     c.fillStyle = 'rgba(255,255,255,.9)'; circ(c, px + 17, py + 17, 17); c.fill();
     c.strokeStyle = '#ff4fa3'; c.lineWidth = 3.5; c.beginPath(); c.arc(px + 17, py + 17, 15, -Math.PI / 2, -Math.PI / 2 + TAU * (v / max)); c.stroke();
@@ -385,7 +388,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -440,6 +443,7 @@ function showWin() {
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 34) { $('winTitle').textContent = 'Копайло тепер копає тунелі для потягів!'; $('winText').textContent = 'Але Будильник Дзеленчик не дає нікому спати: він розбудив зірочки, і вони порозбігалися по нових країнах. Наступна країна: ' + LEVELS[35].name + '.'; }
   if (i === 29) { $('winTitle').textContent = 'Робот Брязкало тепер майструє іграшки!'; $('winText').textContent = 'Але Король Кротів Копайло прорив тунелі й затягнув зірочки під землю. Наступна країна: ' + LEVELS[30].name + '.'; }
   if (i === 24) { $('winTitle').textContent = 'Медуза Желейка подобрішала!'; $('winText').textContent = 'Але Робот Брязкало забирає всі зірочки на свою фабрику. Треба його зупинити! Наступна країна: ' + LEVELS[25].name + '.'; }
   if (i === 9) { $('winTitle').textContent = 'Пан Колючка тепер добрий!'; $('winText').textContent = 'Але Дракон Чхун застудився, і його «Апчхи!» розвіяло зірочки по нових країнах. Наступна країна: ' + LEVELS[10].name + '.'; }
@@ -452,7 +456,7 @@ function showLose() {
   show('scrLose');
 }
 function continueFromCheck() {
-  const P = G.P; P.hearts = 3; P.x = P.check.x; P.y = P.check.y; P.vx = P.vy = 0; P.inv = 2; P.safe = { x: P.x, y: P.y };
+  const P = G.P; P.zip = null; P.ride = null; P.vine = null; P.hearts = 3; P.x = P.check.x; P.y = P.check.y; P.vx = P.vy = 0; P.inv = 2; P.safe = { x: P.x, y: P.y };
   if (G.bossActive && G.boss && !G.boss.dead) { G.bolts = []; if (G.boss.kind === 'hedge') { G.boss.state = 'walk'; G.boss.st = 0; G.boss.x = Math.max(G.boss.x, G.arena.x0 + 14 * T); } if (G.boss.kind === 'dragon') { G.boss.state = 'takeoff'; G.boss.st = 0; G.gust = null; } resetBoss2(G.boss); }
   mode = 'play'; show(null); setPlayUi(true);
 }

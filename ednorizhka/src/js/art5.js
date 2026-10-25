@@ -259,6 +259,7 @@ function drawBlock2(c, b) {
 
 /* Плитка, що підкидає: желе в пекарні, барабан у музичній країні */
 function drawBounceTile(c, theme) {
+  if (theme === 'dream') return drawPillowTile(c);
   c.strokeStyle = INK; c.lineWidth = 1.4;
   if (theme === 'music' || theme === 'circus') {
     rr(c, 1, 5, T - 2, T - 6, 3); c.fillStyle = theme === 'music' ? '#ff5c7a' : '#4cb6ff'; c.fill(); c.stroke();
