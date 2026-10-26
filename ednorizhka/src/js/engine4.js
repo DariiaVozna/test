@@ -17,9 +17,10 @@ function spawnEnemy4(e, b, hover, g) {
     case 'ant': return g(18, 10, { speed: 40 });
     case 'spider': return Object.assign(b, { w: 16, h: 16, x: e.tx * T + 4, y: e.ty * T, hx: e.tx * T + 12, hy: e.ty * T, top: Math.max(0, e.ty * T - 60), range: 3 * T });
   }
-  return null;
+  return spawnEnemy5(e, b, hover, g);
 }
 function updateEnemy4(e, dt) {
+  if (e.k === 'turtle') return updateTurtle(e, dt);
   if (e.k === 'spider') { e.x = e.hx - e.w / 2; e.y = e.hy + (0.5 - 0.5 * Math.cos(e.t * 1.3)) * e.range - e.h / 2; return; }
   if (e.k !== 'goat') return;
   const P = G.P, pcx = P.x + P.w / 2, cx = e.x + e.w / 2;
@@ -100,6 +101,7 @@ function update4(dt) {
   for (const p of G.powers) if (p.k === 'mini' && p.got) { p.reT = (p.reT || 0) + dt; if (p.reT > 4 && Math.abs(pcx - p.x) > 60) { p.got = false; p.reT = 0; } }
   if (P.mini) { P.miniT -= dt; if (P.miniT <= 0) { if (!boxSolid(P.x - 5, P.y - 14, 22, 30)) setMini(P, false); else P.miniT = 0.15; } }
   else if (!P.zip && !P.inCannon && boxSolid(P.x, P.y, P.w, P.h)) setMini(P, true, 2);
+  update5(dt);
 }
 
 /* ===== Будильник Дзеленчик: стрибає, дзвонить хвилями, а потім засинає ===== */

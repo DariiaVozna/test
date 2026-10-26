@@ -167,7 +167,7 @@ function startLevel(idx) {
     springs: L.springs.map(s => Object.assign({}, s)), water: L.water, grav: L.def.grav || 1, caramel: !!L.def.caramel, swimHint: false,
     winds: L.winds, belts: L.belts, beltDir: L.beltDir, gust: null,
     qContent: L.qContent, qLeft: new Map(), bumps: new Map(), portals: L.portals.map(p => Object.assign({}, p)), buttons: L.buttons.map(b => Object.assign({}, b)), keys: L.keys.map(k => Object.assign({}, k)), keysHeld: 0, hasDoors: L.hasDoors, sw: false, dark: !!L.def.dark,
-    zips: L.zips.map(z => Object.assign({}, z)), breezes: L.breezes,
+    zips: L.zips.map(z => Object.assign({}, z)), breezes: L.breezes, storms: L.storms.map(s => Object.assign({}, s)), lowgravs: L.lowgravs, pull: null,
     vines: L.vines, launchers: L.launchers.map(l => Object.assign({}, l)), wheels: L.wheels,
     beans: L.beans.map(b => Object.assign({}, b)), lanterns: L.lanterns.map(l => Object.assign({}, l)), rails: L.rails, blinkOn: true, blinkWarn: false,
   };
@@ -210,10 +210,10 @@ function fire(big) {
   if (!big && P.shootCd > 0) return;
   P.shootCd = 0.17;
   const ox = P.x + P.w / 2 + P.dir * 16, oy = P.y - 6, aim = P.y + P.h - 15;
-  if (big) { G.shots.push({ x: ox, y: oy, aim, vx: P.dir * 330, r: 10, dmg: 3, big: true, life: 1.3, t: 0, hit: new Set() }); Snd.big(); }
+  if (big) { G.shots.push({ x: ox, y: oy, aim, vx: P.dir * 330, r: 10, dmg: 3, big: true, frost: P.frostT > 0, life: 1.3, t: 0, hit: new Set() }); Snd.big(); }
   else {
     const offs = P.candyT > 0 ? [0, -15, -30] : [0];
-    for (const o of offs) G.shots.push({ x: ox, y: oy, aim: aim + o, vx: P.dir * 410, r: 5, dmg: 1, life: 0.8, t: 0, hit: new Set() });
+    for (const o of offs) G.shots.push({ x: ox, y: oy, aim: aim + o, vx: P.dir * 410, r: 5, dmg: 1, frost: P.frostT > 0, life: 0.8, t: 0, hit: new Set() });
     Snd.shoot();
   }
 }
@@ -273,7 +273,8 @@ function updatePlayer(dt) {
     else if (P.jumpBuf > 0 && P.wingsT > 0 && !P.onGround) { P.vy = Math.min(P.vy, -340); P.jumpBuf = 0; P.cut = true; Snd.flap(); burst(P.x + 4, P.y + 8, 4, ['#fff'], 60); }
     if (!In.jump && P.vy < -340 && !P.cut) { P.vy = -340; P.cut = true; }
     const glide = P.wingsT > 0 && In.jump && P.vy > 0;
-    P.vy = Math.min(P.vy + (glide ? 450 : GRAV * G.grav) * dt, P.wingsT > 0 ? 230 : (G.grav < 1 ? 470 : 620));
+    const gk = G.grav * lowGravAt(P);
+    P.vy = Math.min(P.vy + (glide ? 450 : GRAV * gk) * dt, P.wingsT > 0 ? 230 : (gk < 1 ? 470 : 620));
     const wx = P.x + P.w / 2, wy = P.y + P.h / 2;
     for (const z of G.winds) if ((!z.cyc || (G.t + z.ph) % z.cyc < z.on) && wx > z.x0 && wx < z.x1 && wy > z.y - 10 && wy < z.y1) { const k = Math.max(0, Math.min(1, (wy - z.y + 10) / 50)); P.vy -= 2700 * k * dt; if (P.vy < -270) P.vy = -270; P.cut = true; }
   }
@@ -283,7 +284,7 @@ function updatePlayer(dt) {
   let carry = 0;
   if (P.onGround && P.groundTile === 5) carry += (G.beltDir[Math.floor((P.y + P.h + 2) / T) * G.Wt + Math.floor((P.x + P.w / 2) / T)] || 0) * 70;
   if (G.gust && G.gust.t > 0) carry += G.gust.dir * 170;
-  carry += breezeAt(P);
+  carry += breezeAt(P) + pullAt(P);
   P.vx += carry;
   moveBody(P, dt);
   if (P.vx !== 0) P.vx -= carry;
@@ -332,7 +333,7 @@ function updatePlayer(dt) {
   if (In.shootR && P.charging) { fire(P.charge >= 0.55); P.charging = false; P.charge = 0; }
   P.shootCd -= dt;
   if (P.inv > 0) P.inv -= dt;
-  for (const k of ['wingsT', 'candyT', 'magnetT']) if (P[k] > 0) { P[k] -= dt; if (P[k] <= 0) P[k] = 0; }
+  for (const k of ['wingsT', 'candyT', 'magnetT', 'frostT']) if (P[k] > 0) { P[k] -= dt; if (P[k] <= 0) P[k] = 0; }
   P.t += dt * (P.onGround ? Math.max(0.25, Math.abs(P.vx) / SPEED) : 0.6);
   P.blinkT -= dt; if (P.blinkT < 0) { P.blink = 0.12; P.blinkT = 2 + Math.random() * 3; } if (P.blink > 0) P.blink -= dt;
 }
@@ -350,7 +351,7 @@ function updateEnemy(e, dt) {
   } else if (HOVER[e.k]) {
     e.x = e.hx + Math.sin(e.t * e.speed) * e.range - e.w / 2; e.dir = Math.cos(e.t * e.speed) >= 0 ? 1 : -1;
     e.y = e.hy + Math.sin(e.t * 2.3) * e.bob - e.h / 2;
-  } else if (e.k === 'frog') {
+  } else if (e.k === 'frog' || e.k === 'alien') {
     const pcx = P.x + P.w / 2, cx = e.x + e.w / 2;
     if (e.onGround) {
       e.vx = 0; e.air = false; e.cool -= dt;
@@ -381,8 +382,8 @@ function updateEnemy(e, dt) {
   const box = { x: e.x + 2, y: e.y + 2, w: e.w - 4, h: e.h - 2 };
   if (!e.dead && !e.ghost && overlap(P, box)) {
     const stomp = P.vy > 40 && (P.y + P.h - e.y) < Math.min(14, e.h * 0.7) + 2;
-    if (stomp && !NO_STOMP[e.k]) { defeat(e); P.vy = In.jump ? -470 : -360; P.cut = true; }
-    else hurtPlayer(false);
+    if (stomp && !NO_STOMP[e.k]) { if (!stompHook(e)) defeat(e); P.vy = In.jump ? -470 : -360; P.cut = true; }
+    else if (!touchHook(e)) hurtPlayer(false);
   }
 }
 
@@ -396,6 +397,7 @@ function updateBoss(dt) {
   if (B.kind === 'robot') return updateRobotBoss(dt);
   if (B.kind === 'moleking') return updateMoleBoss(dt);
   if (B.kind === 'clock') return updateClockBoss(dt);
+  if (B.kind === 'octopus') return updateOctoBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -435,7 +437,7 @@ function hitBoss(d) {
     if (B.kind !== 'cloud') B.state = 'happy';
     if (B.kind === 'medusa') B.shield = 0;
     if (B.kind === 'wizard') { B.clones = []; B.alpha = 1; }
-    G.gust = null;
+    G.gust = null; G.pull = null; if (B.tents) B.tents = [];
     G.enemies.forEach(e => { if (e.minion && !e.dead) defeat(e); });
     for (let i = 0; i < 18; i++) G.drops.push({ x: B.x + (Math.random() - 0.5) * 60, y: B.y, vx: (Math.random() - 0.5) * 260, vy: -150 - Math.random() * 250, t: 0, got: false });
     burst(B.x, B.y, 40, RAINBOW, 220); G.flash = 0.8; Snd.win();
@@ -570,7 +572,7 @@ function update(dt) {
   G.t += dt;
   const P = G.P;
   for (const m of G.movers) {
-    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep) { updatePlatform(m, dt); continue; }
+    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice) { updatePlatform(m, dt); continue; }
     let nx, ny;
     if (m.circ) { const a = G.t * TAU / m.period + m.ph; nx = m.cx + Math.cos(a) * m.r - m.w / 2; ny = m.cy + Math.sin(a) * m.r; }
     else if (m.swing) { const a = m.amp * Math.sin(G.t * TAU / m.period + m.ph); nx = m.px + Math.sin(a) * m.len - m.w / 2; ny = m.py + Math.cos(a) * m.len; }
@@ -602,6 +604,7 @@ function update(dt) {
       if (p.k === 'wings') { P.wingsT = 10; say('Крила! У повітрі тисни стрибок ще раз'); }
       else if (p.k === 'shield') { P.shield = true; say('Веселковий щит береже від одного удару'); }
       else if (p.k === 'candy') { P.candyT = 15; say('Цукерка! Ріг стріляє трьома іскорками'); }
+      else if (p.k === 'frost') { P.frostT = 15; say('Сніжинка! Ріг заморожує ворогів у крижані кубики', 2.4); }
       else if (p.k === 'mini') { setMini(P, true, 14); say('Ти маленька! Тепер можна пролізти в нірку', 2.2); }
       else { P.magnetT = 12; say('Магніт! Зірочки самі летять до тебе'); }
     }
@@ -620,6 +623,7 @@ function update(dt) {
       if (e.dead || e.ghost || s.life <= 0 || s.hit.has(e) || !circleRect(s, e, 2)) continue;
       s.hit.add(e);
       if (IMMUNE[e.k]) { Snd.tink(); burst(s.x, s.y, 4, ['#fff'], 70); if (s.big) s.life = 0; else { s.vx *= -0.7; s.life = Math.min(s.life, 0.25); } }
+      else if (s.frost && freezeEnemy(e)) { if (!s.big) s.life = 0; }
       else { e.hp -= s.dmg; e.flash = 0.15; if (e.hp <= 0) defeat(e); if (!s.big) s.life = 0; }
     }
     for (const b of G.bolts) if (SHOOTABLE[b.kind] && !b.dead && s.life > 0 && Math.abs(s.x - b.x) < 9 + s.r && Math.abs(s.y - b.y) < 8 + s.r) { b.dead = true; if (!s.big) s.life = 0; burst(b.x, b.y, 8, ['#fff', '#e8dcff'], 90); Snd.pop(); }
@@ -714,6 +718,7 @@ function updatePlatform(m, dt) {
   if (m.bubble) return updateBubble(m, dt);
   if (m.cart) return updateCart(m, dt);
   if (m.sheep) return updateSheep(m, dt);
+  if (m.ice) return updateIce(m, dt);
   const y0 = m.y; m.dx = 0; m.dy = 0; m.st += dt;
   if (m.crumble) {
     if (m.state === 'idle') { m.y = m.by; if (G.P.onMover === m) { m.state = 'shake'; m.st = 0; Snd.tone(240, 0.25, 'triangle', 0.05, 150); } }

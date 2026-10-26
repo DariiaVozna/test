@@ -401,6 +401,11 @@ function drawPowerIcon(c, kind, t) {
     c.lineWidth = 4.2; c.strokeStyle = INK; c.beginPath(); c.arc(0, 0, 5, Math.PI, TAU); c.moveTo(-5, 0); c.lineTo(-5, 5); c.moveTo(5, 0); c.lineTo(5, 5); c.stroke();
     c.lineWidth = 2.6; c.strokeStyle = '#ff4f6d'; c.beginPath(); c.arc(0, 0, 5, Math.PI, TAU); c.moveTo(-5, 0); c.lineTo(-5, 3); c.moveTo(5, 0); c.lineTo(5, 3); c.stroke();
     c.strokeStyle = '#f2f2f2'; c.beginPath(); c.moveTo(-5, 3.2); c.lineTo(-5, 5); c.moveTo(5, 3.2); c.lineTo(5, 5); c.stroke();
+  } else if (kind === 'frost') {
+    c.strokeStyle = '#4cb6ff'; c.lineWidth = 2;
+    for (let i = 0; i < 3; i++) { const a = i * Math.PI / 3; c.beginPath(); c.moveTo(Math.cos(a) * -7, Math.sin(a) * -7); c.lineTo(Math.cos(a) * 7, Math.sin(a) * 7); c.stroke(); }
+    c.lineWidth = 1.4; for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3, x = Math.cos(a) * 4.6, y = Math.sin(a) * 4.6; c.beginPath(); c.moveTo(x, y); c.lineTo(x + Math.cos(a + 0.8) * 2.4, y + Math.sin(a + 0.8) * 2.4); c.moveTo(x, y); c.lineTo(x + Math.cos(a - 0.8) * 2.4, y + Math.sin(a - 0.8) * 2.4); c.stroke(); }
+    c.fillStyle = '#fff'; circ(c, 0, 0, 1.6); c.fill();
   } else if (kind === 'mini') {
     c.fillStyle = '#fff3e0'; rr(c, -2.6, -1, 5.2, 7, 2); c.fill(); c.stroke();
     c.fillStyle = '#ff5c7a'; c.beginPath(); c.arc(0, 0, 7, Math.PI, TAU); c.closePath(); c.fill(); c.stroke();

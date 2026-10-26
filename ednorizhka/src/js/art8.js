@@ -193,7 +193,7 @@ function drawBlock5(c, b) {
     c.fillStyle = '#e6dcff'; c.beginPath(); c.moveTo(2, 4); c.quadraticCurveTo(T / 2, 7, T - 2, 4); c.quadraticCurveTo(T - 5, T / 2, T - 2, T - 3); c.quadraticCurveTo(T / 2, T - 6, 2, T - 3); c.quadraticCurveTo(5, T / 2, 2, 4); c.closePath(); c.fill(); c.stroke();
     c.fillStyle = '#b99aff'; circ(c, T / 2, T / 2, 2); c.fill();
     c.fillStyle = 'rgba(255,255,255,.7)'; ell(c, 8, 8, 3, 1.3, -0.3); c.fill();
-  } else return false;
+  } else return drawBlock6(c, b);
   return true;
 }
 function drawPillowTile(c) {
@@ -226,6 +226,7 @@ function drawDecor8(c, d, t) {
       c.strokeStyle = '#6fcf5a'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 9); c.stroke();
       c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 0.7; for (let i = 0; i < 6; i++) { const a = i * TAU / 6; ell(c, x + Math.cos(a) * 3.2, y - 11 + Math.sin(a) * 3.2, 2.6, 1.3, a); c.fill(); c.stroke(); }
       c.fillStyle = '#ffd23f'; circ(c, x, y - 11, 1.6); c.fill(); break;
+    default: drawDecor9(c, d, t);
   }
 }
 
@@ -316,5 +317,5 @@ function drawEnemy4(c, e, cx, fl) {
     case 'spider': drawSpider(c, cx, e.y + e.h / 2, e.t, fl, e.top); return true;
     case 'ant': drawAnt(c, cx, e.y + e.h, e.dir, e.t, fl); return true;
   }
-  return false;
+  return drawEnemy5(c, e, cx, fl);
 }

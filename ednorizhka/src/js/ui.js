@@ -127,6 +127,7 @@ function renderGame(dt) {
   for (const w of G.wheels) if (vis(w.cx, w.r + 60)) drawWheelStruct(c, w, t, G.theme);
   for (const r of G.rails) if (r.x1 > G.cam - 40 && r.x0 < G.cam + viewW + 40) drawRails(c, r);
   for (const z of G.breezes) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) drawBreeze(c, z, t);
+  for (const z of G.lowgravs) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) drawLowGrav(c, z, t);
   for (const d of G.decor) if (vis(d.x)) drawDecor(c, d, t);
   for (const v of G.vines) if (vis(v.x)) drawVine(c, v, t);
   for (const l of G.launchers) if (vis(l.x)) drawLauncher(c, l, t);
@@ -187,6 +188,7 @@ function renderGame(dt) {
     else if (B.kind === 'robot') drawRobot(c, B, B.t);
     else if (B.kind === 'moleking') drawMoleKing(c, B, B.t);
     else if (B.kind === 'clock') drawClockBoss(c, B, B.t);
+    else if (B.kind === 'octopus') { for (const tn of B.tents) drawTentacle(c, tn, t, B.gy); drawOctopus(c, B, B.t); }
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -211,6 +213,7 @@ function renderGame(dt) {
   }
   const blinkHide = P.inv > 0 && Math.floor(P.inv * 14) % 2 === 0;
   if (!P.inCannon) {
+  for (const s of G.storms) if (vis(s.x, 60)) drawStormCloud(c, s, t, G.t);
   const cartM = P.ride || (P.onMover && P.onMover.cart ? P.onMover : null);
   drawUnicorn(c, { x: pcx, y: P.y + P.h + 1, dir: P.dir, t: P.t, run: P.onGround ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround, s: P.mini ? 0.42 : 0.8, prof: save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
   if (cartM) cartBody(c, cartM);
@@ -225,7 +228,7 @@ function renderGame(dt) {
   for (const z of G.water) drawWater(c, z, G.cam, viewW, t);
   for (const s of G.shots) {
     const g = c.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 1.8);
-    g.addColorStop(0, '#ffffff'); g.addColorStop(0.45, s.big ? '#ff9ad0' : '#fff0a0'); g.addColorStop(1, s.big ? 'rgba(180,120,255,0)' : 'rgba(255,200,120,0)');
+    g.addColorStop(0, '#ffffff'); g.addColorStop(0.45, s.frost ? '#9fe0ff' : s.big ? '#ff9ad0' : '#fff0a0'); g.addColorStop(1, s.big ? 'rgba(180,120,255,0)' : 'rgba(255,200,120,0)');
     c.fillStyle = g; circ(c, s.x, s.y, s.r * 1.8); c.fill();
     if (s.big) { for (let i = 0; i < 6; i++) { c.strokeStyle = RAINBOW[i]; c.lineWidth = 1.2; c.beginPath(); c.arc(s.x, s.y, s.r - i * 1.2, s.t * 12 + i, s.t * 12 + i + 2.2); c.stroke(); } }
     else sparkle(c, s.x, s.y, 2.2, '#fff');
@@ -287,7 +290,7 @@ function drawHud(c) {
   }
   // бонуси з таймером
   let px = left, py = top + H + 8;
-  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14]]) {
+  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15]]) {
     if (v <= 0) continue;
     c.fillStyle = 'rgba(255,255,255,.9)'; circ(c, px + 17, py + 17, 17); c.fill();
     c.strokeStyle = '#ff4fa3'; c.lineWidth = 3.5; c.beginPath(); c.arc(px + 17, py + 17, 15, -Math.PI / 2, -Math.PI / 2 + TAU * (v / max)); c.stroke();
@@ -388,20 +391,41 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
   const starSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.2 6.7.8-5 4.6 1.4 6.7L12 17.4l-6 3.4 1.4-6.7-5-4.6 6.7-.8z" fill="#ffcf2e" stroke="#c98200" stroke-width="1.5" stroke-linejoin="round"/></svg>';
   $('recordPill').innerHTML = starSvg + 'Рекорд: ' + (save.record || 0);
-  const ol = $('worlds'); ol.innerHTML = '';
+  const host = $('worlds'); host.innerHTML = '';
+  const cur = Math.min(LEVELS.length - 1, save.unlocked - 1), curPart = Math.floor(cur / 5), nParts = Math.ceil(LEVELS.length / 5);
+  mapOpen.add(curPart); if (G) mapOpen.add(Math.floor(G.idx / 5));
+  const chev = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#ffe4f1"/><path d="M7.5 10l4.5 4.5 4.5-4.5" fill="none" stroke="#cf2a7c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2 8.8-9.4" fill="none" stroke="#3b1f4f" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  let curSec = null, ol = null;
   LEVELS.forEach((lv, i) => {
-    if (i % 5 === 0 && PARTS[i / 5]) { const h = document.createElement('li'); h.className = 'part'; h.textContent = 'Частина ' + (i / 5 + 1) + ' · ' + PARTS[i / 5]; ol.appendChild(h); }
+    if (i % 5 === 0) {
+      const p = i / 5, last = Math.min(LEVELS.length, i + 5), total = last - i, partLocked = i + 1 > save.unlocked, open = mapOpen.has(p);
+      let passed = 0, dots = '';
+      for (let k = i; k < last; k++) { const done = save.best[k] != null, sky = THEMES[LEVELS[k].theme].sky; if (done) passed++; dots += '<i style="background:linear-gradient(160deg,' + sky[0] + ',' + sky[2] + ')">' + (done ? starSvg : '') + '</i>'; }
+      const allDone = passed === total;
+      const sec = document.createElement('section'); sec.className = 'part' + (partLocked ? ' locked' : '') + (allDone ? ' done' : '') + (p === curPart ? ' now' : '');
+      const head = document.createElement('button'); head.type = 'button'; head.className = 'part-head'; head.setAttribute('aria-expanded', open ? 'true' : 'false'); head.setAttribute('aria-controls', 'part_' + p);
+      head.innerHTML = '<span class="part-badge">' + (allDone ? check : (p + 1)) + '</span><span class="part-text"><span class="part-kicker"></span><span class="part-title"></span><span class="part-row"><span class="part-dots">' + dots + '</span><span class="part-sub"></span></span></span>' + chev;
+      head.querySelector('.part-kicker').textContent = 'Частина ' + (p + 1) + (p === curPart && !allDone ? ' · ти тут' : '');
+      head.querySelector('.part-title').textContent = PARTS[p] || '';
+      head.querySelector('.part-sub').textContent = partLocked ? 'Відкриється після частини ' + p : allDone ? 'Усе пройдено!' : passed ? 'Пройдено ' + passed + ' з ' + total : 'Нова частина!';
+      ol = document.createElement('ol'); ol.className = 'worlds'; ol.id = 'part_' + p; ol.hidden = !open;
+      const list = ol;
+      head.onclick = () => { const willOpen = list.hidden; list.hidden = !willOpen; head.setAttribute('aria-expanded', willOpen ? 'true' : 'false'); if (willOpen) { mapOpen.add(p); drawThumbs(list); } else mapOpen.delete(p); };
+      sec.append(head, ol); host.appendChild(sec);
+      if (p === curPart) curSec = sec;
+    }
     const li = document.createElement('li'), b = document.createElement('button'); b.type = 'button'; b.className = 'world'; b.id = 'world_' + i;
     const locked = i + 1 > save.unlocked, best = save.best[i];
     if (locked) b.disabled = true;
     const status = locked ? 'Відкриється після країни ' + i : (best != null ? 'Пройдено · найкраще ' + best + ' ' + starWord(best) : (i >= 5 ? 'Нова країна!' : 'Можна грати'));
-    b.innerHTML = '<span class="thumb"><canvas></canvas><span class="num">' + (i + 1) + '</span>' + (locked ? '<span class="lock"><svg viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="11" rx="3" fill="#fff" stroke="#3b1f4f" stroke-width="1.8"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="#fff" stroke-width="3"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="#3b1f4f" stroke-width="1.6"/><circle cx="12" cy="15.5" r="1.8" fill="#3b1f4f"/></svg></span>' : '') + '</span>'
+    b.innerHTML = '<span class="thumb"><canvas data-i="' + i + '"></canvas><span class="num">' + (i + 1) + '</span>' + (locked ? '<span class="lock"><svg viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="11" rx="3" fill="#fff" stroke="#3b1f4f" stroke-width="1.8"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="#fff" stroke-width="3"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="#3b1f4f" stroke-width="1.6"/><circle cx="12" cy="15.5" r="1.8" fill="#3b1f4f"/></svg></span>' : '') + '</span>'
       + '<span class="wbody"><span class="wname"></span><span class="wblurb"></span><span class="wstat"></span></span>';
     b.querySelector('.wname').textContent = lv.name; b.querySelector('.wblurb').textContent = lv.blurb; b.querySelector('.wstat').textContent = status;
     b.onclick = () => { if (!locked) startPlay(i); };
@@ -409,17 +433,25 @@ function showMap() {
   });
   requestAnimationFrame(() => {
     sizePreviews();
-    ol.querySelectorAll('canvas').forEach((cn, i) => {
-      const r = cn.getBoundingClientRect(); cn.width = Math.round(r.width * dpr); cn.height = Math.round(r.height * dpr);
-      const c = cn.getContext('2d'), k = cn.height / VIEW_H; c.setTransform(k, 0, 0, k, 0, 0);
-      drawBackground(c, LEVELS[i].theme, 400, cn.width / k, 3, 0);
-      const th = THEMES[LEVELS[i].theme]; c.fillStyle = th.top; c.fillRect(0, 238, cn.width / k + 1, 8); c.fillStyle = th.fill; c.fillRect(0, 244, cn.width / k + 1, 50);
-      c.strokeStyle = INK; c.lineWidth = 2; c.beginPath(); c.moveTo(0, 238); c.lineTo(cn.width / k + 1, 238); c.stroke();
-      drawStar(c, cn.width / k * 0.7, 150, 0.2, 16);
-    });
+    host.querySelectorAll('.worlds').forEach(list => { if (!list.hidden) drawThumbs(list); });
+    const scr = $('scrMap');
+    if (curSec && curPart > 0) { const r = curSec.getBoundingClientRect(); if (r.top > scr.clientHeight * 0.55) scr.scrollTop += r.top - 24; }
   });
   $('rotateTip').hidden = !(isTouch && SH > SW);
   $('keysHint').hidden = isTouch;
+}
+const mapOpen = new Set();
+function drawThumbs(list) {
+  list.querySelectorAll('canvas').forEach(cn => {
+    if (cn.dataset.done) return;
+    const i = +cn.dataset.i, r = cn.getBoundingClientRect(); if (!r.width) return;
+    cn.width = Math.round(r.width * dpr); cn.height = Math.round(r.height * dpr); cn.dataset.done = '1';
+    const c = cn.getContext('2d'), k = cn.height / VIEW_H; c.setTransform(k, 0, 0, k, 0, 0);
+    drawBackground(c, LEVELS[i].theme, 400, cn.width / k, 3, 0);
+    const th = THEMES[LEVELS[i].theme]; c.fillStyle = th.top; c.fillRect(0, 238, cn.width / k + 1, 8); c.fillStyle = th.fill; c.fillRect(0, 244, cn.width / k + 1, 50);
+    c.strokeStyle = INK; c.lineWidth = 2; c.beginPath(); c.moveTo(0, 238); c.lineTo(cn.width / k + 1, 238); c.stroke();
+    drawStar(c, cn.width / k * 0.7, 150, 0.2, 16);
+  });
 }
 function startPlay(i) {
   Snd.init(); fonts();
@@ -443,6 +475,7 @@ function showWin() {
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 39) { $('winTitle').textContent = 'Дзеленчик тепер дзвонить лише на ігри!'; $('winText').textContent = 'А тим часом Восьминіжка Ласунка поласувала зоряними цукерками й сховала решту зірочок у морі, у хмарах і навіть на Місяці. Наступна країна: ' + LEVELS[40].name + '.'; }
   if (i === 34) { $('winTitle').textContent = 'Копайло тепер копає тунелі для потягів!'; $('winText').textContent = 'Але Будильник Дзеленчик не дає нікому спати: він розбудив зірочки, і вони порозбігалися по нових країнах. Наступна країна: ' + LEVELS[35].name + '.'; }
   if (i === 29) { $('winTitle').textContent = 'Робот Брязкало тепер майструє іграшки!'; $('winText').textContent = 'Але Король Кротів Копайло прорив тунелі й затягнув зірочки під землю. Наступна країна: ' + LEVELS[30].name + '.'; }
   if (i === 24) { $('winTitle').textContent = 'Медуза Желейка подобрішала!'; $('winText').textContent = 'Але Робот Брязкало забирає всі зірочки на свою фабрику. Треба його зупинити! Наступна країна: ' + LEVELS[25].name + '.'; }

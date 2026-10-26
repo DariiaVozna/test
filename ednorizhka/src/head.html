@@ -72,7 +72,7 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
 
 .maphead { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 18px; align-items: center; }
 .maphead .stage { aspect-ratio: 1 / 1; }
-@media (max-width: 560px) { .maphead { grid-template-columns: 110px minmax(0, 1fr); gap: 12px; } }
+@media (max-width: 560px) { .maphead { grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 14px; } .maphead .story { display: none; } .maphead .btn.ghost { padding: 9px 14px; font-size: 15px; } }
 .maphead h2 { font-family: var(--f-display); font-size: clamp(24px, 4.5vw, 34px); margin: 0 0 6px; line-height: 1.1; overflow-wrap: anywhere; }
 .story { margin: 0 0 10px; font-size: 16px; line-height: 1.45; color: var(--ink-2); max-width: 60ch; }
 .mh-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
@@ -80,7 +80,28 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
 .pill svg { width: 18px; height: 18px; }
 
 .worlds { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 14px; }
-.worlds .part { grid-column: 1 / -1; font-family: var(--f-display); font-weight: 700; font-size: 19px; color: var(--ink); padding: 6px 4px 0; }
+.parts { display: flex; flex-direction: column; gap: 12px; }
+.part { background: rgba(255,255,255,.5); border: 3px solid #fff; border-radius: 24px; box-shadow: 0 5px 0 #ebbcd8, 0 10px 22px rgba(59,31,79,.1); overflow: hidden; }
+.part.now { border-color: var(--pink); box-shadow: 0 5px 0 var(--pink-d), 0 10px 22px rgba(207,42,124,.16); }
+.part-head { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 14px; background: var(--paper); border: 0; font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+.part-head:active { background: #fff1f8; }
+.part-badge { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font: 900 21px var(--f-body); background: #ffe4f1; color: var(--pink-d); box-shadow: inset 0 0 0 3px #fff, 0 2px 0 rgba(59,31,79,.15); flex: none; }
+.part-badge svg { width: 26px; height: 26px; }
+.part.done .part-badge { background: var(--gold); color: var(--ink); }
+.part.locked .part-badge { background: #eee5f2; color: var(--ink-2); }
+.part-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.part-kicker { font-size: 12px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.part.now .part-kicker { color: var(--pink-d); }
+.part-title { font-family: var(--f-display); font-weight: 700; font-size: 18px; line-height: 1.15; overflow-wrap: anywhere; }
+.part-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.part-dots { display: flex; gap: 5px; }
+.part-dots i { width: 18px; height: 18px; border-radius: 6px; box-shadow: inset 0 0 0 2px rgba(255,255,255,.9), 0 1px 0 rgba(59,31,79,.2); display: grid; place-items: center; }
+.part-dots i svg { width: 14px; height: 14px; }
+.part.locked .part-dots i { filter: grayscale(.85) brightness(.97); }
+.part-sub { font-size: 13px; color: var(--ink-2); font-weight: 800; }
+.chev { width: 28px; height: 28px; flex: none; transition: transform .2s; }
+.part-head[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.part .worlds { padding: 6px 14px 16px; }
 .world { width: 100%; text-align: left; font: inherit; color: var(--ink); background: var(--paper); border: 4px solid #fff; border-radius: 22px; padding: 0; overflow: hidden; cursor: pointer; box-shadow: 0 6px 0 #ebbcd8, 0 12px 24px rgba(59,31,79,.14); display: flex; flex-direction: column; transition: transform .1s; }
 .world:active { transform: translateY(3px); }
 .world .thumb { position: relative; aspect-ratio: 16 / 9; max-width: 100%; }
@@ -132,7 +153,7 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
 #pad.below .pbtn.horn { margin: 0 min(64px, 14vw) 0 0; width: min(80px, 21vw); height: min(80px, 21vw); }
 #pad.below .pbtn.jump { width: min(100px, 26vw); height: min(100px, 26vw); }
 @media (max-height: 520px) { .modal { padding: 14px 16px; } .modal { gap: 10px; } .modal h2 { font-size: 22px; } .modal p { font-size: 15px; } .stat { padding: 6px; } .stat b { font-size: 20px; } .btn.big { font-size: 19px; padding: 11px 22px; } }
-@media (prefers-reduced-motion: reduce) { .btn, .chip, .sw, .pbtn, .world { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .btn, .chip, .sw, .pbtn, .world, .chev { transition: none; } }
 </style>
 
 <div id="app">
@@ -195,7 +216,7 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
           </div>
         </div>
       </div>
-      <ol class="worlds" id="worlds"></ol>
+      <div class="parts" id="worlds"></div>
       <p class="tip" id="rotateTip" hidden>На телефоні зручніше грати, якщо повернути його боком.</p>
       <p class="keys" id="keysHint">Клавіатура: стрілки — бігти, пробіл — стрибок, X — ріг (затисни, щоб зарядити велику кулю), P — пауза.</p>
     </div>

@@ -1702,6 +1702,191 @@ const LEVELS = [
       L.power('shield', 146, 9);
       L.gate(168);
     }
+  },  {
+    id: 'tide', theme: 'tide', name: 'Острів припливів', blurb: 'Вода то прибуває, то відступає; черепашки ховаються в панцирики', w: 170,
+    build(L) {
+      L.ground(0, 22, 5);
+      L.sign(4, 'Вода то прибуває, то відступає. Пливи нагору, коли вона висока!');
+      L.row(7, 4, 3);
+      L.enemy('turtle', 15, 5);
+      L.ground(22, 46, 11); L.tide(22, 46, 11.3, 5.3, 8);
+      L.row(24, 10, 4); L.row(31, 7, 4); L.enemy('crab', 37, 11); L.row(40, 10, 3);
+      L.ground(46, 72, 5);
+      L.check(48);
+      L.enemy('turtle', 53, 5);
+      L.qblock(56, 1, 'star5');
+      L.enemy('turtle', 61, 5);
+      L.row(63, 4, 4);
+      L.ground(72, 100, 11); L.tide(72, 100, 11.3, 5.3, 7);
+      L.row(74, 10, 4); L.enemy('crab', 82, 11); L.rainbow(85, 7); L.row(90, 8, 4);
+      L.ground(100, 132, 5);
+      L.check(102);
+      L.enemy('turtle', 107, 5);
+      L.qblock(110, 1, 'star'); L.qblock(111, 1, 'rainbow'); L.qblock(112, 1, 'star');
+      L.enemy('turtle', 116, 5);
+      L.row(118, 4, 4);
+      L.enemy('bird', 124, 2);
+      L.ground(135, 170, 5);
+      L.enemy('turtle', 140, 5);
+      L.qblock(144, 1, 'magnet');
+      L.row(146, 4, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'aurora', theme: 'aurora', name: 'Північне сяйво', blurb: 'Сніжинка заморожує ворогів у крижані кубики', w: 170, needK: 0.4,
+    build(L) {
+      L.ground(0, 26);
+      L.sign(4, 'Сніжинка заморожує ворогів у крижані кубики. На них можна стрибати!');
+      L.power('frost', 8, 8);
+      L.row(10, 9, 3);
+      L.enemy('bird', 15, 5); L.cloud(18, 2, 4); L.row(18, 1, 4);
+      L.enemy('penguin', 22, 10);
+      L.ground(29, 58);
+      L.enemy('owl', 33, 4);
+      L.qblock(36, 6, 'star5');
+      L.enemy('snowman', 40, 10);
+      L.enemy('bird', 46, 6); L.cloud(49, 3, 3); L.row(49, 2, 3); L.rainbow(52, 1);
+      L.enemy('penguin', 54, 10);
+      L.row(55, 9, 2);
+      L.ground(61, 96);
+      L.check(63);
+      L.power('frost', 66, 8);
+      L.enemy('owl', 70, 4);
+      L.qblock(73, 6, 'shield');
+      L.row(75, 9, 4);
+      L.enemy('snowman', 85, 10);
+      L.enemy('bird', 89, 5); L.cloud(92, 2, 4); L.row(92, 1, 4);
+      L.mover(97, 8, 2, 1, 0, 3); L.row(96, 7, 4);
+      L.ground(100, 132);
+      L.check(102);
+      L.enemy('penguin', 106, 10);
+      L.qblock(109, 6, 'star'); L.qblock(110, 6, 'rainbow'); L.qblock(111, 6, 'star');
+      L.power('frost', 114, 8);
+      L.enemy('bird', 118, 5); L.cloud(121, 2, 4); L.row(121, 1, 4);
+      L.enemy('snowman', 127, 10);
+      L.row(128, 9, 3);
+      L.ground(135, 170);
+      L.enemy('owl', 139, 4);
+      L.qblock(143, 6, 'magnet');
+      L.row(145, 9, 4);
+      L.enemy('penguin', 150, 10);
+      L.sign(157, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'storm', theme: 'storm', name: 'Грозові хмари', blurb: 'Хмарки блимають і б\'ють блискавками — проходь між ударами', w: 170,
+    build(L) {
+      L.ground(0, 26);
+      L.sign(4, 'Грозова хмарка блимає, перш ніж ударить блискавкою. Проходь, коли вона спокійна!');
+      L.row(7, 9, 3);
+      L.storm(14); L.row(12, 9, 5);
+      L.enemy('cloud', 20, 5);
+      L.ground(29, 58);
+      L.storm(33); L.qblock(37, 6, 'star5');
+      L.enemy('bird', 41, 5);
+      L.storm(45); L.row(43, 9, 5);
+      L.cloud(49, 6, 3); L.row(49, 5, 3);
+      L.enemy('cloud', 54, 5);
+      L.ground(61, 96);
+      L.check(63);
+      L.storm(68); L.row(66, 9, 5);
+      L.qblock(72, 6, 'shield');
+      L.enemy('bird', 76, 5);
+      L.storm(81); L.storm(85); L.row(79, 9, 8);
+      L.enemy('cloud', 90, 5);
+      L.mover(97, 8, 2, 1, 0, 3); L.row(96, 7, 4);
+      L.ground(100, 132);
+      L.check(102);
+      L.storm(107);
+      L.qblock(110, 6, 'star'); L.qblock(111, 6, 'rainbow'); L.qblock(112, 6, 'star');
+      L.enemy('cloud', 116, 5);
+      L.storm(121); L.row(119, 9, 5);
+      L.spring(126); L.cloud(128, 4, 3); L.row(128, 3, 3);
+      L.ground(135, 170);
+      L.storm(140);
+      L.enemy('bird', 144, 5);
+      L.qblock(147, 6, 'magnet');
+      L.row(149, 9, 4);
+      L.sign(157, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'moon', theme: 'moon', name: 'Місячна база', blurb: 'У фіолетових колонах майже немає ваги — стрибки до неба', w: 170, needK: 0.42,
+    build(L) {
+      L.ground(0, 32);
+      L.sign(4, 'У фіолетових колонах майже немає ваги — стрибай дуже високо!');
+      L.row(7, 9, 3);
+      L.lowgrav(13, 22); L.block(20, 3, 2, 7); L.row(20, 2, 2);
+      L.enemy('alien', 26, 10);
+      L.row(27, 9, 3);
+      L.lowgrav(30, 42); L.arc(33, 5, 7, 3);
+      L.ground(40, 72);
+      L.check(44);
+      L.qblock(47, 6, 'star5');
+      L.enemy('ufo', 52, 5);
+      L.enemy('alien', 55, 10);
+      L.lowgrav(58, 64); L.cloud(60, 2, 4); L.row(60, 1, 4);
+      L.enemy('alien', 67, 10);
+      L.row(68, 9, 3);
+      L.lowgrav(70, 82); L.arc(73, 5, 7, 3);
+      L.ground(80, 112);
+      L.check(84);
+      L.enemy('alien', 88, 10);
+      L.qblock(91, 6, 'shield');
+      L.lowgrav(95, 103); L.block(101, 3, 2, 7); L.row(101, 2, 2);
+      L.enemy('ufo', 106, 5);
+      L.row(107, 9, 3);
+      L.lowgrav(110, 122); L.arc(113, 5, 7, 3);
+      L.ground(120, 170);
+      L.enemy('alien', 126, 10);
+      L.qblock(129, 6, 'star'); L.qblock(130, 6, 'rainbow'); L.qblock(131, 6, 'star');
+      L.enemy('alien', 136, 10);
+      L.lowgrav(139, 145); L.cloud(141, 2, 4); L.row(141, 1, 4);
+      L.enemy('ufo', 148, 5);
+      L.qblock(151, 6, 'magnet');
+      L.row(153, 9, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'station', theme: 'station', name: 'Космічна станція', blurb: 'Битва з Восьминіжкою Ласункою', w: 172, boss: 'octopus',
+    build(L) {
+      L.ground(0, 28);
+      L.sign(5, 'Космічна станція Восьминіжки Ласунки. Вона з\'їла всі зоряні цукерки!');
+      L.qblock(10, 6, 'star5');
+      L.row(13, 9, 4);
+      L.enemy('alien', 18, 10);
+      L.lowgrav(22, 35); L.arc(28, 6, 5, 2);
+      L.ground(33, 64);
+      L.check(36);
+      L.enemy('ufo', 41, 5);
+      L.qblock(44, 6, 'shield');
+      L.enemy('alien', 48, 10);
+      L.row(50, 9, 4);
+      L.enemy('turtle', 56, 10);
+      L.ground(67, 100);
+      L.check(69);
+      L.enemy('alien', 74, 10);
+      L.power('frost', 77, 8);
+      L.qblock(80, 6, 'candy');
+      L.enemy('ufo', 84, 5);
+      L.lowgrav(88, 96); L.cloud(90, 2, 4); L.row(90, 1, 4); L.rainbow(95, 1);
+      L.ground(103, 172);
+      L.enemy('alien', 108, 10);
+      L.qblock(112, 6, 'magnet');
+      L.row(110, 9, 3);
+      L.sign(121, 'Восьминіжка Ласунка! Стріляй, коли вона відкриє ротик');
+      L.check(125);
+      L.arena(129, 172);
+      L.cloud(137, 6, 3); L.cloud(149, 6, 4); L.cloud(160, 6, 3);
+      L.power('shield', 146, 9);
+      L.gate(168);
+    }
   },
 ];
 
@@ -1745,13 +1930,18 @@ const DECOR = {
   tiny: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'dewdrop', x, y } : r < 0.7 ? { k: 'clover', x, y } : { k: 'mush', x, y, c: ['#ff6b8a', '#ffb347', '#b48cff'][Math.floor(R() * 3)], glow: false }; },
   swing: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'leafpile', x, y } : r < 0.7 ? { k: 'mush', x, y, c: ['#ff6b8a', '#ffb347', '#e85d3a'][Math.floor(R() * 3)], glow: false } : { k: 'flower', x, y, c: ['#ffffff', '#ff7ab8', '#ffd54a'][Math.floor(R() * 3)] }; },
   dream: (R, x, y) => R() < 0.5 ? { k: 'zzz', x, y } : { k: 'twinkle', x, y },
+  tide: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'palmS', x, y } : r < 0.7 ? { k: 'shell', x, y, c: ['#ffb3c6', '#ffd9a8', '#fff3e0'][Math.floor(R() * 3)] } : { k: 'starfish', x, y }; },
+  aurora: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'igloo', x, y } : r < 0.65 ? { k: 'pine', x, y } : { k: 'crystal', x, y }; },
+  storm: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'puddle', x, y } : r < 0.7 ? { k: 'flower', x, y, c: ['#ffffff', '#9fe0ff', '#ffd54a'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  moon: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'rock', x, y } : r < 0.7 ? { k: 'crystal', x, y } : { k: 'antenna', x, y }; },
+  station: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'antenna', x, y } : r < 0.7 ? { k: 'crate2', x, y } : { k: 'gearS', x, y, c: ['#ffb347', '#9fd8ff', '#ff9fcb'][Math.floor(R() * 3)] }; },
   factory: (R, x, y) => R() < 0.5 ? { k: 'gearS', x, y, c: ['#ffb347', '#9fd8ff', '#ff9fcb'][Math.floor(R() * 3)] } : { k: 'crate2', x, y },
 };
 
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -1792,6 +1982,9 @@ function buildLevel(idx) {
       for (let i = 0; i < n; i++) { const ph = i * TAU / n; L.movers.push({ circ: true, cx: C.cx, cy: C.cy, r: C.r, ph, period, w, bx: C.cx + Math.cos(ph) * C.r - w / 2, by: C.cy + Math.sin(ph) * C.r, ax: 0, ay: 0 }); }
     },
     geyser(x0, x1, top, cyc, on) { later.push(() => L.winds.push({ x0: x0 * T, x1: x1 * T, y: top * T, y1: groundY(x0), cyc: cyc || 3.2, on: on || 1.5, ph: (x0 * 0.7) % 3 })); },
+    tide(x0, x1, lowRow, highRow, period) { const lo = lowRow * T + 6, hi = highRow * T + 6; L.water.push({ x0: x0 * T, x1: x1 * T, y: lo, tide: { lo, hi, per: period || 8 } }); },
+    storm(x) { later.push(() => L.storms.push({ x: x * T + 12, y: 40, gy: groundY(x), per: 3.4, ph: (x * 0.53) % 3.4, struck: false })); },
+    lowgrav(x0, x1) { L.lowgravs.push({ x0: x0 * T, x1: x1 * T }); },
     zip(x0, x1, top0, top1) { const z = { x0: x0 * T + 12, y0: top0 * T - 34, x1: x1 * T + 12, y1: top1 * T - 46, gy0: top0 * T, gy1: top1 * T, state: 'idle', d: 0, v: 0 }; z.len = Math.hypot(z.x1 - z.x0, z.y1 - z.y0); z.hx = z.x0; z.hy = z.y0 + 8; L.zips.push(z); },
     breeze(x0, x1) { L.breezes.push({ x0: x0 * T, x1: x1 * T, p: 170 }); },
     swing(cx, cy, len, amp, period) { const px = cx * T + 12, py = cy * T, l = len * T, w = 2 * T; L.movers.push({ swing: true, px, py, len: l, amp, period, ph: 0, w, bx: px - w / 2, by: py + l, ax: 0, ay: 0 }); },
