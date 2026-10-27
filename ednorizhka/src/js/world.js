@@ -54,6 +54,13 @@ const tileCache = new Map();
 function tileSprite(theme, kind, l, r, ps) {
   const key = theme + kind + (l ? 1 : 0) + (r ? 1 : 0) + ps.toFixed(3);
   let cv = tileCache.get(key); if (cv) return cv;
+  if (kind === 'ceil') {
+    // стеля в країні догори дриґом: верхня плитка, перевернута травою донизу
+    const top = tileSprite(theme, 'top', l, r, ps), S2 = top.width;
+    cv = makeCanvas(S2, S2); const c2 = cv.getContext('2d');
+    c2.translate(0, S2); c2.scale(1, -1); c2.drawImage(top, 0, 0);
+    tileCache.set(key, cv); return cv;
+  }
   const S = Math.ceil(T * ps) + 1;
   cv = makeCanvas(S, S); const c = cv.getContext('2d');
   c.scale(ps, ps); c.lineJoin = 'round'; c.lineCap = 'round';

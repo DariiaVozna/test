@@ -12,7 +12,7 @@ Object.assign(ENEMY2, { turtle: 1 });
 function spawnEnemy5(e, b, hover, g) {
   if (e.k === 'turtle') return g(22, 18, { speed: 22, state: 'walk', st: 0 });
   if (e.k === 'alien') return Object.assign(b, { w: 20, h: 18, x: e.tx * T + 2, y: e.ty * T - 18, cool: 0.6 + Math.random(), air: false });
-  return null;
+  return spawnEnemy6(e, b, hover, g);
 }
 
 /* Черепашка: стрибни — сховається в панцирик; штовхни панцирик — він покотиться й зіб'є ворогів */
@@ -48,23 +48,41 @@ function touchHook(e) {
   return e.state === 'slide';
 }
 
-/* Сніжинка: постріл заморожує ворога в крижаний кубик, на який можна стати */
+/* Сніжинка: постріл заморожує ворога в крижаний кубик. Кубик падає на землю, і на нього можна стати,
+   щоб дострибнути на одну сходинку вище, ніж із землі */
+const ICE_H = 30, ICE_LIFE = 8;
 function freezeEnemy(e) {
-  if (e.k === 'spark') return false;
-  const cx = e.x + e.w / 2, cy = e.y + e.h / 2, w = Math.max(26, Math.min(40, e.w + 6));
+  if (e.k === 'spark' || e.k === 'leaper') return false;
+  const cx = e.x + e.w / 2, w = 30;
   e.dead = true; G.defeated++;
   const col = ['#ff9fd0', '#ffd54a', '#9fe0ff', '#c5a8ff', '#9ff0c4'][Math.floor(Math.random() * 5)];
-  G.movers.push({ ice: true, x: cx - w / 2, y: cy - 12, bx: cx - w / 2, by: cy - 12, w, dx: 0, dy: 0, st: 0, life: 5, state: 'idle', col, fly: !!(FLYERS[e.k] || HOVER[e.k]), ax: 0, ay: 0, period: 1 });
-  Snd.tone(1200, 0.25, 'triangle', 0.06, 1800); burst(cx, cy, 12, ['#ffffff', '#bfefff', '#9fe0ff'], 120);
-  if (!G.frostHint) { G.frostHint = true; say('Крижаний кубик! На нього можна стати', 2); }
+  const y = Math.min(e.y + e.h, VIEW_H) - ICE_H;
+  G.movers.push({ ice: true, x: cx - w / 2, y, bx: cx - w / 2, by: y, w, h: ICE_H, dx: 0, dy: 0, vy: 0, st: 0, life: ICE_LIFE, state: 'fall', col, fly: !!(FLYERS[e.k] || HOVER[e.k]), ax: 0, ay: 0, period: 1 });
+  Snd.tone(1200, 0.25, 'triangle', 0.06, 1800); burst(cx, e.y + e.h / 2, 12, ['#ffffff', '#bfefff', '#9fe0ff'], 120);
+  if (!G.frostHint) { G.frostHint = true; say('Крижаний кубик! Стань на нього — і дострибнеш вище', 2.4); }
   return true;
 }
+/* Кубик падає, доки не стане на землю, хмаринку чи інший кубик */
+function iceLands(m, prevB) {
+  const bot = m.y + m.h, l = Math.floor((m.x + 4) / T), r = Math.floor((m.x + m.w - 4) / T), ty = Math.floor(bot / T);
+  for (let tx = l; tx <= r; tx++) { const v = tileAt(tx, ty); if (solid(v) || (v === 3 && prevB <= ty * T + 0.5)) return ty * T; }
+  for (const o of G.movers) if (o !== m && o.ice && o.state === 'idle' && prevB <= o.y + 0.5 && bot >= o.y && m.x + m.w > o.x + 6 && m.x < o.x + o.w - 6) return o.y;
+  return null;
+}
 function updateIce(m, dt) {
-  m.dx = 0; m.dy = 0; m.st += dt;
+  const y0 = m.y; m.dx = 0; m.dy = 0; m.st += dt;
+  if (m.state === 'fall') {
+    const prevB = m.y + m.h;
+    m.vy = Math.min(m.vy + 1400 * dt, 600); m.y += m.vy * dt;
+    const top = iceLands(m, prevB);
+    if (top != null) { m.y = top - m.h; m.vy = 0; m.state = 'idle'; if (m.st > 0.1 && Math.abs(m.x - G.P.x) < 400) Snd.bump(); }
+    else if (m.y > VIEW_H + 40) { m.state = 'gone'; return; }
+    m.dy = m.y - y0;
+  }
   if (m.state !== 'gone' && m.st > m.life) {
-    m.state = 'gone'; const cx = m.x + m.w / 2, cy = m.y + 12;
+    m.state = 'gone'; const cx = m.x + m.w / 2, cy = m.y + m.h / 2;
     if (Math.abs(cx - G.P.x) < 400) Snd.pop(); burst(cx, cy, 14, ['#ffffff', '#bfefff'], 120);
-    if (m.fly) G.flys.push({ x: cx, y: cy, vx: (Math.random() - 0.5) * 40, t: 0, col: m.col }); else G.flowers.push({ x: cx, gy: m.y + 24, col: m.col, t: 0 });
+    if (m.fly) G.flys.push({ x: cx, y: cy, vx: (Math.random() - 0.5) * 40, t: 0, col: m.col }); else G.flowers.push({ x: cx, gy: m.y + m.h, col: m.col, t: 0 });
     G.drops.push({ x: cx, y: cy, vx: (Math.random() - 0.5) * 70, vy: -230, t: 0, got: false });
   }
 }
@@ -82,6 +100,8 @@ function pullAt(P) {
 
 function update5(dt) {
   const P = G.P, pcx = P.x + P.w / 2;
+  // сніжинка з'являється знову, щоб можна було повернутися й спробувати ще раз
+  for (const p of G.powers) if (p.k === 'frost' && p.got) { p.reT = (p.reT || 0) + dt; if (p.reT > 5 && Math.abs(pcx - p.x) > 60) { p.got = false; p.reT = 0; } }
   for (const z of G.water) if (z.tide) { const td = z.tide; z.y = (td.lo + td.hi) / 2 + (td.lo - td.hi) / 2 * Math.cos(G.t * TAU / td.per); }
   for (const s of G.storms) {
     const ph = (G.t + s.ph) % s.per, strike = ph >= s.per - 0.35;
@@ -95,6 +115,7 @@ function update5(dt) {
     if (tn.phase !== 'up' || tn.h < 20) continue;
     for (const s of G.shots) if (s.life > 0 && Math.abs(s.x - tn.x) < 10 + s.r && s.y > B.gy - tn.h && s.y < B.gy) { tn.phase = 'down'; tn.st = 0; s.life = 0; Snd.pop(); burst(tn.x, s.y, 10, ['#ffffff', '#e86fb4'], 110); break; }
   }
+  update6(dt);
 }
 
 /* ===== Восьминіжка Ласунка: щупальця з-під підлоги, а потім втягує все до себе ===== */

@@ -20,6 +20,7 @@ function spawnEnemy4(e, b, hover, g) {
   return spawnEnemy5(e, b, hover, g);
 }
 function updateEnemy4(e, dt) {
+  if (updateEnemy6(e, dt)) return;
   if (e.k === 'turtle') return updateTurtle(e, dt);
   if (e.k === 'spider') { e.x = e.hx - e.w / 2; e.y = e.hy + (0.5 - 0.5 * Math.cos(e.t * 1.3)) * e.range - e.h / 2; return; }
   if (e.k !== 'goat') return;

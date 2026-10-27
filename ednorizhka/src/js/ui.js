@@ -104,7 +104,10 @@ function renderGame(dt) {
     for (let ty = 0; ty < ROWS; ty++) {
       const v = G.map[ty * G.Wt + tx]; if (!v || v === 5) continue;
       let kind, l = false, r = false;
-      if (v === 1) { const up = ty > 0 ? G.map[(ty - 1) * G.Wt + tx] : 0; kind = (up === 1 || up === 2 || up === 5 || up === 12) ? 'fill' : 'top'; l = tileAt(tx - 1, ty) !== 1; r = tileAt(tx + 1, ty) !== 1; }
+      if (v === 1) {
+        const up = ty > 0 ? G.map[(ty - 1) * G.Wt + tx] : (th.ceil ? 1 : 0); kind = (up === 1 || up === 2 || up === 5 || up === 12) ? 'fill' : 'top'; l = tileAt(tx - 1, ty) !== 1; r = tileAt(tx + 1, ty) !== 1;
+        if (th.ceil && kind === 'fill' && ty < ROWS - 1 && G.map[(ty + 1) * G.Wt + tx] === 0) kind = 'ceil';
+      }
       else if (v === 2) kind = 'block';
       else if (v === 7) kind = 'qblock';
       else if (v === 8) kind = 'used';
@@ -128,6 +131,7 @@ function renderGame(dt) {
   for (const r of G.rails) if (r.x1 > G.cam - 40 && r.x0 < G.cam + viewW + 40) drawRails(c, r);
   for (const z of G.breezes) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) drawBreeze(c, z, t);
   for (const z of G.lowgravs) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) drawLowGrav(c, z, t);
+  drawWorld6(c, t, vis);
   for (const d of G.decor) if (vis(d.x)) drawDecor(c, d, t);
   for (const v of G.vines) if (vis(v.x)) drawVine(c, v, t);
   for (const l of G.launchers) if (vis(l.x)) drawLauncher(c, l, t);
@@ -189,6 +193,7 @@ function renderGame(dt) {
     else if (B.kind === 'moleking') drawMoleKing(c, B, B.t);
     else if (B.kind === 'clock') drawClockBoss(c, B, B.t);
     else if (B.kind === 'octopus') { for (const tn of B.tents) drawTentacle(c, tn, t, B.gy); drawOctopus(c, B, B.t); }
+    else if (B.kind === 'magpie') drawMagpie(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -215,17 +220,20 @@ function renderGame(dt) {
   if (!P.inCannon) {
   for (const s of G.storms) if (vis(s.x, 60)) drawStormCloud(c, s, t, G.t);
   const cartM = P.ride || (P.onMover && P.onMover.cart ? P.onMover : null);
+  if (P.flip) { c.save(); c.translate(0, 2 * (P.y + P.h / 2)); c.scale(1, -1); }
   drawUnicorn(c, { x: pcx, y: P.y + P.h + 1, dir: P.dir, t: P.t, run: P.onGround ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround, s: P.mini ? 0.42 : 0.8, prof: save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
+  if (P.flip) c.restore();
   if (cartM) cartBody(c, cartM);
-  // ім'я над головою
+  // ім'я над головою (догори дриґом — під нею)
   c.font = '900 9px Nunito, system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
-  const nm = nameOf(), nw = c.measureText(nm).width + 10, ny = P.y - (P.mini ? 12 : 19);
+  const nm = nameOf(), nw = c.measureText(nm).width + 10, ny = P.flip ? P.y + P.h + 19 : P.y - (P.mini ? 12 : 19);
   c.fillStyle = 'rgba(255,255,255,.9)'; rr(c, pcx - nw / 2, ny - 6.5, nw, 13, 6.5); c.fill();
   c.strokeStyle = '#ff4fa3'; c.lineWidth = 1; c.stroke();
   c.fillStyle = INK; c.fillText(nm, pcx, ny + 0.5);
   }
 
   for (const z of G.water) drawWater(c, z, G.cam, viewW, t);
+  drawWater6(c, t);
   for (const s of G.shots) {
     const g = c.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 1.8);
     g.addColorStop(0, '#ffffff'); g.addColorStop(0.45, s.frost ? '#9fe0ff' : s.big ? '#ff9ad0' : '#fff0a0'); g.addColorStop(1, s.big ? 'rgba(180,120,255,0)' : 'rgba(255,200,120,0)');
@@ -391,7 +399,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -475,6 +483,7 @@ function showWin() {
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 44) { $('winTitle').textContent = 'Ласунка тепер ділиться цукерками!'; $('winText').textContent = 'Але Сорока Блискітка побачила, як сяють зірочки, і понесла їх до свого гнізда: через річку, понад лугом і навіть у країну, де все догори дриґом. Наступна країна: ' + LEVELS[45].name + '.'; }
   if (i === 39) { $('winTitle').textContent = 'Дзеленчик тепер дзвонить лише на ігри!'; $('winText').textContent = 'А тим часом Восьминіжка Ласунка поласувала зоряними цукерками й сховала решту зірочок у морі, у хмарах і навіть на Місяці. Наступна країна: ' + LEVELS[40].name + '.'; }
   if (i === 34) { $('winTitle').textContent = 'Копайло тепер копає тунелі для потягів!'; $('winText').textContent = 'Але Будильник Дзеленчик не дає нікому спати: він розбудив зірочки, і вони порозбігалися по нових країнах. Наступна країна: ' + LEVELS[35].name + '.'; }
   if (i === 29) { $('winTitle').textContent = 'Робот Брязкало тепер майструє іграшки!'; $('winText').textContent = 'Але Король Кротів Копайло прорив тунелі й затягнув зірочки під землю. Наступна країна: ' + LEVELS[30].name + '.'; }
@@ -489,7 +498,7 @@ function showLose() {
   show('scrLose');
 }
 function continueFromCheck() {
-  const P = G.P; P.zip = null; P.ride = null; P.vine = null; P.hearts = 3; P.x = P.check.x; P.y = P.check.y; P.vx = P.vy = 0; P.inv = 2; P.safe = { x: P.x, y: P.y };
+  const P = G.P; P.zip = null; P.ride = null; P.vine = null; if (P.kite) { P.kite.state = 'back'; P.kite.st = 0; P.kite = null; } P.hearts = 3; P.x = P.check.x; P.y = P.check.y; P.vx = P.vy = 0; P.inv = 2; P.safe = { x: P.x, y: P.y };
   if (G.bossActive && G.boss && !G.boss.dead) { G.bolts = []; if (G.boss.kind === 'hedge') { G.boss.state = 'walk'; G.boss.st = 0; G.boss.x = Math.max(G.boss.x, G.arena.x0 + 14 * T); } if (G.boss.kind === 'dragon') { G.boss.state = 'takeoff'; G.boss.st = 0; G.gust = null; } resetBoss2(G.boss); }
   mode = 'play'; show(null); setPlayUi(true);
 }

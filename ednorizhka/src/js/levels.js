@@ -189,6 +189,7 @@ const LEVELS = [
       L.arc(29, 8, 5, 2);
       L.ground(33, 60);
       L.enemy('snail', 38, 10);
+      L.power('magnet', 40, 8);
       L.enemy('cloud', 44, 6);
       L.power('shield', 47, 8);
       L.enemy('hedgehog', 52, 10);
@@ -200,7 +201,6 @@ const LEVELS = [
       L.enemy('bat', 75, 4); L.enemy('bat', 82, 4);
       L.row(76, 9, 4);
       L.enemy('snail', 86, 10);
-      L.power('candy', 90, 8);
       L.enemy('hedgehog', 95, 10);
       L.arc(99, 8, 5, 2);
       L.ground(103, 172);
@@ -208,10 +208,10 @@ const LEVELS = [
       L.enemy('cloud', 114, 5);
       L.row(110, 9, 4);
       L.enemy('hedgehog', 120, 10);
-      L.power('magnet', 124, 8);
       L.sign(126, 'Попереду Король Похмурої Хмари!');
       L.check(129);
       L.block(131, 9, 1);
+      L.power('candy', 128, 8);
       L.arena(133, 172);
       L.cloud(137, 7, 3); L.cloud(143, 5, 3); L.cloud(150, 7, 3); L.cloud(156, 5, 3); L.cloud(162, 7, 3);
       L.power('shield', 147, 9);
@@ -285,6 +285,7 @@ const LEVELS = [
       L.enemy('crab', 40, 6);
       L.row(37, 5, 4);
       L.block(44, 3, 3); L.row(44, 2, 3);
+      L.power('magnet', 47, 5);
       L.check(49);
       L.ground(52, 80, 11); L.water(52, 80, 6);
       L.row(54, 10, 4);
@@ -313,7 +314,6 @@ const LEVELS = [
       L.ground(130, 152, 11); L.water(130, 152, 6);
       L.row(132, 10, 6);
       L.enemy('fish', 136, 8);
-      L.power('magnet', 139, 10);
       L.enemy('jelly', 141, 8);
       L.row(144, 8, 6);
       L.enemy('fish', 147, 10);
@@ -343,6 +343,7 @@ const LEVELS = [
       L.enemy('spark', 51, 11);
       L.ground(53, 80);
       L.check(55);
+      L.power('magnet', 58, 8);
       L.enemy('cloud', 60, 7);
       L.row(58, 9, 5);
       L.block(65, 7, 1, 3); L.star(65, 6);
@@ -358,7 +359,6 @@ const LEVELS = [
       L.cloud(97, 4, 4); L.row(97, 3, 4);
       L.enemy('hedgehog', 100, 10);
       L.enemy('snail', 105, 10);
-      L.power('magnet', 107, 8);
       L.enemy('spark', 111, 11);
       L.ground(113, 140);
       L.check(115);
@@ -401,6 +401,7 @@ const LEVELS = [
       L.enemy('snail', 72, 10);
       L.cloud(77, 7, 2); L.row(77, 6, 2);
       L.ground(80, 105);
+      L.power('magnet', 82, 8);
       L.enemy('ufo', 86, 6); L.enemy('ufo', 95, 4);
       L.row(84, 9, 6);
       L.cloud(90, 4, 4); L.row(90, 3, 4);
@@ -420,7 +421,6 @@ const LEVELS = [
       L.ground(144, 175);
       L.enemy('ufo', 150, 6);
       L.row(148, 9, 5);
-      L.power('magnet', 155, 8);
       L.sign(160, 'Ворота вже близько!');
       L.gate(167);
     }
@@ -441,6 +441,7 @@ const LEVELS = [
       L.power('shield', 47, 8);
       L.block(50, 7, 3); L.row(50, 6, 3);
       L.enemy('crab', 55, 10);
+      L.power('magnet', 57, 8);
       L.arc(59, 8, 4, 2);
       L.ground(65, 100);
       L.check(67);
@@ -449,14 +450,13 @@ const LEVELS = [
       L.spring(84);
       L.cloud(86, 4, 4); L.row(86, 3, 3); L.rainbow(89, 2);
       L.enemy('ufo', 92, 6);
-      L.power('candy', 95, 8);
       L.ground(103, 172);
       L.enemy('cloud', 108, 7);
       L.enemy('hedgehog', 114, 10);
       L.row(110, 9, 4);
-      L.power('magnet', 118, 8);
       L.sign(122, 'Пан Колючка! Стріляй, коли в нього паморочиться голова');
       L.check(126);
+      L.power('candy', 128, 8);
       L.arena(129, 172);
       L.cloud(135, 7, 3); L.cloud(146, 6, 3); L.cloud(158, 7, 3);
       L.power('shield', 147, 5);
@@ -473,6 +473,7 @@ const LEVELS = [
       L.crumble(25, 8, 2); L.crumble(28, 7, 2);
       L.row(25, 7, 2); L.row(28, 6, 2);
       L.ground(31, 58);
+      L.power('magnet', 32, 8);
       L.row(34, 9, 4);
       L.enemy('squirrel', 39, 10);
       L.block(42, 7, 3); L.row(42, 6, 3);
@@ -503,7 +504,6 @@ const LEVELS = [
       L.enemy('mush', 147, 10);
       L.row(149, 9, 4);
       L.enemy('squirrel', 153, 10);
-      L.power('magnet', 155, 8);
       L.sign(159, 'Ворота вже близько!');
       L.gate(164);
     }
@@ -526,6 +526,7 @@ const LEVELS = [
       L.ground(57, 85);
       L.check(59);
       L.enemy('snail', 64, 10);
+      L.power('magnet', 62, 8);
       L.balloon(67);
       L.cloud(70, 3, 4); L.row(70, 2, 4);
       L.row(74, 9, 5);
@@ -540,7 +541,6 @@ const LEVELS = [
       L.enemy('snail', 110, 10);
       L.enemy('bird', 114, 6);
       L.block(118, 7, 3); L.row(118, 6, 3);
-      L.power('magnet', 122, 8);
       L.wind(125, 133, 4); L.arc(125, 4, 8, 2);
       L.ground(133, 170);
       L.enemy('snail', 138, 10);
@@ -580,6 +580,7 @@ const LEVELS = [
       L.belt(80, 8, 4, 1); L.row(80, 7, 4);
       L.ground(84, 112);
       L.enemy('soldier', 89, 10);
+      L.power('magnet', 91, 8);
       L.spring(94);
       L.cloud(96, 3, 4); L.row(96, 2, 4);
       L.belt(100, 10, 6, -1); L.row(100, 9, 6);
@@ -592,7 +593,6 @@ const LEVELS = [
       L.enemy('mouse', 131, 10);
       L.ground(143, 170);
       L.enemy('soldier', 148, 10);
-      L.power('magnet', 151, 8);
       L.row(150, 9, 5);
       L.sign(157, 'Ворота вже близько!');
       L.gate(164);
@@ -625,6 +625,7 @@ const LEVELS = [
       L.enemy('cactus', 85, 10);
       L.enemy('bird', 88, 6);
       L.power('candy', 90, 8);
+      L.power('magnet', 92, 8);
       L.wind(95, 101, 5); L.arc(95, 5, 6, 2);
       L.ground(101, 130);
       L.enemy('scorp', 106, 10);
@@ -638,7 +639,6 @@ const LEVELS = [
       L.enemy('cactus', 143, 10);
       L.enemy('bird', 148, 5);
       L.row(145, 9, 5);
-      L.power('magnet', 152, 8);
       L.sign(157, 'Ворота вже близько!');
       L.gate(164);
     }
@@ -660,6 +660,7 @@ const LEVELS = [
       L.power('shield', 50, 8);
       L.block(53, 7, 3); L.row(53, 6, 3);
       L.enemy('bird', 58, 5);
+      L.power('magnet', 60, 8);
       L.crumble(65, 8, 2); L.crumble(68, 7, 2);
       L.row(65, 7, 2); L.row(68, 6, 2);
       L.ground(71, 100);
@@ -668,14 +669,13 @@ const LEVELS = [
       L.enemy('mouse', 84, 10);
       L.balloon(88);
       L.cloud(91, 3, 4); L.row(91, 2, 3); L.rainbow(94, 1);
-      L.power('candy', 96, 8);
       L.ground(103, 172);
       L.enemy('cloud', 109, 7);
       L.enemy('cactus', 114, 10);
       L.row(110, 9, 3); L.row(116, 9, 2);
-      L.power('magnet', 118, 8);
       L.sign(122, 'Дракон Чхун! Стріляй, коли він сідає і чхає');
       L.check(126);
+      L.power('candy', 128, 8);
       L.arena(129, 172);
       L.cloud(136, 6, 3); L.cloud(158, 6, 3);
       L.power('shield', 147, 9);
@@ -703,6 +703,7 @@ const LEVELS = [
       L.check(62);
       L.qblock(66, 6, 'star5');
       L.enemy('ghost', 70, 5);
+      L.qblock(72, 6, 'magnet');
       L.enemy('beetle', 74, 10);
       L.row(72, 9, 4);
       L.qblock(79, 6, 'candy');
@@ -718,7 +719,6 @@ const LEVELS = [
       L.enemy('frog', 121, 10);
       L.ground(128, 170);
       L.enemy('bat', 133, 4);
-      L.qblock(137, 6, 'magnet');
       L.row(139, 9, 5);
       L.enemy('beetle', 146, 10);
       L.qblock(150, 6, 'star5');
@@ -751,6 +751,7 @@ const LEVELS = [
       L.enemy('frog', 84, 10);
       L.portal(87, 95);
       L.block(90, 0, 2, 10);
+      L.qblock(98, 6, 'magnet');
       L.enemy('ghost', 100, 6);
       L.row(97, 9, 4);
       L.qblock(103, 6, 'star5');
@@ -762,7 +763,6 @@ const LEVELS = [
       L.enemy('beetle', 136, 10);
       L.ground(143, 170);
       L.enemy('frog', 148, 10);
-      L.qblock(152, 6, 'magnet');
       L.row(150, 9, 4);
       L.sign(157, 'Ворота вже близько!');
       L.gate(164);
@@ -781,6 +781,7 @@ const LEVELS = [
       L.enemy('beetle', 36, 10);
       L.qblock(39, 6, 'star5');
       L.button(44);
+      L.qblock(47, 6, 'magnet');
       L.swblocks(50, 6, 2, 'pink', 4);
       L.swblocks(53, 8, 2, 'blue'); L.swblocks(55, 6, 2, 'blue'); L.row(55, 5, 2); L.rainbow(57, 3);
       L.swblocks(60, 10, 8, 'blue'); L.enemy('ghost', 64, 6); L.row(61, 8, 6);
@@ -806,7 +807,6 @@ const LEVELS = [
       L.swblocks(133, 10, 8, 'blue'); L.row(134, 8, 6);
       L.ground(141, 170);
       L.enemy('ghost', 146, 6);
-      L.qblock(151, 6, 'magnet');
       L.row(149, 9, 4);
       L.sign(157, 'Ворота вже близько!');
       L.gate(164);
@@ -824,6 +824,7 @@ const LEVELS = [
       L.row(23, 9, 3);
       L.enemy('beetle', 25, 10);
       L.ground(33, 70);
+      L.qblock(35, 6, 'magnet');
       L.enemy('frog', 37, 10);
       L.spring(40);
       L.cloud(42, 4, 4); L.key(44, 3); L.row(42, 3, 2);
@@ -856,7 +857,6 @@ const LEVELS = [
       L.row(141, 9, 3);
       L.ground(148, 170);
       L.enemy('ghost', 151, 6);
-      L.qblock(154, 6, 'magnet');
       L.row(152, 9, 3);
       L.sign(158, 'Ворота вже близько!');
       L.gate(164);
@@ -873,6 +873,7 @@ const LEVELS = [
       L.button(24);
       L.swblocks(30, 10, 4, 'pink'); L.row(30, 8, 4);
       L.ground(34, 64);
+      L.qblock(36, 6, 'magnet');
       L.enemy('frog', 39, 10);
       L.qblock(42, 6, 'shield');
       L.key(45, 9);
@@ -883,16 +884,16 @@ const LEVELS = [
       L.ground(71, 100);
       L.check(77);
       L.enemy('ghost', 81, 6);
-      L.qblock(84, 6, 'candy');
+      L.qblock(84, 6, 'star');
       L.enemy('frog', 88, 10);
       L.spring(91);
       L.cloud(93, 3, 4); L.row(93, 2, 3); L.rainbow(96, 1);
       L.ground(103, 172);
       L.enemy('beetle', 108, 10);
-      L.qblock(112, 6, 'magnet');
       L.row(110, 9, 3);
       L.sign(121, 'Плутанко! Стріляй, коли він чаклує або сміється');
       L.check(125);
+      L.power('candy', 128, 8);
       L.arena(129, 172);
       L.cloud(137, 7, 3); L.cloud(149, 7, 4); L.cloud(160, 7, 3);
       L.power('shield', 146, 9);
@@ -911,6 +912,7 @@ const LEVELS = [
       L.enemy('parrot', 37, 6);
       L.qblock(40, 6, 'star5');
       L.enemy('frog', 45, 10);
+      L.qblock(47, 6, 'magnet');
       L.vine(49, 2); L.block(50, 3, 3); L.row(50, 2, 3);
       L.enemy('monkey', 56, 10);
       L.row(58, 9, 3);
@@ -932,7 +934,6 @@ const LEVELS = [
       L.enemy('frog', 131, 10);
       L.ground(138, 170);
       L.enemy('parrot', 142, 6);
-      L.qblock(146, 6, 'magnet');
       L.row(148, 9, 4);
       L.enemy('monkey', 154, 10);
       L.sign(158, 'Ворота вже близько!');
@@ -958,6 +959,7 @@ const LEVELS = [
       L.bubble(61, 9);
       L.ground(62, 96);
       L.check(64);
+      L.qblock(67, 6, 'magnet');
       L.enemy('bee', 70, 6);
       L.row(68, 9, 4);
       L.qblock(73, 6, 'shield');
@@ -975,7 +977,6 @@ const LEVELS = [
       L.bubble(135, 9);
       L.ground(136, 170);
       L.enemy('parrot', 140, 6);
-      L.qblock(144, 6, 'magnet');
       L.row(146, 9, 4);
       L.enemy('bee', 152, 7);
       L.sign(157, 'Ворота вже близько!');
@@ -1001,6 +1002,7 @@ const LEVELS = [
       L.enemy('ginger', 56, 10);
       L.ground(63, 98);
       L.check(65);
+      L.qblock(68, 6, 'magnet');
       L.enemy('ginger', 70, 10);
       L.qblock(73, 6, 'shield');
       L.row(72, 9, 4);
@@ -1018,7 +1020,6 @@ const LEVELS = [
       L.belt(127, 10, 5, 1); L.row(127, 9, 5);
       L.ground(137, 170);
       L.enemy('ginger', 141, 10);
-      L.qblock(145, 6, 'magnet');
       L.row(147, 9, 4);
       L.enemy('mouse', 152, 10);
       L.sign(157, 'Ворота вже близько!');
@@ -1052,6 +1053,7 @@ const LEVELS = [
       L.ground(80, 104, 7);
       L.check(82);
       L.row(84, 6, 3);
+      L.power('magnet', 84, 5);
       L.enemy('cannon', 89, 7);
       L.qblock(92, 3, 'shield');
       L.enemy('gull', 96, 3);
@@ -1068,7 +1070,6 @@ const LEVELS = [
       L.enemy('gull', 141, 3);
       L.ground(149, 170, 7);
       L.enemy('crab', 153, 7);
-      L.qblock(156, 3, 'magnet');
       L.row(154, 6, 4);
       L.sign(159, 'Ворота вже близько!');
       L.gate(165);
@@ -1089,19 +1090,20 @@ const LEVELS = [
       L.check(58);
       L.qblock(61, 6, 'shield');
       L.bubble(64, 7); L.star(64, 6); L.bubble(67, 5); L.star(67, 4); L.cloud(70, 4, 3); L.row(70, 3, 3);
+      L.qblock(65, 6, 'magnet');
       L.enemy('crab', 74, 10);
       L.row(75, 9, 2);
       L.ground(81, 100);
       L.enemy('jelly', 85, 7);
-      L.qblock(88, 6, 'candy');
+      L.qblock(88, 6, 'star');
       L.enemy('crab', 92, 10);
       L.spring(95); L.cloud(97, 4, 4); L.row(97, 3, 3); L.rainbow(100, 2);
       L.ground(103, 172);
       L.enemy('crab', 108, 10);
-      L.qblock(112, 6, 'magnet');
       L.row(110, 9, 3);
       L.sign(121, 'Медуза Желейка! Лопни щит у стрибку, а тоді стріляй');
       L.check(125);
+      L.power('candy', 128, 8);
       L.arena(129, 172);
       L.cloud(137, 7, 3); L.cloud(149, 7, 4); L.cloud(160, 7, 3);
       L.power('shield', 146, 9);
@@ -1124,6 +1126,7 @@ const LEVELS = [
       L.enemy('note', 55, 5);
       L.ground(63, 98);
       L.check(65);
+      L.qblock(68, 6, 'magnet');
       L.enemy('frog', 70, 10);
       L.row(68, 9, 4);
       L.qblock(74, 6, 'shield');
@@ -1141,7 +1144,6 @@ const LEVELS = [
       L.enemy('beetle', 130, 10);
       L.ground(137, 170);
       L.enemy('note', 141, 6);
-      L.qblock(145, 6, 'magnet');
       L.row(147, 9, 4);
       L.enemy('frog', 152, 10);
       L.sign(157, 'Ворота вже близько!');
@@ -1165,6 +1167,7 @@ const LEVELS = [
       L.enemy('bouncer', 49, 10);
       L.ground(55, 92);
       L.check(57);
+      L.qblock(60, 6, 'magnet');
       L.wheel(66, 4, 3.5, 4, 9);
       L.rainbow(65, 0); L.star(62, 3); L.star(69, 3);
       L.enemy('bouncer', 74, 10);
@@ -1183,7 +1186,6 @@ const LEVELS = [
       L.ground(133, 170);
       L.enemy('bouncer', 138, 10);
       L.spring(141); L.cloud(143, 4, 4); L.row(143, 3, 4);
-      L.qblock(149, 6, 'magnet');
       L.row(150, 9, 4);
       L.enemy('bouncer', 153, 10);
       L.sign(157, 'Ворота вже близько!');
@@ -1202,6 +1204,7 @@ const LEVELS = [
       L.ground(31, 62);
       L.enemy('ptero', 35, 3);
       L.qblock(38, 6, 'star5');
+      L.qblock(41, 6, 'magnet');
       L.enemy('dino', 43, 10);
       L.geyser(46, 49, 1); L.cloud(49, 4, 4); L.row(49, 3, 4); L.rainbow(54, 2);
       L.row(52, 9, 4);
@@ -1224,7 +1227,6 @@ const LEVELS = [
       L.enemy('dino', 133, 10);
       L.ground(139, 170);
       L.enemy('ptero', 143, 3);
-      L.qblock(146, 6, 'magnet');
       L.row(148, 9, 4);
       L.enemy('dino', 153, 10);
       L.sign(158, 'Ворота вже близько!');
@@ -1246,6 +1248,7 @@ const LEVELS = [
       L.enemy('penguin', 35, 10);
       L.cloud(38, 7, 3); L.row(38, 6, 3);
       L.enemy('snowman', 44, 10);
+      L.qblock(46, 6, 'magnet');
       L.crumble(47, 6, 2); L.crumble(50, 4, 2); L.row(47, 5, 2); L.row(50, 3, 2); L.rainbow(53, 2);
       L.enemy('penguin', 55, 10);
       L.ground(61, 97);
@@ -1267,7 +1270,6 @@ const LEVELS = [
       L.enemy('penguin', 127, 10);
       L.ground(135, 170);
       L.enemy('snowman', 140, 10);
-      L.qblock(144, 6, 'magnet');
       L.row(146, 9, 4);
       L.enemy('penguin', 151, 10);
       L.sign(157, 'Ворота вже близько!');
@@ -1284,6 +1286,7 @@ const LEVELS = [
       L.enemy('soldier', 22, 10);
       L.ground(31, 64);
       L.wheel(37, 5, 3, 3, 8); L.star(36, 1);
+      L.qblock(41, 6, 'magnet');
       L.enemy('mouse', 43, 10);
       L.qblock(46, 6, 'shield');
       L.belt(49, 7, 5, -1); L.row(49, 6, 5);
@@ -1294,14 +1297,14 @@ const LEVELS = [
       L.enemy('mouse', 74, 10);
       L.wheel(81, 5, 3, 4, 9); L.rainbow(80, 1);
       L.enemy('soldier', 87, 10);
-      L.qblock(90, 6, 'candy');
+      L.qblock(90, 6, 'star');
       L.row(92, 9, 4);
       L.ground(103, 172);
       L.enemy('mouse', 108, 10);
-      L.qblock(112, 6, 'magnet');
       L.row(110, 9, 3);
       L.sign(121, 'Робот Брязкало! Стріляй, коли на животі відчиниться віконце');
       L.check(125);
+      L.power('candy', 128, 8);
       L.arena(129, 172);
       L.cloud(137, 6, 3); L.cloud(149, 6, 4); L.cloud(160, 6, 3);
       L.power('shield', 146, 9);
@@ -1330,6 +1333,7 @@ const LEVELS = [
       L.qblock(76, 6, 'shield');
       L.bean(80, 3); L.block(82, 4, 2, 6); L.row(82, 3, 2);
       L.enemy('bird', 88, 6);
+      L.qblock(90, 6, 'magnet');
       L.enemy('worm', 92, 10);
       L.row(94, 9, 4);
       L.mover(101, 8, 2, 1, 0, 3); L.row(100, 7, 4);
@@ -1342,7 +1346,6 @@ const LEVELS = [
       L.enemy('bird', 131, 6);
       L.ground(139, 170);
       L.enemy('mole', 143, 10);
-      L.qblock(146, 6, 'magnet');
       L.row(148, 9, 4);
       L.enemy('worm', 153, 10);
       L.sign(158, 'Ворота вже близько!');
@@ -1373,6 +1376,7 @@ const LEVELS = [
       L.enemy('frog', 72, 10);
       L.qblock(75, 6, 'shield');
       L.row(77, 9, 4);
+      L.qblock(78, 6, 'magnet');
       L.enemy('owl', 82, 4);
       L.lantern(85, 5);
       L.block(88, 7, 3); L.row(88, 6, 3);
@@ -1390,7 +1394,6 @@ const LEVELS = [
       L.ground(137, 170);
       L.lantern(139);
       L.enemy('frog', 143, 10);
-      L.qblock(146, 6, 'magnet');
       L.row(148, 9, 4);
       L.enemy('owl', 152, 4);
       L.lantern(155);
@@ -1413,6 +1416,7 @@ const LEVELS = [
       L.qblock(37, 6, 'star5');
       L.blink(41, 7, 2); L.blink(44, 5, 2); L.blink(47, 3, 2); L.row(47, 2, 2); L.rainbow(50, 2);
       L.enemy('bee', 53, 7);
+      L.qblock(55, 6, 'magnet');
       L.blink(58, 10, 4);
       L.ground(62, 96);
       L.check(64);
@@ -1433,7 +1437,6 @@ const LEVELS = [
       L.blink(132, 10, 4);
       L.ground(136, 170);
       L.enemy('worm', 140, 10);
-      L.qblock(144, 6, 'magnet');
       L.row(146, 9, 4);
       L.enemy('bird', 151, 6);
       L.sign(157, 'Ворота вже близько!');
@@ -1452,6 +1455,7 @@ const LEVELS = [
       L.qblock(38, 6, 'star5');
       L.enemy('worm', 42, 10);
       L.row(44, 9, 2);
+      L.qblock(44, 6, 'magnet');
       L.cart(47, 62); L.row(51, 8, 6);
       L.enemy('bat', 55, 3);
       L.ground(58, 90);
@@ -1473,7 +1477,6 @@ const LEVELS = [
       L.row(124, 9, 4);
       L.ground(135, 170);
       L.enemy('worm', 139, 10);
-      L.qblock(143, 6, 'magnet');
       L.row(145, 9, 4);
       L.enemy('mole', 150, 10);
       L.sign(157, 'Ворота вже близько!');
@@ -1500,16 +1503,17 @@ const LEVELS = [
       L.ground(67, 100);
       L.check(69);
       L.enemy('mole', 74, 10);
-      L.qblock(77, 6, 'candy');
+      L.qblock(77, 6, 'star');
       L.enemy('worm', 81, 10);
+      L.qblock(83, 6, 'magnet');
       L.row(84, 9, 4);
       L.spring(90); L.cloud(92, 4, 4); L.row(92, 3, 3); L.rainbow(96, 2);
       L.ground(103, 172);
       L.enemy('mole', 108, 10);
-      L.qblock(112, 6, 'magnet');
       L.row(110, 9, 3);
       L.sign(121, 'Король Кротів! Стріляй, коли він вилазить із нірки');
       L.check(125);
+      L.power('candy', 128, 8);
       L.arena(129, 172);
       L.cloud(139, 6, 3); L.cloud(153, 6, 3);
       L.power('shield', 146, 9);
@@ -1531,6 +1535,7 @@ const LEVELS = [
       L.zip(56, 73, 7, 6); L.row(60, 5, 9);
       L.ground(70, 96, 6);
       L.check(75);
+      L.power('magnet', 78, 4);
       L.enemy('goat', 80, 6);
       L.qblock(84, 2, 'shield');
       L.row(86, 5, 3);
@@ -1544,7 +1549,6 @@ const LEVELS = [
       L.enemy('goat', 130, 8);
       L.ground(139, 170, 8);
       L.enemy('bird', 143, 4);
-      L.qblock(146, 4, 'magnet');
       L.row(148, 7, 4);
       L.enemy('goat', 154, 8);
       L.sign(158, 'Ворота вже близько!');
@@ -1561,6 +1565,7 @@ const LEVELS = [
       L.ground(31, 58);
       L.enemy('mouse', 36, 10);
       L.qblock(39, 6, 'star5');
+      L.qblock(46, 6, 'magnet');
       L.wheel(47, 5, 3.5, 4, 10); L.rainbow(46, 0);
       L.enemy('bird', 53, 5);
       L.breeze(51, 66); L.arc(59, 7, 6, 2);
@@ -1581,7 +1586,6 @@ const LEVELS = [
       L.breeze(124, 141); L.arc(135, 7, 6, 2);
       L.ground(141, 170);
       L.enemy('mouse', 146, 10);
-      L.qblock(149, 6, 'magnet');
       L.row(151, 9, 4);
       L.sign(158, 'Ворота вже близько!');
       L.gate(164);
@@ -1605,6 +1609,7 @@ const LEVELS = [
       L.row(58, 9, 3);
       L.ground(67, 100);
       L.check(69);
+      L.qblock(72, 6, 'magnet');
       L.enemy('bee', 74, 7);
       L.qblock(77, 6, 'shield');
       L.cloud(80, 6, 3); L.row(80, 5, 3);
@@ -1621,7 +1626,6 @@ const LEVELS = [
       L.block(126, 0, 5, 9); L.row(126, 9, 5);
       L.ground(139, 170);
       L.enemy('bee', 143, 7);
-      L.qblock(146, 6, 'magnet');
       L.row(148, 9, 4);
       L.enemy('ant', 153, 10);
       L.sign(158, 'Ворота вже близько!');
@@ -1643,6 +1647,7 @@ const LEVELS = [
       L.enemy('owl', 39, 3);
       L.enemy('spider', 43, 6);
       L.swing(48, 1, 5, 0.7, 3); L.cloud(52, 3, 4); L.row(52, 2, 4); L.rainbow(57, 1);
+      L.qblock(48, 6, 'magnet');
       L.swing(61, 2, 6, 0.5, 3.4);
       L.ground(63, 96);
       L.check(65);
@@ -1666,7 +1671,6 @@ const LEVELS = [
       L.ground(136, 170);
       L.row(138, 9, 3);
       L.enemy('spider', 141, 6);
-      L.qblock(145, 6, 'magnet');
       L.row(147, 9, 4);
       L.enemy('owl', 151, 3);
       L.sign(157, 'Ворота вже близько!');
@@ -1683,20 +1687,21 @@ const LEVELS = [
       L.ground(31, 64);
       L.qblock(34, 6, 'star5');
       L.enemy('owl', 38, 4);
+      L.qblock(40, 6, 'magnet');
       L.sheep(42, 56); L.cloud(47, 5, 4); L.row(47, 4, 4); L.rainbow(52, 3);
       L.enemy('ghost', 59, 6);
       L.ground(67, 100);
       L.check(69);
       L.jelly(73, 10, 2); L.block(75, 5, 2, 5); L.row(75, 4, 2);
       L.enemy('owl', 82, 4);
-      L.qblock(86, 6, 'candy');
+      L.qblock(86, 6, 'star');
       L.sheep(88, 99); L.cloud(92, 5, 3); L.row(92, 4, 3);
       L.ground(103, 172);
       L.enemy('ghost', 108, 6);
-      L.qblock(112, 6, 'magnet');
       L.row(110, 9, 3);
       L.sign(121, 'Будильник Дзеленчик! Чекай, поки задрімає, і тоді стріляй');
       L.check(125);
+      L.power('candy', 128, 8);
       L.arena(129, 172);
       L.cloud(137, 6, 3); L.cloud(149, 6, 4); L.cloud(160, 6, 3);
       L.power('shield', 146, 9);
@@ -1717,6 +1722,7 @@ const LEVELS = [
       L.qblock(56, 1, 'star5');
       L.enemy('turtle', 61, 5);
       L.row(63, 4, 4);
+      L.qblock(68, 1, 'magnet');
       L.ground(72, 100, 11); L.tide(72, 100, 11.3, 5.3, 7);
       L.row(74, 10, 4); L.enemy('crab', 82, 11); L.rainbow(85, 7); L.row(90, 8, 4);
       L.ground(100, 132, 5);
@@ -1728,48 +1734,51 @@ const LEVELS = [
       L.enemy('bird', 124, 2);
       L.ground(135, 170, 5);
       L.enemy('turtle', 140, 5);
-      L.qblock(144, 1, 'magnet');
       L.row(146, 4, 4);
       L.sign(158, 'Ворота вже близько!');
       L.gate(164);
     }
   },
   {
-    id: 'aurora', theme: 'aurora', name: 'Північне сяйво', blurb: 'Сніжинка заморожує ворогів у крижані кубики', w: 170, needK: 0.4,
+    id: 'aurora', theme: 'aurora', name: 'Північне сяйво', blurb: 'Сніжинка заморожує ворогів у крижані кубики', w: 170, needK: 0.36,
     build(L) {
       L.ground(0, 26);
-      L.sign(4, 'Сніжинка заморожує ворогів у крижані кубики. На них можна стрибати!');
+      L.sign(4, 'Сніжинка заморожує ворогів у крижані кубики. Стань на кубик — і дострибнеш до хмаринки!');
       L.power('frost', 8, 8);
       L.row(10, 9, 3);
-      L.enemy('bird', 15, 5); L.cloud(18, 2, 4); L.row(18, 1, 4);
-      L.enemy('penguin', 22, 10);
+      L.enemy('snowman', 15, 10);
+      L.cloud(16, 5, 5); L.row(16, 3, 5);
+      L.enemy('penguin', 23, 10);
       L.ground(29, 58);
       L.enemy('owl', 33, 4);
       L.qblock(36, 6, 'star5');
-      L.enemy('snowman', 40, 10);
-      L.enemy('bird', 46, 6); L.cloud(49, 3, 3); L.row(49, 2, 3); L.rainbow(52, 1);
+      L.power('frost', 40, 8);
+      L.enemy('snowman', 44, 10);
+      L.cloud(45, 5, 3); L.row(45, 3, 3);
+      L.cloud(49, 3, 3); L.row(49, 2, 3); L.rainbow(52, 1);
       L.enemy('penguin', 54, 10);
       L.row(55, 9, 2);
       L.ground(61, 96);
       L.check(63);
-      L.power('frost', 66, 8);
+      L.qblock(66, 6, 'magnet');
       L.enemy('owl', 70, 4);
       L.qblock(73, 6, 'shield');
       L.row(75, 9, 4);
-      L.enemy('snowman', 85, 10);
-      L.enemy('bird', 89, 5); L.cloud(92, 2, 4); L.row(92, 1, 4);
+      L.power('frost', 80, 8);
+      L.enemy('penguin', 84, 10); L.enemy('penguin', 93, 10);
+      L.cloud(85, 5, 6); L.row(85, 3, 6);
       L.mover(97, 8, 2, 1, 0, 3); L.row(96, 7, 4);
       L.ground(100, 132);
       L.check(102);
       L.enemy('penguin', 106, 10);
       L.qblock(109, 6, 'star'); L.qblock(110, 6, 'rainbow'); L.qblock(111, 6, 'star');
       L.power('frost', 114, 8);
-      L.enemy('bird', 118, 5); L.cloud(121, 2, 4); L.row(121, 1, 4);
-      L.enemy('snowman', 127, 10);
+      L.enemy('snowman', 119, 10);
+      L.cloud(120, 5, 4); L.row(120, 3, 3);
+      L.cloud(125, 2, 4); L.row(125, 1, 4);
       L.row(128, 9, 3);
       L.ground(135, 170);
       L.enemy('owl', 139, 4);
-      L.qblock(143, 6, 'magnet');
       L.row(145, 9, 4);
       L.enemy('penguin', 150, 10);
       L.sign(157, 'Ворота вже близько!');
@@ -1787,6 +1796,7 @@ const LEVELS = [
       L.ground(29, 58);
       L.storm(33); L.qblock(37, 6, 'star5');
       L.enemy('bird', 41, 5);
+      L.qblock(43, 6, 'magnet');
       L.storm(45); L.row(43, 9, 5);
       L.cloud(49, 6, 3); L.row(49, 5, 3);
       L.enemy('cloud', 54, 5);
@@ -1808,7 +1818,6 @@ const LEVELS = [
       L.ground(135, 170);
       L.storm(140);
       L.enemy('bird', 144, 5);
-      L.qblock(147, 6, 'magnet');
       L.row(149, 9, 4);
       L.sign(157, 'Ворота вже близько!');
       L.gate(164);
@@ -1827,6 +1836,7 @@ const LEVELS = [
       L.ground(40, 72);
       L.check(44);
       L.qblock(47, 6, 'star5');
+      L.qblock(50, 6, 'magnet');
       L.enemy('ufo', 52, 5);
       L.enemy('alien', 55, 10);
       L.lowgrav(58, 64); L.cloud(60, 2, 4); L.row(60, 1, 4);
@@ -1847,7 +1857,6 @@ const LEVELS = [
       L.enemy('alien', 136, 10);
       L.lowgrav(139, 145); L.cloud(141, 2, 4); L.row(141, 1, 4);
       L.enemy('ufo', 148, 5);
-      L.qblock(151, 6, 'magnet');
       L.row(153, 9, 4);
       L.sign(158, 'Ворота вже близько!');
       L.gate(164);
@@ -1872,16 +1881,203 @@ const LEVELS = [
       L.ground(67, 100);
       L.check(69);
       L.enemy('alien', 74, 10);
+      L.qblock(76, 6, 'magnet');
       L.power('frost', 77, 8);
-      L.qblock(80, 6, 'candy');
+      L.qblock(80, 6, 'star');
       L.enemy('ufo', 84, 5);
       L.lowgrav(88, 96); L.cloud(90, 2, 4); L.row(90, 1, 4); L.rainbow(95, 1);
       L.ground(103, 172);
       L.enemy('alien', 108, 10);
-      L.qblock(112, 6, 'magnet');
       L.row(110, 9, 3);
       L.sign(121, 'Восьминіжка Ласунка! Стріляй, коли вона відкриє ротик');
       L.check(125);
+      L.power('candy', 128, 8);
+      L.arena(129, 172);
+      L.cloud(137, 6, 3); L.cloud(149, 6, 4); L.cloud(160, 6, 3);
+      L.power('shield', 146, 9);
+      L.gate(168);
+    }
+  },
+  {
+    id: 'river', theme: 'river', name: 'Боброва річка', blurb: 'Колоди пливуть за течією, а рибки вистрибують із води', w: 170, needK: 0.45,
+    build(L) {
+      L.ground(0, 18, 8);
+      L.sign(4, 'Колоди пливуть за течією. Стрибай на колоду — і катайся!');
+      L.row(7, 6, 3);
+      L.enemy('beaver', 12, 8);
+      L.ground(18, 48, 11); L.river(18, 48, 8, 55); L.logs(18, 48, 8, 3, 50);
+      L.row(21, 6, 4); L.arc(27, 4, 5, 2); L.row(34, 6, 4); L.row(41, 3, 3);
+      L.row(23, 10, 3); L.row(37, 10, 3);
+      L.enemy('leaper', 31, 8); L.enemy('leaper', 44, 8);
+      L.ground(48, 72, 8);
+      L.check(50);
+      L.power('magnet', 53, 6);
+      L.qblock(56, 4, 'star5');
+      L.enemy('beaver', 60, 8);
+      L.cloud(63, 4, 3); L.row(63, 3, 3);
+      L.enemy('beaver', 68, 8);
+      L.ground(72, 110, 11); L.river(72, 110, 8, 70); L.logs(72, 110, 8, 4, 55);
+      L.row(75, 6, 5); L.arc(83, 4, 6, 2); L.rainbow(91, 2); L.row(95, 6, 5); L.row(103, 3, 3);
+      L.row(80, 10, 4); L.row(97, 10, 4);
+      L.enemy('leaper', 81, 8); L.enemy('leaper', 89, 8); L.enemy('leaper', 100, 8);
+      L.ground(110, 136, 8);
+      L.check(112);
+      L.enemy('beaver', 117, 8);
+      L.qblock(120, 4, 'star'); L.qblock(121, 4, 'rainbow'); L.qblock(122, 4, 'star');
+      L.cloud(126, 5, 3); L.row(126, 4, 3);
+      L.enemy('beaver', 131, 8);
+      L.ground(136, 156, 11); L.river(136, 156, 8, 60); L.logs(136, 156, 8, 2, 45);
+      L.row(139, 6, 4); L.arc(146, 4, 5, 2);
+      L.enemy('leaper', 144, 8);
+      L.ground(156, 170, 8);
+      L.row(157, 6, 3);
+      L.sign(160, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'kites', theme: 'kites', name: 'Луг повітряних зміїв', blurb: 'Хапай змія: тримай «Стрибок» — вище, відпусти — нижче', w: 170, needK: 0.4,
+    build(L) {
+      L.ground(0, 22);
+      L.sign(4, 'Підійди до повітряного змія — він сам підхопить! Тримай «Стрибок» — вище, відпусти — нижче');
+      L.row(8, 9, 3);
+      L.enemy('snail', 13, 10);
+      L.kite(19, 50, 2);
+      for (let i = 0; i < 12; i++) L.star(24 + i * 2, Math.round(5 - 2.6 * Math.sin(i * 0.65)));
+      L.rainbow(35, 2);
+      L.ground(48, 74);
+      L.check(53);
+      L.qblock(57, 6, 'star5');
+      L.enemy('frog', 61, 10);
+      L.power('magnet', 64, 8);
+      L.cloud(66, 6, 3); L.row(66, 5, 3);
+      L.kite(71, 104, 1);
+      L.row(75, 2, 4); L.row(81, 7, 4); L.row(87, 2, 4); L.rainbow(90, 1); L.row(93, 7, 4); L.row(99, 3, 3);
+      L.enemy('sparrow', 86, 5); L.enemy('sparrow', 97, 3);
+      L.ground(102, 128);
+      L.check(107);
+      L.enemy('snail', 111, 10);
+      L.spring(115); L.cloud(117, 4, 3); L.row(117, 3, 3); L.rainbow(118, 1);
+      L.qblock(121, 6, 'shield');
+      L.enemy('frog', 123, 10);
+      L.kite(126, 152, 2);
+      L.arc(130, 7, 9, 4); L.row(140, 2, 3); L.row(146, 6, 3);
+      L.enemy('sparrow', 142, 4);
+      L.ground(150, 170);
+      L.row(153, 9, 3);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'pinball', theme: 'pinball', name: 'Зоряний пінбол', blurb: 'Кульки-відбивачі підкидають і дзвенять, вогники світяться', w: 170,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(4, 'Кулька-відбивач підкидає високо — дзинь! Кожна кулька дає три зірочки');
+      L.bumper(11, 9);
+      L.cloud(13, 5, 4); L.row(13, 3, 4);
+      L.lights(19, 5);
+      L.enemy('marble', 26, 10);
+      L.ground(33, 62);
+      L.check(35);
+      L.bumper(39, 6); L.bumper(43, 5); L.bumper(47, 6);
+      L.row(38, 9, 11);
+      L.enemy('marble', 52, 10);
+      L.spring(55); L.cloud(57, 4, 4); L.row(57, 3, 4);
+      L.ground(65, 100);
+      L.power('magnet', 67, 8);
+      L.bumper(70, 9);
+      L.block(73, 5, 2, 5); L.row(73, 4, 2);
+      L.bumper(77, 9);
+      L.lights(80, 6);
+      L.enemy('marble', 88, 10);
+      L.qblock(91, 6, 'star5');
+      L.bumper(95, 7);
+      L.mover(101, 8, 2, 1, 0, 3); L.row(100, 7, 4);
+      L.ground(104, 136);
+      L.check(106);
+      L.bumper(110, 9); L.cloud(112, 5, 3); L.row(112, 3, 3); L.rainbow(113, 1);
+      L.enemy('marble', 118, 10);
+      L.bumper(122, 6); L.bumper(125, 6); L.bumper(128, 6);
+      L.row(121, 9, 9);
+      L.qblock(131, 6, 'star'); L.qblock(132, 6, 'rainbow'); L.qblock(133, 6, 'star');
+      L.ground(139, 170);
+      L.lights(142, 7);
+      L.row(150, 9, 4);
+      L.enemy('marble', 153, 10);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'upside', theme: 'upside', name: 'Країна догори дриґом', blurb: 'У фіолетових смугах усе падає вгору — ходи по стелі', w: 170,
+    build(L) {
+      L.ground(0, 25);
+      L.sign(4, 'У фіолетовій смузі все падає вгору! Ходи по стелі, а дірки перестрибуй');
+      L.row(8, 9, 3);
+      L.enemy('snail', 13, 10);
+      L.ceiling(19, 31, 2); L.ceiling(34, 49, 2);
+      L.flip(21, 47);
+      L.row(22, 2, 8); L.row(31, 5, 3); L.row(36, 2, 5);
+      L.enemy('ghost', 42, 2);
+      L.row(44, 3, 3);
+      L.ground(43, 70);
+      L.check(51);
+      L.power('magnet', 54, 8);
+      L.qblock(57, 6, 'star5');
+      L.enemy('snail', 60, 10);
+      L.ceiling(64, 72, 2); L.ceiling(72, 82, 3); L.ceiling(82, 98, 2);
+      L.flip(66, 96);
+      L.row(67, 2, 4); L.row(70, 5, 2); L.row(73, 3, 8); L.row(84, 2, 6);
+      L.enemy('bird', 89, 2);
+      L.ground(92, 122);
+      L.check(100);
+      L.qblock(105, 6, 'star'); L.qblock(106, 6, 'rainbow'); L.qblock(107, 6, 'star');
+      L.row(110, 9, 4);
+      L.enemy('frog', 115, 10);
+      L.ceiling(118, 128, 2); L.ceiling(130, 152, 2);
+      L.flip(120, 134); L.flip(138, 152);
+      L.row(121, 2, 6); L.row(128, 5, 2); L.row(131, 2, 2);
+      L.star(135, 3); L.star(136, 4); L.star(135, 5); L.star(136, 6); L.star(135, 7);
+      L.ground(133, 139);
+      L.row(140, 2, 6);
+      L.enemy('ghost', 147, 2);
+      L.ground(148, 170);
+      L.row(154, 9, 3);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'nest', theme: 'nest', name: 'Гніздо Сороки', blurb: 'Битва із Сорокою Блискіткою', w: 172, boss: 'magpie',
+    build(L) {
+      L.ground(0, 24);
+      L.sign(5, 'Гніздо Сороки Блискітки — на найвищому дереві. Вона забрала всі блискучі зірочки!');
+      L.qblock(10, 6, 'star5');
+      L.row(13, 9, 4);
+      L.enemy('squirrel', 18, 10);
+      L.kite(21, 46, 2);
+      for (let i = 0; i < 10; i++) L.star(25 + i * 2, Math.round(5 - 2.4 * Math.sin(i * 0.7)));
+      L.ground(44, 68);
+      L.check(48);
+      L.power('magnet', 51, 8);
+      L.qblock(55, 6, 'shield');
+      L.row(57, 9, 4);
+      L.enemy('sparrow', 62, 5);
+      L.ceiling(62, 90, 2);
+      L.flip(64, 88);
+      L.row(66, 2, 6); L.row(73, 5, 3); L.row(77, 2, 6);
+      L.enemy('ghost', 82, 2);
+      L.ground(84, 110);
+      L.check(92);
+      L.enemy('squirrel', 97, 10);
+      L.spring(100); L.cloud(102, 4, 3); L.row(102, 3, 3);
+      L.qblock(107, 6, 'star');
+      L.ground(113, 172);
+      L.row(114, 9, 4);
+      L.sign(121, 'Сорока Блискітка! Стріляй, коли вона милується блискіткою');
+      L.check(125);
+      L.power('candy', 128, 8);
       L.arena(129, 172);
       L.cloud(137, 6, 3); L.cloud(149, 6, 4); L.cloud(160, 6, 3);
       L.power('shield', 146, 9);
@@ -1890,7 +2086,15 @@ const LEVELS = [
   },
 ];
 
+const DECOR_UNDER = {
+  upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
+};
 const DECOR = {
+  river: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'reed', x, y } : r < 0.65 ? { k: 'stump', x, y } : { k: 'flower', x, y, c: ['#ffffff', '#ffd54a', '#ff9fd0'][Math.floor(R() * 3)] }; },
+  kites: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'dandelion', x, y } : r < 0.65 ? { k: 'pinwheel', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#9fe0ff'][Math.floor(R() * 3)] }; },
+  pinball: (R, x, y) => R() < 0.55 ? { k: 'bulb', x, y } : { k: 'arrowlamp', x, y },
+  upside: (R, x, y) => R() < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'mush', x, y, c: ['#ff9fd9', '#b48cff', '#5fd3ff'][Math.floor(R() * 3)], glow: false },
+  nest: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'feather', x, y } : r < 0.65 ? { k: 'leafpile', x, y } : { k: 'nestegg', x, y, c: ['#9fe0ff', '#ffffff', '#ffd6ea'][Math.floor(R() * 3)] }; },
   meadow: (R, x, y) => R() < 0.5 ? { k: 'lolli', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffffff', '#b28bff', '#ffd54a'][Math.floor(R() * 4)] },
   clouds: (R, x, y) => ({ k: 'twinkle', x, y }),
   forest: (R, x, y) => ({ k: 'mush', x, y, c: ['#ff6b8a', '#b48cff', '#5fd3ff'][Math.floor(R() * 3)], glow: R() < 0.5 }),
@@ -1941,7 +2145,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -1985,6 +2189,13 @@ function buildLevel(idx) {
     tide(x0, x1, lowRow, highRow, period) { const lo = lowRow * T + 6, hi = highRow * T + 6; L.water.push({ x0: x0 * T, x1: x1 * T, y: lo, tide: { lo, hi, per: period || 8 } }); },
     storm(x) { later.push(() => L.storms.push({ x: x * T + 12, y: 40, gy: groundY(x), per: 3.4, ph: (x * 0.53) % 3.4, struck: false })); },
     lowgrav(x0, x1) { L.lowgravs.push({ x0: x0 * T, x1: x1 * T }); },
+    river(x0, x1, row, flow) { L.water.push({ x0: x0 * T, x1: x1 * T, y: row * T + 6, flow: flow || 60 }); },
+    logs(x0, x1, row, n, speed) { const span = (x1 - x0) * T; for (let i = 0; i < n; i++) L.movers.push({ log: true, bx: x0 * T + i * span / n, by: row * T - 2, w: 3 * T, h: 14, xStart: x0 * T, xEnd: x1 * T, v: speed || 50, state: 'float', st: 0, ph: i * 1.7, ax: 0, ay: 0, period: 1 }); },
+    kite(x0, x1, top) { later.push(() => { const gy = groundY(x0); L.kites.push({ x0: x0 * T + 12, x1: x1 * T + 12, gy, yMin: (top == null ? 2 : top) * T, yMax: 7 * T, state: 'idle', st: 0, vy: 0, hx: x0 * T + 18, hy: gy - 24, kx: x0 * T + 48, ky: gy - 120 }); }); },
+    bumper(x, row) { L.bumpers.push({ x: x * T + 12, y: row * T + 12, r: 14, hits: 0, cd: 0, glow: 0 }); },
+    lights(x, n) { later.push(() => { const gy = groundY(x), lamps = []; for (let i = 0; i < n; i++) lamps.push({ x: (x + i) * T + 12, gy, on: false }); L.lightSets.push({ lamps }); }); },
+    flip(x0, x1) { L.flips.push({ x0: x0 * T, x1: x1 * T }); },
+    ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
     zip(x0, x1, top0, top1) { const z = { x0: x0 * T + 12, y0: top0 * T - 34, x1: x1 * T + 12, y1: top1 * T - 46, gy0: top0 * T, gy1: top1 * T, state: 'idle', d: 0, v: 0 }; z.len = Math.hypot(z.x1 - z.x0, z.y1 - z.y0); z.hx = z.x0; z.hy = z.y0 + 8; L.zips.push(z); },
     breeze(x0, x1) { L.breezes.push({ x0: x0 * T, x1: x1 * T, p: 170 }); },
     swing(cx, cy, len, amp, period) { const px = cx * T + 12, py = cy * T, l = len * T, w = 2 * T; L.movers.push({ swing: true, px, py, len: l, amp, period, ph: 0, w, bx: px - w / 2, by: py + l, ax: 0, ay: 0 }); },
@@ -2002,7 +2213,12 @@ function buildLevel(idx) {
       });
     },
   };
-  const groundY = x => { for (let y = 0; y < ROWS; y++) { const v = map[y * W + x]; if (v === 1 || v === 2) return y * T; } return 10 * T; };
+  const groundY = x => {
+    let y = 0;
+    if (L.hasCeil) while (y < ROWS && map[y * W + x] === 1) y++;   // стелю пропускаємо
+    for (; y < ROWS; y++) { const v = map[y * W + x]; if (v === 1 || v === 2) return y * T; }
+    return 10 * T;
+  };
   def.build(api);
   later.forEach(f => f());
   const normal = L.stars.filter(s => !s.rainbow).length;
@@ -2017,6 +2233,9 @@ function buildLevel(idx) {
         break;
       }
     }
+  }
+  if (DECOR_UNDER[def.theme]) for (let x = 1; x < W - 1; x++) for (let y = 0; y < 6; y++) {
+    if (map[y * W + x] === 1 && map[(y + 1) * W + x] === 0) { if (R() < 0.3) L.decor.push(DECOR_UNDER[def.theme](R, x * T + 6 + R() * 12, (y + 1) * T)); break; }
   }
   return L;
 }

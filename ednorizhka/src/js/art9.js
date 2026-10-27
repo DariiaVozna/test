@@ -37,14 +37,15 @@ function drawAlien(c, x, gy, dir, t, air, flash) {
 /* Крижаний кубик із замороженим ворогом */
 function drawIceBlock(c, m, t) {
   if (m.state === 'gone') return;
-  const k = m.st / m.life, warn = k > 0.75, sh = warn ? Math.sin(t * 40) * 0.8 : 0;
+  const k = m.st / m.life, warn = k > 0.75, sh = warn ? Math.sin(t * 40) * 0.8 : 0, h = m.h || 24;
   c.save(); c.translate(m.x + sh, m.y); c.lineJoin = 'round';
   c.globalAlpha = warn ? 0.65 + 0.35 * Math.abs(Math.sin(t * 10)) : 1;
-  c.fillStyle = 'rgba(200,240,255,.9)'; c.strokeStyle = INK; c.lineWidth = 1.4; rr(c, 0, 0, m.w, 24, 5); c.fill(); c.stroke();
-  c.fillStyle = m.col; c.globalAlpha *= 0.55; ell(c, m.w / 2, 13, 7, 6); c.fill(); c.globalAlpha = warn ? 0.8 : 1;
+  c.fillStyle = 'rgba(200,240,255,.9)'; c.strokeStyle = INK; c.lineWidth = 1.4; rr(c, 0, 0, m.w, h, 5); c.fill(); c.stroke();
+  c.fillStyle = m.col; c.globalAlpha *= 0.55; ell(c, m.w / 2, h / 2 + 1, 8, h * 0.3); c.fill(); c.globalAlpha = warn ? 0.8 : 1;
   c.fillStyle = 'rgba(255,255,255,.9)'; c.beginPath(); c.moveTo(4, 4); c.lineTo(11, 4); c.lineTo(4, 11); c.closePath(); c.fill();
-  c.strokeStyle = 'rgba(255,255,255,.9)'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(m.w - 9, 19); c.lineTo(m.w - 4, 14); c.stroke();
-  if (warn) { c.fillStyle = 'rgba(150,210,255,.9)'; for (let i = 0; i < 3; i++) { const dy = ((t * 1.5 + i / 3) % 1) * 8; circ(c, 5 + i * (m.w - 10) / 2, 24 + dy, 1.4); c.fill(); } }
+  c.strokeStyle = 'rgba(255,255,255,.9)'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(m.w - 9, h - 5); c.lineTo(m.w - 4, h - 10); c.stroke();
+  c.fillStyle = 'rgba(255,255,255,.75)'; c.fillRect(3, 1.5, m.w - 6, 2);
+  if (warn) { c.fillStyle = 'rgba(150,210,255,.9)'; for (let i = 0; i < 3; i++) { const dy = ((t * 1.5 + i / 3) % 1) * 8; circ(c, 5 + i * (m.w - 10) / 2, h + dy, 1.4); c.fill(); } }
   c.restore();
 }
 /* Грозова хмарка */
@@ -155,7 +156,7 @@ function drawBlock6(c, b) {
     rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#d6dcf0'; c.fill(); c.stroke();
     c.fillStyle = '#8f9cc8'; rr(c, 4, 4, T - 8, 7, 2); c.fill();
     c.fillStyle = '#7dffe0'; circ(c, 7, 16, 1.6); c.fill(); c.fillStyle = '#ff7ab8'; circ(c, 12, 16, 1.6); c.fill(); c.fillStyle = '#ffd23f'; circ(c, 17, 16, 1.6); c.fill();
-  } else return false;
+  } else return drawBlock7(c, b);
   return true;
 }
 function drawDecor9(c, d, t) {
@@ -178,6 +179,7 @@ function drawDecor9(c, d, t) {
       c.strokeStyle = '#8f9cc8'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 18); c.stroke();
       c.fillStyle = '#d6dcf0'; c.strokeStyle = INK; c.lineWidth = 0.8; c.beginPath(); c.arc(x, y - 18, 6, 0.1 * Math.PI, 0.9 * Math.PI); c.closePath(); c.fill(); c.stroke();
       c.fillStyle = Math.sin(t * 4 + x) > 0 ? '#ff5c7a' : '#ffd23f'; circ(c, x, y - 26, 2); c.fill(); break;
+    default: drawDecor10(c, d, t);
   }
 }
 
@@ -257,5 +259,5 @@ Object.assign(BG2, { tide: bgTide, aurora: bgAurora, storm: bgStorm, moon: bgMoo
 function drawEnemy5(c, e, cx, fl) {
   if (e.k === 'turtle') { drawTurtle(c, e, e.t, fl); return true; }
   if (e.k === 'alien') { drawAlien(c, cx, e.y + e.h, e.dir, e.t, e.air, fl); return true; }
-  return false;
+  return drawEnemy6(c, e, cx, fl);
 }

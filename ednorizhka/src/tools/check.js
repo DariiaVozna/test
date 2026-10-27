@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -18,9 +18,14 @@ function runLevel(idx, maxT) {
     if (stuck > 3 && G.hasDoors && G.keysHeld === 0) { back = 2.5; stuck = 0; }
     if (back > 0) { back -= STEP; In.left = true; In.right = false; }
     const wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
-    const wall = solid(tileAt(Math.floor((P.x + P.w + 4) / T), Math.floor((P.y + P.h - 4) / T)));
+    const wall = solid(tileAt(Math.floor((P.x + P.w + 4) / T), Math.floor((P.flip ? P.y + 4 : P.y + P.h - 4) / T)));
     let gap = false;
-    for (let d = 2; d <= 14; d += 4) { const gx = Math.floor((P.x + P.w + d) / T); let g = true; for (let yy = Math.floor((P.y + P.h) / T); yy < ROWS; yy++) { const v = tileAt(gx, yy); if (solid(v) || v === 3) { g = false; break; } } if (g) { gap = true; break; } }
+    for (let d = 2; d <= 14; d += 4) {
+      const gx = Math.floor((P.x + P.w + d) / T); let g = true;
+      if (P.flip) { for (let yy = Math.floor((P.y - 1) / T); yy >= 0; yy--) if (solid(tileAt(gx, yy))) { g = false; break; } }
+      else for (let yy = Math.floor((P.y + P.h) / T); yy < ROWS; yy++) { const v = tileAt(gx, yy); if (solid(v) || v === 3) { g = false; break; } }
+      if (g) { gap = true; break; }
+    }
     if (G.water.some(z => P.x + P.w + 10 > z.x0 && P.x < z.x1)) gap = false;
     let foe = null; for (const e of G.enemies) { const dx = e.x - P.x; if (dx > 0 && dx < 90 && Math.abs((e.y + e.h / 2) - (P.y + P.h / 2)) < 40) { foe = e; break; } }
     if (!foe && G.beans) for (const bn of G.beans) if (!bn.grown && bn.x - P.x > 0 && bn.x - P.x < 90) { foe = { x: bn.x - 10, y: bn.gy - 20, w: 20, h: 20 }; break; }
@@ -28,7 +33,7 @@ function runLevel(idx, maxT) {
     if (wz) { In.jump = P.y + P.h > 250 || stuck > 0.3 || wall; if ((stuck > 0.3 || wall) && Math.floor(t * 6) % 2 === 0 && cool <= 0) { In.jumpP = true; cool = 0.2; } }
     else {
       const want = P.onGround && (wall || gap || (foe && foe.x - P.x < 50) || stuck > 1);
-      In.jump = !P.onGround && P.vy < 0;
+      In.jump = !P.onGround && (P.flip ? P.vy > 0 : P.vy < 0);
       if (want && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; }
     }
     if (typeof checkHooks === 'function') checkHooks(t);
