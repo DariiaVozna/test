@@ -82,7 +82,7 @@ function drawEnemy6(c, e, cx, fl) {
     case 'leaper': drawLeaper(c, e, e.t, fl); return true;
     case 'sparrow': drawSparrow(c, e, e.t, fl); return true;
   }
-  return false;
+  return drawEnemy7(c, e, cx, fl);
 }
 
 /* ===== Річка: колоди й течія ===== */
@@ -293,7 +293,7 @@ function drawBlock7(c, b) {
     rr(c, 1, 1, T - 2, T - 2, 8); c.fillStyle = '#c98d55'; c.fill(); c.stroke();
     c.strokeStyle = '#8a5a30'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(3, 7); c.lineTo(T - 4, 11); c.moveTo(4, 15); c.lineTo(T - 3, 9); c.moveTo(3, 19); c.lineTo(T - 5, 17); c.stroke();
     c.strokeStyle = '#e6b878'; c.lineWidth = 0.9; c.beginPath(); c.moveTo(6, 4); c.lineTo(T - 6, 6); c.stroke();
-  } else return false;
+  } else return drawBlock8(c, b);
   return true;
 }
 
@@ -349,6 +349,7 @@ function drawDecor10(c, d, t) {
       c.fillStyle = '#c98d55'; c.strokeStyle = INK; c.lineWidth = 0.8; ell(c, x, y - 3, 9, 3.4); c.fill(); c.stroke();
       c.fillStyle = d.c; ell(c, x - 3, y - 6, 2.8, 3.6); c.fill(); c.stroke(); ell(c, x + 3, y - 6, 2.8, 3.6); c.fill(); c.stroke();
       break;
+    default: drawDecor11(c, d, t);
   }
 }
 

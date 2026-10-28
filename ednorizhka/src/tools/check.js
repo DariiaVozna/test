@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -16,9 +16,13 @@ function runLevel(idx, maxT) {
   while (t < maxT && !G.done) {
     In.left = false; In.right = true; In.jumpP = false; In.shootP = false; In.shootR = false;
     if (stuck > 3 && G.hasDoors && G.keysHeld === 0) { back = 2.5; stuck = 0; }
+    // двері храму зачинені — повертаємося по кубик, щоб доштовхати його на кнопку
+    const dt7 = tileAt(Math.floor((P.x + P.w + 4) / T), Math.floor((P.y + P.h - 4) / T));
+    if (stuck > 2 && dt7 >= 19 && dt7 <= 21) { back = 4; stuck = 0; }
     if (back > 0) { back -= STEP; In.left = true; In.right = false; }
     const wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
-    const wall = solid(tileAt(Math.floor((P.x + P.w + 4) / T), Math.floor((P.flip ? P.y + 4 : P.y + P.h - 4) / T)));
+    const wallTile = tileAt(Math.floor((P.x + P.w + 4) / T), Math.floor((P.flip ? P.y + 4 : P.y + P.h - 4) / T));
+    const wall = solid(wallTile) && !(wallTile === 17 && stuck < 0.8);
     let gap = false;
     for (let d = 2; d <= 14; d += 4) {
       const gx = Math.floor((P.x + P.w + d) / T); let g = true;
@@ -32,10 +36,13 @@ function runLevel(idx, maxT) {
     if (foe && Math.floor(t * 10) % 2 === 0) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
     if (wz) { In.jump = P.y + P.h > 250 || stuck > 0.3 || wall; if ((stuck > 0.3 || wall) && Math.floor(t * 6) % 2 === 0 && cool <= 0) { In.jumpP = true; cool = 0.2; } }
     else {
-      const want = P.onGround && (wall || gap || (foe && foe.x - P.x < 50) || stuck > 1);
+      const want = P.onGround && (wall || gap || (foe && foe.x - P.x < 50 && wallTile !== 17) || stuck > 1);
       In.jump = !P.onGround && (P.flip ? P.vy > 0 : P.vy < 0);
       if (want && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; }
     }
+    // тріснута скеля попереду — заряджаємо велику кулю
+    let crack = false; for (let d = 4; d <= 90; d += 12) if (tileAt(Math.floor((P.x + P.w + d) / T), Math.floor((P.y + P.h - 15) / T)) === 18) crack = true;
+    if (crack) { In.shootR = false; if (!P.charging) { In.shootP = true; In.shoot = true; } else if (P.charge >= 0.6) { In.shootP = false; In.shootR = true; In.shoot = false; } else { In.shootP = false; In.shoot = true; } }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;
@@ -72,5 +79,7 @@ const bad = out.filter(r => !r.done);
 console.log(bad.length ? 'НЕ ПРОЙДЕНО: ' + bad.map(r => r.idx + 1).join(', ') : 'Усі рівні пройдено');
 process.exitCode = bad.length ? 1 : 0;
 `;
-const ctx = vm.createContext({ Math, console, Map, Set, Array, Object, JSON, Number, Int8Array, Uint8Array, process, setInterval: () => 0, clearInterval: () => 0, setTimeout: () => 0, window: {}, performance: { now: () => 0 } });
+// Випадковість (вороги, бульбашки) робимо однаковою в кожному запуску, щоб результат повторювався
+const M = Object.create(Math); let seed = 12345; M.random = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x80000000; };
+const ctx = vm.createContext({ Math: M, console, Map, Set, Array, Object, JSON, Number, Int8Array, Uint8Array, process, setInterval: () => 0, clearInterval: () => 0, setTimeout: () => 0, window: {}, performance: { now: () => 0 } });
 vm.runInContext(src, ctx, { filename: 'game' });

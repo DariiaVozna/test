@@ -88,7 +88,7 @@ function flower(c, x, y, r, col) {
 
 /* o: {x,y — точка між копитцями; dir; t; run 0..1; air; s; prof; charge 0..1; blink; powerWings; alpha} */
 function drawUnicorn(c, o) {
-  const p = o.prof, B = BODY[p.body] || BODY.white, M = (MANE[p.mane] || MANE.rainbow).c, acc = p.acc || [];
+  const p = o.prof, B = BODY[p.body] || BODY.white, M = p.maneC || (MANE[p.mane] || MANE.rainbow).c, acc = p.acc || [];
   const has = id => acc.indexOf(id) >= 0;
   const t = o.t || 0, run = o.run || 0, air = !!o.air, s = o.s || 1, n = M.length;
   c.save(); c.translate(o.x, o.y); c.scale((o.dir || 1) * s, s);

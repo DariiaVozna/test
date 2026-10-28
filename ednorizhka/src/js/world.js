@@ -271,6 +271,8 @@ function tileSprite(theme, kind, l, r, ps) {
       c.beginPath(); c.arc(12, 10, 3.6, Math.PI, TAU); c.lineWidth = 1.8; c.stroke();
       c.fillStyle = INK; circ(c, 12, 14, 1.4); c.fill(); c.fillRect(11.4, 14, 1.2, 3);
     } else { c.fillStyle = '#6b6b80'; c.fillRect(1, 9, T - 2, 3); c.fillStyle = '#9a9ab0'; circ(c, 5, 10.5, 1); c.fill(); circ(c, 19, 10.5, 1); c.fill(); }
+  } else if (TILE7[kind]) {
+    drawTile7(c, kind);
   } else if (kind === 'cloud') {
     if (theme === 'beans' || theme === 'tiny') {
       drawLeafTile(c, l, r);

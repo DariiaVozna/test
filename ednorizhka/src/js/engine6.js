@@ -20,7 +20,7 @@ function spawnEnemy6(e, b, hover, g) {
     case 'leaper': { const base = e.ty * T + 20; return Object.assign(b, { w: 18, h: 16, x: e.tx * T + 3, y: base, baseY: base, state: 'wait', st: Math.random() * 1.6, period: 2.3, ghost: true, dir: e.tx % 2 ? -1 : 1 }); }
     case 'sparrow': return Object.assign(b, { w: 20, h: 14, x: e.tx * T, y: e.ty * T + 5, hy: e.ty * T + 12, x0: (e.tx - 14) * T, x1: (e.tx + 3) * T, speed: 80, dir: -1 });
   }
-  return null;
+  return spawnEnemy7(e, b, hover, g);
 }
 /* Повертає true, якщо ворог із цієї частини */
 function updateEnemy6(e, dt) {
@@ -42,7 +42,7 @@ function updateEnemy6(e, dt) {
     e.ghost = e.x - e.x0 < 20 || e.x1 - e.x < 20;   // напівпрозорий на краях — не чіпляє
     return true;
   }
-  return false;
+  return updateEnemy7(e, dt);
 }
 
 /* ===== Підготовка рівня ===== */
@@ -160,6 +160,7 @@ function update6(dt) {
     const bb = B.bauble; bb.vy = Math.min(bb.vy + 900 * dt, 500); bb.y += bb.vy * dt;
     if (bb.y >= B.gy - 9) { bb.y = B.gy - 9; bb.landed = true; Snd.tink(); burst(bb.x, bb.y, 10, ['#ffffff', '#9fe0ff', '#ffe14d'], 100); }
   }
+  update7(dt);
 }
 
 /* ===== Сорока Блискітка: літає, кидає шишки, пікірує, а побачивши блискітку — забуває про все ===== */

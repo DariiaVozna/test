@@ -97,7 +97,7 @@ let G = null;
 let mode = 'create';
 
 function tileAt(tx, ty) { if (tx < 0 || tx >= G.Wt) return 1; if (ty < 0 || ty >= ROWS) return 0; return G.map[ty * G.Wt + tx]; }
-const solid = v => v === 1 || v === 2 || v === 5 || v === 7 || v === 8 || v === 11 || v === 12 || (v === 13 && G.blinkOn) || (v === 9 && G.sw) || (v === 10 && !G.sw);
+const solid = v => v === 1 || v === 2 || v === 5 || v === 7 || v === 8 || v === 11 || v === 12 || (v === 13 && G.blinkOn) || (v === 9 && G.sw) || (v === 10 && !G.sw) || (v >= 14 && solid7(v));
 
 function moveBody(b, dt) {
   let hitX = false; b.sideHit = null; b.headHit = null;
@@ -171,7 +171,7 @@ function startLevel(idx) {
     vines: L.vines, launchers: L.launchers.map(l => Object.assign({}, l)), wheels: L.wheels,
     beans: L.beans.map(b => Object.assign({}, b)), lanterns: L.lanterns.map(l => Object.assign({}, l)), rails: L.rails, blinkOn: true, blinkWarn: false,
   };
-  initLevel6(G, L);
+  initLevel6(G, L); initLevel7(G, L);
   const bk = L.def.boss;
   if (bk === 'hedge') G.boss = { kind: 'hedge', name: 'Пан Колючка', acc: 'Пана Колючку', x: L.arena.x0 + 28 * T, gy: 10 * T, y: 10 * T - 21, hw: 28, hh: 22, hp: 16, max: 16, t: 0, st: 0, state: 'wait', dir: -1, rot: 0, flash: 0, dead: false, deadT: 0, alpha: 1, throwT: 2.5, rolls: 0, hinted: false };
   else if (bk === 'wizard') {
@@ -258,6 +258,7 @@ function updatePlayer(dt) {
   const a = ax ? (wz ? 700 : P.onGround ? (ice ? 420 : 1500) : 950) : (wz ? 500 : P.onGround ? (ice ? 200 : 1800) : 650);
   if (P.launchT > 0) { P.launchT -= dt; if (P.onGround || P.sideHit || wz) P.launchT = 0; }
   else if (P.vx < target) P.vx = Math.min(target, P.vx + a * dt); else if (P.vx > target) P.vx = Math.max(target, P.vx - a * dt);
+  boostStep(P, dt);
 
   if (In.jumpP) P.jumpBuf = 0.14;
   P.jumpBuf -= dt; P.coyote = P.onGround ? 0.1 : P.coyote - dt;
@@ -307,6 +308,7 @@ function updatePlayer(dt) {
   afterMove2(P);
   if (P.headHit && !P.flip && tileAt(P.headHit.tx, P.headHit.ty) === 7) bumpBlock(P.headHit.tx, P.headHit.ty);
   if (P.sideHit && tileAt(P.sideHit.tx, P.sideHit.ty) === 11) tryDoor(P.sideHit.tx, P.sideHit.ty);
+  if (P.sideHit && tileAt(P.sideHit.tx, P.sideHit.ty) === 17) pushStone(P, P.sideHit.tx, P.sideHit.ty, dt);
   const pcxP = P.x + P.w / 2;
   if (P.portalLock && !(Math.abs(pcxP - P.portalLock.x) < 14 && P.y + P.h > P.portalLock.gy - 44 && P.y < P.portalLock.gy)) P.portalLock = null;
   for (const p of G.portals) {
@@ -358,7 +360,7 @@ function updateEnemy(e, dt) {
   } else if (HOVER[e.k]) {
     e.x = e.hx + Math.sin(e.t * e.speed) * e.range - e.w / 2; e.dir = Math.cos(e.t * e.speed) >= 0 ? 1 : -1;
     e.y = e.hy + Math.sin(e.t * 2.3) * e.bob - e.h / 2;
-  } else if (e.k === 'frog' || e.k === 'alien') {
+  } else if (e.k === 'frog' || e.k === 'alien' || e.k === 'blob') {
     const pcx = P.x + P.w / 2, cx = e.x + e.w / 2;
     if (e.onGround) {
       e.vx = 0; e.air = false; e.cool -= dt;
@@ -406,6 +408,7 @@ function updateBoss(dt) {
   if (B.kind === 'clock') return updateClockBoss(dt);
   if (B.kind === 'octopus') return updateOctoBoss(dt);
   if (B.kind === 'magpie') return updateMagpieBoss(dt);
+  if (B.kind === 'chameleon') return updateChameleonBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -580,7 +583,7 @@ function update(dt) {
   G.t += dt;
   const P = G.P;
   for (const m of G.movers) {
-    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice || m.log) { updatePlatform(m, dt); continue; }
+    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice || m.log || m.dolphin || m.whale) { updatePlatform(m, dt); continue; }
     let nx, ny;
     if (m.circ) { const a = G.t * TAU / m.period + m.ph; nx = m.cx + Math.cos(a) * m.r - m.w / 2; ny = m.cy + Math.sin(a) * m.r; }
     else if (m.swing) { const a = m.amp * Math.sin(G.t * TAU / m.period + m.ph); nx = m.px + Math.sin(a) * m.len - m.w / 2; ny = m.py + Math.cos(a) * m.len; }
@@ -626,7 +629,8 @@ function update(dt) {
   for (const s of G.shots) {
     s.t += dt; s.life -= dt; s.x += s.vx * dt; s.y += (s.aim - s.y) * Math.min(1, dt * 22);
     if (s.big || s.t % 0.05 < dt) G.parts.push({ k: 'spark', x: s.x, y: s.y, vx: -s.vx * 0.05, vy: (Math.random() - 0.5) * 30, t: 0, life: 0.3, col: RAINBOW[Math.floor(Math.random() * 6)], r: s.big ? 2.4 : 1.4 });
-    if (solid(tileAt(Math.floor(s.x / T), Math.floor(s.y / T)))) { s.life = 0; burst(s.x, s.y, 5, ['#fff', '#ffe14d'], 60); }
+    const stx = Math.floor(s.x / T), sty = Math.floor(s.y / T), stv = tileAt(stx, sty);
+    if (solid(stv)) { if (stv === 18) crackHit(stx, sty, s); s.life = 0; burst(s.x, s.y, 5, ['#fff', '#ffe14d'], 60); }
     for (const e of G.enemies) {
       if (e.dead || e.ghost || s.life <= 0 || s.hit.has(e) || !circleRect(s, e, 2)) continue;
       s.hit.add(e);
@@ -728,6 +732,8 @@ function updatePlatform(m, dt) {
   if (m.sheep) return updateSheep(m, dt);
   if (m.ice) return updateIce(m, dt);
   if (m.log) return updateLog(m, dt);
+  if (m.dolphin) return updateDolphin(m, dt);
+  if (m.whale) return updateWhale(m, dt);
   const y0 = m.y; m.dx = 0; m.dy = 0; m.st += dt;
   if (m.crumble) {
     if (m.state === 'idle') { m.y = m.by; if (G.P.onMover === m) { m.state = 'shake'; m.st = 0; Snd.tone(240, 0.25, 'triangle', 0.05, 150); } }

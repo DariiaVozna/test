@@ -2068,14 +2068,236 @@ const LEVELS = [
       L.flip(64, 88);
       L.row(66, 2, 6); L.row(73, 5, 3); L.row(77, 2, 6);
       L.enemy('ghost', 82, 2);
-      L.ground(84, 110);
+      L.ground(84, 112);
       L.check(92);
       L.enemy('squirrel', 97, 10);
       L.spring(100); L.cloud(102, 4, 3); L.row(102, 3, 3);
       L.qblock(107, 6, 'star');
-      L.ground(113, 172);
-      L.row(114, 9, 4);
+      L.ground(115, 172);
+      L.row(116, 9, 4);
       L.sign(121, 'Сорока Блискітка! Стріляй, коли вона милується блискіткою');
+      L.check(125);
+      L.power('candy', 128, 8);
+      L.arena(129, 172);
+      L.cloud(137, 6, 3); L.cloud(149, 6, 4); L.cloud(160, 6, 3);
+      L.power('shield', 146, 9);
+      L.gate(168);
+    }
+  },
+  {
+    id: 'paint', theme: 'paint', name: 'Країна фарб', blurb: 'Відро фарби фарбує гриву, і стіна такого ж кольору пропускає', w: 170,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(4, 'Відро фарби фарбує гриву. Стіна такого самого кольору тебе пропустить!');
+      L.row(7, 9, 3);
+      L.bucket(11, 'red');
+      L.pwall(16, 'red');
+      L.row(18, 9, 4);
+      L.enemy('blob', 25, 10);
+      L.arc(29, 8, 5, 2);
+      L.ground(33, 66);
+      L.check(35);
+      L.cloud(38, 6, 3); L.row(38, 5, 3);
+      L.bucket(41, 'blue');
+      L.pwall(45, 'blue');
+      L.row(47, 9, 3);
+      L.qblock(49, 6, 'star5');
+      L.bucket(53, 'yellow'); L.bucket(56, 'red');
+      L.pwall(60, 'red');
+      L.row(62, 9, 3);
+      L.arc(65, 8, 5, 2);
+      L.ground(69, 104);
+      L.check(71);
+      L.power('magnet', 73, 8);
+      L.bucket(76, 'yellow');
+      L.pwall(80, 'yellow');
+      L.block(82, 6, 4); L.row(82, 5, 4); L.row(82, 9, 4);
+      L.pwall(87, 'yellow');
+      L.enemy('blob', 90, 10);
+      L.bucket(93, 'blue');
+      L.pwall(97, 'blue');
+      L.row(99, 9, 3); L.rainbow(100, 6);
+      L.arc(103, 8, 5, 2);
+      L.ground(107, 140);
+      L.check(109);
+      L.bucket(112, 'red'); L.pwall(115, 'red'); L.row(116, 9, 2);
+      L.bucket(118, 'yellow'); L.pwall(121, 'yellow'); L.row(122, 9, 2);
+      L.bucket(124, 'blue'); L.pwall(127, 'blue'); L.row(128, 9, 2);
+      L.qblock(131, 6, 'star'); L.qblock(132, 6, 'rainbow'); L.qblock(133, 6, 'star');
+      L.enemy('blob', 137, 10);
+      L.arc(139, 8, 5, 2);
+      L.ground(143, 170);
+      L.row(146, 9, 4);
+      L.enemy('blob', 152, 10);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'temple', theme: 'temple', name: 'Піщаний храм', blurb: 'Кам\'яні кубики котяться вперед, а кнопки відчиняють двері', w: 170,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(4, 'Кам\'яний кубик можна штовхати вперед. Підсунь його до високої стіни й вилізь!');
+      L.row(7, 9, 2);
+      L.stone(10);
+      L.block(16, 5, 2, 5); L.row(16, 4, 2);
+      L.row(19, 9, 3);
+      L.enemy('snake', 24, 10);
+      L.arc(29, 8, 5, 2);
+      L.ground(33, 72);
+      L.check(35);
+      L.sign(38, 'Постав кубик на кнопку — і двері відчиняться');
+      L.stone(41);
+      L.plate(47, 0); L.tdoor(48, 0);
+      L.row(50, 9, 4);
+      L.qblock(53, 6, 'star5');
+      L.enemy('snake', 57, 10);
+      L.stone(60);
+      L.block(66, 5, 2, 5); L.row(66, 4, 2); L.rainbow(67, 1);
+      L.row(68, 9, 3);
+      L.arc(71, 8, 5, 2);
+      L.ground(75, 118);
+      L.check(77);
+      L.power('magnet', 79, 8);
+      L.stone(82);
+      L.qblock(85, 6, 'shield');
+      L.enemy('snake', 88, 10);
+      L.plate(93, 1); L.tdoor(94, 1);
+      L.row(95, 9, 4);
+      L.block(100, 7, 3); L.row(100, 6, 3);
+      L.stone(104);
+      L.block(110, 5, 2, 5); L.row(110, 4, 2);
+      L.row(112, 9, 4);
+      L.arc(117, 8, 5, 2);
+      L.ground(121, 152);
+      L.check(123);
+      L.qblock(126, 6, 'star'); L.qblock(127, 6, 'rainbow'); L.qblock(128, 6, 'star');
+      L.stone(131);
+      L.plate(138, 2); L.tdoor(139, 2);
+      L.row(141, 9, 4);
+      L.enemy('snake', 146, 10);
+      L.arc(151, 8, 5, 2);
+      L.ground(155, 170);
+      L.row(155, 9, 2);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'bay', theme: 'bay', name: 'Дельфінова бухта', blurb: 'Дельфіни катають на спинці, а кит підкидає фонтаном', w: 170, needK: 0.45,
+    build(L) {
+      L.ground(0, 16, 8);
+      L.sign(4, 'Дельфінчик катає! Стань йому на спинку, а коли він стрибне — стрибай і ти');
+      L.row(7, 6, 3);
+      L.enemy('urchin', 12, 8);
+      L.ground(16, 44, 11); L.water(16, 44, 8);
+      L.dolphin(16, 44, 8);
+      L.row(19, 5, 4); L.arc(25, 3, 6, 2); L.row(34, 5, 4);
+      L.row(21, 10, 3); L.enemy('urchin', 29, 11); L.row(37, 10, 3);
+      L.enemy('puffer', 32, 9);
+      L.ground(44, 62, 8);
+      L.check(46);
+      L.power('magnet', 49, 6);
+      L.qblock(52, 4, 'star5');
+      L.enemy('crab', 56, 8);
+      L.ground(62, 98, 11); L.water(62, 98, 8);
+      L.whale(64, 8);
+      L.star(65, 5); L.star(66, 3); L.rainbow(65, 1);
+      L.dolphin(68, 98, 8);
+      L.row(72, 5, 4); L.arc(79, 3, 6, 2); L.row(88, 5, 4);
+      L.row(80, 10, 4);
+      L.enemy('puffer', 76, 10); L.enemy('puffer', 90, 9);
+      L.enemy('gull', 84, 3);
+      L.ground(98, 128, 8);
+      L.check(100);
+      L.enemy('crab', 104, 8);
+      L.qblock(107, 4, 'star'); L.qblock(108, 4, 'rainbow'); L.qblock(109, 4, 'star');
+      L.enemy('urchin', 113, 8);
+      L.cloud(116, 5, 3); L.row(116, 4, 3);
+      L.enemy('crab', 122, 8);
+      L.ground(128, 154, 11); L.water(128, 154, 8);
+      L.whale(130, 8); L.star(131, 5); L.star(132, 3); L.rainbow(131, 1);
+      L.dolphin(135, 154, 8);
+      L.row(138, 5, 4); L.arc(145, 3, 5, 2);
+      L.enemy('urchin', 141, 11);
+      L.ground(154, 170, 8);
+      L.row(155, 6, 3);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'quarry', theme: 'quarry', name: 'Каменоломня', blurb: 'Стрілки розганяють, а велика куля рогу розбиває тріснуті скелі', w: 170,
+    build(L) {
+      L.ground(0, 18);
+      L.sign(4, 'Стань на стрілку — вона розжене, і ти перелетиш широку яму!');
+      L.row(7, 9, 4);
+      L.boost(16, 1);
+      L.arc(18, 7, 8, 3);
+      L.ground(26, 58);
+      L.check(28);
+      L.sign(31, 'Тріснута скеля! Затисни «Ріг», а потім відпусти — велика куля її розіб\'є');
+      L.crack(36);
+      L.row(38, 9, 4);
+      L.enemy('car', 44, 10);
+      L.qblock(47, 6, 'star5');
+      L.row(50, 9, 3);
+      L.boost(56, 1);
+      L.arc(58, 7, 8, 3);
+      L.ground(66, 104);
+      L.check(68);
+      L.power('magnet', 70, 8);
+      L.crack(74); L.row(76, 9, 3); L.crack(80);
+      L.enemy('car', 86, 10);
+      L.block(89, 7, 3); L.row(89, 6, 3);
+      L.row(95, 9, 4);
+      L.boost(102, 1);
+      L.arc(104, 7, 8, 3);
+      L.ground(112, 144);
+      L.check(114);
+      L.qblock(117, 6, 'star'); L.qblock(118, 6, 'rainbow'); L.qblock(119, 6, 'star');
+      L.crack(123);
+      L.enemy('car', 129, 10);
+      L.row(132, 9, 4);
+      L.boost(142, 1);
+      L.arc(144, 7, 7, 3);
+      L.ground(151, 170);
+      L.row(153, 9, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'studio', theme: 'studio', name: 'Майстерня Хамелеона', blurb: 'Битва з Хамелеоном Барвиком', w: 172, boss: 'chameleon',
+    build(L) {
+      L.ground(0, 34);
+      L.sign(5, 'Майстерня Хамелеона Барвика. Він знебарвив зірочки й сховався!');
+      L.qblock(9, 6, 'star5');
+      L.bucket(12, 'blue'); L.pwall(16, 'blue');
+      L.row(18, 9, 3);
+      L.stone(22); L.plate(29, 0); L.tdoor(30, 0);
+      L.row(31, 9, 1);
+      L.boost(32, 1);
+      L.arc(34, 7, 8, 3);
+      L.ground(42, 80);
+      L.check(44);
+      L.power('magnet', 46, 8);
+      L.crack(50);
+      L.row(52, 9, 3);
+      L.enemy('blob', 57, 10);
+      L.bucket(61, 'red'); L.pwall(65, 'red');
+      L.row(67, 9, 3);
+      L.qblock(70, 6, 'shield');
+      L.enemy('car', 75, 10);
+      L.arc(79, 8, 5, 2);
+      L.ground(83, 172);
+      L.check(85);
+      L.stone(88); L.block(94, 5, 2, 5); L.row(94, 4, 2);
+      L.row(97, 9, 4);
+      L.enemy('snake', 104, 10);
+      L.qblock(108, 6, 'star');
+      L.row(112, 9, 4);
+      L.sign(121, 'Хамелеон Барвик! Перестрибни язик і стріляй, поки язик прилип');
       L.check(125);
       L.power('candy', 128, 8);
       L.arena(129, 172);
@@ -2090,6 +2312,11 @@ const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  paint: (R, x, y) => R() < 0.5 ? { k: 'paintpot', x, y, c: ['#ff4f5e', '#3f8fff', '#ffd23f'][Math.floor(R() * 3)] } : R() < 0.5 ? { k: 'brushes', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#9fe0ff'][Math.floor(R() * 3)] },
+  temple: (R, x, y) => R() < 0.5 ? { k: 'urn', x, y } : { k: 'obelisk', x, y },
+  bay: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'umbrella', x, y } : r < 0.65 ? { k: 'shell', x, y, c: ['#ffb3c6', '#ffd9a8', '#fff3e0'][Math.floor(R() * 3)] } : { k: 'starfish', x, y }; },
+  quarry: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'rockpile', x, y } : r < 0.75 ? { k: 'trafficcone', x, y } : { k: 'tuft', x, y }; },
+  studio: (R, x, y) => R() < 0.5 ? { k: 'paintpot', x, y, c: ['#ff4f5e', '#3f8fff', '#ffd23f'][Math.floor(R() * 3)] } : { k: 'brushes', x, y },
   river: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'reed', x, y } : r < 0.65 ? { k: 'stump', x, y } : { k: 'flower', x, y, c: ['#ffffff', '#ffd54a', '#ff9fd0'][Math.floor(R() * 3)] }; },
   kites: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'dandelion', x, y } : r < 0.65 ? { k: 'pinwheel', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#9fe0ff'][Math.floor(R() * 3)] }; },
   pinball: (R, x, y) => R() < 0.55 ? { k: 'bulb', x, y } : { k: 'arrowlamp', x, y },
@@ -2145,7 +2372,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -2195,6 +2422,15 @@ function buildLevel(idx) {
     bumper(x, row) { L.bumpers.push({ x: x * T + 12, y: row * T + 12, r: 14, hits: 0, cd: 0, glow: 0 }); },
     lights(x, n) { later.push(() => { const gy = groundY(x), lamps = []; for (let i = 0; i < n; i++) lamps.push({ x: (x + i) * T + 12, gy, on: false }); L.lightSets.push({ lamps }); }); },
     flip(x0, x1) { L.flips.push({ x0: x0 * T, x1: x1 * T }); },
+    bucket(x, color, row) { later.push(() => L.buckets.push({ x: x * T + 12, gy: row != null ? row * T : groundY(x), color, splash: 0 })); },
+    pwall(x, color, top, h) { top = top || 0; h = h || 10 - top; for (let y = top; y < top + h; y++) set(x, y, 14 + PAINTS.indexOf(color)); },
+    stone(x, row) { later.push(() => { const y = row != null ? row : groundY(x) / T - 1; set(x, y, 17); L.stones.push({ x, y }); }); },
+    plate(x, id) { later.push(() => { const gy = groundY(x); L.plates.push({ x: x * T + 12, tx: x, gy, row: gy / T - 1, id: id || 0, on: false }); }); },
+    tdoor(x, id, top) { for (let y = top || 0; y < 10; y++) set(x, y, 19 + (id || 0)); },
+    boost(x, dir) { later.push(() => L.boosts.push({ x: x * T + 24, gy: groundY(x), dir: dir || 1, glow: 0 })); },
+    crack(x, top, h) { top = top || 0; h = h || 10 - top; for (let y = top; y < top + h; y++) set(x, y, 18); },
+    dolphin(x0, x1, row) { L.movers.push({ dolphin: true, bx: x0 * T + 4, by: row * T - 10, w: 3 * T, minX: x0 * T, maxX: x1 * T, dir: 1, speed: 75, st: 0, air: false, vy: 0, jumpT: 1.5 + (x0 % 3) * 0.5, ax: 0, ay: 0, period: 1 }); },
+    whale(x, row, top) { const by = row * T - 6; L.movers.push({ whale: true, bx: x * T, by, w: 4 * T, st: 0, ax: 0, ay: 0, period: 1 }); L.winds.push({ x0: (x + 1) * T + 4, x1: (x + 3) * T - 4, y: (top == null ? 1 : top) * T, y1: by + 4, cyc: 3.6, on: 1.5, ph: (x * 0.7) % 3, whale: true }); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
     zip(x0, x1, top0, top1) { const z = { x0: x0 * T + 12, y0: top0 * T - 34, x1: x1 * T + 12, y1: top1 * T - 46, gy0: top0 * T, gy1: top1 * T, state: 'idle', d: 0, v: 0 }; z.len = Math.hypot(z.x1 - z.x0, z.y1 - z.y0); z.hx = z.x0; z.hy = z.y0 + 8; L.zips.push(z); },
     breeze(x0, x1) { L.breezes.push({ x0: x0 * T, x1: x1 * T, p: 170 }); },

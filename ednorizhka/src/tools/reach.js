@@ -19,9 +19,10 @@ for (const d of [1, -1]) { ACTS.push({ jump: true, dir: d, hold: 1, dd: 0.25 });
 ACTS.push({ wait: 0.7 }); ACTS.push({ wait: 1.6 });
 for (const d of [1, -1, 0]) ACTS.push({ swim: true, dir: d });
 ACTS.push({ climb: true });
+for (const d of [1, -1]) ACTS.push({ big: true, dir: d });
 function act(a) {
   const P = G.P, h0 = P.hearts; let t = 0, left = false;
-  const T_MAX = a.wait || (a.swim ? 1.1 : a.climb ? 2 : 2.6);
+  const T_MAX = a.wait || (a.swim ? 1.1 : a.climb ? 2 : a.big ? 1.1 : 2.6);
   while (t < T_MAX) {
     In.left = In.right = In.jumpP = In.shootP = In.shootR = In.shoot = false; In.jump = false;
     let d = a.dir || 0; if (a.dd && t < a.dd) d = 0; if (a.back && t > a.back) d = -d;
@@ -29,6 +30,7 @@ function act(a) {
     if (a.jump) { In.jump = t < a.hold; In.jumpP = t === 0; }
     if (a.swim) { In.jump = true; In.jumpP = Math.floor(t / STEP) % 15 === 0; }
     if (a.climb) In.jump = true;
+    if (a.big) { In.left = In.right = false; P.dir = a.dir; if (t === 0) { In.shootP = true; In.shoot = true; } else if (t < 0.65) In.shoot = true; else if (t < 0.65 + STEP * 1.5) In.shootR = true; }
     P.inv = 99; P.wingsT = 0; P.magnetT = 0; P.candyT = 0; P.frostT = 0; P.shield = false;
     update(STEP); t += STEP;
     if (P.hearts < h0 || P.y > VIEW_H + 30) return false;
@@ -43,7 +45,9 @@ function act(a) {
 function keyOf(TB) {
   const P = G.P, wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
   let mv = -1; if (P.onMover) mv = G.movers.indexOf(P.onMover);
-  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0].join(',');
+  if (G._sc == null) G._sc = G.map.some(v => v === 17 || v === 18);
+  let st = ''; if (G._sc) for (let i = 0; i < G.map.length; i++) if (G.map[i] === 17 || G.map[i] === 18) st += i + (G.map[i] === 18 ? 'c' : '') + ';';
+  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0].join(',');
 }
 function explore(idx, opts) {
   opts = opts || {};
@@ -63,6 +67,7 @@ function explore(idx, opts) {
     for (const a of ACTS) {
       if (a.swim && !waterAt(s.P.x + s.P.w / 2, s.P.y + s.P.h / 2)) continue;
       if (a.climb && !s.vines.length) continue;
+      if (a.big && s.map.indexOf(18) < 0) continue;
       if ((a.wait) && !(s.movers.length || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0)) continue;
       G = structuredClone(Object.assign({}, s, { L: null, def: null })); G.L = s.L; G.def = s.def;
       if (!act(a)) continue;

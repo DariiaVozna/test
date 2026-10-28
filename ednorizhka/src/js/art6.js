@@ -211,6 +211,8 @@ function drawWheelStruct(c, w, t, theme) {
 function drawMover2(c, m, theme) {
   if (m.ice) { drawIceBlock(c, m, G.t); return true; }
   if (m.log) { drawLog(c, m, G.t); return true; }
+  if (m.dolphin) { drawDolphin(c, m, G.t); return true; }
+  if (m.whale) { drawWhale(c, m, G.t); return true; }
   if (m.swing || m.sheep || (m.circ && theme === 'windmill')) return drawMover3(c, m, theme);
   if (m.bubble) { drawBubblePlat(c, m, G.t); return true; }
   if (m.cart) { drawCart(c, m, G.t); return true; }
@@ -451,6 +453,7 @@ function drawBolt2(c, b) {
     case 'rock': drawRock(c, b.x, b.y, b.t); return true;
     case 'ringw': drawRingWave(c, b); return true;
     case 'cone': drawCone(c, b.x, b.y, b.t); return true;
+    case 'paintball': drawPaintball(c, b); return true;
   }
   return false;
 }
