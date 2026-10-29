@@ -105,7 +105,7 @@ function renderGame(dt) {
       const v = G.map[ty * G.Wt + tx]; if (!v || v === 5) continue;
       let kind, l = false, r = false;
       if (v === 1) {
-        const up = ty > 0 ? G.map[(ty - 1) * G.Wt + tx] : (th.ceil ? 1 : 0); kind = (up === 1 || up === 2 || up === 5 || up === 12) ? 'fill' : 'top'; l = tileAt(tx - 1, ty) !== 1; r = tileAt(tx + 1, ty) !== 1;
+        const up = ty > 0 ? G.map[(ty - 1) * G.Wt + tx] : (th.ceil ? 1 : 0); kind = (up === 1 || up === 2 || up === 5 || up === 12 || up === 22) ? 'fill' : 'top'; l = tileAt(tx - 1, ty) !== 1; r = tileAt(tx + 1, ty) !== 1;
         if (th.ceil && kind === 'fill' && ty < ROWS - 1 && G.map[(ty + 1) * G.Wt + tx] === 0) kind = 'ceil';
       }
       else if (v === 2) kind = 'block';
@@ -116,7 +116,7 @@ function renderGame(dt) {
       else if (v === 11) kind = (ty > 0 && G.map[(ty - 1) * G.Wt + tx] === 11) ? 'door' : 'doorTop';
       else if (v === 12) kind = 'bounce';
       else if (v === 13) kind = G.blinkOn && !(G.blinkWarn && Math.floor(t * 10) % 2) ? 'blinkOn' + (tx % 6) : 'blinkOff';
-      else if (v >= 14) kind = tileKind7(v);
+      else if (v >= 14) kind = tileKind7(v, tx, ty);
       else { kind = 'cloud'; l = tileAt(tx - 1, ty) !== 3; r = tileAt(tx + 1, ty) !== 3; }
       const bt = (v === 7 || v === 8 || v === 12) ? G.bumps.get(ty * G.Wt + tx) : 0;
       const bo = bt ? -Math.sin((0.18 - bt) / 0.18 * Math.PI) * 5 : 0;
@@ -135,6 +135,7 @@ function renderGame(dt) {
   for (const z of G.lowgravs) if (z.x1 > G.cam - 20 && z.x0 < G.cam + viewW + 20) drawLowGrav(c, z, t);
   drawWorld6(c, t, vis);
   drawWorld7(c, t, vis);
+  drawWorld8(c, t, vis);
   for (const d of G.decor) if (vis(d.x)) drawDecor(c, d, t);
   for (const v of G.vines) if (vis(v.x)) drawVine(c, v, t);
   for (const l of G.launchers) if (vis(l.x)) drawLauncher(c, l, t);
@@ -198,6 +199,7 @@ function renderGame(dt) {
     else if (B.kind === 'octopus') { for (const tn of B.tents) drawTentacle(c, tn, t, B.gy); drawOctopus(c, B, B.t); }
     else if (B.kind === 'magpie') drawMagpie(c, B, B.t);
     else if (B.kind === 'chameleon') drawChameleon(c, B, B.t);
+    else if (B.kind === 'cat') drawCatBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -223,10 +225,10 @@ function renderGame(dt) {
   const blinkHide = P.inv > 0 && Math.floor(P.inv * 14) % 2 === 0;
   if (!P.inCannon) {
   for (const s of G.storms) if (vis(s.x, 60)) drawStormCloud(c, s, t, G.t);
-  const cartM = P.ride || (P.onMover && P.onMover.cart ? P.onMover : null);
+  const cartM = P.ride || (P.onMover && (P.onMover.cart || P.onMover.coaster) ? P.onMover : null);
   if (P.flip) { c.save(); c.translate(0, 2 * (P.y + P.h / 2)); c.scale(1, -1); }
   drawPaintAura(c, P, t);
-  drawUnicorn(c, { x: pcx, y: P.y + P.h + 1, dir: P.dir, t: P.t, run: P.onGround ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround, s: P.mini ? 0.42 : 0.8, prof: G.paint ? paintProf() : save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
+  drawUnicorn(c, { x: pcx, y: P.y + P.h + 1, dir: P.dir, t: P.t, run: P.onGround ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround, s: P.mini ? 0.42 : P.big ? 1.24 : 0.8, prof: G.paint ? paintProf() : save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
   if (P.flip) c.restore();
   if (cartM) cartBody(c, cartM);
   // ім'я над головою (догори дриґом — під нею)
@@ -301,9 +303,15 @@ function drawHud(c) {
     c.save(); c.translate(x3 + 6, 0); drawKey(c, 14, top + H / 2, 0); c.restore();
     c.fillStyle = INK; c.textAlign = 'left'; c.fillText(kt, x3 + 38, top + H / 2 + 1);
   }
+  if (G.chicks.length) {
+    const x3 = x2 + w2 + 10, ct = G.chicksIn + ' / ' + G.chicks.length, cw = c.measureText(ct).width + 50, all = G.chicksIn === G.chicks.length;
+    hudPill(c, x3, top, cw, H, all ? 'rgba(255,246,200,.95)' : null);
+    drawChick(c, x3 + 20, top + H / 2 + 8, 1, 0, false, 1.25);
+    c.fillStyle = INK; c.textAlign = 'left'; c.fillText(ct, x3 + 38, top + H / 2 + 1);
+  }
   // бонуси з таймером
   let px = left, py = top + H + 8;
-  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15]]) {
+  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME]]) {
     if (v <= 0) continue;
     c.fillStyle = 'rgba(255,255,255,.9)'; circ(c, px + 17, py + 17, 17); c.fill();
     c.strokeStyle = '#ff4fa3'; c.lineWidth = 3.5; c.beginPath(); c.arc(px + 17, py + 17, 15, -Math.PI / 2, -Math.PI / 2 + TAU * (v / max)); c.stroke();
@@ -404,7 +412,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -488,6 +496,7 @@ function showWin() {
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 54) { $('winTitle').textContent = 'Хамелеон розфарбував світ!'; $('winText').textContent = 'Але Кіт Мурко побачив, як блищать зірочки, і потягнув їх на горище: через курячий хутір, ярмарок, гарбузову ніч і кубикове місто. Наступна країна: ' + LEVELS[55].name + '.'; }
   if (i === 49) { $('winTitle').textContent = 'Сорока повернула всі зірочки!'; $('winText').textContent = 'Але Хамелеон Барвик знебарвив цілі країни й сховав зірочки за стінами, у храмі й навіть у морі. Тепер їх видно тільки тому, хто знайде свою фарбу. Наступна країна: ' + LEVELS[50].name + '.'; }
   if (i === 44) { $('winTitle').textContent = 'Ласунка тепер ділиться цукерками!'; $('winText').textContent = 'Але Сорока Блискітка побачила, як сяють зірочки, і понесла їх до свого гнізда: через річку, понад лугом і навіть у країну, де все догори дриґом. Наступна країна: ' + LEVELS[45].name + '.'; }
   if (i === 39) { $('winTitle').textContent = 'Дзеленчик тепер дзвонить лише на ігри!'; $('winText').textContent = 'А тим часом Восьминіжка Ласунка поласувала зоряними цукерками й сховала решту зірочок у морі, у хмарах і навіть на Місяці. Наступна країна: ' + LEVELS[40].name + '.'; }

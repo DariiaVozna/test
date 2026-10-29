@@ -171,7 +171,7 @@ function startLevel(idx) {
     vines: L.vines, launchers: L.launchers.map(l => Object.assign({}, l)), wheels: L.wheels,
     beans: L.beans.map(b => Object.assign({}, b)), lanterns: L.lanterns.map(l => Object.assign({}, l)), rails: L.rails, blinkOn: true, blinkWarn: false,
   };
-  initLevel6(G, L); initLevel7(G, L);
+  initLevel6(G, L); initLevel7(G, L); initLevel8(G, L);
   const bk = L.def.boss;
   if (bk === 'hedge') G.boss = { kind: 'hedge', name: 'Пан Колючка', acc: 'Пана Колючку', x: L.arena.x0 + 28 * T, gy: 10 * T, y: 10 * T - 21, hw: 28, hh: 22, hp: 16, max: 16, t: 0, st: 0, state: 'wait', dir: -1, rot: 0, flash: 0, dead: false, deadT: 0, alpha: 1, throwT: 2.5, rolls: 0, hinted: false };
   else if (bk === 'wizard') {
@@ -197,6 +197,7 @@ function floatText(x, y, text, col) { G.parts.push({ k: 'text', x, y, vx: 0, vy:
 function hurtPlayer(pit) {
   const P = G.P;
   if (!pit && P.inv > 0) return;
+  if (!pit && P.big) return;
   if (!pit && P.shield) { P.shield = false; P.inv = 1.2; Snd.tink(); burst(P.x + 11, P.y + 10, 12, RAINBOW, 140); say('Щит захистив!', 1.4); return; }
   P.hearts--; P.inv = 1.8; Snd.hurt(); P.hurtT = 0.25;
   if (!pit) { P.vy = -280; P.vx = -P.dir * 150; }
@@ -258,7 +259,7 @@ function updatePlayer(dt) {
   const a = ax ? (wz ? 700 : P.onGround ? (ice ? 420 : 1500) : 950) : (wz ? 500 : P.onGround ? (ice ? 200 : 1800) : 650);
   if (P.launchT > 0) { P.launchT -= dt; if (P.onGround || P.sideHit || wz) P.launchT = 0; }
   else if (P.vx < target) P.vx = Math.min(target, P.vx + a * dt); else if (P.vx > target) P.vx = Math.max(target, P.vx - a * dt);
-  boostStep(P, dt);
+  boostStep(P, dt); rideStep(P);
 
   if (In.jumpP) P.jumpBuf = 0.14;
   P.jumpBuf -= dt; P.coyote = P.onGround ? 0.1 : P.coyote - dt;
@@ -330,7 +331,7 @@ function updatePlayer(dt) {
   if (P.x < minX) { P.x = minX; if (P.vx < 0) P.vx = 0; }
   if (P.onGround && !P.onMover && !P.mini) {
     const ty = P.flip ? Math.floor((P.y - 2) / T) : Math.floor((P.y + P.h + 2) / T);
-    const firm = v => solid(v) && v !== 13;
+    const firm = v => solid(v) && v !== 13 && v !== 22;
     if (firm(tileAt(Math.floor((P.x - 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w + 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w / 2) / T), ty))) P.safe = { x: P.x, y: P.y };
   }
   if (P.y > VIEW_H + 60 || (P.flip && P.y < -54)) { hurtPlayer(true); P.x = P.safe.x; P.y = P.safe.y - 2; P.vx = P.vy = 0; burst(P.x + 11, P.y + 15, 10, ['#fff', '#ffe14d'], 100); }
@@ -409,6 +410,7 @@ function updateBoss(dt) {
   if (B.kind === 'octopus') return updateOctoBoss(dt);
   if (B.kind === 'magpie') return updateMagpieBoss(dt);
   if (B.kind === 'chameleon') return updateChameleonBoss(dt);
+  if (B.kind === 'cat') return updateCatBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -583,7 +585,7 @@ function update(dt) {
   G.t += dt;
   const P = G.P;
   for (const m of G.movers) {
-    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice || m.log || m.dolphin || m.whale) { updatePlatform(m, dt); continue; }
+    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice || m.log || m.dolphin || m.whale || m.coaster || m.ball) { updatePlatform(m, dt); continue; }
     let nx, ny;
     if (m.circ) { const a = G.t * TAU / m.period + m.ph; nx = m.cx + Math.cos(a) * m.r - m.w / 2; ny = m.cy + Math.sin(a) * m.r; }
     else if (m.swing) { const a = m.amp * Math.sin(G.t * TAU / m.period + m.ph); nx = m.px + Math.sin(a) * m.len - m.w / 2; ny = m.py + Math.cos(a) * m.len; }
@@ -617,6 +619,7 @@ function update(dt) {
       else if (p.k === 'candy') { P.candyT = 15; P.candyBoss = !!(G.boss && !G.bossDefeated); say(P.candyBoss ? 'Цукерка! Ріг стріляє трьома іскорками аж до кінця битви' : 'Цукерка! Ріг стріляє трьома іскорками', 2.4); }
       else if (p.k === 'frost') { P.frostT = 15; say('Сніжинка! Ріг заморожує ворогів у крижані кубики', 2.4); }
       else if (p.k === 'mini') { setMini(P, true, 14); say('Ти маленька! Тепер можна пролізти в нірку', 2.2); }
+      else if (p.k === 'big') { setBig(P, true, BIG_TIME); say(G.bigHint ? 'Знову велика!' : 'Гриб-велетень! Ти велика: ламай стіни з кубиків', 2.4); G.bigHint = true; }
       else { P.magnetT = 12; say('Магніт! Зірочки самі летять до тебе'); }
     }
   }
@@ -657,7 +660,7 @@ function update(dt) {
   G.shots = G.shots.filter(s => s.life > 0);
   for (const b of G.bolts) {
     b.t += dt; if (b.g) b.vy += b.g * dt; else if (b.spike) b.vy += 900 * dt; if (b.kind === 'bub') b.vy = Math.sin(b.t * 3.2) * 28 + b.sink; b.x += b.vx * dt; b.y += b.vy * dt;
-    const roll = (b.kind === 'puff' && !b.fall) || b.kind === 'wave' || b.kind === 'ringw', floaty = b.kind === 'magic' || b.kind === 'bub';
+    const roll = (b.kind === 'puff' && !b.fall) || b.kind === 'wave' || b.kind === 'ringw' || b.kind === 'yarn', floaty = b.kind === 'magic' || b.kind === 'bub';
     const gone = (roll || floaty) ? (b.t > (b.kind === 'bub' ? 6 : 4.5) || (G.arena && (b.x < G.arena.x0 || b.x > G.arena.x1)) || (floaty && (b.y > VIEW_H || solid(tileAt(Math.floor(b.x / T), Math.floor(b.y / T)))))) : (solid(tileAt(Math.floor(b.x / T), Math.floor((b.y + (b.kind ? 5 : 10)) / T))) || b.y > VIEW_H || b.t > 6);
     const hb = b.r ? { x: b.x - b.r, y: b.y - b.r, w: b.r * 2, h: b.r * 2 } : b.kind === 'magic' ? { x: b.x - 5, y: b.y - 5, w: 10, h: 10 } : b.kind === 'puff' ? { x: b.x - 7, y: b.y - 6, w: 14, h: 12 } : b.kind === 'acorn' ? { x: b.x - 4, y: b.y - 4, w: 8, h: 8 } : { x: b.x - 4, y: b.y - 9, w: 8, h: 18 };
     if (gone) { b.dead = true; burst(b.x, b.y + 4, 6, b.kind === 'puff' ? ['#fff', '#e8dcff'] : ['#ffe14d', '#fff'], 80); }
@@ -734,6 +737,8 @@ function updatePlatform(m, dt) {
   if (m.log) return updateLog(m, dt);
   if (m.dolphin) return updateDolphin(m, dt);
   if (m.whale) return updateWhale(m, dt);
+  if (m.coaster) return updateCoaster(m, dt);
+  if (m.ball) return updateBall(m, dt);
   const y0 = m.y; m.dx = 0; m.dy = 0; m.st += dt;
   if (m.crumble) {
     if (m.state === 'idle') { m.y = m.by; if (G.P.onMover === m) { m.state = 'shake'; m.st = 0; Snd.tone(240, 0.25, 'triangle', 0.05, 150); } }

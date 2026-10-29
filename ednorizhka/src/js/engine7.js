@@ -26,7 +26,7 @@ function solid7(v) {
   if (v >= 14 && v <= 16) return G.paint !== PAINTS[v - 14];
   if (v === 17 || v === 18) return true;
   if (v >= 19 && v <= 21) return !G.doorOpen[v - 19];
-  return false;
+  return v === 22 || v === 23;
 }
 
 function spawnEnemy7(e, b, hover, g) {
@@ -37,11 +37,11 @@ function spawnEnemy7(e, b, hover, g) {
     case 'urchin': return g(20, 18, {});
     case 'puffer': return Object.assign(hover(22, 18, 2.6, 0.8, 5), { puff: 0 });
   }
-  return null;
+  return spawnEnemy8(e, b, hover, g);
 }
 function updateEnemy7(e, dt) {
   if (e.k === 'urchin') return true;
-  return false;
+  return updateEnemy8(e, dt);
 }
 
 /* ===== Підготовка рівня ===== */
@@ -169,6 +169,7 @@ function update7(dt) {
   P.prevOG = P.onGround;
   if (G.stoneHome.length || G.stoneOff.size) updateStones(dt);
   for (const b of G.bolts) if (b.kind === 'paintball' && !b.col) b.col = PAINTS[Math.floor(Math.random() * 3)];
+  update8(dt);
 }
 /* Прискорювач тримає швидкість і на землі, і в повітрі (виклик із updatePlayer) */
 function boostStep(P, dt) {

@@ -2306,12 +2306,222 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  {
+    id: 'farm', theme: 'farm', name: 'Курячий хутір', blurb: 'Курчатка йдуть за тобою слідом — відведи їх у курник', w: 170,
+    build(L) {
+      L.ground(0, 34);
+      L.sign(4, 'Курчатко загубилося! Підійди — і воно піде за тобою. Відведи курчат у курник');
+      L.chick(9);
+      L.row(12, 9, 4);
+      L.block(18, 7, 3); L.row(18, 6, 3);
+      L.cloud(24, 6, 3); L.chick(25, 6); L.star(24, 5); L.star(26, 5);
+      L.enemy('goose', 29, 10);
+      L.arc(34, 8, 4, 2);
+      L.ground(38, 82);
+      L.check(40);
+      L.spring(45);
+      L.block(48, 5, 3); L.chick(49, 5); L.row(48, 4, 3);
+      L.qblock(55, 6, 'star5');
+      L.enemy('goose', 60, 10);
+      L.row(62, 9, 3);
+      L.sign(66, 'Курник! Заведи туди курчат — кожне дасть 2 зірочки');
+      L.coop(70);
+      L.row(74, 9, 4);
+      L.arc(82, 8, 4, 2);
+      L.ground(86, 120);
+      L.check(88);
+      L.power('magnet', 90, 8);
+      L.row(92, 9, 4);
+      L.cloud(96, 6, 3); L.row(96, 5, 3);
+      L.spring(101);
+      L.cloud(103, 4, 4); L.chick(104, 4); L.row(103, 3, 4);
+      L.enemy('goose', 110, 10);
+      L.block(114, 8, 2, 2); L.row(114, 7, 2);
+      L.arc(120, 8, 4, 2);
+      L.ground(124, 170);
+      L.check(126);
+      L.enemy('goose', 130, 10);
+      L.chick(134);
+      L.qblock(137, 6, 'star'); L.qblock(138, 6, 'rainbow'); L.qblock(139, 6, 'star');
+      L.enemy('goose', 142, 10);
+      L.cloud(145, 6, 3); L.chick(146, 6); L.star(145, 5); L.star(147, 5);
+      L.coop(152);
+      L.row(155, 9, 3);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'fair', theme: 'fair', name: 'Ярмарок', blurb: 'Американські гірки над прірвою і тир із качечками', w: 172,
+    build(L) {
+      L.ground(0, 24);
+      L.sign(4, 'Американські гірки! Стань у вагончик — і він повезе над прірвою');
+      L.row(8, 9, 4);
+      L.enemy('top', 15, 10);
+      L.row(18, 9, 3);
+      L.coaster([[24, 10.75], [27, 10.75], [31, 7], [35, 4.5], [39, 8.5], [43, 5], [47, 9], [50, 10.75], [53, 10.75]]);
+      L.rainbow(36, 0.6);
+      L.ground(53, 92);
+      L.check(55);
+      L.sign(58, 'Тир! Влуч у всі качечки — і отримаєш веселкову зірочку');
+      L.ducks(62, 70, 9, 4);
+      L.enemy('top', 74, 10);
+      L.row(75, 9, 3);
+      L.qblock(79, 6, 'star5');
+      L.block(83, 7, 2); L.row(83, 6, 2);
+      L.enemy('top', 88, 10);
+      L.arc(92, 8, 4, 2);
+      L.ground(96, 114);
+      L.check(98);
+      L.power('magnet', 100, 8);
+      L.row(102, 9, 6);
+      L.enemy('top', 109, 10);
+      L.coaster([[114, 10.75], [117, 10.75], [121, 6], [125, 9], [129, 3.8], [134, 3.8], [138, 8.5], [141, 6], [145, 9.5], [148, 10.75], [151, 10.75]]);
+      L.rainbow(132, 0.4);
+      L.ground(151, 172);
+      L.check(153);
+      L.ducks(156, 163, 9, 4);
+      L.gate(167);
+    }
+  },
+  {
+    id: 'pumpkin', theme: 'pumpkin', name: 'Гарбузова ніч', blurb: 'Гарбузи котяться через колючки, а привиди бояться погляду', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(4, 'Колючки! Стрибни на гарбуз і котися на ньому — гарбузу колючки не страшні');
+      L.row(7, 9, 2);
+      L.pumpkin(11);
+      L.thorns(15, 29);
+      L.row(16, 7, 12);
+      L.block(29, 8, 2, 2);
+      L.enemy('boo', 22, 4);
+      L.check(33);
+      L.row(35, 9, 3);
+      L.arc(42, 8, 4, 2);
+      L.ground(46, 92);
+      L.sign(47, 'Привид підкрадається, коли ти відвертаєшся. Подивись на нього — і він засоромиться');
+      L.check(51);
+      L.pumpkin(53);
+      L.thorns(57, 69);
+      L.row(58, 7, 2); L.row(63, 7, 2); L.row(67, 7, 2);
+      L.cloud(60, 6, 3); L.row(60, 5, 3); L.cloud(65, 6, 2); L.row(65, 5, 2);
+      L.block(69, 8, 2, 2);
+      L.enemy('boo', 64, 3);
+      L.qblock(74, 6, 'star5');
+      L.enemy('boo', 79, 5);
+      L.row(81, 9, 4);
+      L.arc(92, 8, 4, 2);
+      L.ground(96, 142);
+      L.check(98);
+      L.power('magnet', 100, 8);
+      L.row(102, 9, 3);
+      L.pumpkin(107);
+      L.thorns(111, 127);
+      L.row(112, 7, 15);
+      L.enemy('boo', 116, 5); L.enemy('boo', 124, 4);
+      L.block(127, 8, 2, 2);
+      L.qblock(131, 6, 'star'); L.qblock(132, 6, 'rainbow'); L.qblock(133, 6, 'star');
+      L.enemy('boo', 137, 6);
+      L.arc(142, 8, 4, 2);
+      L.ground(146, 170);
+      L.row(148, 9, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'bricks', theme: 'bricks', name: 'Кубикове місто', blurb: 'Гриб-велетень робить єдиноріжку великою, і вона ламає стіни з кубиків', w: 170,
+    build(L) {
+      L.ground(0, 40);
+      L.sign(4, 'Гриб-велетень! Візьми його — станеш великою й проламаєш стіни з кубиків');
+      L.power('big', 9, 9);
+      L.bricks(14, 3, 7, 2);
+      L.row(17, 9, 2);
+      L.bricks(20, 5, 5); L.bricks(21, 5, 1, 4); L.bricks(25, 5, 5); L.row(21, 8, 4);
+      L.enemy('soldier', 30, 10);
+      L.qblock(33, 6, 'star5');
+      L.row(35, 9, 3);
+      L.arc(40, 8, 4, 2);
+      L.ground(44, 96);
+      L.check(46);
+      L.enemy('mouse', 50, 10);
+      L.power('big', 53, 9);
+      L.bricks(57, 0, 10);
+      L.bricks(60, 4, 6); L.bricks(61, 4, 1, 4); L.bricks(65, 4, 6); L.row(61, 8, 4); L.rainbow(63, 5);
+      L.enemy('soldier', 70, 10);
+      L.row(72, 9, 3);
+      L.block(76, 7, 2); L.row(76, 6, 2);
+      L.enemy('top', 81, 10);
+      L.power('magnet', 85, 8);
+      L.row(87, 9, 6); L.arc(88, 6, 4, 1);
+      L.arc(96, 8, 4, 2);
+      L.ground(100, 170);
+      L.check(102);
+      L.power('big', 106, 9);
+      L.bricks(110, 2, 8, 2);
+      L.enemy('soldier', 115, 10); L.enemy('mouse', 118, 10);
+      L.bricks(121, 6, 1, 6); L.row(121, 5, 6);
+      L.bricks(130, 0, 10);
+      L.qblock(134, 6, 'star'); L.qblock(135, 6, 'rainbow'); L.qblock(136, 6, 'star');
+      L.enemy('top', 139, 10);
+      L.power('big', 141, 9);
+      L.bricks(144, 5, 5); L.bricks(145, 5, 1, 4); L.bricks(149, 5, 5); L.row(145, 8, 4);
+      L.row(152, 9, 3);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'attic', theme: 'attic', name: 'Котяче горище', blurb: 'Битва з Котом Мурком', w: 172, boss: 'cat',
+    build(L) {
+      L.ground(0, 40);
+      L.sign(5, 'Котяче горище! Кіт Мурко затягнув сюди всі зірочки');
+      L.qblock(9, 6, 'star5');
+      L.pumpkin(12);
+      L.thorns(16, 28);
+      L.row(17, 7, 10);
+      L.block(28, 8, 2, 2);
+      L.enemy('mouse', 33, 10);
+      L.row(34, 9, 3);
+      L.arc(40, 8, 4, 2);
+      L.ground(44, 84);
+      L.check(46);
+      L.power('big', 50, 9);
+      L.bricks(54, 2, 8, 2);
+      L.enemy('mouse', 58, 10);
+      L.bricks(61, 5, 5); L.bricks(62, 5, 1, 3); L.bricks(65, 5, 5); L.row(62, 8, 3);
+      L.qblock(70, 6, 'shield');
+      L.enemy('top', 75, 10);
+      L.row(77, 9, 3);
+      L.arc(84, 8, 4, 2);
+      L.ground(88, 172);
+      L.check(90);
+      L.power('magnet', 92, 8);
+      L.row(95, 9, 5);
+      L.cloud(100, 6, 3); L.row(100, 5, 3);
+      L.enemy('mouse', 106, 10);
+      L.qblock(110, 6, 'star');
+      L.row(113, 9, 4);
+      L.sign(121, 'Кіт Мурко! Тікай від стрибків і стріляй, коли він умивається');
+      L.check(125);
+      L.power('candy', 128, 8);
+      L.arena(129, 172);
+      L.cloud(136, 6, 3); L.cloud(147, 6, 4); L.cloud(159, 6, 3);
+      L.power('shield', 152, 9);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  farm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fence', x, y } : r < 0.5 ? { k: 'hen', x, y } : r < 0.75 ? { k: 'sunflower', x, y } : { k: 'wheat', x, y }; },
+  fair: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'balloonS', x, y } : r < 0.7 ? { k: 'flag', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'popcorn', x, y }; },
+  pumpkin: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'pumpkin', x, y } : r < 0.75 ? { k: 'candle', x, y } : { k: 'candybowl', x, y }; },
+  bricks: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'toystack', x, y } : r < 0.75 ? { k: 'ball', x, y } : { k: 'duck', x, y }; },
+  attic: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'yarnS', x, y, c: ['#4cb6ff', '#ff7ab8', '#ffd23f', '#7fd46a'][Math.floor(R() * 4)] } : r < 0.7 ? { k: 'bookstack', x, y } : { k: 'ball', x, y }; },
   paint: (R, x, y) => R() < 0.5 ? { k: 'paintpot', x, y, c: ['#ff4f5e', '#3f8fff', '#ffd23f'][Math.floor(R() * 3)] } : R() < 0.5 ? { k: 'brushes', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#9fe0ff'][Math.floor(R() * 3)] },
   temple: (R, x, y) => R() < 0.5 ? { k: 'urn', x, y } : { k: 'obelisk', x, y },
   bay: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'umbrella', x, y } : r < 0.65 ? { k: 'shell', x, y, c: ['#ffb3c6', '#ffd9a8', '#fff3e0'][Math.floor(R() * 3)] } : { k: 'starfish', x, y }; },
@@ -2372,7 +2582,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -2431,6 +2641,17 @@ function buildLevel(idx) {
     crack(x, top, h) { top = top || 0; h = h || 10 - top; for (let y = top; y < top + h; y++) set(x, y, 18); },
     dolphin(x0, x1, row) { L.movers.push({ dolphin: true, bx: x0 * T + 4, by: row * T - 10, w: 3 * T, minX: x0 * T, maxX: x1 * T, dir: 1, speed: 75, st: 0, air: false, vy: 0, jumpT: 1.5 + (x0 % 3) * 0.5, ax: 0, ay: 0, period: 1 }); },
     whale(x, row, top) { const by = row * T - 6; L.movers.push({ whale: true, bx: x * T, by, w: 4 * T, st: 0, ax: 0, ay: 0, period: 1 }); L.winds.push({ x0: (x + 1) * T + 4, x1: (x + 3) * T - 4, y: (top == null ? 1 : top) * T, y1: by + 4, cyc: 3.6, on: 1.5, ph: (x * 0.7) % 3, whale: true }); },
+    chick(x, row) { later.push(() => L.chicks.push({ x: x * T + 12, y: row != null ? row * T : groundY(x) })); },
+    coop(x) { later.push(() => L.coops.push({ x: x * T + 12, gy: groundY(x) })); },
+    ducks(x0, x1, row, n) { const s = { x0: x0 * T + 12, x1: x1 * T - 12, y: row * T + 12, speed: 42, ducks: [] }, span = s.x1 - s.x0; for (let i = 0; i < n; i++) s.ducks.push({ off: i * span / n, down: false, fall: 0, x: 0 }); L.duckSets.push(s); },
+    coaster(pts, stars) {
+      const P = pts.map(([x, r]) => ({ x: x * T, y: r * T })), c0 = P[0].x + 24, c1 = P[P.length - 1].x - 24;
+      L.movers.push({ coaster: true, pts: P, c0, c1, cx: c0, v: 0, state: 'idle', st: 0, bx: c0 - 24, by: railY(P, c0) - 18, w: 48, ax: 0, ay: 0, period: 1 });
+      if (stars !== false) for (let x = P[0].x + 3 * T; x < P[P.length - 1].x - 2 * T; x += 2 * T) L.stars.push({ x: x + 12, y: railY(P, x + 12) - 33, t: (x * 0.01) % 6 });
+    },
+    pumpkin(x) { later.push(() => { const gy = groundY(x), h = 34; L.movers.push({ ball: true, bx: x * T + 2, by: gy - h, w: 40, h, vx: 0, vy: 0, rot: 0, ax: 0, ay: 0, period: 1 }); }); },
+    thorns(x0, x1, row) { for (let x = x0; x < x1; x++) set(x, row == null ? 10 : row, 22); },
+    bricks(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 23); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
     zip(x0, x1, top0, top1) { const z = { x0: x0 * T + 12, y0: top0 * T - 34, x1: x1 * T + 12, y1: top1 * T - 46, gy0: top0 * T, gy1: top1 * T, state: 'idle', d: 0, v: 0 }; z.len = Math.hypot(z.x1 - z.x0, z.y1 - z.y0); z.hx = z.x0; z.hy = z.y0 + 8; L.zips.push(z); },
     breeze(x0, x1) { L.breezes.push({ x0: x0 * T, x1: x1 * T, p: 170 }); },
@@ -2460,7 +2681,9 @@ function buildLevel(idx) {
   const normal = L.stars.filter(s => !s.rainbow).length;
   L.total = normal;
   L.need = def.boss ? 0 : Math.max(5, Math.round(normal * (def.needK || 0.5)));
-  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, L.gate].filter(Boolean).map(o => o.x);
+  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, L.gate].filter(Boolean).map(o => o.x);
+  for (const s of L.duckSets) for (let x = s.x0 - 20; x <= s.x1 + 20; x += 30) avoid.push(x);
+  for (const m of L.movers) if (m.ball || m.coaster) avoid.push(m.bx + 20);
   for (let x = 1; x < W - 1; x++) {
     for (let y = 1; y < ROWS; y++) {
       if (map[y * W + x] === 1 && map[(y - 1) * W + x] === 0) {

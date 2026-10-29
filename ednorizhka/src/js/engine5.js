@@ -43,6 +43,7 @@ function stompHook(e) {
   return true;
 }
 function touchHook(e) {
+  if (touchHook8(e)) return true;
   if (e.k !== 'turtle') return false;
   if (e.state === 'shell') { kickShell(e); return true; }
   return e.state === 'slide';

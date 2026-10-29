@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -28,6 +28,8 @@ function runLevel(idx, maxT) {
       const gx = Math.floor((P.x + P.w + d) / T); let g = true;
       if (P.flip) { for (let yy = Math.floor((P.y - 1) / T); yy >= 0; yy--) if (solid(tileAt(gx, yy))) { g = false; break; } }
       else for (let yy = Math.floor((P.y + P.h) / T); yy < ROWS; yy++) { const v = tileAt(gx, yy); if (solid(v) || v === 3) { g = false; break; } }
+      // вагончик американських гірок на станції — це підлога, а не яма
+      if (g && G.movers.some(m => m.coaster && m.state === 'idle' && gx * T + 12 > m.x && gx * T + 12 < m.x + m.w && Math.abs(m.y - (P.y + P.h)) < 6)) g = false;
       if (g) { gap = true; break; }
     }
     if (G.water.some(z => P.x + P.w + 10 > z.x0 && P.x < z.x1)) gap = false;
@@ -36,9 +38,13 @@ function runLevel(idx, maxT) {
     if (foe && Math.floor(t * 10) % 2 === 0) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
     if (wz) { In.jump = P.y + P.h > 250 || stuck > 0.3 || wall; if ((stuck > 0.3 || wall) && Math.floor(t * 6) % 2 === 0 && cool <= 0) { In.jumpP = true; cool = 0.2; } }
     else {
-      const want = P.onGround && (wall || gap || (foe && foe.x - P.x < 50 && wallTile !== 17) || stuck > 1);
+      // гарбуз попереду — застрибуємо на нього, щоб перекотитися через колючки
+      const ball = G.movers.find(m => m.ball && P.onMover !== m && m.x - (P.x + P.w) > 0 && m.x - (P.x + P.w) < 40 && Math.abs(m.y + m.h - (P.y + P.h)) < 10);
+      const want = P.onGround && (wall || gap || ball || (foe && foe.x - P.x < 50 && wallTile !== 17) || stuck > 1);
       In.jump = !P.onGround && (P.flip ? P.vy > 0 : P.vy < 0);
-      if (want && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; }
+      if (want && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; if (ball) G._bt = ball; }
+      // над гарбузом гальмуємо, щоб приземлитися на нього, а не перелетіти
+      if (G._bt) { if (P.onGround && P.onMover !== G._bt && P.vy === 0 && cool < 0.2) G._bt = null; else if (!P.onGround && P.x + P.w / 2 > G._bt.x + G._bt.w / 2 - 8) { In.right = false; In.left = true; } if (P.onMover === G._bt) G._bt = null; }
     }
     // тріснута скеля попереду — заряджаємо велику кулю
     let crack = false; for (let d = 4; d <= 90; d += 12) if (tileAt(Math.floor((P.x + P.w + d) / T), Math.floor((P.y + P.h - 15) / T)) === 18) crack = true;

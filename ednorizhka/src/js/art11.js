@@ -78,12 +78,13 @@ function drawEnemy7(c, e, cx, fl) {
     case 'urchin': drawUrchin(c, cx, e.y + e.h, e.t); return true;
     case 'puffer': drawPuffer(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
   }
-  return false;
+  return drawEnemy8(c, e, cx, fl);
 }
 
 /* ===== Плитки: фарбові стіни, кам'яні кубики, тріснуті скелі, двері храму ===== */
 const TILE7 = { paint0: 1, paint1: 1, paint2: 1, paint0o: 1, paint1o: 1, paint2o: 1, stone: 1, crack: 1, tdoor: 1, tdoorO: 1 };
-function tileKind7(v) {
+function tileKind7(v, tx, ty) {
+  if (v >= 22) return tileKind8(v, tx, ty);
   if (v >= 14 && v <= 16) return 'paint' + (v - 14) + (G.paint === PAINTS[v - 14] ? 'o' : '');
   if (v === 17) return 'stone';
   if (v === 18) return 'crack';
@@ -117,7 +118,7 @@ function drawTile7(c, kind) {
     c.strokeStyle = '#8a5a30'; c.lineWidth = 1.2; c.beginPath(); for (const y of [6, 12, 18]) { c.moveTo(1, y); c.lineTo(T - 1, y); } c.stroke();
     c.fillStyle = '#ffd23f'; c.strokeStyle = INK; c.lineWidth = 0.9; circ(c, T / 2, T / 2, 3.4); c.fill(); c.stroke();
     c.strokeStyle = INK; c.lineWidth = 1.4; c.beginPath(); c.moveTo(1.2, 0); c.lineTo(1.2, T); c.moveTo(T - 1.2, 0); c.lineTo(T - 1.2, T); c.stroke();
-  }
+  } else drawTile8(c, kind);
 }
 
 /* ===== Предмети ===== */
@@ -293,7 +294,7 @@ function drawBlock8(c, b) {
     rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#fffaf2'; c.fill(); c.stroke();
     c.fillStyle = '#7fd46a'; c.fillRect(4, 13, T - 8, 6); c.fillStyle = '#9fe0ff'; c.fillRect(4, 4, T - 8, 9);
     c.fillStyle = '#ffd23f'; circ(c, 16, 8, 2.4); c.fill();
-  } else return false;
+  } else return drawBlock9(c, b);
   return true;
 }
 
@@ -330,6 +331,7 @@ function drawDecor11(c, d, t) {
       c.fillStyle = '#ff9a3d'; c.beginPath(); c.moveTo(x - 5, y - 1); c.lineTo(x - 1.4, y - 14); c.lineTo(x + 1.4, y - 14); c.lineTo(x + 5, y - 1); c.closePath(); c.fill(); c.stroke();
       c.fillStyle = '#fff'; c.fillRect(x - 3, y - 8, 6, 2.4); c.fillStyle = '#ff9a3d'; rr(c, x - 7, y - 2, 14, 2.4, 1); c.fill(); c.stroke();
       break;
+    default: drawDecor12(c, d, t);
   }
 }
 

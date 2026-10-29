@@ -130,6 +130,7 @@ function drawRails(c, r, viewCam) {
   c.restore();
 }
 function cartBody(c, m) {
+  if (m.coaster) return coasterFront(c, m);
   c.strokeStyle = INK; c.lineWidth = 1.4;
   c.fillStyle = '#8f9cb8'; c.beginPath(); c.moveTo(m.x, m.y - 12); c.lineTo(m.x + m.w, m.y - 12); c.lineTo(m.x + m.w - 5, m.y + 10); c.lineTo(m.x + 5, m.y + 10); c.closePath(); c.fill(); c.stroke();
   c.fillStyle = '#ffd23f'; c.fillRect(m.x + 1, m.y - 11, m.w - 2, 3);
