@@ -118,6 +118,12 @@ function drawTotem(c, tm, t) {
   c.strokeStyle = '#4cb6ff'; c.lineWidth = 1.6; for (let i = 0; i < 3; i++) { const a = i * Math.PI / 3 - t * 0.5; c.beginPath(); c.moveTo(x - Math.cos(a) * 9, gy - 42 - Math.sin(a) * 9); c.lineTo(x + Math.cos(a) * 9, gy - 42 + Math.sin(a) * 9); c.stroke(); }
   c.restore();
   c.strokeStyle = INK; c.lineWidth = 1.2; circ(c, x, gy - 42, 12); c.stroke();
+  const P = G.P;
+  if (tm.armed && Math.abs(P.x + P.w / 2 - x) < 260) {
+    const ay = gy - 82 + Math.abs(Math.sin(t * 4)) * -6;
+    c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 1.4;
+    c.beginPath(); c.moveTo(x - 7, ay - 10); c.lineTo(x + 7, ay - 10); c.lineTo(x + 7, ay - 2); c.lineTo(x + 12, ay - 2); c.lineTo(x, ay + 9); c.lineTo(x - 12, ay - 2); c.lineTo(x - 7, ay - 2); c.closePath(); c.fill(); c.stroke();
+  }
   const k = 0.5 + 0.5 * Math.sin(t * 4);
   c.fillStyle = w ? `rgba(255,210,63,${0.3 + k * 0.5})` : `rgba(76,182,255,${0.3 + k * 0.5})`; sparkle(c, x + (w ? -15 : 15), gy - 56, 2.2, c.fillStyle);
   c.restore();

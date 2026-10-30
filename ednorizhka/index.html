@@ -5445,6 +5445,12 @@ function drawTotem(c, tm, t) {
   c.strokeStyle = '#4cb6ff'; c.lineWidth = 1.6; for (let i = 0; i < 3; i++) { const a = i * Math.PI / 3 - t * 0.5; c.beginPath(); c.moveTo(x - Math.cos(a) * 9, gy - 42 - Math.sin(a) * 9); c.lineTo(x + Math.cos(a) * 9, gy - 42 + Math.sin(a) * 9); c.stroke(); }
   c.restore();
   c.strokeStyle = INK; c.lineWidth = 1.2; circ(c, x, gy - 42, 12); c.stroke();
+  const P = G.P;
+  if (tm.armed && Math.abs(P.x + P.w / 2 - x) < 260) {
+    const ay = gy - 82 + Math.abs(Math.sin(t * 4)) * -6;
+    c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 1.4;
+    c.beginPath(); c.moveTo(x - 7, ay - 10); c.lineTo(x + 7, ay - 10); c.lineTo(x + 7, ay - 2); c.lineTo(x + 12, ay - 2); c.lineTo(x, ay + 9); c.lineTo(x - 12, ay - 2); c.lineTo(x - 7, ay - 2); c.closePath(); c.fill(); c.stroke();
+  }
   const k = 0.5 + 0.5 * Math.sin(t * 4);
   c.fillStyle = w ? `rgba(255,210,63,${0.3 + k * 0.5})` : `rgba(76,182,255,${0.3 + k * 0.5})`; sparkle(c, x + (w ? -15 : 15), gy - 56, 2.2, c.fillStyle);
   c.restore();
@@ -8250,11 +8256,11 @@ const LEVELS = [
       L.snow(45, 46, 9); L.snow(46, 47, 8); L.snow(47, 48, 7); L.snow(48, 49, 6);
       L.block(49, 4, 2, 6); L.row(49, 3, 2);
       L.ground(51, 53, 8);
+      L.sign(52, 'Влітку лід розтане, і під водою знайдуться зірочки');
       L.lake(53, 67, 8); L.ground(53, 67, 11);
       L.row(55, 10, 4); L.row(62, 10, 4); L.row(56, 6, 9);
       L.enemy('puffer', 60, 10);
       L.ground(67, 72, 8);
-      L.sign(68, 'Влітку лід розтане, і під водою знайдуться зірочки');
       L.totem(70, 'summer');
       L.flowers(72, 86, 9); L.row(73, 7, 12);
       L.ground(86, 124);
