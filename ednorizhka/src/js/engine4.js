@@ -50,6 +50,7 @@ function boxSolid(x, y, w, h) {
 function setMini(P, on, time) {
   if (on) {
     if (P.big) setBig(P, false);
+    if (P.mount) setMount(P, null);
     if (!P.mini) { P.mini = true; P.x += 5; P.y += 14; P.w = 12; P.h = 16; burst(P.x + 6, P.y + 8, 12, ['#ff5c7a', '#ffffff'], 110); Snd.tone(900, 0.25, 'triangle', 0.06, 400); }
     P.miniT = time || 14;
   } else if (P.mini) {
@@ -102,7 +103,7 @@ function update4(dt) {
   }
   for (const p of G.powers) if ((p.k === 'mini' || p.k === 'big') && p.got) { p.reT = (p.reT || 0) + dt; if (p.reT > 4 && Math.abs(pcx - p.x) > 60) { p.got = false; p.reT = 0; } }
   if (P.mini) { P.miniT -= dt; if (P.miniT <= 0) { if (!boxSolid(P.x - 5, P.y - 14, 22, 30)) setMini(P, false); else P.miniT = 0.15; } }
-  else if (!P.zip && !P.inCannon && boxSolid(P.x, P.y, P.w, P.h)) setMini(P, true, 2);
+  else if (!P.zip && !P.inCannon && !P.swing && boxSolid(P.x, P.y, P.w, P.h)) setMini(P, true, 2);
   update5(dt);
 }
 

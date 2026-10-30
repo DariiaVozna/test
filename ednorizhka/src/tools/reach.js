@@ -8,7 +8,7 @@ const dir = path.join(__dirname, '..', 'js');
 const order = fs.readFileSync(path.join(__dirname, '..', 'build.sh'), 'utf8').match(/^JS="([^"]+)"/m)[1].split(/\s+/).map(f => f.replace('js/', '')).filter(f => f !== 'ui.js');
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
-var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'none', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
+var save = { profile: { name: 'АБВГДЕЖЗ', body: 'white', mane: 'rainbow', acc: [], friend: 'none', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
 var viewW = 600; function showLose() {} function showWin() {} function writeSave() {}
 burst = function () {}; floatText = function () {}; bubbles = function () {};
 function snap() { const L = G.L, def = G.def; G.L = null; G.def = null; const s = structuredClone(G); G.L = L; G.def = def; s.L = L; s.def = def; return s; }
@@ -16,7 +16,7 @@ const ACTS = [];
 for (const d of [1, -1]) { ACTS.push({ walk: 0.2, dir: d }); ACTS.push({ walk: 0.5, dir: d }); }
 for (const d of [1, -1, 0]) for (const hold of [0.06, 0.16, 0.3, 1]) ACTS.push({ jump: true, dir: d, hold });
 for (const d of [1, -1]) { ACTS.push({ jump: true, dir: d, hold: 1, dd: 0.25 }); ACTS.push({ jump: true, dir: d, hold: 1, back: 0.3 }); }
-ACTS.push({ wait: 0.7 }); ACTS.push({ wait: 1.6 });
+ACTS.push({ wait: 0.7 }); ACTS.push({ wait: 1.6 }); ACTS.push({ wait: 0.2 });
 for (const d of [1, -1, 0]) ACTS.push({ swim: true, dir: d });
 ACTS.push({ climb: true });
 for (const d of [1, -1]) ACTS.push({ big: true, dir: d });
@@ -45,10 +45,10 @@ function act(a) {
 function keyOf(TB) {
   const P = G.P, wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
   let mv = -1; if (P.onMover) mv = G.movers.indexOf(P.onMover);
-  if (G._sc == null) G._sc = G.map.some(v => v === 17 || v === 18 || v === 23);
-  let st = ''; if (G._sc) for (let i = 0; i < G.map.length; i++) if (G.map[i] === 17 || G.map[i] === 18 || G.map[i] === 23) st += i + (G.map[i] === 18 ? 'c' : '') + ';';
+  if (G._sc == null) G._sc = G.map.some(v => v === 17 || v === 18 || v === 23 || v === 24);
+  let st = ''; if (G._sc) for (let i = 0; i < G.map.length; i++) if (G.map[i] === 17 || G.map[i] === 18 || G.map[i] === 23 || G.map[i] === 24) st += i + (G.map[i] === 18 ? 'c' : '') + ';';
   let mv8 = ''; for (const m of G.movers) { if (m.ball) mv8 += Math.round(m.x / 12) + 'b;'; else if (m.coaster) mv8 += m.state[0] + Math.round(m.cx / 48) + ';'; }
-  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0, P.big ? Math.ceil(P.bigT / 3) : 0, mv8].join(',');
+  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0, P.big ? Math.ceil(P.bigT / 3) : 0, mv8, G.season || '', P.mount ? 1 : 0, P.swing ? G.rings.indexOf(P.swing) + ':' + Math.round(P.swing.th * 4) + ':' + Math.round(P.swing.om) : ''].join(',');
 }
 function explore(idx, opts) {
   opts = opts || {};
@@ -58,7 +58,7 @@ function explore(idx, opts) {
   const limitX = G.arena ? G.arena.x0 : Infinity;
   // дати рівню «осісти»
   for (let i = 0; i < 20; i++) { G.P.inv = 99; update(STEP); }
-  const stars = G.stars.length, got = new Uint8Array(stars), qb = new Set(), seen = new Set(), gotC = new Uint8Array(G.chicks.length);
+  const stars = G.stars.length, got = new Uint8Array(stars), qb = new Set(), seen = new Set(), gotC = new Uint8Array(G.chicks.length), gotL = new Uint8Array(G.letters.length);
   let gate = false, maxX = 0;
   const queue = [snap()]; seen.add(keyOf(opts.tb));
   const qStart = []; for (let i = 0; i < G.map.length; i++) if (G.map[i] === 7) qStart.push(i);
@@ -69,11 +69,12 @@ function explore(idx, opts) {
       if (a.swim && !waterAt(s.P.x + s.P.w / 2, s.P.y + s.P.h / 2)) continue;
       if (a.climb && !s.vines.length) continue;
       if (a.big && s.map.indexOf(18) < 0) continue;
-      if ((a.wait) && !(s.movers.length || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0)) continue;
+      if ((a.wait) && !(s.movers.length || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0 || s.P.swing)) continue;
       G = structuredClone(Object.assign({}, s, { L: null, def: null })); G.L = s.L; G.def = s.def;
       if (!act(a)) continue;
       G.stars.forEach((st, i) => { if (st.got) got[i] = 1; });
       G.chicks.forEach((ch, i) => { if (ch.state !== 'home') gotC[i] = 1; });
+      G.letters.forEach((l, i) => { if (l.got) gotL[i] = 1; });
       for (const i of qStart) if (G.map[i] !== 7 || G.qLeft.has(i)) qb.add(i);
       if (G.done || (G.gate && Math.abs(G.P.x + G.P.w / 2 - G.gate.x) < 20)) { gate = true; continue; }
       maxX = Math.max(maxX, G.P.x);
@@ -88,7 +89,7 @@ function explore(idx, opts) {
   L.stars.forEach((st, i) => { if (!got[i] && st.x < limitX) missS.push((st.rainbow ? 'R' : '') + Math.floor(st.x / T) + ':' + Math.floor(st.y / T)); });
   for (const i of qStart) if (!qb.has(i) && (i % W) * T < limitX) missQ.push((i % W) + ':' + Math.floor(i / W) + '(' + L.qContent.get(i) + ')');
   const missC = []; L.chicks.forEach((ch, i) => { if (!gotC[i]) missC.push(Math.floor(ch.x / T) + ':' + Math.floor(ch.y / T)); });
-  return { idx: idx + 1, name: LEVELS[idx].name, states: n, gate, maxX: Math.round(maxX / T), stars: stars - missS.length + '/' + stars, missS, missQ, chicks: L.chicks.length ? (L.chicks.length - missC.length) + '/' + L.chicks.length : undefined, missC: missC.length ? missC : undefined };
+  return { idx: idx + 1, name: LEVELS[idx].name, states: n, gate, maxX: Math.round(maxX / T), stars: stars - missS.length + '/' + stars, missS, missQ, chicks: L.chicks.length ? (L.chicks.length - missC.length) + '/' + L.chicks.length : undefined, missC: missC.length ? missC : undefined, letters: G.letters.length ? (gotL.reduce((a, b) => a + b, 0)) + '/' + G.letters.length : undefined };
 }
 const want = (process.argv[2] || '').split(',').filter(Boolean).flatMap(p => { const m = p.split('-').map(Number); return m.length > 1 ? Array.from({ length: m[1] - m[0] + 1 }, (_, i) => m[0] + i) : m; });
 const list = want.length ? want.map(n => n - 1) : LEVELS.map((_, i) => i);

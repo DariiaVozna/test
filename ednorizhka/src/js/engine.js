@@ -171,7 +171,7 @@ function startLevel(idx) {
     vines: L.vines, launchers: L.launchers.map(l => Object.assign({}, l)), wheels: L.wheels,
     beans: L.beans.map(b => Object.assign({}, b)), lanterns: L.lanterns.map(l => Object.assign({}, l)), rails: L.rails, blinkOn: true, blinkWarn: false,
   };
-  initLevel6(G, L); initLevel7(G, L); initLevel8(G, L);
+  initLevel6(G, L); initLevel7(G, L); initLevel8(G, L); initLevel9(G, L);
   const bk = L.def.boss;
   if (bk === 'hedge') G.boss = { kind: 'hedge', name: 'Пан Колючка', acc: 'Пана Колючку', x: L.arena.x0 + 28 * T, gy: 10 * T, y: 10 * T - 21, hw: 28, hh: 22, hp: 16, max: 16, t: 0, st: 0, state: 'wait', dir: -1, rot: 0, flash: 0, dead: false, deadT: 0, alpha: 1, throwT: 2.5, rolls: 0, hinted: false };
   else if (bk === 'wizard') {
@@ -199,6 +199,7 @@ function hurtPlayer(pit) {
   if (!pit && P.inv > 0) return;
   if (!pit && P.big) return;
   if (!pit && P.shield) { P.shield = false; P.inv = 1.2; Snd.tink(); burst(P.x + 11, P.y + 10, 12, RAINBOW, 140); say('Щит захистив!', 1.4); return; }
+  if (!pit && P.mount) { mountHurt(P); return; }
   P.hearts--; P.inv = 1.8; Snd.hurt(); P.hurtT = 0.25;
   if (!pit) { P.vy = -280; P.vx = -P.dir * 150; }
   if (P.hearts <= 0) {
@@ -240,12 +241,13 @@ function collect(s) {
   else { G.points += 1; G.collected++; G.combo = G.comboT > 0 ? G.combo + 1 : 0; G.comboT = 0.7; Snd.star(G.combo); burst(s.x, s.y, 6, ['#fff', '#ffe14d'], 80); }
 }
 
-function waterAt(x, y) { for (const z of G.water) if (x >= z.x0 && x <= z.x1 && y > z.y) return z; return null; }
+function waterAt(x, y) { for (const z of G.water) if (!z.frozen && x >= z.x0 && x <= z.x1 && y > z.y) return z; return null; }
 function updatePlayer(dt) {
   const P = G.P;
   if (P.inCannon) return holdInCannon(P, dt);
   if (P.zip) return rideZip(P, dt);
   if (P.kite) return rideKite(P, dt);
+  if (P.swing) return swingStep(P, dt);
   flipCheck(P);
   let ax = (In.right ? 1 : 0) - (In.left ? 1 : 0);
   if (P.hurtT > 0) { P.hurtT -= dt; ax = 0; }
@@ -255,7 +257,7 @@ function updatePlayer(dt) {
   if (!wz && P.wasWater && P.vy < 0) { burst(P.x + P.w / 2, P.y + P.h, 6, ['#ffffff', '#bfefff'], 80); if (In.jump && P.vy > -480) { P.vy = -480; P.cut = true; } }
   P.wasWater = !!wz;
   const ice = THEMES[G.theme].ice && P.onGround && P.groundTile === 1;
-  const target = ax * SPEED * (wz ? 0.75 : 1);
+  const target = ax * (P.mount ? 185 : SPEED) * (wz ? 0.75 : 1);
   const a = ax ? (wz ? 700 : P.onGround ? (ice ? 420 : 1500) : 950) : (wz ? 500 : P.onGround ? (ice ? 200 : 1800) : 650);
   if (P.launchT > 0) { P.launchT -= dt; if (P.onGround || P.sideHit || wz) P.launchT = 0; }
   else if (P.vx < target) P.vx = Math.min(target, P.vx + a * dt); else if (P.vx > target) P.vx = Math.max(target, P.vx - a * dt);
@@ -274,7 +276,7 @@ function updatePlayer(dt) {
     P.bubT = (P.bubT || 0) - dt; if (P.bubT <= 0) { P.bubT = 0.7; bubbles(P.x + P.w / 2 + P.dir * 14, P.y + 2, 1); }
   } else if (vineStep(P, ax, dt)) {
   } else {
-    if (P.jumpBuf > 0 && P.coyote > 0) { P.vy = P.flip ? JUMP : -JUMP; P.jumpBuf = 0; P.coyote = 0; P.onGround = false; P.onMover = null; P.cut = false; Snd.jump(); G.parts.push({ k: 'puff', x: P.x + P.w / 2, y: P.y + P.h, vx: 0, vy: 0, t: 0, life: 0.35, r: 6 }); }
+    if (P.jumpBuf > 0 && P.coyote > 0) { P.vy = P.flip ? JUMP : -(P.mount ? MOUNT_JUMP : JUMP); P.jumpBuf = 0; P.coyote = 0; P.onGround = false; P.onMover = null; P.cut = false; Snd.jump(); G.parts.push({ k: 'puff', x: P.x + P.w / 2, y: P.y + P.h, vx: 0, vy: 0, t: 0, life: 0.35, r: 6 }); }
     else if (P.jumpBuf > 0 && P.wingsT > 0 && !P.onGround) { P.vy = Math.min(P.vy, -340); P.jumpBuf = 0; P.cut = true; Snd.flap(); burst(P.x + 4, P.y + 8, 4, ['#fff'], 60); }
     if (!In.jump && !P.cut && (P.flip ? P.vy > 340 : P.vy < -340)) { P.vy = P.flip ? 340 : -340; P.cut = true; }
     const glide = P.wingsT > 0 && In.jump && P.vy > 0;
@@ -332,9 +334,9 @@ function updatePlayer(dt) {
   if (P.onGround && !P.onMover && !P.mini) {
     const ty = P.flip ? Math.floor((P.y - 2) / T) : Math.floor((P.y + P.h + 2) / T);
     const firm = v => solid(v) && v !== 13 && v !== 22;
-    if (firm(tileAt(Math.floor((P.x - 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w + 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w / 2) / T), ty))) P.safe = { x: P.x, y: P.y };
+    if (firm(tileAt(Math.floor((P.x - 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w + 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w / 2) / T), ty))) P.safe = { x: P.x, y: P.y, w: P.w, h: P.h };
   }
-  if (P.y > VIEW_H + 60 || (P.flip && P.y < -54)) { hurtPlayer(true); P.x = P.safe.x; P.y = P.safe.y - 2; P.vx = P.vy = 0; burst(P.x + 11, P.y + 15, 10, ['#fff', '#ffe14d'], 100); }
+  if (P.y > VIEW_H + 60 || (P.flip && P.y < -54)) { hurtPlayer(true); P.x = P.safe.x + ((P.safe.w || P.w) - P.w) / 2; P.y = P.safe.y + (P.safe.h || P.h) - P.h - 2; P.vx = P.vy = 0; burst(P.x + 11, P.y + 15, 10, ['#fff', '#ffe14d'], 100); }
 
   if (In.shootP) { P.charging = true; P.charge = 0; P.chargeSnd = false; }
   if (P.charging) { P.charge += dt; if (P.charge >= 0.55 && !P.chargeSnd) { P.chargeSnd = true; Snd.charged(); } }
@@ -411,6 +413,7 @@ function updateBoss(dt) {
   if (B.kind === 'magpie') return updateMagpieBoss(dt);
   if (B.kind === 'chameleon') return updateChameleonBoss(dt);
   if (B.kind === 'cat') return updateCatBoss(dt);
+  if (B.kind === 'dice') return updateDiceBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -633,7 +636,7 @@ function update(dt) {
     s.t += dt; s.life -= dt; s.x += s.vx * dt; s.y += (s.aim - s.y) * Math.min(1, dt * 22);
     if (s.big || s.t % 0.05 < dt) G.parts.push({ k: 'spark', x: s.x, y: s.y, vx: -s.vx * 0.05, vy: (Math.random() - 0.5) * 30, t: 0, life: 0.3, col: RAINBOW[Math.floor(Math.random() * 6)], r: s.big ? 2.4 : 1.4 });
     const stx = Math.floor(s.x / T), sty = Math.floor(s.y / T), stv = tileAt(stx, sty);
-    if (solid(stv)) { if (stv === 18) crackHit(stx, sty, s); s.life = 0; burst(s.x, s.y, 5, ['#fff', '#ffe14d'], 60); }
+    if (solid(stv)) { if (stv === 18) crackHit(stx, sty, s); if (stv === 24) toppleDomino(dominoAt(stx, sty)); s.life = 0; burst(s.x, s.y, 5, ['#fff', '#ffe14d'], 60); }
     for (const e of G.enemies) {
       if (e.dead || e.ghost || s.life <= 0 || s.hit.has(e) || !circleRect(s, e, 2)) continue;
       s.hit.add(e);

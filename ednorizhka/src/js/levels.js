@@ -2511,12 +2511,205 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  {
+    id: 'savanna', theme: 'savanna', name: 'Савана кенгуру', blurb: 'Кенгуру Скок катає верхи й стрибає вище за стіни', w: 170,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(3, 'Кенгуру Скок! Підійди — і поскачеш верхи. Тримай «Стрибок» — і стрибнеш дуже високо');
+      L.roo(8);
+      L.row(11, 9, 3);
+      L.block(16, 5, 2, 5); L.row(16, 4, 2);
+      L.row(19, 9, 3);
+      L.enemy('echidna', 22, 10); L.enemy('echidna', 25, 10);
+      L.cloud(23, 4, 3); L.row(23, 3, 3);
+      L.arc(30, 7, 6, 3);
+      L.ground(36, 70);
+      L.check(39);
+      L.roo(42);
+      L.qblock(46, 6, 'star5');
+      L.block(50, 5, 2, 5); L.rainbow(50, 3);
+      L.row(53, 9, 3);
+      L.enemy('echidna', 57, 10); L.enemy('echidna', 60, 10);
+      L.block(62, 4, 3); L.row(62, 3, 3);
+      L.arc(70, 7, 6, 3);
+      L.ground(76, 112);
+      L.check(79);
+      L.power('magnet', 81, 8);
+      L.row(83, 9, 6);
+      L.cloud(86, 4, 4); L.row(86, 3, 4);
+      L.roo(91);
+      L.block(95, 5, 2, 5); L.row(95, 4, 2);
+      L.enemy('echidna', 99, 10); L.enemy('echidna', 102, 10); L.enemy('echidna', 105, 10);
+      L.row(100, 7, 5);
+      L.arc(112, 7, 6, 3);
+      L.ground(118, 170);
+      L.check(121);
+      L.qblock(124, 6, 'star'); L.qblock(125, 6, 'rainbow'); L.qblock(126, 6, 'star');
+      L.roo(129);
+      L.block(133, 5, 2, 5); L.row(133, 4, 2);
+      L.enemy('bird', 141, 5);
+      L.enemy('echidna', 139, 10); L.enemy('echidna', 143, 10);
+      L.cloud(146, 4, 3); L.row(146, 3, 3);
+      L.row(151, 9, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'seasonS', theme: 'seasonS', seasons: true, name: 'Долина пір року', blurb: 'Тотем перемикає літо й зиму: то квіти-місточки, то лід і сніг', w: 170,
+    build(L) {
+      L.ground(0, 22);
+      L.sign(3, 'Влітку з квітів виростає місточок. Іди по ньому!');
+      L.row(8, 9, 4);
+      L.flowers(22, 34, 9); L.row(23, 7, 10);
+      L.ground(34, 50);
+      L.check(36);
+      L.sign(38, 'Тотем пір року! Застрибни на нього згори — і настане зима');
+      L.totem(42, 'winter');
+      L.snow(45, 46, 9); L.snow(46, 47, 8); L.snow(47, 48, 7); L.snow(48, 49, 6);
+      L.block(49, 4, 2, 6); L.row(49, 3, 2);
+      L.ground(51, 53, 8);
+      L.lake(53, 67, 8); L.ground(53, 67, 11);
+      L.row(55, 10, 4); L.row(62, 10, 4); L.row(56, 6, 9);
+      L.enemy('puffer', 60, 10);
+      L.ground(67, 72, 8);
+      L.sign(68, 'Влітку лід розтане, і під водою знайдуться зірочки');
+      L.totem(70, 'summer');
+      L.flowers(72, 86, 9); L.row(73, 7, 12);
+      L.ground(86, 124);
+      L.check(88);
+      L.power('magnet', 90, 8);
+      L.row(92, 9, 5);
+      L.totem(98, 'winter');
+      L.snow(101, 102, 9); L.snow(102, 103, 8); L.snow(103, 104, 7); L.snow(104, 105, 6); L.snow(105, 106, 5);
+      L.cloud(106, 4, 4); L.row(106, 3, 4); L.rainbow(108, 1);
+      L.enemy('penguin', 114, 10);
+      L.row(116, 9, 4);
+      L.snow(124, 136, 9); L.row(125, 7, 10);
+      L.ground(136, 150);
+      L.check(138);
+      L.qblock(141, 6, 'star'); L.qblock(142, 6, 'rainbow'); L.qblock(143, 6, 'star');
+      L.totem(146, 'summer');
+      L.flowers(150, 158, 9); L.row(151, 7, 6);
+      L.ground(158, 170);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'rings', theme: 'rings', name: 'Острів тарзанок', blurb: 'Хапайся за кільця, розгойдуйся й перелітай через затоки', w: 172,
+    build(L) {
+      L.ground(0, 20);
+      L.sign(3, 'Кільце! Застрибни й ухопися. Розгойдуйся вліво-вправо, а «Стрибок» — відпустити');
+      L.row(8, 9, 4);
+      L.ring(22, 2); L.ring(27, 2); L.ring(32, 2); L.ring(37, 2);
+      L.row(24, 5, 2); L.row(29, 5, 2); L.row(34, 5, 2);
+      L.ground(41, 70);
+      L.check(43);
+      L.enemy('monkey', 48, 10);
+      L.qblock(52, 6, 'star5');
+      L.ring(57, 1, 3); L.cloud(60, 4, 4); L.row(60, 3, 4);
+      L.enemy('crab', 65, 10);
+      L.ring(72, 2); L.ring(77, 2); L.ring(82, 2); L.ring(87, 2);
+      L.row(74, 5, 2); L.row(79, 5, 2); L.row(84, 5, 2);
+      L.ground(91, 128);
+      L.check(93);
+      L.power('magnet', 95, 8);
+      L.row(97, 9, 6);
+      L.enemy('monkey', 104, 10);
+      L.block(108, 7, 3); L.row(108, 6, 3);
+      L.enemy('crab', 114, 10);
+      L.qblock(118, 6, 'star'); L.qblock(119, 6, 'rainbow'); L.qblock(120, 6, 'star');
+      L.ring(130, 2); L.ring(135, 2); L.ring(140, 2); L.ring(145, 2);
+      L.row(132, 5, 2); L.rainbow(137, 2); L.row(142, 5, 2);
+      L.ground(149, 172);
+      L.row(152, 9, 4);
+      L.sign(159, 'Ворота вже близько!');
+      L.gate(166);
+    }
+  },
+  {
+    id: 'board', theme: 'board', name: 'Країна настільних ігор', blurb: 'Доміно лягає містком, а з літер складається твоє ім\'я', w: 170,
+    build(L) {
+      L.ground(0, 21);
+      L.sign(3, 'Доміно! Штовхни або вистріли — воно впаде й ляже містком. А ще збирай літери свого імені');
+      L.row(10, 9, 3);
+      L.dominoes(20, 4); L.row(22, 7, 9);
+      L.ground(32, 57);
+      L.check(34);
+      L.enemy('knight', 40, 10);
+      L.block(43, 7, 3);
+      L.qblock(48, 6, 'star5');
+      L.enemy('knight', 52, 10);
+      L.dominoes(56, 3); L.row(58, 7, 6);
+      L.ground(65, 100);
+      L.check(67);
+      L.power('magnet', 69, 8);
+      L.row(71, 9, 5);
+      L.cloud(78, 6, 3);
+      L.enemy('knight', 84, 10);
+      L.row(86, 9, 3);
+      L.dominoes(99, 5); L.row(101, 7, 12);
+      L.ground(114, 139);
+      L.check(116);
+      L.qblock(120, 6, 'star'); L.qblock(121, 6, 'rainbow'); L.qblock(122, 6, 'star');
+      L.enemy('knight', 126, 10);
+      L.block(129, 7, 3);
+      L.dominoes(138, 3); L.row(140, 7, 6);
+      L.ground(147, 170);
+      L.cloud(155, 6, 3);
+      L.letters([[8, 8], [44, 6], [75, 8], [79, 5], [90, 8], [130, 6], [150, 8], [156, 5]]);
+      L.sign(159, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'dicecastle', theme: 'dicecastle', name: 'Замок Кубика', blurb: 'Битва з Кубиком Кидайлом', w: 172, boss: 'dice',
+    build(L) {
+      L.ground(0, 26);
+      L.sign(5, 'Замок Кубика Кидайла! Він виграв усі зірочки в настільну гру');
+      L.roo(9);
+      L.block(15, 5, 2, 5); L.row(15, 4, 2);
+      L.enemy('echidna', 19, 10); L.enemy('echidna', 22, 10);
+      L.arc(26, 7, 6, 3);
+      L.ground(32, 50);
+      L.check(35);
+      L.qblock(40, 6, 'star5');
+      L.enemy('knight', 45, 10);
+      L.rooStop(46);
+      L.ring(52, 2); L.ring(57, 2); L.ring(62, 2);
+      L.row(54, 5, 2); L.row(59, 5, 2);
+      L.ground(66, 85);
+      L.check(68);
+      L.qblock(72, 6, 'shield');
+      L.enemy('knight', 77, 10);
+      L.dominoes(84, 3); L.row(86, 7, 6);
+      L.ground(93, 172);
+      L.check(95);
+      L.power('magnet', 97, 8);
+      L.row(99, 9, 5);
+      L.cloud(104, 6, 3); L.row(104, 5, 3);
+      L.enemy('echidna', 110, 10);
+      L.qblock(114, 6, 'star');
+      L.sign(121, 'Кубик Кидайло! Стріляй, коли випаде 1 або 2 — тоді він запаморочиться');
+      L.check(125);
+      L.power('candy', 128, 8);
+      L.arena(129, 172);
+      L.cloud(136, 6, 3); L.cloud(147, 6, 4); L.cloud(159, 6, 3);
+      L.power('shield', 152, 9);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  savanna: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'acaciaS', x, y } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'rockpile', x, y }; },
+  seasonS: (R, x, y) => y > 10 * T ? { k: 'none', x, y } : R() < 0.5 ? { k: 'stree', x, y } : { k: 'sbush', x, y },
+  rings: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'palmS', x, y } : r < 0.7 ? { k: 'shell', x, y, c: ['#ffb3c6', '#ffd9a8', '#fff3e0'][Math.floor(R() * 3)] } : { k: 'starfish', x, y }; },
+  board: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'pawn', x, y, c: ['#fffaf2', '#3b3060', '#ff7ab8'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'dieS', x, y, n: 1 + Math.floor(R() * 6) } : { k: 'cardS', x, y }; },
+  dicecastle: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'dieS', x, y, n: 1 + Math.floor(R() * 6) } : r < 0.7 ? { k: 'pawn', x, y, c: ['#fffaf2', '#ff7ab8'][Math.floor(R() * 2)] } : { k: 'torch', x, y }; },
   farm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fence', x, y } : r < 0.5 ? { k: 'hen', x, y } : r < 0.75 ? { k: 'sunflower', x, y } : { k: 'wheat', x, y }; },
   fair: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'balloonS', x, y } : r < 0.7 ? { k: 'flag', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'popcorn', x, y }; },
   pumpkin: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'pumpkin', x, y } : r < 0.75 ? { k: 'candle', x, y } : { k: 'candybowl', x, y }; },
@@ -2582,7 +2775,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -2652,6 +2845,15 @@ function buildLevel(idx) {
     pumpkin(x) { later.push(() => { const gy = groundY(x), h = 34; L.movers.push({ ball: true, bx: x * T + 2, by: gy - h, w: 40, h, vx: 0, vy: 0, rot: 0, ax: 0, ay: 0, period: 1 }); }); },
     thorns(x0, x1, row) { for (let x = x0; x < x1; x++) set(x, row == null ? 10 : row, 22); },
     bricks(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 23); },
+    roo(x) { later.push(() => L.roos.push({ x: x * T + 12, gy: groundY(x) })); },
+    rooStop(x) { (L.rooStops = L.rooStops || []).push(x * T); },
+    totem(x, want) { later.push(() => L.totems.push({ x: x * T + 12, gy: groundY(x), want })); },
+    ring(x, row, len) { L.rings.push({ ax: x * T + 12, ay: row * T, len: (len || 3) * T }); },
+    dominoes(x0, n) { for (let i = 0; i < n; i++) { const x = x0 + 3 * i; L.dominoes.push({ x, base: 10, i }); for (let y = 7; y < 10; y++) set(x, y, 24); if (i) { set(x, 10, 2); set(x, 11, 2); } } },
+    letters(spots) { L.letterSpots = spots.map(([x, y]) => ({ x: x * T + 12, y: y * T + 12 })); },
+    lake(x0, x1, row) { L.water.push({ x0: x0 * T, x1: x1 * T, y: row * T + 6 }); for (let x = x0; x < x1; x++) set(x, row, 25); },
+    flowers(x0, x1, row) { for (let x = x0; x < x1; x++) set(x, row, 26); },
+    snow(x0, x1, row) { for (let x = x0; x < x1; x++) set(x, row, 27); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
     zip(x0, x1, top0, top1) { const z = { x0: x0 * T + 12, y0: top0 * T - 34, x1: x1 * T + 12, y1: top1 * T - 46, gy0: top0 * T, gy1: top1 * T, state: 'idle', d: 0, v: 0 }; z.len = Math.hypot(z.x1 - z.x0, z.y1 - z.y0); z.hx = z.x0; z.hy = z.y0 + 8; L.zips.push(z); },
     breeze(x0, x1) { L.breezes.push({ x0: x0 * T, x1: x1 * T, p: 170 }); },
@@ -2681,7 +2883,8 @@ function buildLevel(idx) {
   const normal = L.stars.filter(s => !s.rainbow).length;
   L.total = normal;
   L.need = def.boss ? 0 : Math.max(5, Math.round(normal * (def.needK || 0.5)));
-  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, L.gate].filter(Boolean).map(o => o.x);
+  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, ...L.roos, ...L.totems, L.gate].filter(Boolean).map(o => o.x);
+  for (const d of L.dominoes) avoid.push(d.x * T + 12, d.x * T + 60);
   for (const s of L.duckSets) for (let x = s.x0 - 20; x <= s.x1 + 20; x += 30) avoid.push(x);
   for (const m of L.movers) if (m.ball || m.coaster) avoid.push(m.bx + 20);
   for (let x = 1; x < W - 1; x++) {

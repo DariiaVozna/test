@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -22,7 +22,7 @@ function runLevel(idx, maxT) {
     if (back > 0) { back -= STEP; In.left = true; In.right = false; }
     const wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
     const wallTile = tileAt(Math.floor((P.x + P.w + 4) / T), Math.floor((P.flip ? P.y + 4 : P.y + P.h - 4) / T));
-    const wall = solid(wallTile) && !(wallTile === 17 && stuck < 0.8);
+    const wall = solid(wallTile) && !((wallTile === 17 || wallTile === 24) && stuck < 0.8);
     let gap = false;
     for (let d = 2; d <= 14; d += 4) {
       const gx = Math.floor((P.x + P.w + d) / T); let g = true;
@@ -40,12 +40,16 @@ function runLevel(idx, maxT) {
     else {
       // гарбуз попереду — застрибуємо на нього, щоб перекотитися через колючки
       const ball = G.movers.find(m => m.ball && P.onMover !== m && m.x - (P.x + P.w) > 0 && m.x - (P.x + P.w) < 40 && Math.abs(m.y + m.h - (P.y + P.h)) < 10);
-      const want = P.onGround && (wall || gap || ball || (foe && foe.x - P.x < 50 && wallTile !== 17) || stuck > 1);
+      // тотем пір року попереду, а потрібна інша пора — застрибуємо на нього
+      const tm = G.totems.find(q => q.want && q.want !== G.season && q.x - (P.x + P.w / 2) > 10 && q.x - (P.x + P.w / 2) < 60);
+      const want = P.onGround && (wall || gap || ball || tm || (foe && foe.x - P.x < 50 && wallTile !== 17 && wallTile !== 24) || stuck > 1);
       In.jump = !P.onGround && (P.flip ? P.vy > 0 : P.vy < 0);
-      if (want && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; if (ball) G._bt = ball; }
+      if (want && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; if (ball) G._bt = ball; else if (tm) G._bt = { x: tm.x - 20, w: 40, totem: true }; }
       // над гарбузом гальмуємо, щоб приземлитися на нього, а не перелетіти
-      if (G._bt) { if (P.onGround && P.onMover !== G._bt && P.vy === 0 && cool < 0.2) G._bt = null; else if (!P.onGround && P.x + P.w / 2 > G._bt.x + G._bt.w / 2 - 8) { In.right = false; In.left = true; } if (P.onMover === G._bt) G._bt = null; }
+      if (G._bt) { if (P.onGround && P.onMover !== G._bt && P.vy === 0 && cool < 0.2) G._bt = null; else if (!P.onGround && P.x + P.w / 2 > G._bt.x + G._bt.w / 2 - (G._bt.totem ? 12 : 8)) { In.right = false; In.left = true; } if (P.onMover === G._bt) G._bt = null; }
     }
+    // на кільці: розгойдуємося в бік руху й відпускаємо, коли летимо вперед і вгору
+    if (P.swing) { const r = P.swing; In.right = r.om > -0.3; In.left = !In.right; In.jumpP = r.th > 0.35 && r.om > 0 && r.om * r.len > 200; }
     // тріснута скеля попереду — заряджаємо велику кулю
     let crack = false; for (let d = 4; d <= 90; d += 12) if (tileAt(Math.floor((P.x + P.w + d) / T), Math.floor((P.y + P.h - 15) / T)) === 18) crack = true;
     if (crack) { In.shootR = false; if (!P.charging) { In.shootP = true; In.shoot = true; } else if (P.charge >= 0.6) { In.shootP = false; In.shootR = true; In.shoot = false; } else { In.shootP = false; In.shoot = true; } }

@@ -20,7 +20,7 @@ function spawnEnemy8(e, b, hover, g) {
     case 'top': return g(20, 20, { speed: 80, flipT: 1 + Math.random() * 1.5 });
     case 'boo': return Object.assign(b, { w: 24, h: 22, x: e.tx * T, y: e.ty * T, shy: true });
   }
-  return null;
+  return spawnEnemy9(e, b, hover, g);
 }
 function updateEnemy8(e, dt) {
   const P = G.P, pcx = P.x + P.w / 2, pcy = P.y + P.h / 2, cx = e.x + e.w / 2, cy = e.y + e.h / 2;
@@ -50,13 +50,13 @@ function updateEnemy8(e, dt) {
     e.y = clamp(e.y, -10, VIEW_H - 40);
     return true;
   }
-  return false;
+  return updateEnemy9(e, dt);
 }
 /* Дотик до ворога без стрибка: велика єдиноріжка перемагає всіх, сором'язливий привид не ранить */
 function touchHook8(e) {
   if (G.P.big) { defeat(e); Snd.bump(); return true; }
   if (e.k === 'boo' && e.shy) return true;
-  return false;
+  return touchHook9(e);
 }
 
 /* ===== Підготовка рівня ===== */
@@ -72,6 +72,7 @@ function initLevel8(G, L) {
 function setBig(P, on, time) {
   if (on) {
     if (P.mini) setMini(P, false);
+    if (P.mount) setMount(P, null);
     if (!P.big) {
       // росте вгору; біля стіни зсувається вбік, а якщо місця немає — чекає
       const ny = P.y - (BIG_H - P.h), nx = [P.x - (BIG_W - P.w) / 2, P.x - (BIG_W - P.w), P.x].find(x => !boxSolid(x, ny, BIG_W, BIG_H));
@@ -192,6 +193,7 @@ function update8(dt) {
   if (G.arena) for (const b of G.bolts) if (b.kind === 'yarn' && !b.bounced && ((b.vx < 0 && b.x < G.arena.x0 + 14) || (b.vx > 0 && b.x > G.arena.x1 - 14))) { b.vx = -b.vx; b.bounced = true; Snd.bump(); }
   updateChicks(P, dt);
   updateDucks(dt);
+  update9(dt);
 }
 
 /* ===== Курчатка: ідуть за єдиноріжкою слідом, а в курнику дають зірочки ===== */

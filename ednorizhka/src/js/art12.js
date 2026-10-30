@@ -75,12 +75,13 @@ function drawEnemy8(c, e, cx, fl) {
     case 'top': drawTop(c, cx, e.y + e.h, e.t, fl); return true;
     case 'boo': drawBoo(c, cx, e.y + e.h / 2, e.t, e.dir, e.shy, fl); return true;
   }
-  return false;
+  return drawEnemy9(c, e, cx, fl);
 }
 
 /* ===== Плитки: колючки й кубики ===== */
 Object.assign(TILE7, { thorn: 1, brick0: 1, brick1: 1, brick2: 1, brick3: 1, box: 1 });
 function tileKind8(v, tx, ty) {
+  if (v >= 24) return tileKind9(v);
   if (v === 22) return 'thorn';
   return G.theme === 'attic' ? 'box' : 'brick' + (((tx || 0) + (ty || 0) * 2) % 4);
 }
@@ -115,7 +116,7 @@ function drawTile8(c, kind) {
     for (const sx of [7, 17]) { c.fillStyle = col[0]; rr(c, sx - 3.6, 0.8, 7.2, 4.4, 1.6); c.fill(); c.stroke(); c.fillStyle = col[1]; c.fillRect(sx - 2.4, 1.6, 2, 1.6); }
     c.fillStyle = col[1]; c.globalAlpha = 0.7; c.fillRect(3.5, 6.5, T - 7, 2); c.globalAlpha = 1;
     c.fillStyle = 'rgba(59,31,79,.18)'; c.fillRect(3, T - 5, T - 6, 2);
-  }
+  } else drawTile9(c, kind);
 }
 
 /* ===== Курчатка й курник ===== */
@@ -358,7 +359,7 @@ function drawBlock9(c, b) {
     c.strokeStyle = '#8a5a30'; c.lineWidth = 1; c.beginPath(); c.moveTo(2, 9); c.lineTo(T - 2, 9); c.stroke();
     c.fillStyle = '#ffd23f'; c.strokeStyle = INK; c.lineWidth = 0.9; for (const [x, y] of [[1.5, 1.5], [T - 6.5, 1.5], [1.5, T - 6.5], [T - 6.5, T - 6.5]]) { c.fillRect(x, y, 5, 5); c.strokeRect(x, y, 5, 5); }
     rr(c, T / 2 - 3, 7, 6, 6, 1.4); c.fill(); c.stroke();
-  } else return false;
+  } else return drawBlock10(c, b);
   return true;
 }
 
@@ -402,6 +403,7 @@ function drawDecor12(c, d, t) {
     case 'bookstack':
       for (const [i, col] of [[0, '#ff5c7a'], [1, '#54d68c'], [2, '#4cb6ff']]) { c.fillStyle = col; rr(c, x - 8 + i, y - 4 - i * 4, 16 - i * 2, 4, 1); c.fill(); c.stroke(); }
       break;
+    default: drawDecor13(c, d, t);
   }
 }
 

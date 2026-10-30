@@ -26,7 +26,9 @@ function solid7(v) {
   if (v >= 14 && v <= 16) return G.paint !== PAINTS[v - 14];
   if (v === 17 || v === 18) return true;
   if (v >= 19 && v <= 21) return !G.doorOpen[v - 19];
-  return v === 22 || v === 23;
+  if (v === 25 || v === 27) return G.season === 'winter';
+  if (v === 26) return G.season === 'summer';
+  return v >= 22 && v <= 24;
 }
 
 function spawnEnemy7(e, b, hover, g) {

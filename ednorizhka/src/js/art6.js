@@ -457,6 +457,7 @@ function drawBolt2(c, b) {
     case 'cone': drawCone(c, b.x, b.y, b.t); return true;
     case 'paintball': drawPaintball(c, b); return true;
     case 'yarn': drawYarnBolt(c, b); return true;
+    case 'minidie': drawMiniDie(c, b); return true;
   }
   return false;
 }
