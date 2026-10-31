@@ -38,6 +38,7 @@ function act(a) {
     if (!P.onGround) left = true;
     if (a.walk) { if (t >= a.walk) break; }
     else if ((a.jump) && left && P.onGround && t > 0.1) break;
+    if (a.jump && P.cling && t > 0.05) break;
   }
   In.left = In.right = In.jump = false;
   return true;
@@ -48,7 +49,7 @@ function keyOf(TB) {
   if (G._sc == null) G._sc = G.map.some(v => v === 17 || v === 18 || v === 23 || v === 24);
   let st = ''; if (G._sc) for (let i = 0; i < G.map.length; i++) if (G.map[i] === 17 || G.map[i] === 18 || G.map[i] === 23 || G.map[i] === 24) st += i + (G.map[i] === 18 ? 'c' : '') + ';';
   let mv8 = ''; for (const m of G.movers) { if (m.ball) mv8 += Math.round(m.x / 12) + 'b;'; else if (m.coaster) mv8 += m.state[0] + Math.round(m.cx / 48) + ';'; }
-  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0, P.big ? Math.ceil(P.bigT / 3) : 0, mv8, G.season || '', P.mount ? 1 : 0, P.swing ? G.rings.indexOf(P.swing) + ':' + Math.round(P.swing.th * 4) + ':' + Math.round(P.swing.om) : ''].join(',');
+  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0, P.big ? Math.ceil(P.bigT / 3) : 0, mv8, G.season || '', P.mount ? 1 : 0, P.swing ? G.rings.indexOf(P.swing) + ':' + Math.round(P.swing.th * 4) + ':' + Math.round(P.swing.om) : '', P.cling || 0, G.crystals.map(c => Math.ceil(c.t / 2)).join(''), G.movers.filter(m => m.pulley && m.lead).map(m => Math.round(m.y / 8)).join('.'), Math.ceil((G.timeStop || 0) / 2)].join(',');
 }
 function explore(idx, opts) {
   opts = opts || {};
@@ -68,7 +69,7 @@ function explore(idx, opts) {
     for (const a of ACTS) {
       if (a.swim && !waterAt(s.P.x + s.P.w / 2, s.P.y + s.P.h / 2)) continue;
       if (a.climb && !s.vines.length) continue;
-      if (a.big && s.map.indexOf(18) < 0) continue;
+      if (a.big && s.map.indexOf(18) < 0 && !s.crystals.length) continue;
       if ((a.wait) && !(s.movers.length || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0 || s.P.swing)) continue;
       G = structuredClone(Object.assign({}, s, { L: null, def: null })); G.L = s.L; G.def = s.def;
       if (!act(a)) continue;

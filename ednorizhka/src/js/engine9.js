@@ -22,7 +22,7 @@ function spawnEnemy9(e, b, hover, g) {
     case 'echidna': return g(24, 16, { speed: 22 });
     case 'knight': return g(20, 26, { cool: 0.8 + Math.random(), air: false, ph: 0 });
   }
-  return null;
+  return spawnEnemy10(e, b, hover, g);
 }
 function updateEnemy9(e, dt) {
   if (e.k === 'knight') {
@@ -39,7 +39,7 @@ function updateEnemy9(e, dt) {
     if (e.y > VIEW_H + 40) e.dead = true;
     return true;
   }
-  return false;
+  return updateEnemy10(e, dt);
 }
 /* Верхи на кенгуру: наземних ворогів кенгуру відкидає лапами */
 function touchHook9(e) {
@@ -204,6 +204,7 @@ function update9(dt) {
       else if (!G.letterHint) { G.letterHint = true; say('Літера «' + l.ch + '»! Збери всі — і складеться слово', 2.4); }
     }
   }
+  update10(dt);
 }
 
 /* ===== Кубик Кидайло: котиться, показує число й робить стільки, скільки випало ===== */

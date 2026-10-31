@@ -208,7 +208,7 @@ const LEVELS = [
       L.enemy('cloud', 114, 5);
       L.row(110, 9, 4);
       L.enemy('hedgehog', 120, 10);
-      L.sign(126, 'Попереду Король Похмурої Хмари!');
+      L.sign(124, 'Попереду Король Похмурої Хмари!');
       L.check(129);
       L.block(131, 9, 1);
       L.power('candy', 128, 8);
@@ -2699,12 +2699,207 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  {
+    id: 'hive', theme: 'hive', name: 'Медовий вулик', blurb: 'До медових стін прилипаєш і відштовхуєшся вгору', w: 170,
+    build(L) {
+      L.ground(0, 34);
+      L.sign(3, 'Медові стіни липкі! Стрибни до стіни — прилипнеш, а «Стрибок» відштовхне вгору');
+      L.row(7, 9, 4);
+      L.honey(14, 1, 7); L.honey(17, 3, 7);
+      L.star(15, 7); L.star(16, 5); L.star(15, 3); L.star(17, 2); L.star(18, 2);
+      L.row(20, 9, 3);
+      L.enemy('bee', 24, 6);
+      L.check(27);
+      L.row(29, 9, 3);
+      L.arc(34, 8, 4, 2);
+      L.ground(38, 80);
+      L.check(40);
+      L.honey(44, 0, 8); L.honey(47, 2, 8);
+      L.star(45, 7); L.star(46, 5); L.star(45, 3); L.star(46, 1); L.rainbow(47, 1);
+      L.row(50, 9, 4);
+      L.enemy('bee', 54, 6);
+      L.qblock(58, 6, 'star5');
+      L.honey(63, 5, 5); L.row(63, 4, 1);
+      L.row(66, 9, 3);
+      L.enemy('bee', 72, 5);
+      L.row(74, 9, 3);
+      L.arc(80, 8, 4, 2);
+      L.ground(84, 130);
+      L.check(86);
+      L.power('magnet', 88, 8);
+      L.row(90, 9, 5);
+      L.honey(98, 0, 8); L.honey(101, 1, 9);
+      L.star(99, 7); L.star(100, 5); L.star(99, 3); L.star(100, 1); L.row(101, 0, 2);
+      L.enemy('bee', 106, 5);
+      L.row(105, 9, 4);
+      L.qblock(112, 6, 'star'); L.qblock(113, 6, 'rainbow'); L.qblock(114, 6, 'star');
+      L.enemy('bee', 120, 6);
+      L.row(122, 9, 4);
+      L.arc(130, 8, 4, 2);
+      L.ground(134, 170);
+      L.check(136);
+      L.honey(140, 1, 7); L.honey(143, 3, 7);
+      L.star(141, 7); L.star(142, 5); L.star(141, 3); L.star(143, 2); L.star(144, 2);
+      L.row(147, 9, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'crystal', theme: 'crystal', name: 'Кришталева ущелина', blurb: 'Постріл у кристал запалює світловий міст над прірвою', w: 170,
+    build(L) {
+      L.ground(0, 18);
+      L.sign(3, 'Вистріли в кристал — і над прірвою засяє світловий міст. Біжи, поки не згас!');
+      L.row(7, 9, 3);
+      L.crystal(15, 9, [[18, 30, 10]]);
+      L.row(19, 8, 10);
+      L.ground(30, 61);
+      L.check(32);
+      L.enemy('bat', 36, 3);
+      L.crystal(39, 9, [[41, 43, 8], [43, 45, 6], [45, 47, 4]], 8);
+      L.block(47, 4, 3); L.row(47, 3, 2); L.rainbow(49, 2);
+      L.qblock(54, 6, 'star5');
+      L.sign(57, 'Кристал на тому боці! Вистріли через прірву');
+      L.crystal(70, 9, [[61, 70, 10]]);
+      L.row(62, 8, 7);
+      L.ground(70, 92);
+      L.check(72);
+      L.power('magnet', 74, 8);
+      L.row(76, 9, 6);
+      L.enemy('bat', 84, 3);
+      L.crystal(89, 9, [[92, 112, 10]], 8);
+      L.row(93, 8, 18);
+      L.enemy('bat', 100, 4); L.enemy('bat', 107, 4);
+      L.ground(112, 122);
+      L.check(114);
+      L.qblock(117, 6, 'star'); L.qblock(118, 6, 'rainbow'); L.qblock(119, 6, 'star');
+      L.crystal(121, 9, [[122, 132, 10]]);
+      L.ground(132, 134);
+      L.crystal(133, 9, [[134, 144, 10]]);
+      L.row(123, 8, 8); L.row(135, 8, 8);
+      L.ground(144, 170);
+      L.row(147, 9, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'laundry', theme: 'laundry', name: 'Небесна пральня', blurb: 'Кошики на мотузках: один опускається, а другий піднімається', w: 172,
+    build(L) {
+      L.ground(0, 20);
+      L.sign(3, 'Кошики на мотузках: станеш на один — він опуститься, а сусідній підніметься');
+      L.row(8, 9, 4);
+      L.pulley(22, 28, 2, 9, 9);
+      L.row(22, 7, 3); L.row(28, 7, 3); L.arc(25, 6, 3, 1);
+      L.ground(34, 62);
+      L.check(36);
+      L.enemy('sock', 42, 6);
+      L.qblock(46, 6, 'star5');
+      L.pulley(50, 55, 1, 9, 5);
+      L.cloud(60, 2, 4); L.row(60, 1, 4);
+      L.row(51, 7, 2);
+      L.pulley(64, 70, 2, 9, 9);
+      L.row(64, 7, 3); L.row(70, 7, 3);
+      L.ground(76, 110);
+      L.check(78);
+      L.power('magnet', 80, 8);
+      L.row(82, 9, 6);
+      L.enemy('sock', 90, 5); L.enemy('sock', 97, 7);
+      L.row(99, 9, 4);
+      L.pulley(112, 118, 1, 9, 9);
+      L.row(112, 7, 3); L.row(118, 7, 3); L.rainbow(116, 3);
+      L.ground(124, 172);
+      L.check(126);
+      L.qblock(130, 6, 'star'); L.qblock(131, 6, 'rainbow'); L.qblock(132, 6, 'star');
+      L.enemy('sock', 137, 6);
+      L.cloud(141, 6, 3); L.row(141, 5, 3);
+      L.row(150, 9, 4);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(166);
+    }
+  },
+  {
+    id: 'clocktower', theme: 'clocktower', name: 'Годинникова вежа', blurb: 'Маятники гойдаються, а пісочний годинник зупиняє час', w: 170,
+    build(L) {
+      L.ground(0, 33);
+      L.sign(3, 'Маятники гойдаються — пробігай, коли маятник далеко. А пісочний годинник зупиняє час!');
+      L.power('hourglass', 9, 9);
+      L.row(12, 9, 2);
+      L.pendulum(16, 0, 9.2, 0.9, 2.4); L.pendulum(22, 0, 9.2, 0.9, 2.4, 1.6);
+      L.row(15, 9, 3); L.row(21, 9, 3);
+      L.enemy('cuckoo', 28, 10);
+      L.wheel(38, 6, 2.5, 3, 7);
+      L.ground(43, 80);
+      L.check(45);
+      L.qblock(48, 6, 'star5');
+      L.power('hourglass', 52, 9);
+      L.pendulum(57, 0, 9.2, 1, 2.0); L.pendulum(62, 0, 9.2, 1, 2.0, 1); L.pendulum(67, 0, 9.2, 1, 2.0, 2);
+      L.row(56, 9, 14);
+      L.enemy('cuckoo', 74, 10);
+      L.wheel(86, 6, 3, 4, 8);
+      L.ground(92, 130);
+      L.check(94);
+      L.power('magnet', 96, 8);
+      L.row(98, 9, 6);
+      L.enemy('cuckoo', 106, 10); L.enemy('cuckoo', 112, 10);
+      L.block(116, 7, 3); L.row(116, 6, 3);
+      L.power('hourglass', 121, 9);
+      L.pendulum(125, 0, 9.2, 0.9, 2.2);
+      L.row(124, 9, 3);
+      L.wheel(135, 6, 2.5, 3, 6);
+      L.ground(140, 170);
+      L.qblock(143, 6, 'star'); L.qblock(144, 6, 'rainbow'); L.qblock(145, 6, 'star');
+      L.pendulum(151, 0, 9.2, 0.9, 2.4);
+      L.row(149, 9, 5);
+      L.sign(158, 'Ворота вже близько!');
+      L.gate(164);
+    }
+  },
+  {
+    id: 'apiary', theme: 'apiary', name: 'Пасіка Бурмила', blurb: 'Битва з Ведмедем Бурмилом', w: 172, boss: 'bear',
+    build(L) {
+      L.ground(0, 26);
+      L.sign(5, 'Пасіка Бурмила! Ведмідь забрав мед і зірочки');
+      L.honey(12, 1, 7); L.honey(15, 3, 7);
+      L.star(13, 7); L.star(14, 5); L.star(13, 3); L.star(15, 2);
+      L.crystal(23, 9, [[26, 36, 10]]);
+      L.row(27, 8, 8);
+      L.ground(36, 60);
+      L.check(38);
+      L.power('hourglass', 41, 9);
+      L.pendulum(46, 0, 9.2, 0.9, 2.4); L.pendulum(52, 0, 9.2, 0.9, 2.4, 1.4);
+      L.row(45, 9, 10);
+      L.pulley(62, 68, 2, 9, 9);
+      L.row(62, 7, 3); L.row(68, 7, 3);
+      L.ground(74, 172);
+      L.check(76);
+      L.qblock(80, 6, 'shield');
+      L.enemy('bee', 86, 6);
+      L.power('magnet', 92, 8);
+      L.row(95, 9, 5);
+      L.cloud(100, 6, 3); L.row(100, 5, 3);
+      L.enemy('bee', 108, 5);
+      L.qblock(112, 6, 'star');
+      L.sign(119, 'Ведмідь Бурмило! Тікай від тіней і калюж меду, а стріляй, коли він їсть мед');
+      L.check(125);
+      L.power('candy', 128, 8);
+      L.arena(129, 172);
+      L.cloud(136, 6, 3); L.cloud(147, 6, 4); L.cloud(159, 6, 3);
+      L.power('shield', 152, 9);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  hive: (R, x, y) => R() < 0.55 ? { k: 'honeypot', x, y } : { k: 'beeS', x, y },
+  crystal: (R, x, y) => R() < 0.6 ? { k: 'gemS', x, y, c: ['#c9b6ff', '#9fe0ff', '#ffd6f0'][Math.floor(R() * 3)] } : { k: 'crystal', x, y },
+  laundry: (R, x, y) => R() < 0.5 ? { k: 'peg', x, y, c: ['#ff7ab8', '#4cb6ff', '#ffd23f', '#7fd46a'][Math.floor(R() * 4)] } : { k: 'flower', x, y, c: ['#ff9fd0', '#9fe0ff', '#ffffff'][Math.floor(R() * 3)] },
+  clocktower: (R, x, y) => ({ k: 'gearS', x, y, c: ['#ffb347', '#9fd8ff', '#ff9fcb'][Math.floor(R() * 3)] }),
+  apiary: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'hiveS', x, y } : r < 0.6 ? { k: 'honeypot', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] }; },
   savanna: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'acaciaS', x, y } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'rockpile', x, y }; },
   seasonS: (R, x, y) => y > 10 * T ? { k: 'none', x, y } : R() < 0.5 ? { k: 'stree', x, y } : { k: 'sbush', x, y },
   rings: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'palmS', x, y } : r < 0.7 ? { k: 'shell', x, y, c: ['#ffb3c6', '#ffd9a8', '#fff3e0'][Math.floor(R() * 3)] } : { k: 'starfish', x, y }; },
@@ -2775,7 +2970,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -2854,6 +3049,14 @@ function buildLevel(idx) {
     lake(x0, x1, row) { L.water.push({ x0: x0 * T, x1: x1 * T, y: row * T + 6 }); for (let x = x0; x < x1; x++) set(x, row, 25); },
     flowers(x0, x1, row) { for (let x = x0; x < x1; x++) set(x, row, 26); },
     snow(x0, x1, row) { for (let x = x0; x < x1; x++) set(x, row, 27); },
+    honey(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 28); },
+    crystal(x, row, segs, dur) { L.crystals.push({ x: x * T + 12, y: row * T + 12, segs, dur: dur || 7 }); for (const [x0, x1, r] of segs) for (let xx = x0; xx < x1; xx++) set(xx, r, 30); },
+    pulley(xa, xb, wheelRow, rowA, rowB) {
+      const i = L.movers.length, minY = wheelRow * T + 50, maxY = 10 * T + 16, sum = (rowA + rowB) * T;
+      L.movers.push({ pulley: true, lead: true, mate: i + 1, bx: xa * T, by: rowA * T, w: 3 * T, minY, maxY, sum, wheelY: wheelRow * T, ax: 0, ay: 0, period: 1 });
+      L.movers.push({ pulley: true, mate: i, bx: xb * T, by: rowB * T, w: 3 * T, minY, maxY, ax: 0, ay: 0, period: 1 });
+    },
+    pendulum(x, row, len, amp, period, ph) { L.pendulums.push({ ax: x * T + 12, ay: row * T, len: len * T, amp, period, ph: ph || 0 }); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
     zip(x0, x1, top0, top1) { const z = { x0: x0 * T + 12, y0: top0 * T - 34, x1: x1 * T + 12, y1: top1 * T - 46, gy0: top0 * T, gy1: top1 * T, state: 'idle', d: 0, v: 0 }; z.len = Math.hypot(z.x1 - z.x0, z.y1 - z.y0); z.hx = z.x0; z.hy = z.y0 + 8; L.zips.push(z); },
     breeze(x0, x1) { L.breezes.push({ x0: x0 * T, x1: x1 * T, p: 170 }); },
@@ -2885,6 +3088,8 @@ function buildLevel(idx) {
   L.need = def.boss ? 0 : Math.max(5, Math.round(normal * (def.needK || 0.5)));
   const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, ...L.roos, ...L.totems, L.gate].filter(Boolean).map(o => o.x);
   for (const d of L.dominoes) avoid.push(d.x * T + 12, d.x * T + 60);
+  for (const c of L.crystals) avoid.push(c.x);
+  for (const q of L.pendulums) avoid.push(q.ax);
   for (const s of L.duckSets) for (let x = s.x0 - 20; x <= s.x1 + 20; x += 30) avoid.push(x);
   for (const m of L.movers) if (m.ball || m.coaster) avoid.push(m.bx + 20);
   for (let x = 1; x < W - 1; x++) {

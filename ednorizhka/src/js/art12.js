@@ -81,7 +81,7 @@ function drawEnemy8(c, e, cx, fl) {
 /* ===== Плитки: колючки й кубики ===== */
 Object.assign(TILE7, { thorn: 1, brick0: 1, brick1: 1, brick2: 1, brick3: 1, box: 1 });
 function tileKind8(v, tx, ty) {
-  if (v >= 24) return tileKind9(v);
+  if (v >= 24) return tileKind9(v, tx, ty);
   if (v === 22) return 'thorn';
   return G.theme === 'attic' ? 'box' : 'brick' + (((tx || 0) + (ty || 0) * 2) % 4);
 }

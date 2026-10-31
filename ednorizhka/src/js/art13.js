@@ -38,12 +38,13 @@ function drawEnemy9(c, e, cx, fl) {
     case 'echidna': drawEchidna(c, cx, e.y + e.h, e.dir, e.t, fl); return true;
     case 'knight': drawKnight(c, cx, e.y + e.h, e.dir, e.t, e.air, fl); return true;
   }
-  return false;
+  return drawEnemy10(c, e, cx, fl);
 }
 
 /* ===== Плитки пір року ===== */
 Object.assign(TILE7, { blank: 1, iceTop: 1, flower: 1, bud: 1, snowstep: 1, snowGhost: 1 });
-function tileKind9(v) {
+function tileKind9(v, tx, ty) {
+  if (v >= 28) return tileKind10(v, tx, ty);
   if (v === 24) return 'blank';
   if (v === 25) return G.season === 'winter' ? 'iceTop' : 'blank';
   if (v === 26) return G.season === 'summer' ? 'flower' : 'bud';
@@ -69,7 +70,7 @@ function drawTile9(c, kind) {
     c.fillStyle = '#c9dcff'; circ(c, 7, 8, 1.2); c.fill(); circ(c, 16, 12, 1); c.fill();
   } else if (kind === 'snowGhost') {
     c.strokeStyle = 'rgba(168,196,238,.55)'; c.lineWidth = 1.3; c.setLineDash([3, 3]); rr(c, 1.5, 2.5, T - 3, T - 4, 7); c.stroke(); c.setLineDash([]);
-  }
+  } else drawTile10(c, kind);
 }
 
 /* ===== Кенгуру ===== */
@@ -242,7 +243,7 @@ function drawBlock10(c, b) {
   } else if (b === 'dieblock' || b === 'reddie') {
     rr(c, 1, 1, T - 2, T - 2, 5); c.fillStyle = b === 'reddie' ? '#ff5c7a' : '#ffffff'; c.fill(); c.stroke();
     c.save(); c.translate(T / 2, T / 2); dicePips(c, 1 + Math.floor((b.length * 7) % 6), 5, b === 'reddie' ? '#ffffff' : INK); c.restore();
-  } else return false;
+  } else return drawBlock11(c, b);
   return true;
 }
 
@@ -273,6 +274,7 @@ function drawDecor13(c, d, t) {
     case 'cardS':
       c.save(); c.translate(x, y - 9); c.rotate(-0.15); c.fillStyle = '#ffffff'; rr(c, -6, -9, 12, 18, 2); c.fill(); c.stroke(); c.fillStyle = '#ff5c7a'; heartPath(c, 0, 0, 6); c.fill(); c.restore();
       break;
+    default: drawDecor14(c, d, t);
   }
 }
 

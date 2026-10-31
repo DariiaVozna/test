@@ -101,7 +101,7 @@ function update4(dt) {
     else { z.d = Math.max(0, z.d - 260 * dt); if (z.d <= 0) z.state = 'idle'; }
     const k = z.d / z.len; z.hx = z.x0 + (z.x1 - z.x0) * k; z.hy = z.y0 + (z.y1 - z.y0) * k + 8;
   }
-  for (const p of G.powers) if ((p.k === 'mini' || p.k === 'big') && p.got) { p.reT = (p.reT || 0) + dt; if (p.reT > 4 && Math.abs(pcx - p.x) > 60) { p.got = false; p.reT = 0; } }
+  for (const p of G.powers) if ((p.k === 'mini' || p.k === 'big' || p.k === 'hourglass') && p.got) { p.reT = (p.reT || 0) + dt; if (p.reT > 4 && Math.abs(pcx - p.x) > 60) { p.got = false; p.reT = 0; } }
   if (P.mini) { P.miniT -= dt; if (P.miniT <= 0) { if (!boxSolid(P.x - 5, P.y - 14, 22, 30)) setMini(P, false); else P.miniT = 0.15; } }
   else if (!P.zip && !P.inCannon && !P.swing && boxSolid(P.x, P.y, P.w, P.h)) setMini(P, true, 2);
   update5(dt);

@@ -250,7 +250,7 @@ function updateRobotBoss(dt) {
 
 /* Броня й щити: повертає true, якщо постріл не поранив боса */
 function armored2(s, B) {
-  if (armored8(s, B) || armored9(s, B)) return true;
+  if (armored8(s, B) || armored9(s, B) || armored10(s, B)) return true;
   if (B.kind === 'medusa' && B.shield > 0 && B.state !== 'stun' && B.state !== 'rise') {
     B.shield--; s.life = 0; Snd.pop(); burst(s.x, s.y, 12, ['#ffffff', '#bfefff', '#ffc4ec'], 130); B.flash = 0.08;
     if (B.shield <= 0) { B.state = 'stun'; B.st = 0; G.bolts = G.bolts.filter(b => b.kind !== 'bub'); say('Щит лопнув! Стріляй і стрибай на Медузу!', 2); }
@@ -292,5 +292,5 @@ function resetBoss2(B) {
   if (B.kind === 'chameleon') { B.state = 'walk'; B.st = 0; B.tongue = 0; B.alpha = 1; B.x = Math.max(B.x, G.arena.x0 + 14 * T); }
   if (B.kind === 'clock') { B.state = 'wake'; B.st = 0; B.air = false; B.y = B.gy - 34; }
   if (B.kind === 'robot') { B.state = 'walk'; B.st = 0; B.y = B.gy - 32; B.vx = B.vy = 0; B.x = Math.max(B.x, G.arena.x0 + 14 * T); }
-  resetBoss8(B); resetBoss9(B);
+  resetBoss8(B); resetBoss9(B); resetBoss10(B);
 }

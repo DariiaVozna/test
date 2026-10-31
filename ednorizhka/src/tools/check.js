@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -29,7 +29,7 @@ function runLevel(idx, maxT) {
       if (P.flip) { for (let yy = Math.floor((P.y - 1) / T); yy >= 0; yy--) if (solid(tileAt(gx, yy))) { g = false; break; } }
       else for (let yy = Math.floor((P.y + P.h) / T); yy < ROWS; yy++) { const v = tileAt(gx, yy); if (solid(v) || v === 3) { g = false; break; } }
       // вагончик американських гірок на станції — це підлога, а не яма
-      if (g && G.movers.some(m => m.coaster && m.state === 'idle' && gx * T + 12 > m.x && gx * T + 12 < m.x + m.w && Math.abs(m.y - (P.y + P.h)) < 6)) g = false;
+      if (g && G.movers.some(m => ((m.coaster && m.state === 'idle') || (m.pulley && P.onMover === m)) && gx * T + 12 > m.x && gx * T + 12 < m.x + m.w && Math.abs(m.y - (P.y + P.h)) < 6)) g = false;
       if (g) { gap = true; break; }
     }
     if (G.water.some(z => P.x + P.w + 10 > z.x0 && P.x < z.x1)) gap = false;
@@ -48,6 +48,11 @@ function runLevel(idx, maxT) {
       // над гарбузом гальмуємо, щоб приземлитися на нього, а не перелетіти
       if (G._bt) { if (P.onGround && P.onMover !== G._bt && P.vy === 0 && cool < 0.2) G._bt = null; else if (!P.onGround && P.x + P.w / 2 > G._bt.x + G._bt.w / 2 - (G._bt.totem ? 12 : 8)) { In.right = false; In.left = true; } if (P.onMover === G._bt) G._bt = null; }
     }
+    // прилипли до медової стіни — відштовхуємося вгору
+    if (P.cling && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.2; }
+    // кристал попереду ще не світить — стріляємо в нього, а біля прірви чекаємо на міст
+    const cr = G.crystals.find(c => c.t <= 0.3 && c.x - (P.x + P.w / 2) > 0 && c.x - (P.x + P.w / 2) < 300 && Math.abs(c.y - (P.y + P.h - 15)) < 30);
+    if (cr) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } if (gap) { In.right = false; In.jumpP = false; } }
     // на кільці: розгойдуємося в бік руху й відпускаємо, коли летимо вперед і вгору
     if (P.swing) { const r = P.swing; In.right = r.om > -0.3; In.left = !In.right; In.jumpP = r.th > 0.35 && r.om > 0 && r.om * r.len > 200; }
     // тріснута скеля попереду — заряджаємо велику кулю

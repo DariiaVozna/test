@@ -410,6 +410,10 @@ function drawPowerIcon(c, kind, t) {
     c.fillStyle = '#fff3e0'; rr(c, -2.6, -1, 5.2, 7, 2); c.fill(); c.stroke();
     c.fillStyle = '#ff5c7a'; c.beginPath(); c.arc(0, 0, 7, Math.PI, TAU); c.closePath(); c.fill(); c.stroke();
     c.fillStyle = '#fff'; circ(c, -3.4, -2.6, 1.3); c.fill(); circ(c, 2, -4.4, 1.1); c.fill(); circ(c, 4.2, -1.4, 0.9); c.fill();
+  } else if (kind === 'hourglass') {
+    c.fillStyle = '#c98d55'; rr(c, -6, -8.5, 12, 2.4, 1); c.fill(); c.stroke(); rr(c, -6, 6.1, 12, 2.4, 1); c.fill(); c.stroke();
+    c.fillStyle = 'rgba(230,240,255,.95)'; c.beginPath(); c.moveTo(-4.4, -6); c.lineTo(4.4, -6); c.lineTo(0.8, 0); c.lineTo(4.4, 6); c.lineTo(-4.4, 6); c.lineTo(-0.8, 0); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#ffd23f'; c.beginPath(); c.moveTo(-3, -4.6); c.lineTo(3, -4.6); c.lineTo(0.6, -1); c.lineTo(-0.6, -1); c.closePath(); c.fill(); c.beginPath(); c.moveTo(-3.4, 6); c.lineTo(3.4, 6); c.lineTo(0, 3); c.closePath(); c.fill();
   } else if (kind === 'big') {
     c.fillStyle = '#fff3e0'; rr(c, -3.4, -0.5, 6.8, 8, 2.4); c.fill(); c.stroke();
     c.fillStyle = '#ff9a3d'; c.beginPath(); c.arc(0, 0.5, 8.6, Math.PI, TAU); c.closePath(); c.fill(); c.stroke();

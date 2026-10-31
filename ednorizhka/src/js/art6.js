@@ -215,18 +215,19 @@ function drawMover2(c, m, theme) {
   if (m.whale) { drawWhale(c, m, G.t); return true; }
   if (m.coaster) { drawCoasterCart(c, m, G.t); return true; }
   if (m.ball) { drawRollBall(c, m, G.t); return true; }
+  if (m.pulley) { drawBasket(c, m); return true; }
   if (m.swing || m.sheep || (m.circ && theme === 'windmill')) return drawMover3(c, m, theme);
   if (m.bubble) { drawBubblePlat(c, m, G.t); return true; }
   if (m.cart) { drawCart(c, m, G.t); return true; }
   c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4;
-  if (m.circ && theme !== 'factory') {
+  if (m.circ && theme !== 'factory' && theme !== 'clocktower') {
     const cx = m.x + m.w / 2;
     c.fillStyle = '#fffaf2'; circ(c, cx, m.y + 1, 2.4); c.fill(); c.stroke();
     c.fillStyle = '#ff5c7a'; rr(c, m.x, m.y, m.w, 8, 3); c.fill(); c.stroke();
     c.save(); rr(c, m.x, m.y, m.w, 8, 3); c.clip(); c.fillStyle = '#fffaf2'; for (let x = m.x + 3; x < m.x + m.w; x += 9) c.fillRect(x, m.y, 4, 8); c.restore(); rr(c, m.x, m.y, m.w, 8, 3); c.stroke();
     c.fillStyle = '#4cb6ff'; rr(c, m.x + 7, m.y + 8, m.w - 14, 9, 3); c.fill(); c.stroke();
     c.fillStyle = '#ffd23f'; starPath(c, cx, m.y + 12.5, 3, 1.4, 0); c.fill();
-  } else if (m.circ || theme === 'factory') {
+  } else if (m.circ || theme === 'factory' || theme === 'clocktower') {
     c.fillStyle = '#c9d2e6'; rr(c, m.x, m.y + 1, m.w, 10, 3); c.fill(); c.stroke();
     c.save(); rr(c, m.x, m.y + 1, m.w, 10, 3); c.clip(); c.fillStyle = '#ffd23f'; for (let x = m.x - 6; x < m.x + m.w; x += 10) { c.beginPath(); c.moveTo(x, m.y + 11); c.lineTo(x + 5, m.y + 1); c.lineTo(x + 9, m.y + 1); c.lineTo(x + 4, m.y + 11); c.closePath(); c.fill(); } c.restore();
     c.fillStyle = '#e6ebf5'; c.fillRect(m.x + 2, m.y + 2.5, m.w - 4, 3);
@@ -458,6 +459,8 @@ function drawBolt2(c, b) {
     case 'paintball': drawPaintball(c, b); return true;
     case 'yarn': drawYarnBolt(c, b); return true;
     case 'minidie': drawMiniDie(c, b); return true;
+    case 'pot': drawPotBolt(c, b); return true;
+    case 'comb': drawCombBolt(c, b); return true;
   }
   return false;
 }
