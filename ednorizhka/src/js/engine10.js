@@ -21,7 +21,7 @@ function spawnEnemy10(e, b, hover, g) {
     case 'sock': return Object.assign(hover(20, 22, 2.6, 1.1, 8), { col: ['#ff7ab8', '#4cb6ff', '#ffd23f', '#7fd46a'][(e.tx + e.ty) % 4] });
     case 'cuckoo': return Object.assign(g(22, 20, { st: (e.tx % 4) * 0.6, out: 0, dir: -1 }), { hx: e.tx * T + 1 });
   }
-  return null;
+  return spawnEnemy11(e, b, hover, g);
 }
 function updateEnemy10(e, dt) {
   if (e.k === 'cuckoo') {
@@ -33,7 +33,7 @@ function updateEnemy10(e, dt) {
     if (ph >= 1.6 && ph - dt < 1.6 && Math.abs(e.x - G.P.x) < 360) Snd.seq([12, 7], 784, 0.12, 'sine', 0.05);
     return true;
   }
-  return false;
+  return updateEnemy11(e, dt);
 }
 
 /* ===== Підготовка рівня ===== */
@@ -122,6 +122,7 @@ function update10(dt) {
     G.puddles.push({ x: b.x, w: 64, t: 4.5 }); b.y = VIEW_H + 100; b.dead = true;
     Snd.tone(200, 0.2, 'sine', 0.06, 120); burst(b.x, (G.boss ? G.boss.gy : 10 * T) - 6, 10, ['#ffd23f', '#ffb400', '#ffffff'], 110);
   }
+  update11(dt);
 }
 
 /* ===== Ведмідь Бурмило: кидає горщики з медом, тупає так, що падають стільники, а потім сідає ласувати ===== */

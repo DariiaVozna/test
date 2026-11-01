@@ -184,7 +184,7 @@ function update8(dt) {
     hurtPlayer(true); P.x = P.safe.x; P.y = P.safe.y - 2; P.vx = P.vy = 0; P.onGround = false;
     burst(P.x + P.w / 2, P.y + P.h / 2, 10, ['#fff', '#ffe14d'], 100);
     for (const m of G.movers) if (m.ball) { m.x = m.bx; m.y = m.by; m.vx = m.vy = 0; }
-    say(G.theme === 'attic' ? 'Ой, голочки! Через них котися на клубку' : 'Ой, колючки! Через них котися на гарбузі', 2.4);
+    say(THORN_MSG[G.theme] || (G.theme === 'attic' ? 'Ой, голочки! Через них котися на клубку' : 'Ой, колючки! Через них котися на гарбузі'), 2.4);
   }
   pushBalls(P);
   // дзиги крутяться й часом розвертаються

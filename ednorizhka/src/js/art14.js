@@ -42,12 +42,13 @@ function drawEnemy10(c, e, cx, fl) {
     case 'sock': drawSock(c, cx, e.y + e.h / 2, e.t, e.dir, fl, e.col); return true;
     case 'cuckoo': drawCuckoo(c, e, e.t, fl); return true;
   }
-  return false;
+  return drawEnemy11(c, e, cx, fl);
 }
 
 /* ===== Плитки: медова стіна, світловий міст ===== */
 Object.assign(TILE7, { honey: 1, light: 1, lightW: 1, lightGhost: 1 });
 function tileKind10(v, tx, ty) {
+  if (v >= 31) return tileKind11(v, tx, ty);
   if (v === 28) return 'honey';
   if (v === 29) { const cr = G.bridgeOf.get(ty * G.Wt + tx); return cr && cr.t < 1.5 && Math.floor(G.t * 8) % 2 ? 'lightW' : 'light'; }
   return 'lightGhost';
@@ -69,7 +70,7 @@ function drawTile10(c, kind) {
     c.strokeStyle = 'rgba(255,255,255,.95)'; c.lineWidth = 1.2; rr(c, 0.5, 4, T - 1, 10, 4); c.stroke();
   } else if (kind === 'lightGhost') {
     c.strokeStyle = 'rgba(201,182,255,.55)'; c.lineWidth = 1.2; c.setLineDash([3, 3]); rr(c, 0.5, 4, T - 1, 10, 4); c.stroke(); c.setLineDash([]);
-  }
+  } else drawTile11(c, kind);
 }
 
 /* ===== Кристали, кошики, маятники, калюжі ===== */
@@ -212,7 +213,7 @@ function drawBlock11(c, b) {
     rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#ffe08a'; c.fill(); c.stroke();
     c.strokeStyle = '#d9a83a'; c.lineWidth = 1; c.beginPath(); c.moveTo(2, 8); c.lineTo(T - 2, 8); c.moveTo(2, 16); c.lineTo(T - 2, 16); c.stroke();
     c.fillStyle = '#5a3a24'; rr(c, T / 2 - 3, 17, 6, 4, 1.5); c.fill();
-  } else return false;
+  } else return drawBlock12(c, b);
   return true;
 }
 
@@ -246,6 +247,7 @@ function drawDecor14(c, d, t) {
       c.fillStyle = '#ffd36a'; for (let i = 0; i < 3; i++) { ell(c, x, y - 4 - i * 6, 8 - i * 1.6, 3.4); c.fill(); c.stroke(); }
       c.fillStyle = '#5a3a24'; ell(c, x, y - 4, 2, 1.4); c.fill();
       break;
+    default: drawDecor15(c, d, t);
   }
 }
 

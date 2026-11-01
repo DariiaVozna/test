@@ -461,6 +461,7 @@ function drawBolt2(c, b) {
     case 'minidie': drawMiniDie(c, b); return true;
     case 'pot': drawPotBolt(c, b); return true;
     case 'comb': drawCombBolt(c, b); return true;
+    case 'cone': drawConeBolt(c, b); return true;
   }
   return false;
 }

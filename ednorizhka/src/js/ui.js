@@ -138,6 +138,7 @@ function renderGame(dt) {
   drawWorld8(c, t, vis);
   drawWorld9(c, t, vis);
   drawWorld10(c, t, vis);
+  drawWorld11(c, t, vis);
   for (const d of G.decor) if (vis(d.x)) drawDecor(c, d, t);
   for (const v of G.vines) if (vis(v.x)) drawVine(c, v, t);
   for (const l of G.launchers) if (vis(l.x)) drawLauncher(c, l, t);
@@ -204,6 +205,7 @@ function renderGame(dt) {
     else if (B.kind === 'cat') drawCatBoss(c, B, B.t);
     else if (B.kind === 'dice') drawDiceBoss(c, B, B.t);
     else if (B.kind === 'bear') drawBearBoss(c, B, B.t);
+    else if (B.kind === 'fox') drawFoxBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -235,6 +237,8 @@ function renderGame(dt) {
   if (P.mount) drawRooRide(c, P, t);
   drawUnicorn(c, { x: pcx, y: P.y + P.h + 1 - (P.mount ? 17 : 0), dir: P.dir, t: P.t, run: P.onGround && !P.mount ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround && !P.mount, s: P.mini ? 0.42 : P.big ? 1.24 : 0.8, prof: G.paint ? paintProf() : save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
   if (P.flip) c.restore();
+  if (P.hang) drawHangGrip(c, P, t);
+  if (P.bub) drawSoapRide(c, P, t);
   if (cartM) cartBody(c, cartM);
   // ім'я над головою (догори дриґом — під нею)
   c.font = '900 9px Nunito, system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
@@ -419,7 +423,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -503,6 +507,7 @@ function showWin() {
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 69) { $('winTitle').textContent = 'Ведмідь Бурмило повернув зірочки!'; $('winText').textContent = 'Але вночі до пасіки підкрався Лис Хитрик, сховав зірочки у свій пухнастий хвіст і побіг до нори: через мильне озеро, горіховий гай, морський форт і мотузковий парк. Наступна країна: ' + LEVELS[70].name + '.'; }
   if (i === 64) { $('winTitle').textContent = 'Кубик Кидайло повернув зірочки!'; $('winText').textContent = 'Але Ведмідь Бурмило почув, що зірочки солодкі, як мед, і поніс їх на свою пасіку: через медовий вулик, кришталеву ущелину, небесну пральню й годинникову вежу. Наступна країна: ' + LEVELS[65].name + '.'; }
   if (i === 59) { $('winTitle').textContent = 'Кіт Мурко повернув зірочки!'; $('winText').textContent = 'Але Кубик Кидайло виграв їх у настільну гру й покотив до свого замку: через савану, долину пір року, острів тарзанок і країну настільних ігор. Наступна країна: ' + LEVELS[60].name + '.'; }
   if (i === 54) { $('winTitle').textContent = 'Хамелеон розфарбував світ!'; $('winText').textContent = 'Але Кіт Мурко побачив, як блищать зірочки, і потягнув їх на горище: через курячий хутір, ярмарок, гарбузову ніч і кубикове місто. Наступна країна: ' + LEVELS[55].name + '.'; }
