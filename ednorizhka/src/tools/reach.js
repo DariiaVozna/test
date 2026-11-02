@@ -49,6 +49,12 @@ function act(a) {
     if (t > 0.05 && ((P.bub && !bub0) || (P.hang && !hang0) || (P.inCannon && !can0))) break;
   }
   In.left = In.right = In.jump = false;
+  // постріл ще летить — чекаємо, поки він у щось влучить, інакше новий стан не відрізнити від старого
+  for (let extra = 0; G.shots.length && extra < 1.4; extra += STEP) {
+    In.left = In.right = In.jumpP = In.shootP = In.shootR = In.shoot = false; In.jump = false;
+    update(STEP);
+    if (P.hearts < h0 || P.y > VIEW_H + 30) return false;
+  }
   return true;
 }
 function keyOf(TB) {
