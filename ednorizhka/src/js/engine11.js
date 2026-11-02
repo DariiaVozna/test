@@ -21,7 +21,7 @@ function spawnEnemy11(e, b, hover, g) {
     case 'moth': return Object.assign(hover(20, 16, 1, 1, 4), { mx: e.tx * T + 12, my: e.ty * T + 12 });
     case 'crayfish': return g(24, 14, { speed: 30 });
   }
-  return null;
+  return spawnEnemy12(e, b, hover, g);
 }
 function updateEnemy11(e, dt) {
   if (e.k === 'moth') {
@@ -35,7 +35,7 @@ function updateEnemy11(e, dt) {
     if (Math.abs(dx) > 2) e.dir = dx > 0 ? 1 : -1;
     return true;
   }
-  return false;
+  return updateEnemy12(e, dt);
 }
 
 /* ===== Підготовка рівня ===== */
@@ -232,6 +232,7 @@ function update11(dt) {
   updateNutWheels(dt);
   updateSwCannons(dt);
   grabBars(P, dt);
+  update12(dt);
 }
 
 /* ===== Лис Хитрик: стріляє шишками з гармати, розганяється вздовж підлоги, а потім захекується ===== */

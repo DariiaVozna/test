@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -13,6 +13,7 @@ function press(k) { In.jumpP = k; }
 function runLevel(idx, maxT) {
   startLevel(idx); mode = 'play';
   const P = G.P; let t = 0, cool = 0, stuck = 0, lastX = 0, back = 0;
+  const pcxB = () => P.x + P.w / 2;
   while (t < maxT && !G.done) {
     In.left = false; In.right = true; In.jumpP = false; In.shootP = false; In.shootR = false;
     if (stuck > 3 && G.hasDoors && G.keysHeld === 0) { back = 2.5; stuck = 0; }
@@ -76,6 +77,26 @@ function runLevel(idx, maxT) {
     if (P.hang) { In.left = false; In.right = true; In.jumpP = false; if (tileAt(Math.floor((P.x + P.w / 2 + 14) / T), P.hang.row) !== 35 && Math.abs(P.vx) < 1 && cool <= 0) { In.jumpP = true; cool = 0.3; } }
     // колесо білочки: біжимо в ньому, поки місток не висунеться
     if (G.nutWheels.some(w => !w.full && inWheel(w))) { In.right = true; In.left = false; In.jumpP = false; In.jump = false; }
+    // батут: підскакуємо на місці, поки не наберемо потрібну висоту, а тоді летимо праворуч
+    const tr = G.tramps.find(q => q.need && pcxB() > q.x0 - 4 && pcxB() < q.x1 + 4 && P.y + P.h <= q.row * T + 2);
+    if (tr && P.tramp < tr.need && !(P.tramp === tr.need - 1 && P.vy < -200)) { const mid = (tr.x0 + tr.x1) / 2; In.right = pcxB() < mid - 6; In.left = pcxB() > mid + 6; In.jumpP = false; }
+    else if (tr) { In.right = true; In.left = false; }
+    if (tr || (P.tramp > 0 && !P.onGround)) In.jump = true;
+    // футбол: якщо м'яч для найближчих воріт позаду — обходимо його, щоб ударити вперед
+    const gi = G.goals.findIndex(g => !g.scored && g.x0 > pcxB() - 20), gb = gi >= 0 ? G.balls12[gi] : null;
+    if (gb && gb.x + 10 < pcxB() - 4) { In.right = false; In.left = true; if (P.onGround && pcxB() - (gb.x + 10) < 46 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; } G._ballBack = true; }
+    else if (gb && G._ballBack && gb.x + 10 < pcxB() + 14) { In.right = false; In.left = true; }
+    else G._ballBack = false;
+    // дзеркальце попереду повернуте не так — стріляємо (якщо перед ним немає іншого дзеркальця)
+    const sh = P.y + P.h - 15;
+    const mAhead = G.mirrors.filter(m => Math.abs(m.ty * T + 12 - sh) < 14 && m.tx * T + 12 - pcxB() > 8 && m.tx * T + 12 - pcxB() < 300).sort((a, b) => a.tx - b.tx)[0];
+    if (mAhead && mAhead.d !== mAhead.want && P.onGround && !G.suns.every(s => s.on)) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
+    // зоря-обмінниця попереду на висоті пострілу — стріляємо (біля ями не стрибаємо)
+    const swp = G.swappers.find(w => !w.used && w.x - pcxB() > 20 && w.x - pcxB() < 330 && Math.abs(w.y - sh) < 14);
+    if (swp && P.onGround) { if (gap) { In.right = false; In.jumpP = false; } if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
+    // зоря-обмінниця вгорі — стрибаємо й стріляємо на верхівці стрибка
+    const swU = G.swappers.find(w => !w.used && w.x - pcxB() > 20 && w.x - pcxB() < 140 && sh - w.y > -20 && sh - w.y < 140 && !(P.onGround && sh - w.y < 70));
+    if (swU) { In.right = false; if (P.onGround && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.5; } else if (!P.onGround && Math.abs(sh - swU.y) < 14) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } } }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;
@@ -92,7 +113,7 @@ function fightBoss(idx) {
     if (G.bossActive && !B.dead) {
       const dx = B.x - pcx; P.dir = dx > 0 ? 1 : -1;
       const danger = G.bolts.find(b => !b.high && Math.abs(b.x - pcx) < 50 && Math.abs(b.y - (P.y + P.h / 2)) < 60);
-      if (((B.state === 'roll' || B.state === 'dash') && Math.abs(dx) < 80) || danger) { if (P.onGround) { In.jumpP = true; In.jump = true; } }
+      if (((B.state === 'roll' || B.state === 'dash' || (B.kind === 'peacock' && B.state === 'peck' && B.st > 0.3)) && Math.abs(dx) < 90) || danger) { if (P.onGround) { In.jumpP = true; In.jump = true; } }
       if (Math.abs(dx) > 70) { if (dx > 0) In.right = true; else In.left = true; }
       else if (Math.abs(dx) < 40) { if (dx > 0) In.left = true; else In.right = true; }
       // лис цілиться шишкою — відбігаємо від місця, куди вона впаде

@@ -3084,12 +3084,210 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  {
+    id: 'trampoline', theme: 'trampoline', name: 'Батутне містечко', blurb: 'Кожен стрибок на батуті вищий за попередній', w: 170,
+    build(L) {
+      L.ground(0, 31);
+      L.sign(3, 'Батут! Стрибай на ньому — кожен стрибок вищий за попередній, аж до трьох разів');
+      L.row(5, 9, 3);
+      L.batut(9, 13);
+      L.star(10, 6); L.star(11, 3); L.star(11, 1);
+      L.batut(13, 17, 2);
+      L.block(17, 4, 3, 6);
+      L.row(17, 3, 3);
+      L.enemy('bunny', 24, 10);
+      L.check(27);
+      L.batut(33, 36, 0, 11);
+      L.arc(31, 7, 7, 2);
+      L.ground(38, 72);
+      L.power('magnet', 42, 8);
+      L.row(44, 9, 5);
+      L.batut(50, 54, 3);
+      L.block(54, 2, 6, 8);
+      L.row(54, 1, 6);
+      L.star(51, 5); L.star(52, 3);
+      L.check(64);
+      L.enemy('dragonfly', 66, 6);
+      L.batut(75, 77, 0, 11);
+      L.arc(72, 7, 8, 2);
+      L.ground(80, 170);
+      L.check(84);
+      L.qblock(90, 6, 'star'); L.qblock(91, 6, 'rainbow'); L.qblock(92, 6, 'star');
+      L.batut(98, 108);
+      L.row(99, 3, 4); L.row(104, 1, 3); L.rainbow(106, 3);
+      L.enemy('bunny', 115, 10);
+      L.enemy('dragonfly', 122, 5);
+      L.batut(129, 133, 2);
+      L.block(133, 4, 3, 6);
+      L.row(133, 3, 3);
+      L.row(140, 9, 4);
+      L.sign(156, 'Ворота вже близько!');
+      L.gate(163);
+    }
+  },
+  {
+    id: 'football', theme: 'football', name: 'Футбольне поле', blurb: 'Заб\'єш гол — і ворота відчиняться', w: 170,
+    build(L) {
+      L.ground(0, 170);
+      L.sign(3, 'Біжи в м\'яч — і він покотиться. Заб\'єш гол — ворота відчиняться!');
+      L.ball(8);
+      L.row(11, 9, 5);
+      L.goal(20, 2); L.block(22, 0, 1, 2);
+      L.check(26);
+      L.enemy('bunny', 31, 10);
+      L.ball(36);
+      L.row(41, 8, 3);
+      L.enemy('dragonfly', 46, 5);
+      L.goal(52, 2); L.block(54, 0, 1, 2);
+      L.check(57);
+      L.power('magnet', 60, 8);
+      L.ball(62);
+      L.row(64, 9, 6);
+      L.enemy('beetle', 72, 10); L.enemy('beetle', 76, 10);
+      L.goal(84, 2); L.block(86, 0, 1, 2);
+      L.check(89);
+      L.qblock(93, 6, 'star'); L.qblock(94, 6, 'rainbow'); L.qblock(95, 6, 'star');
+      L.cloud(99, 5, 3); L.row(99, 4, 3);
+      L.ball(104);
+      L.enemy('beetle', 113, 10); L.enemy('bunny', 119, 10);
+      L.row(112, 8, 3); L.row(118, 8, 2);
+      L.enemy('dragonfly', 116, 5);
+      L.goal(124, 2); L.block(126, 0, 1, 2);
+      L.check(129);
+      L.enemy('bunny', 135, 10);
+      L.row(140, 9, 5);
+      L.sign(156, 'Ворота вже близько!');
+      L.gate(163);
+    }
+  },
+  {
+    id: 'mirrors', theme: 'mirrors', name: 'Дзеркальна майстерня', blurb: 'Дзеркальця ведуть сонячний промінь до квітки', w: 170,
+    build(L) {
+      L.ground(0, 170);
+      L.sign(3, 'Сонячний промінь має влучити в квітку. Вистріли в дзеркальце — воно повернеться');
+      L.lamp(9, 2, 'd');
+      L.mirror(9, 9, 1, -1);
+      L.sunflower(20, 9, 22, 2, 8); L.block(22, 0, 1, 2);
+      L.row(12, 8, 6);
+      L.check(25);
+      L.enemy('bunny', 29, 10);
+      L.lamp(34, 2, 'd');
+      L.mirror(34, 9, 1, -1);
+      L.mirror(42, 9, -1, 1);
+      L.sunflower(42, 4, 48, 2, 8); L.block(48, 0, 1, 2);
+      L.row(36, 8, 4); L.star(42, 7); L.star(42, 6);
+      L.check(51);
+      L.power('magnet', 54, 8);
+      L.row(56, 9, 5);
+      L.enemy('dragonfly', 63, 5);
+      L.lamp(70, 9, 'r');
+      L.mirror(76, 9, -1, 1);
+      L.mirror(76, 3, 1);
+      L.sunflower(84, 3, 90, 1, 9); L.block(90, 0, 1, 1);
+      L.row(78, 8, 5);
+      L.check(93);
+      L.qblock(97, 6, 'star'); L.qblock(98, 6, 'rainbow'); L.qblock(99, 6, 'star');
+      L.enemy('bunny', 104, 10);
+      L.lamp(112, 3, 'd');
+      L.mirror(112, 9, 1, -1);
+      L.mirror(118, 9, -1, 1);
+      L.mirror(118, 5, 1);
+      L.mirror(124, 5, -1);
+      L.mirror(124, 9, 1, -1);
+      L.sunflower(128, 9, 130, 2, 8); L.block(130, 0, 1, 2);
+      L.row(114, 8, 3); L.row(120, 8, 3);
+      L.check(133);
+      L.enemy('dragonfly', 140, 6);
+      L.row(144, 9, 5);
+      L.sign(156, 'Ворота вже близько!');
+      L.gate(163);
+    }
+  },
+  {
+    id: 'observatory', theme: 'observatory', name: 'Обсерваторія', blurb: 'Влучиш у зорю-обмінницю — і помінялася з нею місцями', w: 170,
+    build(L) {
+      L.ground(0, 16);
+      L.sign(3, 'Вистріли в зорю-обмінницю — і поміняєшся з нею місцями');
+      L.row(6, 9, 3);
+      L.swapper(28, 9);
+      L.arc(17, 7, 10, 2);
+      L.ground(28, 54);
+      L.check(31);
+      L.enemy('bunny', 35, 10);
+      L.sign(37, 'Під стіною щілина! Стріляй у неї — за стіною зоря-обмінниця');
+      L.block(41, 0, 2, 9);
+      L.swapper(45, 9);
+      L.row(46, 9, 4);
+      L.check(51);
+      L.power('magnet', 52, 8);
+      L.ground(54, 60, 10);
+      L.block(60, 5, 10, 5);
+      L.swapper(62, 4);
+      L.row(64, 4, 5);
+      L.ground(70, 100);
+      L.enemy('dragonfly', 76, 6);
+      L.check(80);
+      L.qblock(84, 6, 'star'); L.qblock(85, 6, 'rainbow'); L.qblock(86, 6, 'star');
+      L.cloud(92, 3, 4); L.swapper(93, 2); L.row(94, 2, 3);
+      L.swapper(112, 9);
+      L.ground(112, 140);
+      L.arc(101, 7, 10, 2);
+      L.check(115);
+      L.block(122, 0, 2, 9);
+      L.swapper(126, 9);
+      L.enemy('bunny', 132, 10);
+      L.ground(140, 170);
+      L.row(144, 9, 5);
+      L.sign(156, 'Ворота вже близько!');
+      L.gate(163);
+    }
+  },
+  {
+    id: 'peacock', theme: 'peacock', name: 'Сад Павича', blurb: 'Битва з Павичем Пишнохвостом', w: 172, boss: 'peacock',
+    build(L) {
+      L.ground(0, 30);
+      L.sign(4, 'Сад Павича! Пишнохвіст прикрасив зірочками свій хвіст');
+      L.batut(8, 12, 2);
+      L.block(12, 4, 3, 6);
+      L.row(12, 3, 3);
+      L.ball(18);
+      L.goal(26, 2); L.block(28, 0, 1, 2);
+      L.ground(30, 172);
+      L.check(31);
+      L.lamp(36, 2, 'd');
+      L.mirror(36, 9, 1, -1);
+      L.sunflower(46, 9, 48, 2, 8); L.block(48, 0, 1, 2);
+      L.row(38, 8, 5);
+      L.block(56, 0, 2, 9);
+      L.swapper(60, 9);
+      L.check(64);
+      L.qblock(70, 6, 'shield');
+      L.enemy('dragonfly', 78, 6);
+      L.power('magnet', 84, 8);
+      L.row(87, 9, 5);
+      L.cloud(96, 6, 3); L.row(96, 5, 3);
+      L.enemy('bunny', 104, 10);
+      L.qblock(110, 6, 'star');
+      L.sign(119, 'Павич Пишнохвіст! Перестрибуй пір\'їнки й не стій там, де він клює. Стріляй, коли він милується собою');
+      L.check(125);
+      L.power('candy', 128, 8);
+      L.arena(129, 172);
+      L.cloud(136, 6, 3); L.cloud(147, 6, 4); L.cloud(159, 6, 3);
+      L.power('shield', 152, 9);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  trampoline: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'ballS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : r < 0.6 ? { k: 'balloonS', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#9fe0ff'][Math.floor(R() * 3)] }; },
+  football: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'cornerflag', x, y, c: ['#ffd23f', '#ff7ab8', '#4cb6ff'][Math.floor(R() * 3)] } : r < 0.6 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: ['#ffffff', '#ffd54a'][Math.floor(R() * 2)] }; },
+  mirrors: (R, x, y) => R() < 0.6 ? { k: 'jar', x, y, c: ['#ffd23f', '#ff9fd0', '#9fe0ff'][Math.floor(R() * 3)] } : { k: 'gearS', x, y, c: ['#ffb347', '#9fd8ff', '#ff9fcb'][Math.floor(R() * 3)] },
+  observatory: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'telescopeS', x, y } : r < 0.7 ? { k: 'crystal', x, y } : { k: 'twinkle', x, y }; },
+  peacock: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'featherS', x, y } : r < 0.65 ? { k: 'tulip', x, y, c: ['#ff5c8a', '#ffa83b', '#ffe14d', '#b28bff'][Math.floor(R() * 4)] } : { k: 'flower', x, y, c: ['#ffffff', '#ff7ab8', '#ffd54a'][Math.floor(R() * 3)] }; },
   soaplake: (R, x, y) => { if (y > 8 * T) return { k: 'none', x, y }; const r = R(); return r < 0.35 ? { k: 'bubbleS', x, y } : r < 0.55 ? { k: 'duckS', x, y } : r < 0.75 ? { k: 'reed', x, y } : { k: 'flower', x, y, c: ['#ff9fd0', '#9fe0ff', '#ffffff'][Math.floor(R() * 3)] }; },
   nutgrove: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'leafpile', x, y } : r < 0.6 ? { k: 'acornS', x, y } : r < 0.8 ? { k: 'mush', x, y, c: ['#ff6b8a', '#ffb347', '#e85d3a'][Math.floor(R() * 3)], glow: false } : { k: 'stump', x, y }; },
   seafort: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'cannonballs', x, y } : r < 0.5 ? { k: 'anchor', x, y } : r < 0.75 ? { k: 'shell', x, y, c: ['#ffb3c6', '#ffd9a8', '#fff3e0'][Math.floor(R() * 3)] } : { k: 'flag', x, y, c: RAINBOW[Math.floor(R() * 6)] }; },
@@ -3170,7 +3368,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -3268,6 +3466,13 @@ function buildLevel(idx) {
     },
     swcannon(x, a0, a1, period, aim, ph) { later.push(() => L.swCannons.push({ x: x * T + 12, gy: groundY(x), a0: a0 * Math.PI / 180, a1: a1 * Math.PI / 180, period, aim: aim * T + 12, ph: ph || 0 })); },
     bars(x0, x1, row) { for (let x = x0; x < x1; x++) set(x, row, 35); },
+    batut(x0, x1, need, row) { row = row == null ? 10 : row; for (let x = x0; x < x1; x++) set(x, row, 36); L.tramps.push({ x0: x0 * T, x1: x1 * T, need: need || 0, row }); },
+    ball(x) { later.push(() => L.balls12.push({ hx: x * T + 2, hy: groundY(x) - 20 })); },
+    goal(x, top) { later.push(() => { const gy = groundY(x), tiles = []; for (let y = top; y < gy / T; y++) { tiles.push([x + 2, y]); set(x + 2, y, 33); } L.goals.push({ x0: x * T + 4, x1: (x + 2) * T, gy, tiles }); }); },
+    mirror(x, row, d, want) { L.mirrors.push({ tx: x, ty: row, d, want: want == null ? d : want }); },
+    lamp(x, row, dir) { const D = { r: [1, 0], l: [-1, 0], u: [0, -1], d: [0, 1] }[dir]; L.lamps.push({ tx: x, ty: row, dx: D[0], dy: D[1] }); },
+    sunflower(x, row, dx, top, h) { const door = []; for (let y = top; y < top + h; y++) { door.push([dx, y]); set(dx, y, 37); } L.suns.push({ tx: x, ty: row, door }); },
+    swapper(x, row) { L.swappers.push({ x: x * T + 12, y: row * T + 12 }); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
     zip(x0, x1, top0, top1) { const z = { x0: x0 * T + 12, y0: top0 * T - 34, x1: x1 * T + 12, y1: top1 * T - 46, gy0: top0 * T, gy1: top1 * T, state: 'idle', d: 0, v: 0 }; z.len = Math.hypot(z.x1 - z.x0, z.y1 - z.y0); z.hx = z.x0; z.hy = z.y0 + 8; L.zips.push(z); },
     breeze(x0, x1) { L.breezes.push({ x0: x0 * T, x1: x1 * T, p: 170 }); },
@@ -3303,6 +3508,9 @@ function buildLevel(idx) {
   for (const q of L.pendulums) avoid.push(q.ax);
   for (const o of [...L.nutWheels, ...L.swCannons]) avoid.push(o.x - 24, o.x + 24);
   for (const s of L.soaps) avoid.push(s.hx);
+  for (const o of [...L.mirrors, ...L.lamps, ...L.suns]) avoid.push(o.tx * T + 12);
+  for (const g of L.goals) avoid.push(g.x0, g.x1);
+  for (const o of L.swappers) avoid.push(o.x);
   for (const s of L.duckSets) for (let x = s.x0 - 20; x <= s.x1 + 20; x += 30) avoid.push(x);
   for (const m of L.movers) if (m.ball || m.coaster) avoid.push(m.bx + 20);
   for (let x = 1; x < W - 1; x++) {

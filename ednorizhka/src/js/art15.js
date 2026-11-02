@@ -53,12 +53,13 @@ function drawEnemy11(c, e, cx, fl) {
     case 'moth': drawMoth(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
     case 'crayfish': drawCrayfish(c, cx, e.y + e.h, e.dir, e.t, fl); return true;
   }
-  return false;
+  return drawEnemy12(c, e, cx, fl);
 }
 
 /* ===== Плитки: місток із колеса, ворота, поручні ===== */
 Object.assign(TILE7, { thornV: 1, nutPlank: 1, nutPlankW: 1, nutSlot: 1, gate: 1, gateW: 1, gateOpen: 1, barL: 1, barR: 1, barM: 1, barLR: 1 });
 function tileKind11(v, tx, ty) {
+  if (v >= 36) return tileKind12(v, tx, ty);
   const w = G.wheelOf && G.wheelOf.get(ty * G.Wt + tx), blink = w && w.warn && Math.floor(G.t * 8) % 2;
   if (v === 31) return blink ? 'nutPlankW' : 'nutPlank';
   if (v === 32) return 'nutSlot';
@@ -103,7 +104,7 @@ function drawTile11(c, kind) {
     const x0 = L ? 2 : 0, x1 = R ? T - 2 : T;
     c.fillStyle = '#ffd23f'; c.strokeStyle = INK; c.lineWidth = 1.1; rr(c, x0, 4.5, x1 - x0, 4, 2); c.fill(); c.stroke();
     c.strokeStyle = '#ff7ab8'; c.lineWidth = 1.2; c.beginPath(); for (let x = x0 + 3; x < x1 - 1; x += 5) { c.moveTo(x, 4.8); c.lineTo(x + 2, 8.2); } c.stroke();
-  }
+  } else drawTile12(c, kind);
 }
 
 /* ===== Мильні бульбашки ===== */
@@ -283,7 +284,7 @@ function drawBlock12(c, b) {
   } else if (b === 'denblock') {
     rr(c, 1, 1, T - 2, T - 2, 5); c.fillStyle = '#7a5a8a'; c.fill(); c.stroke();
     c.fillStyle = '#ffd36a'; starPath(c, 12, 12, 5, 2.2, 0); c.fill(); c.lineWidth = 0.8; c.stroke();
-  } else return false;
+  } else return drawBlock13(c, b);
   return true;
 }
 
@@ -318,6 +319,7 @@ function drawDecor15(c, d, t) {
       c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 0.8; for (let i = 0; i < 5; i++) { const a = i * TAU / 5 + 0.3; ell(c, x + Math.cos(a) * 3.4, y - 14 + Math.sin(a) * 3.4, 3, 2, a); c.fill(); c.stroke(); }
       c.fillStyle = '#ffd36a'; circ(c, x, y - 14, 1.8); c.fill();
       break;
+    default: drawDecor16(c, d, t);
   }
 }
 
