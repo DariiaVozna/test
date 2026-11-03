@@ -23,6 +23,8 @@ for (const d of [1, -1]) ACTS.push({ big: true, dir: d });
 // звичайний постріл на місці й постріл на верхівці стрибка (для дзеркалець і зір-обмінниць)
 for (const d of [1, -1]) ACTS.push({ shoot: true, dir: d });
 for (const d of [1, 0]) ACTS.push({ jump: true, dir: d, hold: 1, shootAt: 0.36 });
+// хмаринки з пляшечки: ставимо в різні моменти стрибка
+for (const at of [0.55, 0.75]) ACTS.push({ jump: true, dir: 1, hold: 1, shootAt: at, cloud: true });
 function act(a) {
   const P = G.P, h0 = P.hearts; let t = 0, left = false;
   const bub0 = !!P.bub, hang0 = !!P.hang, can0 = !!P.inCannon;
@@ -85,7 +87,9 @@ function explore(idx, opts) {
       if (a.climb && !s.vines.length) continue;
       const sail = s.movers.some(m => m.sailboat);
       if (a.big && s.map.indexOf(18) < 0 && !s.crystals.length && !s.mirrors.length && !s.swappers.length) continue;
-      if ((a.shoot || a.shootAt != null) && !s.mirrors.length && !s.swappers.length && !(sail && s.P.onMover && s.P.onMover.sailboat)) continue;
+      const cl = s.P.cloudN > 0;
+      if (a.cloud && !cl) continue;
+      if ((a.shoot || a.shootAt != null) && !s.mirrors.length && !s.swappers.length && !(sail && s.P.onMover && s.P.onMover.sailboat) && !cl) continue;
       if ((a.wait) && !(s.movers.length || s.hasDirt || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0 || s.P.swing || s.P.inCannon || s.P.bub || s.P.hang || s.nutWheels.some(w => w.p > 0) || s.soaps.some(q => q.state === 'gone') || s.balls12.some(b => !b.done && (Math.abs(b.vx) > 1 || !b.onGround)))) continue;
       G = structuredClone(Object.assign({}, s, { L: null, def: null })); G.L = s.L; G.def = s.def;
       if (!act(a)) continue;
