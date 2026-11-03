@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -125,6 +125,35 @@ function runLevel(idx, maxT) {
         if (!P.onGround) In.jump = P.vy < 0;
       }
     }
+    // повітряна куля: застрибуємо в кошик, а в польоті тримаємо кулю посередині вільного проходу попереду
+    const hb = G.movers.find(m => m.hotair && m.state === 'idle' && m.x - (P.x + P.w) > -10 && m.x - (P.x + P.w) < 30);
+    if (hb && P.onGround && !P.hotair && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; G._bt = { x: hb.x, w: hb.w }; }
+    if (P.hotair) {
+      const m = P.hotair, b = hotairBox(m), h = b.bot - b.top, cy = (b.top + b.bot) / 2;
+      let target = null;
+      for (let dx = 4; dx <= 130 && target == null; dx += 12) {
+        const col = Math.floor((b.right + dx) / T);
+        let hit = false; for (let y = Math.max(0, b.top - 6); y <= b.bot + 10; y += 6) if (solid(tileAt(col, Math.floor(y / T)))) hit = true;
+        if (!hit) continue;
+        let bestC = null, r0 = -1;
+        for (let r = 0; r <= ROWS; r++) {
+          const free = r < ROWS && !solid(tileAt(col, r));
+          if (free && r0 < 0) r0 = r;
+          if (!free && r0 >= 0) { const y0 = r0 * T, y1 = r * T; if (y1 - y0 >= h + 6) { const cc = clamp(cy, y0 + h / 2 + 8, y1 - h / 2 - 10); if (bestC == null || Math.abs(cc - cy) < Math.abs(bestC - cy)) bestC = cc; } r0 = -1; }
+        }
+        target = bestC;
+      }
+      if (target == null) target = cy > 160 ? 150 : cy;
+      In.left = In.right = false; In.jumpP = false;
+      In.jump = m.ground || cy > target + 3 || (Math.abs(cy - target) <= 3 && m.vy > 10);
+    }
+    // санчата: стрибаємо трохи раніше, бо їдемо швидко
+    if (P.sled && P.onGround && cool <= 0) {
+      let danger = false; const row = Math.floor((P.y + P.h + 2) / T);
+      for (let d = 22; d <= 46; d += 6) { const gx = Math.floor((P.x + P.w + d) / T); if (solid(tileAt(gx, Math.floor((P.y + P.h - 4) / T)))) danger = true; }
+      for (let d = 4; d <= 20; d += 4) { const gx = Math.floor((P.x + P.w + d) / T); const v = tileAt(gx, row); if (v === 22 || !(solid(v) || v === 3)) danger = true; }
+      if (danger) { In.jumpP = true; In.jump = true; cool = 0.3; }
+    }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;
@@ -150,6 +179,12 @@ function fightBoss(idx) {
       if (P.hang && B.state !== 'dash' && B.state !== 'crouch') In.jumpP = true;
       if (B.kind === 'wizard' && B.y < 200 && P.onGround && Math.abs(dx) < 120) { In.jumpP = true; In.jump = true; }
       if (B.kind === 'medusa' && B.state === 'float' && P.onGround && Math.abs(dx) < 140 && Math.abs(dx) > 36) { In.jumpP = true; In.jump = true; }
+      // пінгвін мчить на животику — стрибаємо так, щоб приземлитися йому на спину
+      if (B.kind === 'penguin' && B.state === 'slide') {
+        const app = Math.sign(pcx - B.x) === B.dir, d = Math.abs(dx);
+        In.left = In.right = false; In.jumpP = false;
+        if (app && d < 150 && d > 112 && P.onGround) { In.jumpP = true; In.jump = true; }
+      }
       if (i % 10 === 0) fire(false);
       if (!P.onGround && P.vy < 0) In.jump = true;
     } else if (!G.bossActive) In.right = true;

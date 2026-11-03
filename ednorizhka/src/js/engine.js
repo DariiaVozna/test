@@ -190,7 +190,7 @@ function startLevel(idx) {
     vines: L.vines, launchers: L.launchers.map(l => Object.assign({}, l)), wheels: L.wheels,
     beans: L.beans.map(b => Object.assign({}, b)), lanterns: L.lanterns.map(l => Object.assign({}, l)), rails: L.rails, blinkOn: true, blinkWarn: false,
   };
-  initLevel6(G, L); initLevel7(G, L); initLevel8(G, L); initLevel9(G, L); initLevel10(G, L); initLevel11(G, L); initLevel12(G, L); initLevel13(G, L);
+  initLevel6(G, L); initLevel7(G, L); initLevel8(G, L); initLevel9(G, L); initLevel10(G, L); initLevel11(G, L); initLevel12(G, L); initLevel13(G, L); initLevel14(G, L);
   const bk = L.def.boss;
   if (bk === 'hedge') G.boss = { kind: 'hedge', name: 'Пан Колючка', acc: 'Пана Колючку', x: L.arena.x0 + 28 * T, gy: 10 * T, y: 10 * T - 21, hw: 28, hh: 22, hp: 16, max: 16, t: 0, st: 0, state: 'wait', dir: -1, rot: 0, flash: 0, dead: false, deadT: 0, alpha: 1, throwT: 2.5, rolls: 0, hinted: false };
   else if (bk === 'wizard') {
@@ -268,9 +268,11 @@ function updatePlayer(dt) {
   if (P.kite) return rideKite(P, dt);
   if (P.swing) return swingStep(P, dt);
   if (P.bub) return soapStep(P, dt);
+  if (P.hotair) return hotairStep(P, dt);
   if (P.hang) return hangStep(P, dt);
   flipCheck(P);
   let ax = (In.right ? 1 : 0) - (In.left ? 1 : 0);
+  if (P.sled) ax = P.sledStun > 0 ? 0 : 1;
   if (P.hurtT > 0) { P.hurtT -= dt; ax = 0; }
   if (ax) P.dir = ax;
   const wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
@@ -278,7 +280,7 @@ function updatePlayer(dt) {
   if (!wz && P.wasWater && P.vy < 0) { burst(P.x + P.w / 2, P.y + P.h, 6, ['#ffffff', '#bfefff'], 80); if (In.jump && P.vy > -480) { P.vy = -480; P.cut = true; } }
   P.wasWater = !!wz;
   const ice = THEMES[G.theme].ice && P.onGround && P.groundTile === 1;
-  const target = ax * (P.mount ? 185 : SPEED) * (wz ? 0.75 : 1) * (P.sticky ? 0.45 : 1);
+  const target = ax * (P.sled ? 240 : P.mount ? 185 : SPEED) * (wz ? 0.75 : 1) * (P.sticky ? 0.45 : 1);
   const a = ax ? (wz ? 700 : P.onGround ? (ice ? 420 : 1500) : 950) : (wz ? 500 : P.onGround ? (ice ? 200 : 1800) : 650);
   if (P.launchT > 0) { P.launchT -= dt; if (P.onGround || P.sideHit || wz) P.launchT = 0; }
   else if (P.vx < target) P.vx = Math.min(target, P.vx + a * dt); else if (P.vx > target) P.vx = Math.max(target, P.vx - a * dt);
@@ -439,6 +441,8 @@ function updateBoss(dt) {
   if (B.kind === 'fox') return updateFoxBoss(dt);
   if (B.kind === 'peacock') return updatePeacockBoss(dt);
   if (B.kind === 'monkey') return updateMonkeyBoss(dt);
+  if (B.kind === 'penguin') return updatePenguinBoss(dt);
+  if (B.kind === 'caterpillar') return updateCaterpillarBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -617,7 +621,7 @@ function update(dt) {
   G.mt = (G.mt || 0) + (frozen ? 0 : dt);
   for (const m of G.movers) {
     if (frozen) { m.dx = 0; m.dy = 0; continue; }
-    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice || m.log || m.dolphin || m.whale || m.coaster || m.ball || m.pulley || m.sailboat || m.giraffe || m.hippo) { updatePlatform(m, dt); continue; }
+    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice || m.log || m.dolphin || m.whale || m.coaster || m.ball || m.pulley || m.sailboat || m.giraffe || m.hippo || m.hotair || m.snowball || m.special15) { updatePlatform(m, dt); continue; }
     let nx, ny;
     if (m.circ) { const a = G.mt * TAU / m.period + m.ph; nx = m.cx + Math.cos(a) * m.r - m.w / 2; ny = m.cy + Math.sin(a) * m.r; }
     else if (m.swing) { const a = m.amp * Math.sin(G.mt * TAU / m.period + m.ph); nx = m.px + Math.sin(a) * m.len - m.w / 2; ny = m.py + Math.cos(a) * m.len; }
@@ -774,6 +778,7 @@ function updatePlatform(m, dt) {
   if (m.ball) return updateBall(m, dt);
   if (m.pulley) return updatePulley(m, dt);
   if (m.sailboat || m.giraffe || m.hippo) return updatePlatform13(m, dt);
+  if (m.hotair || m.snowball || m.special15) return updatePlatform14(m, dt);
   const y0 = m.y; m.dx = 0; m.dy = 0; m.st += dt;
   if (m.crumble) {
     if (m.state === 'idle') { m.y = m.by; if (G.P.onMover === m) { m.state = 'shake'; m.st = 0; Snd.tone(240, 0.25, 'triangle', 0.05, 150); } }

@@ -2752,7 +2752,7 @@ function drawMover2(c, m, theme) {
   if (m.coaster) { drawCoasterCart(c, m, G.t); return true; }
   if (m.ball) { drawRollBall(c, m, G.t); return true; }
   if (m.pulley) { drawBasket(c, m); return true; }
-  if (m.sailboat || m.giraffe || m.hippo || m.drum) return drawMover13(c, m);
+  if (m.sailboat || m.giraffe || m.hippo || m.drum || m.hotair || m.snowball || m.special15) return drawMover13(c, m);
   if (m.swing || m.sheep || (m.circ && theme === 'windmill')) return drawMover3(c, m, theme);
   if (m.bubble) { drawBubblePlat(c, m, G.t); return true; }
   if (m.cart) { drawCart(c, m, G.t); return true; }
@@ -4906,6 +4906,7 @@ function drawEnemy8(c, e, cx, fl) {
 Object.assign(TILE7, { thorn: 1, brick0: 1, brick1: 1, brick2: 1, brick3: 1, box: 1 });
 function tileKind8(v, tx, ty) {
   if (v >= 24) return tileKind9(v, tx, ty);
+  if (v === 22 && (G.theme === 'sledtrack' || G.theme === 'iceberg')) return 'icespike';
   if (v === 22) return (tileAt(tx, (ty || 0) - 1) === 22 || tileAt(tx, (ty || 0) + 1) === 22) ? 'thornV' : 'thorn';
   return G.theme === 'attic' ? 'box' : 'brick' + (((tx || 0) + (ty || 0) * 2) % 4);
 }
@@ -6805,14 +6806,14 @@ function drawEnemy13(c, e, cx, fl) {
     case 'swan': drawSwan(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
     case 'mosquito': drawMosquito(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
   }
-  return false;
+  return drawEnemy14(c, e, cx, fl);
 }
 
 /* ===== Плитка: м'яка земля ===== */
 Object.assign(TILE7, { dirt: 1 });
-function tileKind13() { return 'dirt'; }
+function tileKind13(v, tx, ty) { return v === 39 ? 'dirt' : tileKind14(v, tx, ty); }
 function drawTile13(c, kind) {
-  if (kind !== 'dirt') return;
+  if (kind !== 'dirt') return drawTile14(c, kind);
   c.fillStyle = '#c48a52'; c.fillRect(0, 0, T, T);
   c.fillStyle = '#d9a46a'; c.beginPath(); c.moveTo(0, 3); c.quadraticCurveTo(6, 0, 12, 3); c.quadraticCurveTo(18, 6, T, 2); c.lineTo(T, 0); c.lineTo(0, 0); c.closePath(); c.fill();
   c.fillStyle = '#8a5a30'; for (const [x, y, r] of [[5, 8, 1.8], [16, 6, 1.4], [10, 15, 2.2], [20, 18, 1.6], [4, 20, 1.2]]) { circ(c, x, y, r); c.fill(); }
@@ -6883,7 +6884,7 @@ function drawMover13(c, m) {
   if (m.hippo) { if (m.state !== 'gone') drawHippoBack(c, m.x, m.y, m.w, G.t); return true; }
   if (m.giraffe) { drawGiraffeHead(c, m, G.t); return true; }
   if (m.drum) { drawDrum(c, m, G.t); return true; }
-  return false;
+  return drawMover14(c, m);
 }
 
 /* ===== Їжа й звірятка ===== */
@@ -7008,6 +7009,7 @@ function drawWorld13(c, t, vis) {
     for (let x = G.arena.x0 + 10; x < G.arena.x1; x += 34) { const y = B.top - 62 + Math.sin(x * 0.05) * 4; ell(c, x, y + 4, 6, 3, 0.6); c.fill(); }
     c.restore();
   }
+  drawWorld14(c, t, vis);
 }
 function drawCarry(c, P, t) { if (P.carry) drawFoodItem(c, P.carry.kind, P.carry.x, P.carry.y, 0.9); }
 
@@ -7074,7 +7076,7 @@ function drawBlock14(c, b) {
   } else if (b === 'bananablock') {
     rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#7fcf6a'; c.fill(); c.stroke();
     c.save(); c.translate(12, 13); c.rotate(-0.5); drawBanana(c, 0, 0, 0); c.restore();
-  } else return false;
+  } else return drawBlock15(c, b);
   return true;
 }
 
@@ -7099,6 +7101,7 @@ function drawDecor17(c, d, t) {
       c.fillStyle = d.c || '#ff7ab8'; c.beginPath(); c.moveTo(x, y - 10); c.lineTo(x + 5, y - 5); c.lineTo(x, y); c.lineTo(x - 5, y - 5); c.closePath(); c.fill(); c.stroke();
       sparkle(c, x + 4, y - 10, 1.4, '#ffffff');
       break;
+    default: drawDecor18(c, d, t);
   }
 }
 
@@ -7160,6 +7163,320 @@ function bgBananaGrove(c, viewW, camX, t) {
   hill(c, viewW, 212, 6, 0.03, 1.2, camX * 0.45, '#9fe08a');
 }
 Object.assign(BG2, { sailake: bgSailake, zoo: bgZoo, songmeadow: bgSongMeadow, treasure: bgTreasure, bananagrove: bgBananaGrove });
+
+/* ===== Частина 18: Повітряна куля, Сніжна долина, Північне сяйво, Санна траса, Айсберг Пінгвіна ===== */
+Object.assign(THEMES, {
+  hotair: { sky: ['#7fc8ff', '#bfe6ff', '#fff1f8'], panel: '#1f3a6a', top: '#ffffff', topHi: '#ffffff', topLo: '#cfe0f5', fill: '#b9a3e8', fillLo: '#9f88d6', dots: ['#d6c8ff', '#ffffff', '#ffd6f0'], block: 'balloonblock', ice: false, topStyle: 'snow', dotShape: 'dot' },
+  snowvalley: { sky: ['#9fd0ff', '#d6ecff', '#ffffff'], panel: '#24506f', top: '#ffffff', topHi: '#ffffff', topLo: '#c9e0f5', fill: '#8fb8e6', fillLo: '#7aa4d6', dots: ['#c9e4ff', '#ffffff', '#a8c8f0'], block: 'snowbrick', ice: false, topStyle: 'snow', dotShape: 'dot' },
+  aurora: { sky: ['#0f1a45', '#1d3a6a', '#2f6a8a'], panel: '#0a1230', top: '#e6f4ff', topHi: '#ffffff', topLo: '#a8c8e8', fill: '#4a6aa8', fillLo: '#3a5490', dots: ['#7a9ad9', '#c9e4ff', '#9fffe0'], block: 'icecube', ice: false, topStyle: 'snow', dotShape: 'dot' },
+  sledtrack: { sky: ['#b3dcff', '#e0f2ff', '#ffffff'], panel: '#1f4a6a', top: '#ffffff', topHi: '#ffffff', topLo: '#cfe2f5', fill: '#a8c4e6', fillLo: '#93b0d9', dots: ['#d6e8ff', '#ffffff', '#ff9fc4'], block: 'snowbrick', ice: false, topStyle: 'snow', dotShape: 'dot' },
+  iceberg: { sky: ['#8fd0ff', '#c9ecff', '#f2fbff'], panel: '#14385a', top: '#ffffff', topHi: '#ffffff', topLo: '#bfe4f5', fill: '#7fc4e8', fillLo: '#5fb0dc', dots: ['#bfe8ff', '#ffffff', '#9fd8f5'], block: 'icebrick', ice: false, topStyle: 'snow', fillStyle: 'streaks' },
+});
+
+/* ===== Вороги ===== */
+function drawSeal(c, x, gy, dir, t, flash) {
+  c.save(); c.translate(x, gy); c.scale(dir, 1); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.2;
+  const b = Math.sin(t * 6) * 1.5;
+  c.fillStyle = flash ? '#fff' : '#9fb0c9';
+  c.beginPath(); c.moveTo(-14, -2); c.quadraticCurveTo(-16, -12, -4, -13 + b); c.quadraticCurveTo(8, -14 + b, 11, -6); c.quadraticCurveTo(13, 0, 6, 0); c.lineTo(-10, 0); c.closePath(); c.fill(); c.stroke();
+  c.beginPath(); c.moveTo(-13, -3); c.lineTo(-19, -7); c.lineTo(-18, 0); c.closePath(); c.fill(); c.stroke();
+  c.fillStyle = '#c9d4e6'; ell(c, 1, -4, 6, 3); c.fill();
+  c.fillStyle = INK; circ(c, 6, -9 + b, 1.3); c.fill();
+  c.fillStyle = '#5a5a7a'; circ(c, 11, -6, 1.4); c.fill();
+  c.strokeStyle = 'rgba(59,31,79,.5)'; c.lineWidth = 0.7; c.beginPath(); c.moveTo(10, -5); c.lineTo(15, -6); c.moveTo(10, -4.5); c.lineTo(15, -3.5); c.stroke();
+  c.fillStyle = '#ff9fbf'; circ(c, 4, -6 + b, 1.2); c.fill();
+  c.restore();
+}
+function drawFlake(c, x, y, t, flash) {
+  c.save(); c.translate(x, y); c.rotate(t * 1.2); c.lineCap = 'round';
+  c.strokeStyle = flash ? '#fff' : '#7fc8ff'; c.lineWidth = 3.4;
+  for (let i = 0; i < 3; i++) { c.save(); c.rotate(i * Math.PI / 3); c.beginPath(); c.moveTo(-10, 0); c.lineTo(10, 0); c.stroke(); c.restore(); }
+  c.strokeStyle = '#ffffff'; c.lineWidth = 1.6;
+  for (let i = 0; i < 6; i++) { c.save(); c.rotate(i * Math.PI / 3); c.beginPath(); c.moveTo(0, 0); c.lineTo(9, 0); c.moveTo(6, 0); c.lineTo(8.5, -2.6); c.moveTo(6, 0); c.lineTo(8.5, 2.6); c.stroke(); c.restore(); }
+  c.rotate(-t * 1.2); c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 0.9; circ(c, 0, 0, 4.4); c.fill(); c.stroke();
+  c.fillStyle = INK; circ(c, -1.4, -0.6, 0.7); c.fill(); circ(c, 1.4, -0.6, 0.7); c.fill();
+  c.restore();
+}
+function drawEnemy14(c, e, cx, fl) {
+  switch (e.k) {
+    case 'seal': drawSeal(c, cx, e.y + e.h, e.dir, e.t, fl); return true;
+    case 'flake': drawFlake(c, cx, e.y + e.h / 2, e.t, fl); return true;
+  }
+  return drawEnemy15(c, e, cx, fl);
+}
+
+/* ===== Плитки: крижані шипи ===== */
+Object.assign(TILE7, { icespike: 1 });
+function tileKind14(v, tx, ty) { return tileKind15(v, tx, ty); }
+function drawTile14(c, kind) {
+  if (kind === 'icespike') {
+    const th = THEMES[G.theme] || THEMES.ice;
+    c.fillStyle = th.fill; c.fillRect(0, 12, T, T - 12);
+    c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1;
+    for (const [x0, h] of [[0, 14], [8, 18], [16, 13]]) {
+      c.fillStyle = '#dff4ff'; c.beginPath(); c.moveTo(x0, 14); c.lineTo(x0 + 4, 14 - h + 2); c.lineTo(x0 + 8, 14); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = 'rgba(255,255,255,.9)'; c.beginPath(); c.moveTo(x0 + 2.4, 13); c.lineTo(x0 + 4, 16 - h); c.lineTo(x0 + 4, 13); c.closePath(); c.fill();
+    }
+    return;
+  }
+  drawTile15(c, kind);
+}
+
+/* ===== Повітряна куля ===== */
+function drawHotair(c, m, t) {
+  const cx = m.x + m.w / 2, ecy = m.y - HOT_GAP - HOT_ENV, r = HOT_ENV;
+  c.save(); c.lineJoin = 'round'; c.lineCap = 'round';
+  // мотузки
+  c.strokeStyle = '#8a5a30'; c.lineWidth = 1.2; c.beginPath();
+  c.moveTo(m.x + 4, m.y); c.lineTo(cx - r * 0.55, ecy + r * 0.8); c.moveTo(m.x + m.w - 4, m.y); c.lineTo(cx + r * 0.55, ecy + r * 0.8);
+  c.moveTo(cx - 6, m.y); c.lineTo(cx - 4, ecy + r); c.moveTo(cx + 6, m.y); c.lineTo(cx + 4, ecy + r); c.stroke();
+  // полум'я пальника
+  const f = m.burn || 0;
+  if (f > 0.05) { c.save(); c.globalAlpha = f; const fl = 8 + Math.sin(t * 40) * 3; c.fillStyle = '#ffb347'; c.beginPath(); c.moveTo(cx - 5, m.y - 6); c.quadraticCurveTo(cx, m.y - 8 - fl * 1.6, cx + 5, m.y - 6); c.closePath(); c.fill(); c.fillStyle = '#fff3a8'; c.beginPath(); c.moveTo(cx - 2.4, m.y - 6); c.quadraticCurveTo(cx, m.y - 8 - fl, cx + 2.4, m.y - 6); c.closePath(); c.fill(); c.restore(); }
+  c.fillStyle = '#8a8aa8'; c.strokeStyle = INK; c.lineWidth = 1; rr(c, cx - 5, m.y - 6, 10, 5, 1.5); c.fill(); c.stroke();
+  // конверт у смужки
+  c.save(); c.beginPath(); c.moveTo(cx - r * 0.42, ecy + r * 0.96); c.bezierCurveTo(cx - r * 1.25, ecy + r * 0.3, cx - r * 1.15, ecy - r * 1.05, cx, ecy - r); c.bezierCurveTo(cx + r * 1.15, ecy - r * 1.05, cx + r * 1.25, ecy + r * 0.3, cx + r * 0.42, ecy + r * 0.96); c.closePath(); c.clip();
+  const cols = ['#ff5c7a', '#ffd23f', '#4cb6ff', '#7fd46a', '#b48cff'];
+  for (let i = -3; i <= 3; i++) { c.fillStyle = cols[(i + 10) % cols.length]; c.fillRect(cx + i * 10 - 5, ecy - r - 2, 10, r * 2 + 4); }
+  c.fillStyle = 'rgba(255,255,255,.35)'; ell(c, cx - r * 0.45, ecy - r * 0.45, r * 0.22, r * 0.4, 0.3); c.fill();
+  c.restore();
+  c.strokeStyle = INK; c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx - r * 0.42, ecy + r * 0.96); c.bezierCurveTo(cx - r * 1.25, ecy + r * 0.3, cx - r * 1.15, ecy - r * 1.05, cx, ecy - r); c.bezierCurveTo(cx + r * 1.15, ecy - r * 1.05, cx + r * 1.25, ecy + r * 0.3, cx + r * 0.42, ecy + r * 0.96); c.closePath(); c.stroke();
+  c.fillStyle = '#ff7ab8'; rr(c, cx - r * 0.42, ecy + r * 0.9, r * 0.84, 5, 2); c.fill(); c.stroke();
+  // кошик (задня стінка)
+  drawBasket14(c, m.x, m.y, m.w, false);
+  c.restore();
+}
+function drawBasket14(c, x, y, w, front) {
+  c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4;
+  c.fillStyle = front ? '#d9a36c' : '#b8844f'; rr(c, x, y + (front ? 4 : 0), w, HOT_BASKET - (front ? 4 : 0), 3); c.fill(); c.stroke();
+  c.strokeStyle = 'rgba(90,58,36,.55)'; c.lineWidth = 1; c.beginPath();
+  for (let k = 6; k < w; k += 7) { c.moveTo(x + k, y + (front ? 6 : 2)); c.lineTo(x + k, y + HOT_BASKET - 2); } c.moveTo(x + 2, y + 11); c.lineTo(x + w - 2, y + 11); c.stroke();
+  if (front) { c.fillStyle = '#8a5a30'; c.strokeStyle = INK; c.lineWidth = 1.2; rr(c, x - 2, y + 3, w + 4, 4, 2); c.fill(); c.stroke(); }
+  c.restore();
+}
+
+/* ===== Сніжка ===== */
+function drawSnowballBig(c, m, t) {
+  const cx = m.cx, cy = m.gy - m.r, r = m.r, a = cx / Math.max(6, r);
+  c.save(); c.lineJoin = 'round';
+  c.fillStyle = 'rgba(59,31,79,.15)'; ell(c, cx, m.gy - 1, r * 0.9, 3); c.fill();
+  c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 1.4; circ(c, cx, cy, r); c.fill(); c.stroke();
+  c.save(); circ(c, cx, cy, r); c.clip();
+  c.fillStyle = '#d6e8ff'; ell(c, cx + r * 0.35, cy + r * 0.4, r * 0.9, r * 0.75); c.fill();
+  c.fillStyle = 'rgba(160,190,230,.6)';
+  for (let i = 0; i < 5; i++) { const ang = a + i * 1.26, rr2 = r * (0.3 + (i % 3) * 0.2); circ(c, cx + Math.cos(ang) * rr2, cy + Math.sin(ang) * rr2, Math.max(1.4, r * 0.09)); c.fill(); }
+  c.restore();
+  c.fillStyle = 'rgba(255,255,255,.95)'; ell(c, cx - r * 0.4, cy - r * 0.45, r * 0.25, r * 0.15, -0.6); c.fill();
+  if (m.r >= m.rMax - 0.5) sparkle(c, cx + r * 0.6, cy - r * 0.7, 2.4, '#bfefff');
+  c.restore();
+}
+
+/* ===== Санчата ===== */
+function drawSled(c, x, gy, dir) {
+  c.save(); c.translate(x, gy); c.scale(dir || 1, 1); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1.3;
+  c.strokeStyle = '#ff4f6d'; c.lineWidth = 2.6; c.beginPath(); c.moveTo(-15, -1); c.lineTo(12, -1); c.quadraticCurveTo(18, -1, 17, -7); c.stroke();
+  c.strokeStyle = INK; c.lineWidth = 1; c.beginPath(); c.moveTo(-15, 0.4); c.lineTo(12, 0.4); c.stroke();
+  c.strokeStyle = '#8a5a30'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(-10, -1); c.lineTo(-10, -5); c.moveTo(8, -1); c.lineTo(8, -5); c.stroke();
+  c.fillStyle = '#d9a36c'; c.strokeStyle = INK; c.lineWidth = 1.1; rr(c, -14, -8, 26, 4, 2); c.fill(); c.stroke();
+  c.strokeStyle = 'rgba(90,58,36,.5)'; c.beginPath(); c.moveTo(-6, -7.5); c.lineTo(-6, -4.5); c.moveTo(2, -7.5); c.lineTo(2, -4.5); c.stroke();
+  c.restore();
+}
+
+/* ===== Зірочка-втікачка ===== */
+function drawRunner(c, r, t) {
+  const hop = r.state === 'run' ? Math.abs(Math.sin(r.hop)) * 8 : Math.abs(Math.sin(r.hop)) * 2, shake = r.cornered ? Math.sin(t * 50) * 1.4 : 0;
+  const x = r.x + shake, y = r.gy - 14 - hop, fr = r.freeze > 0;
+  c.save(); c.lineJoin = 'round'; c.lineCap = 'round';
+  c.fillStyle = 'rgba(59,31,79,.18)'; ell(c, r.x, r.gy - 1, 9 - hop * 0.4, 2.4); c.fill();
+  c.strokeStyle = INK; c.lineWidth = 1.6;
+  const lg = r.state === 'run' ? Math.sin(r.hop * 2) * 4 : 0;
+  c.beginPath(); c.moveTo(x - 3, y + 7); c.lineTo(x - 4 - lg, y + 13 + hop * 0.3); c.moveTo(x + 3, y + 7); c.lineTo(x + 4 + lg, y + 13 + hop * 0.3); c.stroke();
+  const g = c.createRadialGradient(x, y, 2, x, y, 22); g.addColorStop(0, 'rgba(255,240,150,.6)'); g.addColorStop(1, 'rgba(255,240,150,0)'); c.fillStyle = g; circ(c, x, y, 22); c.fill();
+  c.fillStyle = fr ? '#bfefff' : '#ffd23f'; c.lineWidth = 1.4; starPath(c, x, y, 13, 6, Math.sin(t * 2) * 0.1); c.fill(); c.stroke();
+  c.fillStyle = 'rgba(255,255,255,.6)'; ell(c, x - 4, y - 5, 2.6, 1.6, -0.5); c.fill();
+  c.fillStyle = INK;
+  if (r.cornered) { c.lineWidth = 1.2; c.beginPath(); c.arc(x - 3, y - 1, 1.6, 0, TAU); c.stroke(); c.beginPath(); c.arc(x + 3, y - 1, 1.6, 0, TAU); c.stroke(); }
+  else { circ(c, x - 3, y - 1, 1.3); c.fill(); circ(c, x + 3, y - 1, 1.3); c.fill(); }
+  c.lineWidth = 1.1; c.beginPath(); if (r.state === 'run') c.arc(x, y + 3, 2, 0, TAU); else c.arc(x, y + 1.6, 2.4, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke();
+  c.fillStyle = '#ff9fbf'; circ(c, x - 6, y + 2, 1.4); c.fill(); circ(c, x + 6, y + 2, 1.4); c.fill();
+  if (fr) { c.strokeStyle = 'rgba(255,255,255,.9)'; c.lineWidth = 1.2; for (let i = 0; i < 4; i++) { const a = t * 2 + i * 1.6; c.beginPath(); c.moveTo(x + Math.cos(a) * 15, y + Math.sin(a) * 15); c.lineTo(x + Math.cos(a) * 19, y + Math.sin(a) * 19); c.stroke(); } }
+  c.restore();
+}
+
+function drawMover14(c, m) {
+  if (m.hotair) { drawHotair(c, m, G.t); return true; }
+  if (m.snowball) { drawSnowballBig(c, m, G.t); return true; }
+  return drawMover15(c, m);
+}
+function drawWorld14(c, t, vis) {
+  for (const s of G.sleds) if (s.state !== 'ride' && vis(s.x)) drawSled(c, s.x, s.gy, 1);
+  for (const s of G.sleds) if (s.state === 'idle' && vis(s.x1)) { c.save(); c.strokeStyle = '#8a5a30'; c.lineWidth = 2; c.beginPath(); c.moveTo(s.x1, s.gy); c.lineTo(s.x1, s.gy - 40); c.stroke(); c.fillStyle = '#ff5c7a'; c.strokeStyle = INK; c.lineWidth = 1; c.beginPath(); c.moveTo(s.x1, s.gy - 40); c.lineTo(s.x1 + 18, s.gy - 34); c.lineTo(s.x1, s.gy - 28); c.closePath(); c.fill(); c.stroke(); c.restore(); }
+  for (const r of G.runners) if (r.state !== 'caught' && vis(r.x)) drawRunner(c, r, t);
+  drawWorld15(c, t, vis);
+}
+function drawUnderPlayer(c, P, t) {
+  if (P.sled) drawSled(c, P.x + P.w / 2, P.y + P.h + 1, 1);
+  drawUnder15(c, P, t);
+}
+function drawOverPlayer(c, P, t) {
+  if (P.hotair) drawBasket14(c, P.hotair.x, P.hotair.y, P.hotair.w, true);
+  drawOver15(c, P, t);
+}
+
+/* ===== Пінгвін Ковзанчик ===== */
+function drawPenguinBoss(c, B, t) {
+  const st = B.state, fl = B.flash > 0, dark = fl ? '#fff' : '#2f3a66', happy = B.dead, d = B.dir || 1;
+  c.save(); c.translate(B.x, B.gy); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1.6;
+  if (st === 'slide' || st === 'spin') {
+    if (st === 'spin') c.rotate(B.spin);
+    c.scale(d, 1);
+    c.fillStyle = dark; ell(c, 0, -11, 24, 11); c.fill(); c.stroke();
+    c.fillStyle = '#ffffff'; ell(c, 2, -6, 18, 6); c.fill();
+    c.fillStyle = '#4cb6ff'; rr(c, 10, -20, 8, 6, 3); c.fill(); c.stroke();
+    c.fillStyle = '#fff'; circ(c, 20, -15, 3); c.fill(); c.stroke(); c.fillStyle = INK; circ(c, 21, -15, 1.4); c.fill();
+    c.fillStyle = '#ff9a3d'; c.beginPath(); c.moveTo(24, -13); c.lineTo(32, -11); c.lineTo(24, -9); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#ff9a3d'; ell(c, -24, -10, 4, 2.4, 0.3); c.fill(); c.stroke(); ell(c, -24, -5, 4, 2.4, -0.3); c.fill(); c.stroke();
+    c.fillStyle = dark; ell(c, 0, -20, 9, 3, -0.2); c.fill(); c.stroke();
+    c.restore(); return;
+  }
+  c.scale(d, 1);
+  const bob = st === 'prep' ? 6 : 0, dizzy = st === 'dizzy';
+  c.fillStyle = '#ff9a3d'; ell(c, -7, -2, 6, 3); c.fill(); c.stroke(); ell(c, 8, -2, 6, 3); c.fill(); c.stroke();
+  c.fillStyle = dark; ell(c, 0, -24 + bob * 0.5, 17, 23 - bob * 0.5); c.fill(); c.stroke();
+  c.fillStyle = '#ffffff'; ell(c, 3, -20 + bob * 0.5, 11, 17 - bob * 0.4); c.fill();
+  // крила
+  const wing = st === 'throw' && B.st > 0.5 ? -1.4 : happy ? -1 + Math.sin(t * 8) * 0.3 : 0.3;
+  c.save(); c.translate(13, -30 + bob); c.rotate(wing); c.fillStyle = dark; ell(c, 3, 8, 4.4, 12); c.fill(); c.stroke(); c.restore();
+  c.save(); c.translate(-14, -30 + bob); c.rotate(-0.3); c.fillStyle = dark; ell(c, -2, 8, 4.4, 12); c.fill(); c.stroke(); c.restore();
+  // шарф
+  c.fillStyle = '#4cb6ff'; rr(c, -12, -38 + bob, 24, 6, 3); c.fill(); c.stroke();
+  c.fillStyle = '#ff5c7a'; rr(c, -14, -36 + bob, 6, 13, 3); c.fill(); c.stroke();
+  // голова
+  c.fillStyle = dark; circ(c, 0, -46 + bob, 13); c.fill(); c.stroke();
+  c.fillStyle = '#ffffff'; ell(c, 4, -45 + bob, 8, 7); c.fill();
+  if (dizzy) { c.lineWidth = 1.3; for (const ex of [1, 8]) { c.beginPath(); c.moveTo(ex - 2, -49 + bob); c.lineTo(ex + 2, -45 + bob); c.moveTo(ex + 2, -49 + bob); c.lineTo(ex - 2, -45 + bob); c.stroke(); } }
+  else if (happy) { c.lineWidth = 1.4; for (const ex of [1, 8]) { c.beginPath(); c.arc(ex, -46 + bob, 2, 1.1 * Math.PI, 1.9 * Math.PI); c.stroke(); } }
+  else { c.fillStyle = INK; circ(c, 1.5, -47 + bob, 1.7); c.fill(); circ(c, 8, -47 + bob, 1.7); c.fill(); c.fillStyle = '#fff'; circ(c, 2, -47.6 + bob, 0.6); c.fill(); circ(c, 8.5, -47.6 + bob, 0.6); c.fill(); }
+  c.fillStyle = '#ff9a3d'; c.strokeStyle = INK; c.lineWidth = 1.3; c.beginPath(); c.moveTo(9, -43 + bob); c.lineTo(19, -41 + bob); c.lineTo(9, -38 + bob); c.closePath(); c.fill(); c.stroke();
+  c.fillStyle = 'rgba(255,110,170,.55)'; circ(c, 11, -37 + bob, 1.8); c.fill();
+  // шапочка з помпоном
+  c.fillStyle = '#ff5c7a'; c.beginPath(); c.moveTo(-12, -53 + bob); c.quadraticCurveTo(0, -70 + bob, 11, -55 + bob); c.closePath(); c.fill(); c.stroke();
+  c.fillStyle = '#ffffff'; circ(c, -1, -66 + bob, 4); c.fill(); c.stroke();
+  if (st === 'throw' && B.st > 0.4) { c.save(); c.translate(17, -42); drawSnowball(c, 0, 0); c.restore(); }
+  c.restore();
+  if (dizzy) for (let i = 0; i < 3; i++) { const a = t * 4 + i * TAU / 3; c.fillStyle = '#ffd23f'; starPath(c, B.x + Math.cos(a) * 16, B.gy - 66 + Math.sin(a) * 5, 4, 1.8, a); c.fill(); c.strokeStyle = INK; c.lineWidth = 0.7; c.stroke(); }
+  if (happy) for (let i = 0; i < 3; i++) { const k = (t * 0.7 + i / 3) % 1; c.save(); c.globalAlpha = 1 - k; heartPath(c, B.x + (i - 1) * 18, B.gy - 86 - k * 30, 9); c.fillStyle = ['#ff7ab8', '#ffd23f', '#4cb6ff'][i]; c.fill(); c.restore(); }
+}
+
+/* ===== Блоки ===== */
+function drawBlock15(c, b) {
+  c.strokeStyle = INK; c.lineWidth = 1.4;
+  if (b === 'balloonblock') {
+    // щільна грозова хмаринка: крізь неї куля не пролетить
+    c.fillStyle = '#d9d2f5'; rr(c, 0.5, 0.5, T - 1, T - 1, 9); c.fill(); c.stroke();
+    c.fillStyle = '#eeeaff'; circ(c, 7, 8, 5); c.fill(); circ(c, 15, 7, 6); c.fill();
+    c.fillStyle = '#ffffff'; ell(c, 9, 6, 3, 1.6, -0.4); c.fill();
+    c.fillStyle = 'rgba(120,100,180,.35)'; ell(c, 12, 18, 8, 2.4); c.fill();
+  } else if (b === 'snowbrick') {
+    rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#e6f2ff'; c.fill(); c.stroke();
+    c.strokeStyle = 'rgba(120,160,210,.7)'; c.lineWidth = 1; c.beginPath(); c.moveTo(1, 12); c.lineTo(T - 1, 12); c.moveTo(12, 1); c.lineTo(12, 12); c.moveTo(6, 12); c.lineTo(6, T - 1); c.moveTo(18, 12); c.lineTo(18, T - 1); c.stroke();
+    c.fillStyle = '#ffffff'; rr(c, 1, 1, T - 2, 4, 2); c.fill();
+  } else if (b === 'icebrick') {
+    rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#bfe8ff'; c.fill(); c.stroke();
+    c.fillStyle = 'rgba(255,255,255,.7)'; c.beginPath(); c.moveTo(4, 18); c.lineTo(10, 4); c.lineTo(13, 4); c.lineTo(7, 18); c.closePath(); c.fill();
+    c.fillStyle = 'rgba(255,255,255,.5)'; c.beginPath(); c.moveTo(13, 20); c.lineTo(18, 9); c.lineTo(20, 9); c.lineTo(15, 20); c.closePath(); c.fill();
+  } else return drawBlock16(c, b);
+  return true;
+}
+
+/* ===== Декор ===== */
+function drawDecor18(c, d, t) {
+  const x = d.x, y = d.y;
+  c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 0.8;
+  switch (d.k) {
+    case 'slalom':
+      c.strokeStyle = '#8a5a30'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 22); c.stroke();
+      c.fillStyle = d.c || '#ff5c7a'; c.strokeStyle = INK; c.lineWidth = 0.8; c.beginPath(); c.moveTo(x, y - 22); c.lineTo(x + 11, y - 18 + Math.sin(t * 4 + x) * 1.5); c.lineTo(x, y - 14); c.closePath(); c.fill(); c.stroke();
+      break;
+    case 'fishS':
+      c.fillStyle = '#9fd8ff'; ell(c, x, y - 4, 6, 3); c.fill(); c.stroke(); c.beginPath(); c.moveTo(x - 5, y - 4); c.lineTo(x - 10, y - 7); c.lineTo(x - 10, y - 1); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = INK; circ(c, x + 3, y - 5, 0.8); c.fill();
+      break;
+    case 'iglooS':
+      c.fillStyle = '#ffffff'; c.beginPath(); c.arc(x, y, 12, Math.PI, TAU); c.closePath(); c.fill(); c.stroke();
+      c.strokeStyle = 'rgba(120,160,210,.8)'; c.beginPath(); c.moveTo(x - 11, y - 5); c.lineTo(x + 11, y - 5); c.moveTo(x - 6, y - 10); c.lineTo(x + 6, y - 10); c.stroke();
+      c.fillStyle = '#5a6a9a'; c.strokeStyle = INK; c.beginPath(); c.arc(x, y, 4, Math.PI, TAU); c.closePath(); c.fill(); c.stroke();
+      break;
+    default: drawDecor19(c, d, t);
+  }
+}
+
+/* ===== Фони ===== */
+function peaks18(c, viewW, camX, k, base, h, col, snow) {
+  const span = 180;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * k, span);
+    c.fillStyle = col; c.beginPath(); c.moveTo(wx - 20, base); c.lineTo(wx + 70, base - h - (i % 2 ? 0 : 18)); c.lineTo(wx + 160, base); c.closePath(); c.fill();
+    if (snow) { c.fillStyle = snow; c.beginPath(); const tx = wx + 70, ty = base - h - (i % 2 ? 0 : 18); c.moveTo(tx, ty); c.lineTo(tx - 22, ty + 26); c.lineTo(tx - 8, ty + 20); c.lineTo(tx + 2, ty + 28); c.lineTo(tx + 12, ty + 20); c.lineTo(tx + 22, ty + 26); c.closePath(); c.fill(); }
+  }
+}
+function bgHotair(c, viewW, camX, t) {
+  for (let i = 0; i < 6; i++) { const x = wrapX(i * 190 - camX * 0.12 + t * 8, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 3) * 30, 1, 'rgba(255,255,255,.95)'); }
+  for (let i = 0; i < 4; i++) {
+    const x = wrapX(i * 260 - camX * 0.2 + t * 6, viewW + 120) - 60, y = 60 + (i % 2) * 40 + Math.sin(t * 0.8 + i) * 6, col = ['#ffd23f', '#ff9fd0', '#9fe0ff', '#b8f0a8'][i];
+    c.fillStyle = col; circ(c, x, y, 9); c.fill(); c.fillStyle = '#c98d55'; c.fillRect(x - 3, y + 12, 6, 4); c.strokeStyle = 'rgba(138,90,48,.6)'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(x - 6, y + 5); c.lineTo(x - 3, y + 12); c.moveTo(x + 6, y + 5); c.lineTo(x + 3, y + 12); c.stroke();
+  }
+  peaks18(c, viewW, camX, 0.15, 230, 90, '#b8c4e6', '#ffffff');
+  peaks18(c, viewW, camX + 90, 0.3, 250, 60, '#9fb0d9', '#f2f8ff');
+}
+function bgSnowvalley(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 4, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  peaks18(c, viewW, camX, 0.12, 200, 80, '#c9d8f0', '#ffffff');
+  hill(c, viewW, 200, 10, 0.012, 0.4, camX * 0.25, '#e6f0ff');
+  const span = 120;
+  for (let i = -1; i < viewW / span + 2; i++) { const wx = i * span + wrapX(-camX * 0.35, span) + 30; c.fillStyle = '#5a9a7a'; for (let k = 0; k < 3; k++) { c.beginPath(); c.moveTo(wx - 14 + k * 3, 200 - k * 12); c.lineTo(wx, 176 - k * 12); c.lineTo(wx + 14 - k * 3, 200 - k * 12); c.closePath(); c.fill(); } c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(wx - 6, 168); c.lineTo(wx, 152); c.lineTo(wx + 6, 168); c.closePath(); c.fill(); }
+  c.fillStyle = 'rgba(255,255,255,.9)'; for (let i = 0; i < 40; i++) { const x = wrapX(i * 97 - camX * 0.5 + Math.sin(t + i) * 10, viewW + 20) - 10, y = (i * 53 + t * (14 + i % 5 * 3)) % VIEW_H; circ(c, x, y, 1 + (i % 3) * 0.5); c.fill(); }
+}
+function bgAurora(c, viewW, camX, t) {
+  const R = rng(77);
+  for (let i = 0; i < 70; i++) { const x = wrapX(R() * 1500 - camX * 0.04, viewW + 20) - 10, y = R() * 160, tw = 0.5 + 0.5 * Math.sin(t * 2 + i * 1.3); c.fillStyle = `rgba(255,255,255,${0.3 + tw * 0.6})`; circ(c, x, y, 0.6 + R() * 1.1); c.fill(); }
+  for (let b = 0; b < 3; b++) {
+    const col = ['rgba(120,255,190,.32)', 'rgba(150,170,255,.28)', 'rgba(255,140,220,.22)'][b];
+    c.fillStyle = col; c.beginPath();
+    for (let x = -20; x <= viewW + 20; x += 12) { const y = 50 + b * 22 + Math.sin(x * 0.012 + t * 0.6 + b * 2 - camX * 0.002) * 18; if (x === -20) c.moveTo(x, y); else c.lineTo(x, y); }
+    for (let x = viewW + 20; x >= -20; x -= 12) { const y = 90 + b * 22 + Math.sin(x * 0.01 + t * 0.5 + b - camX * 0.002) * 14; c.lineTo(x, y); }
+    c.closePath(); c.fill();
+  }
+  peaks18(c, viewW, camX, 0.12, 220, 70, '#2a4a7a', '#c9e0ff');
+  hill(c, viewW, 214, 6, 0.03, 1.2, camX * 0.4, '#3a5a8a');
+}
+function bgSledtrack(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 4, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  peaks18(c, viewW, camX, 0.1, 210, 110, '#c4d4ee', '#ffffff');
+  const span = 220;
+  for (let i = -1; i < viewW / span + 2; i++) { const wx = i * span + wrapX(-camX * 0.3, span); c.strokeStyle = 'rgba(255,255,255,.9)'; c.lineWidth = 6; c.beginPath(); c.moveTo(wx, 150); c.quadraticCurveTo(wx + 80, 170, wx + 200, 215); c.stroke(); for (let k = 0; k < 3; k++) { const fx = wx + 40 + k * 60, fy = 156 + k * 18; c.strokeStyle = '#8a5a30'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(fx, fy); c.lineTo(fx, fy - 14); c.stroke(); c.fillStyle = k % 2 ? '#4cb6ff' : '#ff5c7a'; c.fillRect(fx, fy - 14, 7, 5); } }
+  hill(c, viewW, 212, 6, 0.03, 1.2, camX * 0.45, '#eef5ff');
+}
+function bgIceberg(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 4, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  c.fillStyle = '#4aa8dc'; c.fillRect(0, 176, viewW, VIEW_H - 176);
+  const span = 260;
+  for (let i = -1; i < viewW / span + 2; i++) { const wx = i * span + wrapX(-camX * 0.25, span) + 50; c.fillStyle = '#eaf8ff'; c.beginPath(); c.moveTo(wx - 40, 178); c.lineTo(wx - 20, 130); c.lineTo(wx + 4, 140); c.lineTo(wx + 26, 112); c.lineTo(wx + 50, 178); c.closePath(); c.fill(); c.fillStyle = '#bfe4f5'; c.beginPath(); c.moveTo(wx + 26, 112); c.lineTo(wx + 50, 178); c.lineTo(wx + 20, 178); c.closePath(); c.fill(); }
+  c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 1.4;
+  for (let row = 0; row < 3; row++) { c.beginPath(); for (let x = -20; x < viewW + 20; x += 6) { const y = 188 + row * 16 + Math.sin(x * 0.05 + t * 1.6 + row * 2) * 2; if (x === -20) c.moveTo(x, y); else c.lineTo(x, y); } c.stroke(); }
+}
+Object.assign(BG2, { hotair: bgHotair, snowvalley: bgSnowvalley, aurora: bgAurora, sledtrack: bgSledtrack, iceberg: bgIceberg });
+
+/* ===== Частина 19 (заготовка) ===== */
+function drawEnemy15(c, e, cx, fl) { return false; }
+function tileKind15(v, tx, ty) { return 'blank'; }
+function drawTile15(c, kind) { }
+function drawMover15(c, m) { return false; }
+function drawWorld15(c, t, vis) { }
+function drawUnder15(c, P, t) { }
+function drawOver15(c, P, t) { }
+function drawBlock16(c, b) { return false; }
+function drawDecor19(c, d, t) { }
 
 /* ===== Рівні. Координати в плитках: x — стовпчик, y — рядок (0 угорі, земля з рядка 10) ===== */
 const LEVELS = [
@@ -10616,12 +10933,190 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  {
+    id: 'hotair', theme: 'hotair', name: 'Повітряна куля', blurb: 'Лети над горами на повітряній кулі', w: 172,
+    build(L) {
+      L.ground(0, 16);
+      L.sign(3, 'Повітряна куля! Застрибни в кошик, тримай «Стрибок» — і полетиш');
+      L.row(5, 9, 3);
+      L.hotair(11, 50);
+      L.arc(17, 6, 4, 2);
+      L.block(23, 0, 2, 4); L.row(23, 6, 2);
+      L.arc(27, 4, 3, 1);
+      L.block(31, 7, 2, 5); L.row(31, 5, 2);
+      L.block(39, 0, 2, 3); L.block(39, 9, 2, 3); L.row(39, 6, 2);
+      L.arc(43, 5, 4, 1);
+      L.ground(48, 72);
+      L.check(52);
+      L.row(54, 9, 4);
+      L.enemy('seal', 60, 10);
+      L.qblock(64, 6, 'star');
+      L.hotair(67, 112);
+      L.block(77, 0, 2, 5); L.row(77, 7, 2);
+      L.enemy('flake', 82, 4);
+      L.block(86, 6, 2, 6); L.row(86, 3, 2);
+      L.block(93, 0, 2, 3); L.block(93, 8, 2, 4); L.row(93, 5, 2);
+      L.enemy('bird', 99, 6);
+      L.block(103, 0, 2, 6); L.row(103, 8, 2);
+      L.arc(106, 7, 4, 2);
+      L.ground(110, 130);
+      L.check(113);
+      L.enemy('snowman', 120, 10);
+      L.row(116, 9, 3);
+      L.hotair(126, 162);
+      L.block(132, 0, 1, 3); L.block(132, 8, 1, 4);
+      L.row(132, 6, 1); L.row(136, 5, 3);
+      L.block(140, 6, 1, 6); L.block(140, 0, 1, 1);
+      L.row(140, 3, 1);
+      L.block(146, 0, 1, 4); L.block(146, 9, 1, 3); L.row(146, 7, 1);
+      L.enemy('flake', 150, 4);
+      L.block(154, 5, 1, 7); L.row(154, 2, 1);
+      L.ground(160, 172);
+      L.gate(167);
+    }
+  },
+  {
+    id: 'snowvalley', theme: 'snowvalley', name: 'Сніжна долина', blurb: 'Сніжка росте, поки котиться', w: 170,
+    build(L) {
+      L.ground(0, 170);
+      L.sign(3, 'Сніжна долина! Штовхай сніжку — котячись по снігу, вона росте');
+      L.snowball(7, 12, 30);
+      L.row(9, 9, 5, 2);
+      L.ground(26, 36, 4);
+      L.row(27, 3, 4);
+      L.qblock(31, 0, 'star');
+      L.check(38);
+      L.enemy('seal', 44, 10);
+      L.row(41, 9, 4);
+      L.snowball(48, 12, 30);
+      L.enemy('seal', 56, 10);
+      L.ground(66, 74, 4);
+      L.row(66, 3, 3);
+      L.cloud(76, 6, 3); L.row(76, 5, 3);
+      L.hole(82, 10, 2, 3);
+      L.row(81, 7, 5);
+      L.check(88);
+      L.enemy('snowman', 94, 10);
+      L.row(90, 9, 3);
+      L.snowball(99, 12, 30);
+      L.enemy('flake', 110, 7);
+      L.block(117, 7, 1, 3);
+      L.ground(118, 130, 4);
+      L.row(119, 3, 5);
+      L.ground(130, 170);
+      L.check(134);
+      L.enemy('seal', 140, 10);
+      L.cloud(144, 6, 4); L.row(144, 5, 4);
+      L.row(150, 9, 6);
+      L.gate(165);
+    }
+  },
+  {
+    id: 'aurora', theme: 'aurora', name: 'Північне сяйво', blurb: 'Зірочки-втікачки бігають по кризі', w: 170,
+    build(L) {
+      L.ground(0, 170);
+      L.sign(3, 'Північне сяйво! Тут живуть зірочки-втікачки. Заганяй їх у куток');
+      L.row(6, 9, 3);
+      L.block(13, 8, 1, 2); L.block(27, 8, 1, 2);
+      L.runner(19, 14, 27);
+      L.check(30);
+      L.enemy('flake', 34, 7);
+      L.row(32, 9, 4);
+      L.ground(40, 54, 7);
+      L.runner(46, 40, 54);
+      L.row(41, 6, 2); L.row(52, 6, 2);
+      L.enemy('owl', 60, 5);
+      L.row(57, 9, 4);
+      L.cloud(63, 6, 3); L.row(63, 5, 3);
+      L.check(68);
+      L.block(72, 7, 1, 3); L.block(88, 7, 1, 3);
+      L.runner(78, 73, 88); L.runner(84, 73, 88);
+      L.row(75, 9, 3, 4);
+      L.enemy('seal', 94, 10);
+      L.qblock(97, 6, 'shield');
+      L.ground(102, 116, 6);
+      L.row(103, 5, 3);
+      L.block(116, 8, 1, 2);
+      L.ground(116, 117, 8);
+      L.runner(108, 102, 116);
+      L.check(120);
+      L.enemy('flake', 126, 6);
+      L.hole(130, 10, 2, 3);
+      L.row(129, 7, 5);
+      L.block(136, 8, 1, 2); L.block(150, 8, 1, 2);
+      L.runner(142, 137, 150);
+      L.row(138, 9, 3, 4);
+      L.rainbow(160, 5); L.cloud(158, 6, 4);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'sledtrack', theme: 'sledtrack', name: 'Санна траса', blurb: 'Санчата мчать самі, а ти стрибаєш', w: 178,
+    build(L) {
+      L.ground(0, 178);
+      L.sign(3, 'Санна траса! Стань на санчата — вони поїдуть самі. Перед перешкодою тисни «Стрибок»');
+      L.sled(8, 92);
+      L.block(20, 9, 1, 1); L.arc(18, 7, 5, 2);
+      L.hole(30, 10, 2, 4); L.arc(29, 7, 6, 2);
+      L.block(40, 8, 1, 2); L.arc(38, 6, 5, 2);
+      L.hole(48, 10, 2, 6); L.arc(47, 6, 8, 2);
+      L.thorns(60, 63); L.arc(59, 7, 5, 2);
+      L.block(70, 9, 2, 1);
+      L.hole(76, 10, 2, 6); L.arc(75, 6, 8, 2);
+      L.thorns(87, 89);
+      L.check(95);
+      L.enemy('seal', 99, 10);
+      L.row(98, 9, 3);
+      L.sled(103, 166);
+      L.hole(112, 10, 2, 5); L.arc(111, 6, 7, 2);
+      L.block(121, 8, 1, 2);
+      L.thorns(127, 131); L.arc(126, 6, 6, 2);
+      L.block(137, 9, 1, 1); L.hole(140, 10, 2, 5); L.arc(139, 6, 7, 2);
+      L.thorns(149, 151);
+      L.block(156, 8, 1, 2); L.arc(154, 6, 5, 2);
+      L.hole(160, 10, 2, 4);
+      L.check(169);
+      L.gate(173);
+    }
+  },
+  {
+    id: 'iceberg', theme: 'iceberg', name: 'Айсберг Пінгвіна', blurb: 'Битва з Пінгвіном Ковзанчиком', w: 172, boss: 'penguin',
+    build(L) {
+      L.ground(0, 172);
+      L.sign(3, 'Айсберг Пінгвіна! Ковзанчик сховав зірочки серед криги');
+      L.snowball(7, 12, 30);
+      L.ground(25, 33, 4);
+      L.row(26, 3, 3);
+      L.check(36);
+      L.block(39, 8, 1, 2); L.block(52, 8, 1, 2);
+      L.runner(46, 40, 52);
+      L.sled(56, 100);
+      L.hole(66, 10, 2, 5); L.arc(65, 6, 7, 2);
+      L.block(76, 8, 1, 2);
+      L.thorns(84, 87);
+      L.hole(92, 10, 2, 4);
+      L.check(103);
+      L.enemy('seal', 108, 10);
+      L.row(110, 9, 4);
+      L.sign(118, 'Пінгвін Ковзанчик! Перестрибуй сніжки, а коли він помчить на животику — стрибни на нього згори. Тоді він закрутиться, і в нього можна стріляти');
+      L.check(125);
+      L.power('candy', 128, 8);
+      L.arena(129, 172);
+      L.cloud(136, 7, 3); L.cloud(147, 7, 4); L.cloud(159, 7, 3);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  hotair: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'pine', x, y } : r < 0.7 ? { k: 'snowmanS', x, y } : { k: 'flower', x, y, c: ['#ffffff', '#ff9fd0', '#9fe0ff'][Math.floor(R() * 3)] }; },
+  snowvalley: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'pine', x, y } : r < 0.7 ? { k: 'snowmanS', x, y } : { k: 'iglooS', x, y }; },
+  aurora: (R, x, y) => R() < 0.6 ? { k: 'pine', x, y } : { k: 'crystal', x, y },
+  sledtrack: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'slalom', x, y, c: R() < 0.5 ? '#ff5c7a' : '#4cb6ff' } : r < 0.75 ? { k: 'pine', x, y } : { k: 'snowmanS', x, y }; },
+  iceberg: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'fishS', x, y } : r < 0.65 ? { k: 'iglooS', x, y } : { k: 'crystal', x, y }; },
   sailake: (R, x, y) => { if (y > 10 * T) return { k: 'none', x, y }; const r = R(); return r < 0.3 ? { k: 'lifebuoy', x, y } : r < 0.6 ? { k: 'reed', x, y } : { k: 'flower', x, y, c: ['#ffffff', '#ff9fd0', '#ffd54a'][Math.floor(R() * 3)] }; },
   zoo: (R, x, y) => { if (y > 10 * T) return { k: 'none', x, y }; const r = R(); return r < 0.35 ? { k: 'pawprint', x, y } : r < 0.65 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: ['#ffffff', '#ff7ab8', '#ffd54a'][Math.floor(R() * 3)] }; },
   songmeadow: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'tulip', x, y, c: ['#ff5c8a', '#ffa83b', '#ffe14d', '#b28bff'][Math.floor(R() * 4)] } : r < 0.6 ? { k: 'noteS', x, y, c: ['#ff7ab8', '#4cb6ff', '#ffd23f', '#7fd46a'][Math.floor(R() * 4)] } : { k: 'flower', x, y, c: ['#ffffff', '#c5a8ff', '#ff9fd0'][Math.floor(R() * 3)] }; },
@@ -10712,7 +11207,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -10848,6 +11343,14 @@ function buildLevel(idx) {
       for (let y = 0; y < gtop; y++) set(gx, y, 2);
       L.padSets.push({ drums: idx, seq, door });
     },
+    // повітряна куля стоїть на землі в x і приземляється, коли долетить до стовпчика x1
+    hotair(x, x1) { later.push(() => L.movers.push({ hotair: true, bx: x * T, by: groundY(x) - 18, w: 44, x1: x1 * T, state: 'idle', vy: 0, ax: 0, ay: 0, period: 1 })); },
+    // сніжка в x: починає з радіуса r0 і росте, поки котиться, до rMax
+    snowball(x, r0, rMax) { later.push(() => L.movers.push({ snowball: true, hx: x * T + 12, r0: r0 || 12, rMax: rMax || 30, gy: groundY(x), bx: x * T, by: groundY(x) - 24, w: 24, ax: 0, ay: 0, period: 1 })); },
+    // зірочка-втікачка в x, тікає в межах від x0 до x1
+    runner(x, x0, x1) { later.push(() => L.runners.push({ x: x * T + 12, x0: x0 * T, x1: x1 * T, gy: groundY(x) })); },
+    // санчата стоять у x і зупиняються біля прапорця x1
+    sled(x, x1) { later.push(() => L.sleds.push({ x: x * T + 12, x1: x1 * T + 12, gy: groundY(x) })); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
@@ -10891,6 +11394,9 @@ function buildLevel(idx) {
   for (const f of L.foods) avoid.push(f.hx);
   for (const a of L.animals) avoid.push(a.x, a.x + 30, a.fx0 || a.x);
   for (const m of L.movers) if (m.drum) avoid.push(m.bx + 24);
+  for (const m of L.movers) if (m.hotair || m.snowball) avoid.push(m.bx + 22, m.hx || m.bx);
+  for (const r of L.runners) avoid.push(r.x);
+  for (const q of L.sleds) avoid.push(q.x, q.x1);
   for (const s of L.duckSets) for (let x = s.x0 - 20; x <= s.x1 + 20; x += 30) avoid.push(x);
   for (const m of L.movers) if (m.ball || m.coaster) avoid.push(m.bx + 20);
   for (let x = 1; x < W - 1; x++) {
@@ -11099,7 +11605,7 @@ function startLevel(idx) {
     vines: L.vines, launchers: L.launchers.map(l => Object.assign({}, l)), wheels: L.wheels,
     beans: L.beans.map(b => Object.assign({}, b)), lanterns: L.lanterns.map(l => Object.assign({}, l)), rails: L.rails, blinkOn: true, blinkWarn: false,
   };
-  initLevel6(G, L); initLevel7(G, L); initLevel8(G, L); initLevel9(G, L); initLevel10(G, L); initLevel11(G, L); initLevel12(G, L); initLevel13(G, L);
+  initLevel6(G, L); initLevel7(G, L); initLevel8(G, L); initLevel9(G, L); initLevel10(G, L); initLevel11(G, L); initLevel12(G, L); initLevel13(G, L); initLevel14(G, L);
   const bk = L.def.boss;
   if (bk === 'hedge') G.boss = { kind: 'hedge', name: 'Пан Колючка', acc: 'Пана Колючку', x: L.arena.x0 + 28 * T, gy: 10 * T, y: 10 * T - 21, hw: 28, hh: 22, hp: 16, max: 16, t: 0, st: 0, state: 'wait', dir: -1, rot: 0, flash: 0, dead: false, deadT: 0, alpha: 1, throwT: 2.5, rolls: 0, hinted: false };
   else if (bk === 'wizard') {
@@ -11177,9 +11683,11 @@ function updatePlayer(dt) {
   if (P.kite) return rideKite(P, dt);
   if (P.swing) return swingStep(P, dt);
   if (P.bub) return soapStep(P, dt);
+  if (P.hotair) return hotairStep(P, dt);
   if (P.hang) return hangStep(P, dt);
   flipCheck(P);
   let ax = (In.right ? 1 : 0) - (In.left ? 1 : 0);
+  if (P.sled) ax = P.sledStun > 0 ? 0 : 1;
   if (P.hurtT > 0) { P.hurtT -= dt; ax = 0; }
   if (ax) P.dir = ax;
   const wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
@@ -11187,7 +11695,7 @@ function updatePlayer(dt) {
   if (!wz && P.wasWater && P.vy < 0) { burst(P.x + P.w / 2, P.y + P.h, 6, ['#ffffff', '#bfefff'], 80); if (In.jump && P.vy > -480) { P.vy = -480; P.cut = true; } }
   P.wasWater = !!wz;
   const ice = THEMES[G.theme].ice && P.onGround && P.groundTile === 1;
-  const target = ax * (P.mount ? 185 : SPEED) * (wz ? 0.75 : 1) * (P.sticky ? 0.45 : 1);
+  const target = ax * (P.sled ? 240 : P.mount ? 185 : SPEED) * (wz ? 0.75 : 1) * (P.sticky ? 0.45 : 1);
   const a = ax ? (wz ? 700 : P.onGround ? (ice ? 420 : 1500) : 950) : (wz ? 500 : P.onGround ? (ice ? 200 : 1800) : 650);
   if (P.launchT > 0) { P.launchT -= dt; if (P.onGround || P.sideHit || wz) P.launchT = 0; }
   else if (P.vx < target) P.vx = Math.min(target, P.vx + a * dt); else if (P.vx > target) P.vx = Math.max(target, P.vx - a * dt);
@@ -11348,6 +11856,8 @@ function updateBoss(dt) {
   if (B.kind === 'fox') return updateFoxBoss(dt);
   if (B.kind === 'peacock') return updatePeacockBoss(dt);
   if (B.kind === 'monkey') return updateMonkeyBoss(dt);
+  if (B.kind === 'penguin') return updatePenguinBoss(dt);
+  if (B.kind === 'caterpillar') return updateCaterpillarBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -11526,7 +12036,7 @@ function update(dt) {
   G.mt = (G.mt || 0) + (frozen ? 0 : dt);
   for (const m of G.movers) {
     if (frozen) { m.dx = 0; m.dy = 0; continue; }
-    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice || m.log || m.dolphin || m.whale || m.coaster || m.ball || m.pulley || m.sailboat || m.giraffe || m.hippo) { updatePlatform(m, dt); continue; }
+    if (m.crumble || m.balloon || m.bubble || m.cart || m.sheep || m.ice || m.log || m.dolphin || m.whale || m.coaster || m.ball || m.pulley || m.sailboat || m.giraffe || m.hippo || m.hotair || m.snowball || m.special15) { updatePlatform(m, dt); continue; }
     let nx, ny;
     if (m.circ) { const a = G.mt * TAU / m.period + m.ph; nx = m.cx + Math.cos(a) * m.r - m.w / 2; ny = m.cy + Math.sin(a) * m.r; }
     else if (m.swing) { const a = m.amp * Math.sin(G.mt * TAU / m.period + m.ph); nx = m.px + Math.sin(a) * m.len - m.w / 2; ny = m.py + Math.cos(a) * m.len; }
@@ -11683,6 +12193,7 @@ function updatePlatform(m, dt) {
   if (m.ball) return updateBall(m, dt);
   if (m.pulley) return updatePulley(m, dt);
   if (m.sailboat || m.giraffe || m.hippo) return updatePlatform13(m, dt);
+  if (m.hotair || m.snowball || m.special15) return updatePlatform14(m, dt);
   const y0 = m.y; m.dx = 0; m.dy = 0; m.st += dt;
   if (m.crumble) {
     if (m.state === 'idle') { m.y = m.by; if (G.P.onMover === m) { m.state = 'shake'; m.st = 0; Snd.tone(240, 0.25, 'triangle', 0.05, 150); } }
@@ -14400,7 +14911,7 @@ function spawnEnemy13(e, b, hover, g) {
     case 'swan': return hover(26, 20, 3, 0.7, 2);
     case 'mosquito': return Object.assign(hover(16, 12, 1, 1, 3), { mx: e.tx * T + 12, my: e.ty * T + 12 });
   }
-  return null;
+  return spawnEnemy14(e, b, hover, g);
 }
 function updateEnemy13(e, dt) {
   if (e.k === 'mosquito') {
@@ -14415,7 +14926,7 @@ function updateEnemy13(e, dt) {
     if (G.t % 0.5 < dt && Math.abs(e.mx - pcx) < 200) Snd.tone(880 + Math.random() * 60, 0.05, 'sawtooth', 0.008);
     return true;
   }
-  return false;
+  return updateEnemy14(e, dt);
 }
 
 /* ===== Підготовка рівня ===== */
@@ -14610,6 +15121,7 @@ function update13(dt) {
   updateDrums(dt);
   updateDig(P, dt);
   updatePeels(dt);
+  update14(dt);
 }
 
 /* ===== Мавпочка Шкода: кидає банани згори, розкидає шкірки, а тоді біжить підлогою й сама на них послизається ===== */
@@ -14681,11 +15193,279 @@ function armored13(s, B) {
     if (!B.armHint) { B.armHint = true; say('Мавпочка надто спритна! Стріляй, коли вона послизнеться на шкірці', 2.6); }
     return true;
   }
-  return false;
+  return armored14(s, B);
 }
 function resetBoss13(B) {
   if (B.kind === 'monkey') { B.state = 'swing'; B.st = 0; B.fy = B.top; B.vy = 0; B.throws = 0; G.peels = []; }
+  resetBoss14(B);
 }
+
+/* ===== Частина 18: повітряна куля, сніжка, що росте, зірочки-втікачки, санчата, Пінгвін Ковзанчик ===== */
+Object.assign(TUNES, {
+  hotair: { base: 587.33, ms: 210, n: [0, null, 4, null, 7, null, 11, null, 12, null, 11, null, 7, null, null, null, 5, null, 9, null, 12, null, 14, null, 12, null, 9, null, 7, null, null, null], b: [0, -5, -3, -7] },
+  snowvalley: { base: 659.25, ms: 190, n: [12, null, 7, 9, 7, null, 4, null, 5, null, 7, null, 4, null, null, null, 9, null, 7, 9, 12, null, 11, null, 9, null, 7, null, 4, null, null, null], b: [0, -3, -7, -5] },
+  aurora: { base: 523.25, ms: 240, n: [0, null, null, 7, null, null, 12, null, 11, null, null, 7, null, null, 4, null, 5, null, null, 9, null, null, 12, null, 14, null, null, 12, null, null, 7, null], b: [0, -5, -3, -7] },
+  sledtrack: { base: 587.33, ms: 150, n: [0, 4, 7, 12, 7, 4, 0, null, 2, 5, 9, 14, 9, 5, 2, null, 4, 7, 11, 16, 11, 7, 4, null, 5, 9, 12, 17, 12, 9, 5, null], b: [0, -5, -3, -7] },
+  iceberg: { base: 493.88, ms: 190, n: [0, null, 3, null, 7, null, 12, null, 10, null, 7, null, 3, null, null, null, 5, null, 8, null, 12, null, 15, null, 14, null, 12, null, 7, null, null, null], b: [0, -4, -5, -7] },
+});
+Object.assign(WALKERS, { seal: 1 });
+Object.assign(HOVER, { flake: 1 });
+Object.assign(THORN_MSG, { sledtrack: 'Ой, крижані шипи! Перестрибуй їх на санчатах' });
+
+function spawnEnemy14(e, b, hover, g) {
+  switch (e.k) {
+    case 'seal': return g(28, 18, { speed: 22 });
+    case 'flake': return hover(20, 20, 2.5, 0.6, 8);
+  }
+  return spawnEnemy15(e, b, hover, g);
+}
+function updateEnemy14(e, dt) { return updateEnemy15(e, dt); }
+
+/* ===== Підготовка рівня ===== */
+function initLevel14(G, L) {
+  const P = G.P; P.hotair = null; P.sled = null; P.sledStun = 0;
+  G.runners = (L.runners || []).map(r => Object.assign({ state: 'idle', t: Math.random() * 3, freeze: 0, dir: 1, hop: 0 }, r, { hx: r.x }));
+  G.sleds = (L.sleds || []).map(s => Object.assign({ state: 'idle', hx: s.x, hgy: s.gy }, s));
+  for (const m of G.movers) if (m.snowball) { m.cx = m.hx; m.r = m.r0; m.vy = 0; m.fall = false; snowGeom(m); m.dx = m.dy = 0; m.pdx = m.pdy = 0; }
+  initLevel15(G, L);
+}
+
+/* ===== Повітряна куля: тримай «Стрибок» — пальник гріє, куля піднімається ===== */
+const HOT_ENV = 30, HOT_GAP = 16, HOT_BASKET = 18;
+function hotairBox(m) {
+  // конверт кулі (коло) і кошик — точки, якими перевіряємо зіткнення з плитками
+  const cx = m.x + m.w / 2, ecy = m.y - HOT_GAP - HOT_ENV;
+  return { cx, ecy, top: ecy - HOT_ENV, bot: m.y + HOT_BASKET, left: cx - HOT_ENV, right: cx + HOT_ENV };
+}
+function hotairHits(m, x, y) {
+  const ox = m.x, oy = m.y; m.x = x; m.y = y; const b = hotairBox(m); m.x = ox; m.y = oy;
+  const pts = [[b.cx, b.top + 2], [b.left + 6, b.ecy - 18], [b.right - 6, b.ecy - 18], [b.left + 1, b.ecy], [b.right - 1, b.ecy], [b.left + 6, b.ecy + 18], [b.right - 6, b.ecy + 18], [x + 2, y + 2], [x + m.w - 2, y + 2], [x + 2, b.bot], [x + m.w - 2, b.bot], [b.cx, b.bot]];
+  for (const [px, py] of pts) if (py >= 0 && solid(tileAt(Math.floor(px / T), Math.floor(py / T)))) return true;
+  return false;
+}
+function hotairStep(P, dt) {
+  const m = P.hotair;
+  if (m.state === 'fly') {
+    const want = In.jump ? -78 : 46;
+    m.vy += clamp(want - m.vy, -150 * dt, 150 * dt);
+    m.burn = In.jump ? Math.min(1, (m.burn || 0) + dt * 6) : Math.max(0, (m.burn || 0) - dt * 4);
+    if (In.jump && G.t % 0.25 < dt) Snd.tone(110 + Math.random() * 30, 0.2, 'sawtooth', 0.025, 70);
+    let nx = m.x, ny = m.y + m.vy * dt;
+    const b = hotairBox(m);
+    if (ny - HOT_GAP - HOT_ENV * 2 < 8 && m.vy < 0) { ny = 8 + HOT_GAP + HOT_ENV * 2; m.vy = 0; }
+    if (ny + HOT_BASKET > VIEW_H - 6) { ny = VIEW_H - 6 - HOT_BASKET; m.vy = 0; }
+    if (hotairHits(m, nx, ny)) { ny = m.y; if (Math.abs(m.vy) > 30) Snd.bump(); m.vy = 0; }
+    m.ground = hotairHits(m, nx, ny + 2) && m.vy >= 0;
+    // вітер несе праворуч, якщо куля не сидить на землі й попереду не хмара
+    if (!m.ground) { const tx = nx + 62 * dt; if (!hotairHits(m, tx, ny)) nx = tx; else if (!m.bumpT || m.bumpT <= 0) { m.bumpT = 0.6; Snd.bump(); } }
+    if (m.bumpT > 0) m.bumpT -= dt;
+    m.dx = nx - m.x; m.dy = ny - m.y; m.x = nx; m.y = ny;
+    if (m.x + m.w >= m.x1) { m.state = 'land'; say('Приземляємося!', 1.6); }
+    if (!G.hotHint) { G.hotHint = true; say('Тримай «Стрибок» — куля полетить угору, відпусти — опуститься', 3); }
+  } else if (m.state === 'land') {
+    let ny = m.y + 60 * dt; m.vy = 60;
+    if (hotairHits(m, m.x, ny)) { ny = m.y; m.state = 'done'; m.vy = 0; Snd.seq([0, 4, 7, 12], 523, 0.08, 'triangle', 0.08); }
+    if (ny + HOT_BASKET > VIEW_H - 6) ny = VIEW_H - 6 - HOT_BASKET;
+    m.dx = 0; m.dy = ny - m.y; m.y = ny;
+  }
+  P.x = m.x + m.w / 2 - P.w / 2; P.y = m.y - P.h + 6; P.vx = 0; P.vy = 0; P.onGround = true; P.onMover = null; P.coyote = 0; P.jumpBuf = 0;
+  if (m.state === 'done') { P.hotair = null; P.y = m.y - P.h; P.onMover = m; }
+  P.t += dt * 0.3;
+  if (P.inv > 0) P.inv -= dt;
+  P.shootCd -= dt;
+  if (In.shootP) { P.charging = true; P.charge = 0; } if (In.shootR && P.charging) { fire(false); P.charging = false; }
+}
+function updateHotairIdle(m, dt) {
+  m.dx = 0; m.dy = 0;
+  if (m.state === 'idle' && G.P.onMover === m && !G.P.hotair) { G.P.hotair = m; m.state = 'fly'; m.vy = 0; Snd.seq([0, 7, 12], 392, 0.08, 'triangle', 0.08); }
+}
+
+/* ===== Сніжка: штовхай — котиться й росте ===== */
+function snowGeom(m) { m.w = m.r * 1.2; m.x = m.cx - m.w / 2; m.y = m.gy - 2 * m.r; }
+function groundUnder(x, fromY) { for (let ty = Math.max(0, Math.floor(fromY / T)); ty < ROWS; ty++) { const v = tileAt(Math.floor(x / T), ty); if (solid(v)) return ty * T; } return null; }
+function snowBlocked(m, cx, r) {
+  // чи впирається сніжка в стіну, якщо поставити її центр у cx
+  const gy = m.gy;
+  for (const yy of [gy - 4, gy - r, gy - 2 * r + 4]) for (const xx of [cx - r + 2, cx + r - 2]) if (solid(tileAt(Math.floor(xx / T), Math.floor(yy / T)))) return true;
+  return false;
+}
+function moveSnowball(m, want) {
+  // котимо крок за кроком, щоб не проскочити крізь стіну
+  let moved = 0; const s = Math.sign(want);
+  for (let left = Math.abs(want); left > 0.01;) {
+    const step = Math.min(2, left), nx = m.cx + s * step;
+    if (snowBlocked(m, nx, m.r)) break;
+    m.cx = nx; moved += step; left -= step;
+    if (m.r < m.rMax) m.r = Math.min(m.rMax, m.r + step * 0.06);
+  }
+  return moved * s;
+}
+function updateSnowballs(P, dt) {
+  for (const m of G.movers) {
+    if (!m.snowball) continue;
+    const x0 = m.x, y0 = m.y;
+    if (m.fall) {
+      m.vy += 1500 * dt; m.gy += m.vy * dt;
+      if (m.gy > VIEW_H + 80) { m.cx = m.hx; m.r = m.r0; m.fall = false; m.vy = 0; m.gy = groundUnder(m.cx, 0) || 10 * T; burst(m.cx, m.gy - 20, 12, ['#ffffff', '#d6ecff'], 100); }
+    } else {
+      // єдиноріжка збоку штовхає сніжку
+      const onTop = P.onMover === m;
+      if (!onTop && !P.hotair && P.y + P.h > m.y + 8 && P.y < m.gy - 2) {
+        const pl = P.x, pr = P.x + P.w, bl = m.cx - m.r, br = m.cx + m.r;
+        if (pr > bl && pl < br) {
+          if (P.x + P.w / 2 < m.cx) { const got = moveSnowball(m, pr - bl); if (got < pr - bl - 0.01) { P.x = m.cx - m.r - P.w; if (P.vx > 0) P.vx = 0; } }
+          else { const got = moveSnowball(m, -(br - pl)); if (-got < br - pl - 0.01) { P.x = m.cx + m.r; if (P.vx < 0) P.vx = 0; } }
+          if (!G.snowHint) { G.snowHint = true; say('Штовхай сніжку — котячись по снігу, вона росте! Велика сніжка — це сходинка', 3); }
+          if (G.t % 0.2 < dt) Snd.tone(200 + Math.random() * 40, 0.06, 'triangle', 0.025);
+        }
+      }
+      const g = groundUnder(m.cx, m.gy - 4);
+      if (g == null || g > m.gy + 6) { m.fall = true; m.vy = 0; }
+      else m.gy = g;
+      // сніжка, що котиться, збиває ворогів
+      if (Math.abs(m.x - x0) > 0.2) for (const e of G.enemies) if (!e.dead && !FLYERS[e.k] && !HOVER[e.k] && Math.abs(e.x + e.w / 2 - m.cx) < m.r + e.w / 2 && e.y + e.h > m.gy - 2 * m.r) defeat(e);
+    }
+    snowGeom(m);
+    m.pdx += m.x - x0; m.pdy += m.y - y0;
+  }
+}
+
+/* ===== Зірочки-втікачки: тікають від єдиноріжки, але далеко не втечуть ===== */
+function updateRunners(P, dt) {
+  const pcx = P.x + P.w / 2, pcy = P.y + P.h / 2;
+  for (const r of G.runners) {
+    if (r.state === 'caught') continue;
+    r.t += dt; if (r.freeze > 0) r.freeze -= dt;
+    for (const s of G.shots) if (s.life > 0 && Math.abs(s.x - r.x) < 14 + s.r && Math.abs(s.y - (r.gy - 12)) < 16 + s.r) { s.life = 0; r.freeze = 2.2; burst(r.x, r.gy - 12, 8, ['#ffffff', '#bfefff'], 80); Snd.tone(1400, 0.15, 'sine', 0.05, 900); if (!G.runFreezeHint) { G.runFreezeHint = true; say('Зірочка застигла! Хапай її, поки не втекла', 2.4); } }
+    const close = Math.abs(pcx - r.x) < 110 && Math.abs(pcy - (r.gy - 12)) < 70;
+    if (close && r.freeze <= 0) {
+      r.dir = r.x >= pcx ? 1 : -1;
+      const nx = clamp(r.x + r.dir * 125 * dt, r.x0 + 10, r.x1 - 10);
+      r.cornered = Math.abs(nx - r.x) < 0.5; r.x = nx; r.hop += dt * 9;
+      if (r.state !== 'run') { r.state = 'run'; Snd.tone(900, 0.1, 'triangle', 0.05, 1300); if (!G.runHint) { G.runHint = true; say('Зірочка-втікачка! Заганяй її в куток або постріль — вона застигне', 3); } }
+    } else { r.state = 'idle'; r.cornered = false; r.hop += dt * 2; }
+    if (Math.abs(pcx - r.x) < 18 && P.y + P.h > r.gy - 30 && P.y < r.gy) {
+      r.state = 'caught'; Snd.rainbow(); burst(r.x, r.gy - 14, 20, RAINBOW, 150);
+      for (let i = 0; i < 3; i++) G.drops.push({ x: r.x - 10 + i * 10, y: r.gy - 30, vx: (i - 1) * 50, vy: -240, t: 0, got: false });
+      floatText(r.x, r.gy - 40, 'Спіймала!', '#ff4fa3');
+    }
+  }
+}
+
+/* ===== Санчата: їдуть самі, а ти перестрибуєш перешкоди ===== */
+function updateSleds(P, dt) {
+  const pcx = P.x + P.w / 2;
+  if (P.sledStun > 0) P.sledStun -= dt;
+  for (const s of G.sleds) {
+    if (s.state === 'idle' && !P.sled && !P.hotair && P.onGround && Math.abs(pcx - s.x) < 14 && Math.abs(P.y + P.h - s.gy) < 6) {
+      P.sled = s; s.state = 'ride'; Snd.seq([0, 4, 7, 12], 523, 0.06, 'square', 0.05);
+      if (!G.sledHint) { G.sledHint = true; say('Санчата їдуть самі! Тисни «Стрибок» перед камінцями, ямами й шипами', 3); }
+    }
+  }
+  const s = P.sled; if (!s) return;
+  s.x = pcx; s.gy = P.y + P.h;
+  if (P.sideHit && P.sledStun <= 0) {
+    // врізалися в перешкоду — відкидає назад, але санчата лишаються
+    P.sledStun = 0.6; P.x -= 4; P.vx = -170; P.vy = -260; P.onGround = false; P.launchT = 0.35; P.cut = true;
+    Snd.tone(160, 0.25, 'square', 0.06, 80); burst(P.x + P.w, P.y + P.h - 6, 10, ['#ffffff', '#d6ecff'], 110); floatText(pcx, P.y - 6, 'Бух!', '#4cb6ff');
+    if (!G.crashHint) { G.crashHint = true; say('Бух! Перед перешкодою тисни «Стрибок»', 2.4); }
+  }
+  if (P.onGround && G.t % 0.12 < dt) G.parts.push({ k: 'spark', x: P.x + 2, y: P.y + P.h, vx: -60 - Math.random() * 40, vy: -30 - Math.random() * 30, t: 0, life: 0.4, col: '#ffffff', r: 2 });
+  if (pcx >= s.x1) { P.sled = null; s.state = 'parked'; s.x = s.x1; Snd.seq([0, 4, 7, 12, 16], 523, 0.07, 'triangle', 0.08); say('Приїхали! Далі пішки', 2); }
+}
+
+// після «ще раз» від прапорця: санчата й куля повертаються на свої місця
+function respawn14(P) {
+  if (P.sled) { P.sled.state = 'idle'; P.sled.x = P.sled.hx; P.sled.gy = P.sled.hgy; P.sled = null; }
+  if (P.hotair) { const m = P.hotair; m.state = 'idle'; m.x = m.bx; m.y = m.by; m.vy = 0; P.hotair = null; }
+  if (typeof respawn15 === 'function') respawn15(P);
+}
+function update14(dt) {
+  const P = G.P;
+  updateSnowballs(P, dt);
+  updateRunners(P, dt);
+  updateSleds(P, dt);
+  update15(dt);
+}
+function updatePlatform14(m, dt) {
+  if (m.hotair) { if (G.P.hotair !== m) updateHotairIdle(m, dt); return; }
+  if (m.snowball) { m.dx = m.pdx || 0; m.dy = m.pdy || 0; m.pdx = m.pdy = 0; return; }
+  return updatePlatform15(m, dt);
+}
+
+/* ===== Пінгвін Ковзанчик: кидає сніжки, а тоді мчить на животику ===== */
+Object.assign(BOSS2, {
+  penguin: L => ({ kind: 'penguin', name: 'Пінгвін Ковзанчик', acc: 'Пінгвіна Ковзанчика', win: ' Тепер він катає малечу на животику по льоду.', x: L.arena.x0 + 30 * T, gy: 10 * T, fy: 10 * T, y: 10 * T - 22, hw: 18, hh: 22, hp: 22, max: 22, t: 0, st: 0, state: 'wait', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, throws: 0, vy: 0, spin: 0 }),
+});
+function updatePenguinBoss(dt) {
+  const B = G.boss, P = G.P, A = G.arena;
+  B.t += dt; if (B.flash > 0) B.flash -= dt;
+  if (B.dead) { B.fy = B.gy; B.y = B.fy - 22; return; }
+  if (!G.bossActive) {
+    if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.state = 'throw'; B.st = 0; Music.start('boss'); say('Пінгвін Ковзанчик: «Зірочки — мої сніжинки, які не тануть! Не віддам!»', 2.8); G.flash = 0.4; }
+    return;
+  }
+  B.st += dt;
+  const pcx = P.x + P.w / 2, angry = B.hp <= B.max / 2, left = A.x0 + 30, right = A.x1 - 30;
+  if (B.state === 'throw') {
+    B.dir = pcx < B.x ? -1 : 1; B.fy = B.gy;
+    if (B.st > 0.8) {
+      B.st = 0; B.throws++;
+      const tf = 0.8, vx = clamp((pcx - B.x) / tf, -320, 320), vy = (-(B.gy - 36) + (P.y + P.h - 10) - 0.5 * 900 * tf * tf) / tf;
+      G.bolts.push({ kind: 'snowball', r: 5, x: B.x + B.dir * 10, y: B.gy - 36, vx, vy, g: 900, t: 0 });
+      Snd.tone(600, 0.1, 'triangle', 0.05, 900);
+      if (B.throws >= (angry ? 4 : 3)) { B.state = 'prep'; B.st = 0; B.throws = 0; }
+    }
+  } else if (B.state === 'prep') {
+    // присідає перед розгоном — час підготуватися
+    B.dir = pcx < B.x ? -1 : 1;
+    if (B.st > 0.7) { B.state = 'slide'; B.st = 0; Snd.tone(300, 0.4, 'sawtooth', 0.04, 600); if (!B.slideHint) { B.slideHint = true; say('Ковзанчик мчить на животику! Стрибни на нього згори', 2.6); } }
+  } else if (B.state === 'slide') {
+    B.x += B.dir * (angry ? 215 : 180) * dt;
+    if (G.t % 0.08 < dt) G.parts.push({ k: 'spark', x: B.x - B.dir * 16, y: B.gy - 2, vx: -B.dir * 50, vy: -30, t: 0, life: 0.4, col: '#ffffff', r: 2 });
+    if (B.x < left || B.x > right) { B.x = clamp(B.x, left, right); B.state = 'getup'; B.st = 0; Snd.bump(); B.dir *= -1; }
+  } else if (B.state === 'spin') {
+    B.spin += dt * 18; B.x += B.dir * 90 * dt * Math.max(0, 1 - B.st);
+    if (B.st > 0.8) { B.state = 'dizzy'; B.st = 0; if (!B.dizzyHint) { B.dizzyHint = true; say('Ковзанчик закрутився й бачить зірочки! Стріляй у нього', 2.4); } }
+  } else if (B.state === 'dizzy') {
+    if (B.st > (angry ? 2.2 : 2.8)) { B.state = 'getup'; B.st = 0; }
+  } else if (B.state === 'getup') {
+    if (B.st > 0.6) { B.state = 'throw'; B.st = 0; }
+  }
+  B.x = clamp(B.x, left, right);
+  B.y = B.fy - (B.state === 'slide' || B.state === 'spin' ? 10 : 22);
+  const low = B.state === 'slide' || B.state === 'spin' || B.state === 'dizzy';
+  const box = low ? { x: B.x - 20, y: B.gy - 20, w: 40, h: 20 } : { x: B.x - 14, y: B.gy - 44, w: 28, h: 44 };
+  if (overlap(P, box)) {
+    const stomp = P.vy > 40 && P.y + P.h - box.y < 18;
+    if (stomp && B.state === 'slide') { B.state = 'spin'; B.st = 0; B.spin = 0; P.vy = -480; P.cut = true; Snd.boing(); burst(B.x, B.gy - 20, 12, ['#ffffff', '#bfefff'], 120); }
+    else if (stomp && B.state === 'dizzy') { hitBoss(2); P.vy = -480; P.cut = true; }
+    else if (stomp) { P.vy = -420; P.cut = true; }
+    else if (B.state === 'slide') hurtPlayer(false);
+    else if (B.state !== 'dizzy' && B.state !== 'spin' && B.state !== 'getup') hurtPlayer(false);
+  }
+}
+function armored14(s, B) {
+  if (B.kind === 'penguin' && B.state !== 'dizzy') {
+    Snd.tink(); burst(s.x, s.y, 4, ['#fff'], 70); s.vx *= -0.6; s.life = Math.min(s.life, 0.25);
+    if (!B.armHint) { B.armHint = true; say('Ковзанчик ховає дзьоб у крила! Спершу стрибни на нього, коли він ковзає', 2.6); }
+    return true;
+  }
+  return armored15(s, B);
+}
+function resetBoss14(B) {
+  if (B.kind === 'penguin') { B.state = 'throw'; B.st = 0; B.throws = 0; B.fy = B.gy; }
+  resetBoss15(B);
+}
+
+/* ===== Частина 19 (заготовка) ===== */
+function spawnEnemy15(e, b, hover, g) { return null; }
+function updateEnemy15(e, dt) { return false; }
+function initLevel15(G, L) { }
+function update15(dt) { }
+function updatePlatform15(m, dt) { }
+function armored15(s, B) { return false; }
+function resetBoss15(B) { }
 
 /* ===== Збереження ===== */
 const SAVE_KEY = 'zoriana-ednorizhka-v1';
@@ -14898,6 +15678,8 @@ function renderGame(dt) {
     else if (B.kind === 'fox') drawFoxBoss(c, B, B.t);
     else if (B.kind === 'peacock') drawPeacockBoss(c, B, B.t);
     else if (B.kind === 'monkey') drawMonkeyBoss(c, B, B.t);
+    else if (B.kind === 'penguin') drawPenguinBoss(c, B, B.t);
+    else if (B.kind === 'caterpillar') drawCaterpillarBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -14927,12 +15709,14 @@ function renderGame(dt) {
   if (P.flip) { c.save(); c.translate(0, 2 * (P.y + P.h / 2)); c.scale(1, -1); }
   drawPaintAura(c, P, t);
   if (P.mount) drawRooRide(c, P, t);
+  drawUnderPlayer(c, P, t);
   drawUnicorn(c, { x: pcx, y: P.y + P.h + 1 - (P.mount ? 17 : 0), dir: P.dir, t: P.t, run: P.onGround && !P.mount ? Math.min(1, Math.abs(P.vx) / SPEED) : 0, air: !P.onGround && !P.mount, s: P.mini ? 0.42 : P.big ? 1.24 : 0.8, prof: G.paint ? paintProf() : save.profile, charge: P.charging ? Math.min(1, P.charge / 0.55) : 0, blink: P.blink > 0, powerWings: P.wingsT > 0, alpha: blinkHide ? 0.35 : 1 });
   if (P.flip) c.restore();
   if (P.hang) drawHangGrip(c, P, t);
   if (P.bub) drawSoapRide(c, P, t);
   if (cartM) cartBody(c, cartM);
   drawCarry(c, P, t);
+  drawOverPlayer(c, P, t);
   // ім'я над головою (догори дриґом — під нею)
   c.font = '900 9px Nunito, system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
   const nm = nameOf(), nw = c.measureText(nm).width + 10, ny = P.flip ? P.y + P.h + 19 : P.y - (P.mini ? 12 : 19);
@@ -15116,7 +15900,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -15200,6 +15984,7 @@ function showWin() {
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 84) { $('winTitle').textContent = 'Мавпочка Шкода повернула зірочки!'; $('winText').textContent = 'Але Пінгвін Ковзанчик вирішив, що зірочки — це сніжинки, які ніколи не тануть, і забрав їх на свій айсберг: через гори на повітряній кулі, сніжну долину, північне сяйво й санну трасу. Наступна країна: ' + LEVELS[85].name + '.'; }
   if (i === 79) { $('winTitle').textContent = 'Павич Пишнохвіст повернув зірочки!'; $('winText').textContent = 'Але Мавпочка Шкода подумала, що зірочки — це блискучі банани, і потягла їх до свого бананового гаю: через вітрильне озеро, зоопарк, співочу галявину й скарбовий пагорб. Наступна країна: ' + LEVELS[80].name + '.'; }
   if (i === 74) { $('winTitle').textContent = 'Лис Хитрик повернув зірочки!'; $('winText').textContent = 'Але Павич Пишнохвіст побачив, як вони сяють, і захотів прикрасити ними свій хвіст. Він поніс зірочки до свого саду: через батутне містечко, футбольне поле, дзеркальну майстерню й обсерваторію. Наступна країна: ' + LEVELS[75].name + '.'; }
   if (i === 69) { $('winTitle').textContent = 'Ведмідь Бурмило повернув зірочки!'; $('winText').textContent = 'Але вночі до пасіки підкрався Лис Хитрик, сховав зірочки у свій пухнастий хвіст і побіг до нори: через мильне озеро, горіховий гай, морський форт і мотузковий парк. Наступна країна: ' + LEVELS[70].name + '.'; }
@@ -15222,7 +16007,7 @@ function showLose() {
   show('scrLose');
 }
 function continueFromCheck() {
-  const P = G.P; P.zip = null; P.ride = null; P.vine = null; if (P.kite) { P.kite.state = 'back'; P.kite.st = 0; P.kite = null; } P.hearts = 3; P.x = P.check.x; P.y = P.check.y; P.vx = P.vy = 0; P.inv = 2; P.safe = { x: P.x, y: P.y };
+  const P = G.P; P.zip = null; P.ride = null; P.vine = null; if (P.kite) { P.kite.state = 'back'; P.kite.st = 0; P.kite = null; } P.hearts = 3; P.x = P.check.x; P.y = P.check.y; P.vx = P.vy = 0; P.inv = 2; P.safe = { x: P.x, y: P.y }; respawn14(P);
   if (G.bossActive && G.boss && !G.boss.dead) { G.bolts = []; if (G.boss.kind === 'hedge') { G.boss.state = 'walk'; G.boss.st = 0; G.boss.x = Math.max(G.boss.x, G.arena.x0 + 14 * T); } if (G.boss.kind === 'dragon') { G.boss.state = 'takeoff'; G.boss.st = 0; G.gust = null; } resetBoss2(G.boss); }
   mode = 'play'; show(null); setPlayUi(true);
 }

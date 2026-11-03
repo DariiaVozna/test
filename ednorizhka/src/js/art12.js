@@ -82,6 +82,7 @@ function drawEnemy8(c, e, cx, fl) {
 Object.assign(TILE7, { thorn: 1, brick0: 1, brick1: 1, brick2: 1, brick3: 1, box: 1 });
 function tileKind8(v, tx, ty) {
   if (v >= 24) return tileKind9(v, tx, ty);
+  if (v === 22 && (G.theme === 'sledtrack' || G.theme === 'iceberg')) return 'icespike';
   if (v === 22) return (tileAt(tx, (ty || 0) - 1) === 22 || tileAt(tx, (ty || 0) + 1) === 22) ? 'thornV' : 'thorn';
   return G.theme === 'attic' ? 'box' : 'brick' + (((tx || 0) + (ty || 0) * 2) % 4);
 }

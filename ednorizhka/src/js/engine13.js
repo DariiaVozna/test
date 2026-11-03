@@ -23,7 +23,7 @@ function spawnEnemy13(e, b, hover, g) {
     case 'swan': return hover(26, 20, 3, 0.7, 2);
     case 'mosquito': return Object.assign(hover(16, 12, 1, 1, 3), { mx: e.tx * T + 12, my: e.ty * T + 12 });
   }
-  return null;
+  return spawnEnemy14(e, b, hover, g);
 }
 function updateEnemy13(e, dt) {
   if (e.k === 'mosquito') {
@@ -38,7 +38,7 @@ function updateEnemy13(e, dt) {
     if (G.t % 0.5 < dt && Math.abs(e.mx - pcx) < 200) Snd.tone(880 + Math.random() * 60, 0.05, 'sawtooth', 0.008);
     return true;
   }
-  return false;
+  return updateEnemy14(e, dt);
 }
 
 /* ===== Підготовка рівня ===== */
@@ -233,6 +233,7 @@ function update13(dt) {
   updateDrums(dt);
   updateDig(P, dt);
   updatePeels(dt);
+  update14(dt);
 }
 
 /* ===== Мавпочка Шкода: кидає банани згори, розкидає шкірки, а тоді біжить підлогою й сама на них послизається ===== */
@@ -304,8 +305,9 @@ function armored13(s, B) {
     if (!B.armHint) { B.armHint = true; say('Мавпочка надто спритна! Стріляй, коли вона послизнеться на шкірці', 2.6); }
     return true;
   }
-  return false;
+  return armored14(s, B);
 }
 function resetBoss13(B) {
   if (B.kind === 'monkey') { B.state = 'swing'; B.st = 0; B.fy = B.top; B.vy = 0; B.throws = 0; G.peels = []; }
+  resetBoss14(B);
 }

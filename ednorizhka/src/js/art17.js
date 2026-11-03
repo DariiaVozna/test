@@ -39,14 +39,14 @@ function drawEnemy13(c, e, cx, fl) {
     case 'swan': drawSwan(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
     case 'mosquito': drawMosquito(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
   }
-  return false;
+  return drawEnemy14(c, e, cx, fl);
 }
 
 /* ===== Плитка: м'яка земля ===== */
 Object.assign(TILE7, { dirt: 1 });
-function tileKind13() { return 'dirt'; }
+function tileKind13(v, tx, ty) { return v === 39 ? 'dirt' : tileKind14(v, tx, ty); }
 function drawTile13(c, kind) {
-  if (kind !== 'dirt') return;
+  if (kind !== 'dirt') return drawTile14(c, kind);
   c.fillStyle = '#c48a52'; c.fillRect(0, 0, T, T);
   c.fillStyle = '#d9a46a'; c.beginPath(); c.moveTo(0, 3); c.quadraticCurveTo(6, 0, 12, 3); c.quadraticCurveTo(18, 6, T, 2); c.lineTo(T, 0); c.lineTo(0, 0); c.closePath(); c.fill();
   c.fillStyle = '#8a5a30'; for (const [x, y, r] of [[5, 8, 1.8], [16, 6, 1.4], [10, 15, 2.2], [20, 18, 1.6], [4, 20, 1.2]]) { circ(c, x, y, r); c.fill(); }
@@ -117,7 +117,7 @@ function drawMover13(c, m) {
   if (m.hippo) { if (m.state !== 'gone') drawHippoBack(c, m.x, m.y, m.w, G.t); return true; }
   if (m.giraffe) { drawGiraffeHead(c, m, G.t); return true; }
   if (m.drum) { drawDrum(c, m, G.t); return true; }
-  return false;
+  return drawMover14(c, m);
 }
 
 /* ===== Їжа й звірятка ===== */
@@ -242,6 +242,7 @@ function drawWorld13(c, t, vis) {
     for (let x = G.arena.x0 + 10; x < G.arena.x1; x += 34) { const y = B.top - 62 + Math.sin(x * 0.05) * 4; ell(c, x, y + 4, 6, 3, 0.6); c.fill(); }
     c.restore();
   }
+  drawWorld14(c, t, vis);
 }
 function drawCarry(c, P, t) { if (P.carry) drawFoodItem(c, P.carry.kind, P.carry.x, P.carry.y, 0.9); }
 
@@ -308,7 +309,7 @@ function drawBlock14(c, b) {
   } else if (b === 'bananablock') {
     rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#7fcf6a'; c.fill(); c.stroke();
     c.save(); c.translate(12, 13); c.rotate(-0.5); drawBanana(c, 0, 0, 0); c.restore();
-  } else return false;
+  } else return drawBlock15(c, b);
   return true;
 }
 
@@ -333,6 +334,7 @@ function drawDecor17(c, d, t) {
       c.fillStyle = d.c || '#ff7ab8'; c.beginPath(); c.moveTo(x, y - 10); c.lineTo(x + 5, y - 5); c.lineTo(x, y); c.lineTo(x - 5, y - 5); c.closePath(); c.fill(); c.stroke();
       sparkle(c, x + 4, y - 10, 1.4, '#ffffff');
       break;
+    default: drawDecor18(c, d, t);
   }
 }
 
