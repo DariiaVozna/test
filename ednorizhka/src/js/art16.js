@@ -39,12 +39,13 @@ function drawEnemy12(c, e, cx, fl) {
     case 'dragonfly': drawDragonfly(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
     case 'bunny': drawBunny(c, cx, e.y + e.h, e.dir, e.t, e.air, fl); return true;
   }
-  return false;
+  return drawEnemy13(c, e, cx, fl);
 }
 
 /* ===== Плитки: батут, сонячні двері ===== */
 Object.assign(TILE7, { tramp: 1, sunDoor: 1, sunDoorOpen: 1 });
-function tileKind12(v) {
+function tileKind12(v, tx, ty) {
+  if (v >= 39) return tileKind13(v, tx, ty);
   if (v === 36) return 'tramp';
   if (v === 37) return 'sunDoor';
   return 'sunDoorOpen';
@@ -64,7 +65,7 @@ function drawTile12(c, kind) {
     c.strokeStyle = '#ff9a3d'; c.lineWidth = 1; c.beginPath(); for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; c.moveTo(T / 2 + Math.cos(a) * 6, T / 2 + Math.sin(a) * 6); c.lineTo(T / 2 + Math.cos(a) * 9, T / 2 + Math.sin(a) * 9); } c.stroke();
   } else if (kind === 'sunDoorOpen') {
     c.strokeStyle = 'rgba(217,154,26,.3)'; c.lineWidth = 1; c.setLineDash([2, 3]); rr(c, 1.5, 0.5, T - 3, T - 1, 2); c.stroke(); c.setLineDash([]);
-  }
+  } else drawTile13(c, kind);
 }
 
 /* ===== Футбол ===== */
@@ -243,7 +244,7 @@ function drawBlock13(c, b) {
   } else if (b === 'peablock') {
     rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#3f7fd9'; c.fill(); c.stroke();
     c.fillStyle = '#ffd23f'; ell(c, 12, 12, 6, 7); c.fill(); c.fillStyle = '#2fb8a8'; ell(c, 12, 12, 4, 5); c.fill(); c.fillStyle = '#1f3f8a'; ell(c, 12, 12.6, 2.2, 3); c.fill();
-  } else return false;
+  } else return drawBlock14(c, b);
   return true;
 }
 
@@ -276,6 +277,7 @@ function drawDecor16(c, d, t) {
       c.fillStyle = '#ffd23f'; ell(c, 0, -8, 2.2, 2.6); c.fill(); c.fillStyle = '#1f3f8a'; circ(c, 0, -8, 1); c.fill();
       c.restore();
       break;
+    default: drawDecor17(c, d, t);
   }
 }
 

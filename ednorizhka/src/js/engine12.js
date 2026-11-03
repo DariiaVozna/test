@@ -20,7 +20,7 @@ function spawnEnemy12(e, b, hover, g) {
     case 'dragonfly': return Object.assign(hover(24, 12, 3, 1, 3), { px: e.tx * T + 12, py: e.ty * T + 12, vxd: 1, wait: 0 });
     case 'bunny': return g(20, 20, { cool: 0.6 + (e.tx % 3) * 0.4, air: false });
   }
-  return null;
+  return spawnEnemy13(e, b, hover, g);
 }
 function updateEnemy12(e, dt) {
   if (e.k === 'dragonfly') {
@@ -38,7 +38,7 @@ function updateEnemy12(e, dt) {
     if (e.y > VIEW_H + 40) e.dead = true;
     return true;
   }
-  return false;
+  return updateEnemy13(e, dt);
 }
 
 /* ===== Підготовка рівня ===== */
@@ -178,6 +178,7 @@ function update12(dt) {
   updateBalls12(dt);
   updateMirrors(dt);
   updateSwappers(dt);
+  update13(dt);
 }
 
 /* ===== Павич Пишнохвіст: розпускає хвіст і пускає пір'їнки, клює, а тоді милується собою в дзеркальці ===== */

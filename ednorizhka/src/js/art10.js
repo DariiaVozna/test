@@ -111,7 +111,7 @@ function drawRiverFlow(c, z, t, camX, vw) {
   c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 1.4; c.lineCap = 'round';
   const span = z.x1 - z.x0;
   for (let i = 0; i < span / 40; i++) {
-    const x = z.x0 + ((i * 67 + t * z.flow) % span), y = z.y + 12 + ((i * 29) % 50);
+    const x = z.x0 + wrapX(i * 67 + t * z.flow, span), y = z.y + 12 + ((i * 29) % 50);
     if (x < x0 - 30 || x > x1 + 30) continue;
     c.beginPath(); c.moveTo(x - 12, y); c.quadraticCurveTo(x - 6, y - 2.4, x, y); c.stroke();
   }

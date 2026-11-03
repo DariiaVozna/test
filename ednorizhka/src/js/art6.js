@@ -216,6 +216,7 @@ function drawMover2(c, m, theme) {
   if (m.coaster) { drawCoasterCart(c, m, G.t); return true; }
   if (m.ball) { drawRollBall(c, m, G.t); return true; }
   if (m.pulley) { drawBasket(c, m); return true; }
+  if (m.sailboat || m.giraffe || m.hippo || m.drum) return drawMover13(c, m);
   if (m.swing || m.sheep || (m.circ && theme === 'windmill')) return drawMover3(c, m, theme);
   if (m.bubble) { drawBubblePlat(c, m, G.t); return true; }
   if (m.cart) { drawCart(c, m, G.t); return true; }

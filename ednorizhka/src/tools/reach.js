@@ -60,10 +60,10 @@ function act(a) {
 function keyOf(TB) {
   const P = G.P, wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
   let mv = -1; if (P.onMover) mv = G.movers.indexOf(P.onMover);
-  if (G._sc == null) G._sc = G.map.some(v => v === 17 || v === 18 || v === 23 || v === 24);
-  let st = ''; if (G._sc) for (let i = 0; i < G.map.length; i++) if (G.map[i] === 17 || G.map[i] === 18 || G.map[i] === 23 || G.map[i] === 24) st += i + (G.map[i] === 18 ? 'c' : '') + ';';
+  if (G._sc == null) G._sc = G.map.some(v => v === 17 || v === 18 || v === 23 || v === 24 || v === 39);
+  let st = ''; if (G._sc) for (let i = 0; i < G.map.length; i++) if (G.map[i] === 17 || G.map[i] === 18 || G.map[i] === 23 || G.map[i] === 24 || G.map[i] === 39) st += i + (G.map[i] === 18 ? 'c' : '') + ';';
   let mv8 = ''; for (const m of G.movers) { if (m.ball) mv8 += Math.round(m.x / 12) + 'b;'; else if (m.coaster) mv8 += m.state[0] + Math.round(m.cx / 48) + ';'; }
-  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0, P.big ? Math.ceil(P.bigT / 3) : 0, mv8, G.season || '', P.mount ? 1 : 0, P.swing ? G.rings.indexOf(P.swing) + ':' + Math.round(P.swing.th * 4) + ':' + Math.round(P.swing.om) : '', P.cling || 0, G.crystals.map(c => Math.ceil(c.t / 2)).join(''), G.movers.filter(m => m.pulley && m.lead).map(m => Math.round(m.y / 8)).join('.'), Math.ceil((G.timeStop || 0) / 2), P.bub ? 'b' + G.soaps.indexOf(P.bub) : '', G.soaps.map(q => q.state === 'idle' ? 1 : 0).join(''), P.hang ? 'h' : '', G.nutWheels.map(w => Math.round(w.p * 8) + (w.full ? 'f' + Math.ceil(w.hold) : '')).join('.'), P.inCannon && P.inCannon.swc ? Math.round(P.inCannon.ang * 12) : '', P.tramp + (P.trampT > 0 ? 't' : ''), G.balls12.map(b => Math.round(b.x / 12) + ':' + Math.round(b.y / 12)).join('.'), G.goals.map(g => g.scored ? 1 : 0).join(''), G.mirrors.map(m => m.d > 0 ? 1 : 0).join(''), G.suns.map(q => q.on ? 1 : 0).join(''), G.swappers.map(w => Math.round(w.x / 12) + ':' + Math.round(w.y / 12)).join('.')].join(',');
+  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0, P.big ? Math.ceil(P.bigT / 3) : 0, mv8, G.season || '', P.mount ? 1 : 0, P.swing ? G.rings.indexOf(P.swing) + ':' + Math.round(P.swing.th * 4) + ':' + Math.round(P.swing.om) : '', P.cling || 0, G.crystals.map(c => Math.ceil(c.t / 2)).join(''), G.movers.filter(m => m.pulley && m.lead).map(m => Math.round(m.y / 8)).join('.'), Math.ceil((G.timeStop || 0) / 2), P.bub ? 'b' + G.soaps.indexOf(P.bub) : '', G.soaps.map(q => q.state === 'idle' ? 1 : 0).join(''), P.hang ? 'h' : '', G.nutWheels.map(w => Math.round(w.p * 8) + (w.full ? 'f' + Math.ceil(w.hold) : '')).join('.'), P.inCannon && P.inCannon.swc ? Math.round(P.inCannon.ang * 12) : '', P.tramp + (P.trampT > 0 ? 't' : ''), G.balls12.map(b => Math.round(b.x / 12) + ':' + Math.round(b.y / 12)).join('.'), G.goals.map(g => g.scored ? 1 : 0).join(''), G.mirrors.map(m => m.d > 0 ? 1 : 0).join(''), G.suns.map(q => q.on ? 1 : 0).join(''), G.swappers.map(w => Math.round(w.x / 12) + ':' + Math.round(w.y / 12)).join('.'), G.movers.filter(m => m.sailboat).map(m => Math.round(m.x / 12) + ':' + Math.round(m.vx / 50)).join('.'), G.foods.map(f => f.state[0]).join(''), G.animals.map(a => (a.fed ? 1 : 0) + (a.m ? (a.m.hippo ? a.m.state[0] : Math.round(a.m.y / 12)) : '')).join('.'), G.padSets.map(q => q.solved ? 's' : q.prog).join('')].join(',');
 }
 function explore(idx, opts) {
   opts = opts || {};
@@ -83,8 +83,9 @@ function explore(idx, opts) {
     for (const a of ACTS) {
       if (a.swim && !waterAt(s.P.x + s.P.w / 2, s.P.y + s.P.h / 2)) continue;
       if (a.climb && !s.vines.length) continue;
+      const sail = s.movers.some(m => m.sailboat);
       if (a.big && s.map.indexOf(18) < 0 && !s.crystals.length && !s.mirrors.length && !s.swappers.length) continue;
-      if ((a.shoot || a.shootAt != null) && !s.mirrors.length && !s.swappers.length) continue;
+      if ((a.shoot || a.shootAt != null) && !s.mirrors.length && !s.swappers.length && !(sail && s.P.onMover && s.P.onMover.sailboat)) continue;
       if ((a.wait) && !(s.movers.length || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0 || s.P.swing || s.P.inCannon || s.P.bub || s.P.hang || s.nutWheels.some(w => w.p > 0) || s.soaps.some(q => q.state === 'gone') || s.balls12.some(b => !b.done && (Math.abs(b.vx) > 1 || !b.onGround)))) continue;
       G = structuredClone(Object.assign({}, s, { L: null, def: null })); G.L = s.L; G.def = s.def;
       if (!act(a)) continue;

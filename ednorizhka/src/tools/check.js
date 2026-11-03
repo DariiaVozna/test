@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -23,7 +23,7 @@ function runLevel(idx, maxT) {
     if (back > 0) { back -= STEP; In.left = true; In.right = false; }
     const wz = waterAt(P.x + P.w / 2, P.y + P.h / 2);
     const wallTile = tileAt(Math.floor((P.x + P.w + 4) / T), Math.floor((P.flip ? P.y + 4 : P.y + P.h - 4) / T));
-    const wall = solid(wallTile) && !((wallTile === 17 || wallTile === 24) && stuck < 0.8);
+    const wall = solid(wallTile) && wallTile !== 39 && !((wallTile === 17 || wallTile === 24) && stuck < 0.8);
     let gap = false;
     for (let d = 2; d <= 14; d += 4) {
       const gx = Math.floor((P.x + P.w + d) / T); let g = true;
@@ -38,6 +38,8 @@ function runLevel(idx, maxT) {
     let foe = null; for (const e of G.enemies) { const dx = e.x - P.x; if (dx > 0 && dx < 90 && Math.abs((e.y + e.h / 2) - (P.y + P.h / 2)) < 40) { foe = e; break; } }
     if (!foe && G.beans) for (const bn of G.beans) if (!bn.grown && bn.x - P.x > 0 && bn.x - P.x < 90) { foe = { x: bn.x - 10, y: bn.gy - 20, w: 20, h: 20 }; break; }
     if (foe && Math.floor(t * 10) % 2 === 0) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
+    // упали в озеро з течією — випливаємо до берега, звідки прийшли
+    if (wz && wz.flow < 0) { In.right = false; In.left = true; }
     if (wz) { In.jump = P.y + P.h > 250 || stuck > 0.3 || wall; if ((stuck > 0.3 || wall) && Math.floor(t * 6) % 2 === 0 && cool <= 0) { In.jumpP = true; cool = 0.2; } }
     else {
       // гарбуз попереду — застрибуємо на нього, щоб перекотитися через колючки
@@ -97,6 +99,32 @@ function runLevel(idx, maxT) {
     // зоря-обмінниця вгорі — стрибаємо й стріляємо на верхівці стрибка
     const swU = G.swappers.find(w => !w.used && w.x - pcxB() > 20 && w.x - pcxB() < 140 && sh - w.y > -20 && sh - w.y < 140 && !(P.onGround && sh - w.y < 70));
     if (swU) { In.right = false; if (P.onGround && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.5; } else if (!P.onGround && Math.abs(sh - swU.y) < 14) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } } }
+    // озеро з течією назад: на вітрильнику стоїмо позаду щогли й стріляємо у вітрило; бегемотика чекаємо й перестрибуємо по ньому
+    const lake = G.water.find(z => z.flow < 0 && P.x + P.w > z.x0 - 40 && P.x < z.x0 && P.y + P.h <= z.y);
+    const boat = P.onMover && P.onMover.sailboat ? P.onMover : null;
+    if (boat) {
+      In.left = false; In.jumpP = false;
+      if (boat.x < boat.x1 - boat.w - 2) { In.right = pcxB() < boat.x + 14; if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
+      else In.right = true;
+    } else if (lake && P.onGround) {
+      const bt = G.movers.find(m => m.sailboat && m.x0 === lake.x0), hp = G.movers.find(m => m.hippo && m.x > lake.x0 && m.x < lake.x1);
+      if (bt) { In.jumpP = false; if (bt.x - bt.x0 > 6) In.right = P.x + P.w < lake.x0 - 30; }
+      else if (hp) { if (hp.state === 'gone') { In.right = P.x + P.w < lake.x0 - 6; In.jumpP = false; } else if (P.x + P.w > lake.x0 - 6 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; } }
+    }
+    if (P.onMover && P.onMover.hippo && P.x + P.w > P.onMover.x + P.onMover.w - 6 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; }
+    // голова жирафи піднімає — стоїмо, поки не доїде нагору
+    if (P.onMover && P.onMover.giraffe && P.onMover.y > P.onMover.yTop + 1) { In.right = In.left = In.jumpP = In.jump = false; }
+    // барабани: стрибаємо на той, що наступний у мелодії
+    const ps = G.padSets.find(s => !s.solved && pcxB() > s.drums[0].x - 3 * T && pcxB() < s.door[0][0] * T);
+    if (ps) {
+      const d = ps.drums[ps.seq[ps.prog]], tx = d.x + d.w / 2; In.jumpP = false;
+      if (P.onMover === d) { In.right = In.left = false; }
+      else {
+        In.right = pcxB() < tx - 4; In.left = pcxB() > tx + 4;
+        if (P.onGround && P.onMover !== d && Math.abs(pcxB() - tx) < 10 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; }
+        if (!P.onGround) In.jump = P.vy < 0;
+      }
+    }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;
