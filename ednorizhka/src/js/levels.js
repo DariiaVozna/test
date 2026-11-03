@@ -3463,7 +3463,7 @@ const LEVELS = [
       L.hotair(11, 50);
       L.arc(17, 6, 4, 2);
       L.block(23, 0, 2, 4); L.row(23, 6, 2);
-      L.arc(27, 4, 3, 1);
+      L.arc(27, 5, 3, 1);
       L.block(31, 7, 2, 5); L.row(31, 5, 2);
       L.block(39, 0, 2, 3); L.block(39, 9, 2, 3); L.row(39, 6, 2);
       L.arc(43, 5, 4, 1);

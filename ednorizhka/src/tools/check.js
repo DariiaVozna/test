@@ -164,8 +164,8 @@ function runLevel(idx, maxT) {
     const pm = G.movers.find(m => m.pump && m.level < 3 && m.x + m.w / 2 > pcxB() - 40 && m.x + m.w / 2 - pcxB() < 100);
     if (pm) {
       const tx = pm.x + pm.w / 2; In.jumpP = false;
-      if (P.onMover === pm) { In.right = In.left = false; if (cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.3; } }
-      else { In.right = pcxB() < tx - 3; In.left = pcxB() > tx + 3; if (P.onGround && Math.abs(pcxB() - tx) < 26 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.3; } }
+      if (P.onMover === pm) { In.right = In.left = false; In.jumpP = P.onGround; In.jump = true; }
+      else { In.right = pcxB() < tx - 3; In.left = pcxB() > tx + 3; if (P.onGround && Math.abs(pcxB() - tx) < 26) { In.jumpP = true; In.jump = true; } }
     }
     if (P.onMover && P.onMover.lift19 && P.onMover.level >= 3 && P.onMover.y > P.onMover.yTop + 1) { In.left = In.right = In.jumpP = In.jump = false; }
     // хмаринки: падаємо над ямою або впираємося в стіну — ставимо хмаринку під ноги
