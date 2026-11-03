@@ -154,6 +154,26 @@ function runLevel(idx, maxT) {
       for (let d = 4; d <= 20; d += 4) { const gx = Math.floor((P.x + P.w + d) / T); const v = tileAt(gx, row); if (v === 22 || !(solid(v) || v === 3)) danger = true; }
       if (danger) { In.jumpP = true; In.jump = true; cool = 0.3; }
     }
+    // лелека: застрибуємо на спинку й летимо, нічого не натискаючи
+    const sk = G.movers.find(m => m.stork && m.state === 'wait' && m.x - (P.x + P.w) > -24 && m.x - (P.x + P.w) < 30);
+    if (sk && P.onGround && P.onMover !== sk && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; G._bt = { x: sk.x, w: sk.w }; }
+    if (P.onMover && P.onMover.stork && P.onMover.state !== 'arrive') { In.left = In.right = In.jumpP = In.jump = false; }
+    // пого: завжди тримаємо «Стрибок», щоб скакати якнайвище
+    if (P.pogoT > 0) In.jump = true;
+    // насос: стрибаємо на ручку, доки не накачаємо, а на кульці-ліфті стоїмо, доки не підніме
+    const pm = G.movers.find(m => m.pump && m.level < 3 && m.x + m.w / 2 > pcxB() - 40 && m.x + m.w / 2 - pcxB() < 100);
+    if (pm) {
+      const tx = pm.x + pm.w / 2; In.jumpP = false;
+      if (P.onMover === pm) { In.right = In.left = false; if (cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.3; } }
+      else { In.right = pcxB() < tx - 3; In.left = pcxB() > tx + 3; if (P.onGround && Math.abs(pcxB() - tx) < 26 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.3; } }
+    }
+    if (P.onMover && P.onMover.lift19 && P.onMover.level >= 3 && P.onMover.y > P.onMover.yTop + 1) { In.left = In.right = In.jumpP = In.jump = false; }
+    // хмаринки: падаємо над ямою або впираємося в стіну — ставимо хмаринку під ноги
+    if (P.cloudN > 0 && !P.onGround && P.vy > 30) {
+      let pit = true; for (let yy = Math.floor((P.y + P.h) / T); yy < ROWS; yy++) { const v = tileAt(Math.floor((P.x + P.w / 2) / T), yy); if (solid(v) || v === 3) { pit = false; break; } }
+      const wallAhead = solid(tileAt(Math.floor((P.x + P.w + 6) / T), Math.floor((P.y + P.h - 4) / T)));
+      if (((pit && P.y + P.h > 7 * T) || wallAhead) && !In.shoot) { In.shootP = true; In.shoot = true; } else if (In.shoot) { In.shootR = true; In.shoot = false; }
+    }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;
@@ -184,6 +204,14 @@ function fightBoss(idx) {
         const app = Math.sign(pcx - B.x) === B.dir, d = Math.abs(dx);
         In.left = In.right = false; In.jumpP = false;
         if (app && d < 150 && d > 112 && P.onGround) { In.jumpP = true; In.jump = true; }
+      }
+      // гусениця повзе — скачемо їй по спинці
+      if (B.kind === 'caterpillar') {
+        const near = catSegs(B).some(sg => sg.shown && Math.abs(sg.x - pcx) < 48) || (B.headShown && Math.abs(B.x - pcx) < 56);
+        if ((B.state === 'crawl' || B.state === 'emerge' || B.state === 'burrow') && near && P.onGround) { In.jumpP = true; In.jump = true; }
+        if (!P.onGround) In.jump = true;
+        // жує листочок — біжимо до голови й стрибаємо на неї (або стріляємо)
+        if (B.state === 'munch') { const hx = B.x - pcx; In.right = hx > 6; In.left = hx < -6; if (P.onGround && Math.abs(hx) < 34) { In.jumpP = true; In.jump = true; } }
       }
       if (i % 10 === 0) fire(false);
       if (!P.onGround && P.vy < 0) In.jump = true;

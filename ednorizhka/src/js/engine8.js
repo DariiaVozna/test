@@ -180,7 +180,7 @@ function update8(dt) {
   }
   P.wasAir8 = !P.onGround; P.prevVy8 = P.vy;
   // колючки — як яма: серце менше, повертаємося на край, а гарбуз котиться на своє місце
-  if (!P.big && P.onGround && !P.onMover && P.groundTile === 22) {
+  if (!P.big && !(P.pogoT > 0) && P.onGround && !P.onMover && P.groundTile === 22) {
     hurtPlayer(true); P.x = P.safe.x; P.y = P.safe.y - 2; P.vx = P.vy = 0; P.onGround = false;
     burst(P.x + P.w / 2, P.y + P.h / 2, 10, ['#fff', '#ffe14d'], 100);
     for (const m of G.movers) if (m.ball) { m.x = m.bx; m.y = m.by; m.vx = m.vy = 0; }

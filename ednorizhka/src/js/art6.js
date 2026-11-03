@@ -449,6 +449,7 @@ function drawEnemy2(c, e, cx, fl) {
 function drawBolt2(c, b) {
   switch (b.kind) {
     case 'banana': drawBanana(c, b.x, b.y + 4, b.t * 10); return true;
+    case 'leaf': drawLeafBolt(c, b); return true;
     case 'ball': drawCannonball(c, b.x, b.y); return true;
     case 'bub': drawBub(c, b.x, b.y, b.t); return true;
     case 'snowball': drawSnowball(c, b.x, b.y); return true;

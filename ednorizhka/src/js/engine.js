@@ -359,7 +359,7 @@ function updatePlayer(dt) {
     const firm = v => solid(v) && v !== 13 && v !== 22;
     if (firm(tileAt(Math.floor((P.x - 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w + 26) / T), ty)) && firm(tileAt(Math.floor((P.x + P.w / 2) / T), ty))) P.safe = { x: P.x, y: P.y, w: P.w, h: P.h };
   }
-  if (P.y > VIEW_H + 60 || (P.flip && P.y < -54)) { hurtPlayer(true); P.x = P.safe.x + ((P.safe.w || P.w) - P.w) / 2; P.y = P.safe.y + (P.safe.h || P.h) - P.h - 2; P.vx = P.vy = 0; burst(P.x + 11, P.y + 15, 10, ['#fff', '#ffe14d'], 100); }
+  if (P.y > VIEW_H + 60 || (P.flip && P.y < -54)) { hurtPlayer(true); if (P.cloudFill) P.cloudN = 3; P.x = P.safe.x + ((P.safe.w || P.w) - P.w) / 2; P.y = P.safe.y + (P.safe.h || P.h) - P.h - 2; P.vx = P.vy = 0; burst(P.x + 11, P.y + 15, 10, ['#fff', '#ffe14d'], 100); }
 
   if (In.shootP) { P.charging = true; P.charge = 0; P.chargeSnd = false; }
   if (P.charging) { P.charge += dt; if (P.charge >= 0.55 && !P.chargeSnd) { P.chargeSnd = true; Snd.charged(); } }
@@ -656,6 +656,7 @@ function update(dt) {
       else if (p.k === 'mini') { setMini(P, true, 14); say('Ти маленька! Тепер можна пролізти в нірку', 2.2); }
       else if (p.k === 'hourglass') { P.stopT = STOP_TIME; Snd.seq([0, 7, 12, 7, 0], 392, 0.08, 'triangle', 0.07); say(G.stopHint ? 'Час знову зупинився!' : 'Пісочний годинник! Час зупинився на 6 секунд — біжи!', 2.4); G.stopHint = true; }
       else if (p.k === 'big') { setBig(P, true, BIG_TIME); say(G.bigHint ? 'Знову велика!' : 'Гриб-велетень! Ти велика: ламай стіни з кубиків', 2.4); G.bigHint = true; }
+      else if (p.k === 'pogo' || p.k === 'cloud') powerUp15(P, p);
       else { P.magnetT = 12; say('Магніт! Зірочки самі летять до тебе'); }
     }
   }
@@ -716,7 +717,7 @@ function update(dt) {
   // ворота
   const gt = G.gate;
   if (!gt.open && G.points >= G.need && (!G.boss || G.bossDefeated)) { gt.open = true; Snd.gate(); if (!G.boss) say('Ворота відчинилися!', 2.4); burst(gt.x, gt.gy - 30, 30, RAINBOW, 180); }
-  if (gt.open && Math.abs(pcx - gt.x) < 16 && P.y + P.h > gt.gy - 52) levelComplete();
+  if (gt.open && Math.abs(pcx - gt.x) < 16 && (P.y + P.h > gt.gy - 52 || P.pogoT > 0)) levelComplete();
   else if (!gt.open && Math.abs(pcx - gt.x) < 30 && (!G.msg || G.msg.t < 0.5)) {
     if (G.boss && !G.bossDefeated) say('Спочатку переможи ' + G.boss.acc, 1.8);
     else say('Ще ' + (G.need - G.points) + ' ' + starWord(G.need - G.points) + ', і ворота відчиняться', 1.8);

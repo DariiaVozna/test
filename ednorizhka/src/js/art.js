@@ -419,7 +419,7 @@ function drawPowerIcon(c, kind, t) {
     c.fillStyle = '#ff9a3d'; c.beginPath(); c.arc(0, 0.5, 8.6, Math.PI, TAU); c.closePath(); c.fill(); c.stroke();
     c.fillStyle = '#ffe14d'; starPath(c, -3.8, -3, 2.4, 1.1, 0); c.fill(); starPath(c, 3.4, -4.6, 2, 0.9, 0); c.fill();
     c.strokeStyle = '#fff'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(0, 6); c.lineTo(0, 2.6); c.moveTo(-1.4, 4); c.lineTo(0, 2.6); c.lineTo(1.4, 4); c.stroke();
-  }
+  } else drawPowerIcon19(c, kind, t);
 }
 function drawPower(c, x, y, kind, t) {
   c.save(); c.translate(x, y + Math.sin(t * 3) * 2);
