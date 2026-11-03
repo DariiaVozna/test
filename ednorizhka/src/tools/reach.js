@@ -86,7 +86,7 @@ function explore(idx, opts) {
       const sail = s.movers.some(m => m.sailboat);
       if (a.big && s.map.indexOf(18) < 0 && !s.crystals.length && !s.mirrors.length && !s.swappers.length) continue;
       if ((a.shoot || a.shootAt != null) && !s.mirrors.length && !s.swappers.length && !(sail && s.P.onMover && s.P.onMover.sailboat)) continue;
-      if ((a.wait) && !(s.movers.length || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0 || s.P.swing || s.P.inCannon || s.P.bub || s.P.hang || s.nutWheels.some(w => w.p > 0) || s.soaps.some(q => q.state === 'gone') || s.balls12.some(b => !b.done && (Math.abs(b.vx) > 1 || !b.onGround)))) continue;
+      if ((a.wait) && !(s.movers.length || s.hasDirt || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0 || s.P.swing || s.P.inCannon || s.P.bub || s.P.hang || s.nutWheels.some(w => w.p > 0) || s.soaps.some(q => q.state === 'gone') || s.balls12.some(b => !b.done && (Math.abs(b.vx) > 1 || !b.onGround)))) continue;
       G = structuredClone(Object.assign({}, s, { L: null, def: null })); G.L = s.L; G.def = s.def;
       if (!act(a)) continue;
       G.stars.forEach((st, i) => { if (st.got) got[i] = 1; });
