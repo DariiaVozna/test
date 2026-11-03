@@ -3,8 +3,25 @@
 const Snd = {
   ctx: null, master: null, on: true,
   init() {
-    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
-    try { const C = window.AudioContext || window.webkitAudioContext; this.ctx = new C(); this.master = this.ctx.createGain(); this.master.gain.value = 0.55; this.master.connect(this.ctx.destination); } catch (e) { this.ctx = null; }
+    // на айфоні звук грає й тоді, коли телефон у беззвучному режимі
+    try { if (navigator.audioSession && navigator.audioSession.type !== 'playback') navigator.audioSession.type = 'playback'; } catch (e) { }
+    if (this.ctx && this.ctx.state === 'closed') this.ctx = null;
+    if (this.ctx) {
+      // після блокування екрана, дзвінка чи переходу в іншу програму телефон глушить звук (на айфоні стан «interrupted»):
+      // дотик пробує його відновити, а якщо за півтори секунди не вийшло, наступний дотик створить звук наново
+      if (this.ctx.state !== 'running') {
+        const c = this.ctx;
+        try { c.resume().catch(() => { }); } catch (e) { }
+        clearTimeout(this._rt); this._rt = setTimeout(() => { if (this.ctx === c && c.state !== 'running') { try { c.close(); } catch (e) { } this.ctx = null; } }, 1500);
+        this.unlock();
+      }
+      return;
+    }
+    try { const C = window.AudioContext || window.webkitAudioContext; this.ctx = new C(); this.master = this.ctx.createGain(); this.master.gain.value = 0.55; this.master.connect(this.ctx.destination); this.unlock(); } catch (e) { this.ctx = null; }
+  },
+  unlock() {
+    // беззвучний коротенький звук під час дотику «розблоковує» звук на телефонах
+    try { const o = this.ctx.createOscillator(), g = this.ctx.createGain(); g.gain.value = 0; o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.02); } catch (e) { }
   },
   tone(f, d, type, v, f2, delay) {
     if (!this.on || !this.ctx || this.ctx.state !== 'running') return;
@@ -72,6 +89,8 @@ const Music = {
   stop() { clearInterval(this.timer); this.timer = null; this.name = ''; },
   tick() {
     if (!Snd.on || mode !== 'play') return;
+    // поки звучать барабани-повторюшки, фонова музика замовкає
+    if (G && G.hush > 0) return;
     const tu = this.tune, n = tu.n[this.step % tu.n.length];
     if (n != null) Snd.tone(tu.base * Math.pow(2, n / 12), 0.28, 'triangle', 0.035);
     if (this.step % 8 === 0) Snd.tone(tu.base / 4 * Math.pow(2, tu.b[(this.step / 8) % tu.b.length] / 12), 0.6, 'sine', 0.07);

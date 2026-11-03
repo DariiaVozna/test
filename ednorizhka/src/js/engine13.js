@@ -124,7 +124,15 @@ function updateZoo(dt) {
 
 /* ===== Барабани-повторюшки: запам'ятай мелодію й застрибни на барабани в тому ж порядку ===== */
 const DRUM_NOTES = [0, 4, 7, 12], DRUM_COLS = ['#ff5c7a', '#ffd23f', '#4cb6ff', '#7fd46a'];
-function drumNote(i) { Snd.tone(392 * Math.pow(2, DRUM_NOTES[i] / 12), 0.28, 'triangle', 0.08); }
+function drumNote(i) {
+  // удар по барабану й дзвінка нота свого тону, вище за фонову музику, щоб добре чути навіть у телефоні
+  const f = 784 * Math.pow(2, DRUM_NOTES[i] / 12);
+  Snd.tone(170, 0.18, 'sine', 0.2, 55);
+  Snd.tone(f, 0.45, 'triangle', 0.16);
+  Snd.tone(f, 0.35, 'square', 0.045);
+  Snd.tone(f * 2, 0.25, 'sine', 0.05, null, 0.01);
+  G.hush = 1.2;
+}
 function pressDrum(d) {
   const s = d.set; d.lit = 0.45; drumNote(d.idx); s.idle = 0;
   burst(d.x + d.w / 2, d.y - 4, 6, [DRUM_COLS[d.idx], '#ffffff'], 80);
@@ -220,6 +228,7 @@ function updatePeels(dt) {
 
 function update13(dt) {
   const P = G.P;
+  if (G.hush > 0) G.hush -= dt;
   updateZoo(dt);
   updateDrums(dt);
   updateDig(P, dt);
