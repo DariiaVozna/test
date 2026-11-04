@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -39,16 +39,22 @@ function runLevel(idx, maxT) {
     if (!foe && G.beans) for (const bn of G.beans) if (!bn.grown && bn.x - P.x > 0 && bn.x - P.x < 90) { foe = { x: bn.x - 10, y: bn.gy - 20, w: 20, h: 20 }; break; }
     if (foe && Math.floor(t * 10) % 2 === 0) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
     // упали в озеро з течією — випливаємо до берега, звідки прийшли
-    if (wz && wz.flow < 0) { In.right = false; In.left = true; }
+    if (wz && wz.flow < 0 && !P.seahorse) { In.right = false; In.left = true; }
     if (wz) { In.jump = P.y + P.h > 250 || stuck > 0.3 || wall; if ((stuck > 0.3 || wall) && Math.floor(t * 6) % 2 === 0 && cool <= 0) { In.jumpP = true; cool = 0.2; } }
     else {
       // гарбуз попереду — застрибуємо на нього, щоб перекотитися через колючки
       const ball = G.movers.find(m => m.ball && P.onMover !== m && m.x - (P.x + P.w) > 0 && m.x - (P.x + P.w) < 40 && Math.abs(m.y + m.h - (P.y + P.h)) < 10);
       // тотем пір року попереду, а потрібна інша пора — застрибуємо на нього
       const tm = G.totems.find(q => q.want && q.want !== G.season && q.x - (P.x + P.w / 2) > 10 && q.x - (P.x + P.w / 2) < 60);
-      const want = P.onGround && (wall || gap || ball || tm || (foe && foe.x - P.x < 50 && wallTile !== 17 && wallTile !== 24) || stuck > 1);
+      // веселка: над ямою не стрибаємо, а йдемо по веселковому містку, якщо часу вистачить
+      if (gap && P.rainbowT > 0) { let pw = 0; for (let gx = Math.floor((P.x + P.w + 2) / T); pw < 40; gx++, pw++) { let any = false; for (let yy = Math.floor((P.y + P.h) / T); yy < ROWS; yy++) if (solid(tileAt(gx, yy))) any = true; if (any) break; } if (P.rainbowT > pw * T / 150 + 0.6) gap = false; }
+      // морозиво: з землі чи з кульки стрибаємо на наступну кульку попереду й гальмуємо над нею
+      const onSc = P.onMover && P.onMover.scoop ? P.onMover : null, feetB = P.y + P.h;
+      const ns = G.movers.filter(m => m.scoop && m !== onSc && m.state !== 'gone' && m.x > P.x + 4 && m.x - (P.x + P.w) < 100 && feetB - m.y < 104 && m.y - feetB < 100).sort((a, b) => a.x - b.x)[0];
+      const sc = ns && (onSc || gap || wall || feetB - ns.y > 30) ? ns : null, scEdge = onSc && pcxB() > onSc.x + onSc.w - 10;
+      const want = P.onGround && (wall || gap || ball || tm || sc || scEdge || (foe && foe.x - P.x < 50 && wallTile !== 17 && wallTile !== 24) || stuck > 1);
       In.jump = !P.onGround && (P.flip ? P.vy > 0 : P.vy < 0);
-      if (want && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; if (ball) G._bt = ball; else if (tm) G._bt = { x: tm.x - 20, w: 40, totem: true }; }
+      if (want && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; if (ball) G._bt = ball; else if (tm) G._bt = { x: tm.x - 20, w: 40, totem: true }; else if (sc) G._bt = { x: sc.x, w: sc.w }; else if (onSc) G._bt = null; }
       // над гарбузом гальмуємо, щоб приземлитися на нього, а не перелетіти
       if (G._bt) { if (P.onGround && P.onMover !== G._bt && P.vy === 0 && cool < 0.2) G._bt = null; else if (!P.onGround && P.x + P.w / 2 > G._bt.x + G._bt.w / 2 - (G._bt.totem ? 12 : 8)) { In.right = false; In.left = true; } if (P.onMover === G._bt) G._bt = null; }
     }
@@ -174,6 +180,15 @@ function runLevel(idx, maxT) {
       const wallAhead = solid(tileAt(Math.floor((P.x + P.w + 6) / T), Math.floor((P.y + P.h - 4) / T)));
       if (((pit && P.y + P.h > 7 * T) || wallAhead) && !In.shoot) { In.shootP = true; In.shoot = true; } else if (In.shoot) { In.shootR = true; In.shoot = false; }
     }
+    // паперовий літачок: застрибуємо на нього, а в польоті підкидаємо, коли без цього за півтори секунди врізалися б
+    const pl = G.movers.find(m => m.plane && m.state === 'idle' && m.x - (P.x + P.w) > -16 && m.x - (P.x + P.w) < 34);
+    if (pl && P.onGround && !P.plane && P.onMover !== pl && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; G._bt = { x: pl.x, w: pl.w }; }
+    if (P.plane) {
+      const m = P.plane; In.left = In.right = false; In.jump = false; In.jumpP = false;
+      // коли (через скільки кроків) літачок врізався б, якщо не підкидати або підкинути зараз
+      const crashIn = vy0 => { const s = { x: m.x, y: m.y, vy: vy0 }; for (let k = 0; k < 120; k++) { const ev = planeAdvance(m, s, STEP); if (ev === 'crash') return k; if (ev === 'landed') return 999; } return 999; };
+      if (m.puffs > 0 && m.vy > 0) { const c0 = crashIn(m.vy); if (c0 < 90 && crashIn(-150) > c0) In.jumpP = true; }
+    }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;
@@ -212,6 +227,15 @@ function fightBoss(idx) {
         if (!P.onGround) In.jump = true;
         // жує листочок — біжимо до голови й стрибаємо на неї (або стріляємо)
         if (B.state === 'munch') { const hx = B.x - pcx; In.right = hx > 6; In.left = hx < -6; if (P.onGround && Math.abs(hx) < 34) { In.jumpP = true; In.jump = true; } }
+      }
+      // жабка: тримаємося на відстані, перестрибуємо язик і хвилі, а коли співає «Ква!» — стріляємо
+      if (B.kind === 'frog') {
+        const d = Math.abs(dx); In.left = In.right = false;
+        if (B.state === 'croak') { if (d > 90 || P.y + P.h < B.gy - 10) { In.right = dx > 0; In.left = dx < 0; } else if (d < 40) { In.left = dx > 0; In.right = dx < 0; } }
+        else if (B.state !== 'leap' && B.state !== 'crouch') { if (d < 120) { In.left = dx > 0; In.right = dx < 0; } else if (d > 190) { In.right = dx > 0; In.left = dx < 0; } }
+        const tip = B.x + B.dir * (22 + B.tongue), near = Math.abs(tip - pcx) - 11;
+        if (B.state === 'tongue' && B.st < 0.3 && Math.sign(pcx - B.x) === B.dir && near < 50 && P.onGround) { In.jumpP = true; In.jump = true; }
+        if (danger && P.onGround) { In.jumpP = true; In.jump = true; }
       }
       if (i % 10 === 0) fire(false);
       if (!P.onGround && P.vy < 0) In.jump = true;

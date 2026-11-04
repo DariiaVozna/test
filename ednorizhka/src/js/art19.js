@@ -19,7 +19,7 @@ function drawLadybug(c, x, gy, dir, t, flash) {
   c.fillStyle = '#fff'; circ(c, 11.4, -7, 1.2); c.fill();
   c.restore();
 }
-function drawButterfly(c, x, y, t, dir, flash) {
+function drawButterflyFoe(c, x, y, t, dir, flash) {
   c.save(); c.translate(x, y); c.scale(dir, 1); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 0.9;
   const f = Math.abs(Math.sin(t * 9));
   for (const s of [-1, 1]) {
@@ -35,9 +35,9 @@ function drawButterfly(c, x, y, t, dir, flash) {
 function drawEnemy15(c, e, cx, fl) {
   switch (e.k) {
     case 'ladybug': drawLadybug(c, cx, e.y + e.h, e.dir, e.t, fl); return true;
-    case 'butterfly': drawButterfly(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
+    case 'butterfly': drawButterflyFoe(c, cx, e.y + e.h / 2, e.t, e.dir, fl); return true;
   }
-  return false;
+  return drawEnemy16(c, e, cx, fl);
 }
 
 /* ===== Плитки: надувний місток (41 — здутий, 42 — надутий) ===== */
@@ -118,7 +118,7 @@ function drawMover15(c, m) {
   if (m.pump) { drawPump(c, m, G.t); return true; }
   if (m.lift19) { drawLift19(c, m, G.t); return true; }
   if (m.tmpCloud) { drawTmpCloud(c, m, G.t); return true; }
-  return false;
+  return drawMover16(c, m);
 }
 
 /* ===== Світ: стовпчики містків, капуста на арені ===== */
@@ -137,6 +137,7 @@ function drawWorld15(c, t, vis) {
   }
   const B = G.boss;
   if (B && B.kind === 'caterpillar' && G.arena) { drawCabbage(c, G.arena.x0 + 6, B.gy, 1.1); drawCabbage(c, G.arena.x1 - 6, B.gy, 1.1); }
+  drawWorld16(c, t, vis);
 }
 function drawUnder15(c, P, t) {
   if (P.pogoT > 0) {
@@ -148,9 +149,11 @@ function drawUnder15(c, P, t) {
     c.fillStyle = '#ff5c7a'; circ(c, x, y + 13, 2.6); c.fill();
     c.restore();
   }
+  drawUnder16(c, P, t);
 }
 function drawOver15(c, P, t) {
   if (P.cloudN > 0) for (let i = 0; i < P.cloudN; i++) { const x = P.x + P.w / 2 - 12 + i * 12, y = P.y - 30; c.save(); c.globalAlpha = 0.95; c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 0.8; circ(c, x - 2.4, y, 3); c.fill(); c.stroke(); circ(c, x + 2.4, y, 3); c.fill(); c.stroke(); circ(c, x, y - 2, 3.4); c.fill(); c.restore(); }
+  drawOver16(c, P, t);
 }
 function drawPowerIcon19(c, kind, t) {
   c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1;
@@ -162,7 +165,7 @@ function drawPowerIcon19(c, kind, t) {
     c.fillStyle = 'rgba(220,235,255,.8)'; rr(c, -5, -6, 10, 13, 3); c.fill(); c.stroke();
     c.fillStyle = '#c98d55'; rr(c, -2.6, -9, 5.2, 3.4, 1); c.fill(); c.stroke();
     c.fillStyle = '#ffffff'; circ(c, -1.6, 1, 2.4); c.fill(); circ(c, 1.8, 1, 2.4); c.fill(); circ(c, 0, -1, 2.6); c.fill();
-  }
+  } else drawPowerIcon20(c, kind, t);
 }
 
 /* ===== Гусениця Ненажерка ===== */
@@ -242,7 +245,7 @@ function drawBlock16(c, b) {
   } else if (b === 'cabbageblock') {
     rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#c98d55'; c.fill(); c.stroke();
     c.fillStyle = '#9fe07a'; circ(c, 12, 12, 7); c.fill(); c.stroke(); c.strokeStyle = 'rgba(59,110,40,.6)'; c.lineWidth = 1; c.beginPath(); c.moveTo(12, 18); c.lineTo(12, 6); c.stroke();
-  } else return false;
+  } else return drawBlock17(c, b);
   return true;
 }
 
@@ -263,6 +266,7 @@ function drawDecor19(c, d, t) {
     case 'cloudpuffS':
       c.fillStyle = 'rgba(255,255,255,.95)'; circ(c, x - 5, y - 5, 5); c.fill(); circ(c, x + 5, y - 5, 5); c.fill(); circ(c, x, y - 9, 6); c.fill();
       break;
+    default: drawDecor20(c, d, t);
   }
 }
 

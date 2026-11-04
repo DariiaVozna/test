@@ -269,6 +269,7 @@ function updatePlayer(dt) {
   if (P.swing) return swingStep(P, dt);
   if (P.bub) return soapStep(P, dt);
   if (P.hotair) return hotairStep(P, dt);
+  if (P.plane) return planeStep(P, dt);
   if (P.hang) return hangStep(P, dt);
   flipCheck(P);
   let ax = (In.right ? 1 : 0) - (In.left ? 1 : 0);
@@ -280,7 +281,7 @@ function updatePlayer(dt) {
   if (!wz && P.wasWater && P.vy < 0) { burst(P.x + P.w / 2, P.y + P.h, 6, ['#ffffff', '#bfefff'], 80); if (In.jump && P.vy > -480) { P.vy = -480; P.cut = true; } }
   P.wasWater = !!wz;
   const ice = THEMES[G.theme].ice && P.onGround && P.groundTile === 1;
-  const target = ax * (P.sled ? 240 : P.mount ? 185 : SPEED) * (wz ? 0.75 : 1) * (P.sticky ? 0.45 : 1);
+  const target = ax * (P.sled ? 240 : P.mount ? 185 : SPEED) * (wz ? (P.seahorse ? 1.6 : 0.75) : 1) * (P.sticky ? 0.45 : 1);
   const a = ax ? (wz ? 700 : P.onGround ? (ice ? 420 : 1500) : 950) : (wz ? 500 : P.onGround ? (ice ? 200 : 1800) : 650);
   if (P.launchT > 0) { P.launchT -= dt; if (P.onGround || P.sideHit || wz) P.launchT = 0; }
   else if (P.vx < target) P.vx = Math.min(target, P.vx + a * dt); else if (P.vx > target) P.vx = Math.max(target, P.vx - a * dt);
@@ -443,6 +444,7 @@ function updateBoss(dt) {
   if (B.kind === 'monkey') return updateMonkeyBoss(dt);
   if (B.kind === 'penguin') return updatePenguinBoss(dt);
   if (B.kind === 'caterpillar') return updateCaterpillarBoss(dt);
+  if (B.kind === 'frog') return updateFrogBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -656,7 +658,7 @@ function update(dt) {
       else if (p.k === 'mini') { setMini(P, true, 14); say('Ти маленька! Тепер можна пролізти в нірку', 2.2); }
       else if (p.k === 'hourglass') { P.stopT = STOP_TIME; Snd.seq([0, 7, 12, 7, 0], 392, 0.08, 'triangle', 0.07); say(G.stopHint ? 'Час знову зупинився!' : 'Пісочний годинник! Час зупинився на 6 секунд — біжи!', 2.4); G.stopHint = true; }
       else if (p.k === 'big') { setBig(P, true, BIG_TIME); say(G.bigHint ? 'Знову велика!' : 'Гриб-велетень! Ти велика: ламай стіни з кубиків', 2.4); G.bigHint = true; }
-      else if (p.k === 'pogo' || p.k === 'cloud') powerUp15(P, p);
+      else if (p.k === 'pogo' || p.k === 'cloud' || p.k === 'rainbow') powerUp15(P, p);
       else { P.magnetT = 12; say('Магніт! Зірочки самі летять до тебе'); }
     }
   }
@@ -725,7 +727,8 @@ function update(dt) {
 
   // камера
   const viewWNow = viewW;
-  const camTarget = pcx - viewWNow * 0.42 + P.dir * 18;
+  // на паперовому літачку камера дивиться далі вперед, щоб перешкоди було видно заздалегідь
+  const camTarget = pcx - viewWNow * (P.plane ? 0.3 : 0.42) + P.dir * 18;
   const minCam = G.arenaLock ? G.arena.x0 - T : 0, maxCam = Math.max(0, G.Wpx - viewWNow);
   G.cam += (Math.max(minCam, Math.min(maxCam, camTarget)) - G.cam) * Math.min(1, dt * 6);
   G.cam = Math.max(0, Math.min(maxCam, G.cam));

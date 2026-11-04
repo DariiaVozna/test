@@ -57,7 +57,7 @@ function initLevel6(G, L) {
 /* ===== Річка: течія штовхає вперед, колоди пливуть і пірнають ===== */
 function flowAt(P) {
   const z = waterAt(P.x + P.w / 2, P.y + P.h / 2);
-  return z && z.flow ? z.flow : 0;
+  return z && z.flow && !P.seahorse ? z.flow : 0;
 }
 function updateLog(m, dt) {
   const x0 = m.x, y0 = m.y; m.st += dt;

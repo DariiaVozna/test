@@ -1,9 +1,9 @@
 'use strict';
-/* ===== Частина 18: Повітряна куля, Сніжна долина, Північне сяйво, Санна траса, Айсберг Пінгвіна ===== */
+/* ===== Частина 18: Повітряна куля, Сніжна долина, Крижана рівнина, Санна траса, Айсберг Пінгвіна ===== */
 Object.assign(THEMES, {
   hotair: { sky: ['#7fc8ff', '#bfe6ff', '#fff1f8'], panel: '#1f3a6a', top: '#ffffff', topHi: '#ffffff', topLo: '#cfe0f5', fill: '#b9a3e8', fillLo: '#9f88d6', dots: ['#d6c8ff', '#ffffff', '#ffd6f0'], block: 'balloonblock', ice: false, topStyle: 'snow', dotShape: 'dot' },
   snowvalley: { sky: ['#9fd0ff', '#d6ecff', '#ffffff'], panel: '#24506f', top: '#ffffff', topHi: '#ffffff', topLo: '#c9e0f5', fill: '#8fb8e6', fillLo: '#7aa4d6', dots: ['#c9e4ff', '#ffffff', '#a8c8f0'], block: 'snowbrick', ice: false, topStyle: 'snow', dotShape: 'dot' },
-  aurora: { sky: ['#0f1a45', '#1d3a6a', '#2f6a8a'], panel: '#0a1230', top: '#e6f4ff', topHi: '#ffffff', topLo: '#a8c8e8', fill: '#4a6aa8', fillLo: '#3a5490', dots: ['#7a9ad9', '#c9e4ff', '#9fffe0'], block: 'icecube', ice: false, topStyle: 'snow', dotShape: 'dot' },
+  polarice: { sky: ['#0f1a45', '#1d3a6a', '#2f6a8a'], panel: '#0a1230', top: '#e6f4ff', topHi: '#ffffff', topLo: '#a8c8e8', fill: '#4a6aa8', fillLo: '#3a5490', dots: ['#7a9ad9', '#c9e4ff', '#9fffe0'], block: 'icecube', ice: false, topStyle: 'snow', dotShape: 'dot' },
   sledtrack: { sky: ['#b3dcff', '#e0f2ff', '#ffffff'], panel: '#1f4a6a', top: '#ffffff', topHi: '#ffffff', topLo: '#cfe2f5', fill: '#a8c4e6', fillLo: '#93b0d9', dots: ['#d6e8ff', '#ffffff', '#ff9fc4'], block: 'snowbrick', ice: false, topStyle: 'snow', dotShape: 'dot' },
   iceberg: { sky: ['#8fd0ff', '#c9ecff', '#f2fbff'], panel: '#14385a', top: '#ffffff', topHi: '#ffffff', topLo: '#bfe4f5', fill: '#7fc4e8', fillLo: '#5fb0dc', dots: ['#bfe8ff', '#ffffff', '#9fd8f5'], block: 'icebrick', ice: false, topStyle: 'snow', fillStyle: 'streaks' },
 });
@@ -272,7 +272,7 @@ function bgSnowvalley(c, viewW, camX, t) {
   for (let i = -1; i < viewW / span + 2; i++) { const wx = i * span + wrapX(-camX * 0.35, span) + 30; c.fillStyle = '#5a9a7a'; for (let k = 0; k < 3; k++) { c.beginPath(); c.moveTo(wx - 14 + k * 3, 200 - k * 12); c.lineTo(wx, 176 - k * 12); c.lineTo(wx + 14 - k * 3, 200 - k * 12); c.closePath(); c.fill(); } c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(wx - 6, 168); c.lineTo(wx, 152); c.lineTo(wx + 6, 168); c.closePath(); c.fill(); }
   c.fillStyle = 'rgba(255,255,255,.9)'; for (let i = 0; i < 40; i++) { const x = wrapX(i * 97 - camX * 0.5 + Math.sin(t + i) * 10, viewW + 20) - 10, y = (i * 53 + t * (14 + i % 5 * 3)) % VIEW_H; circ(c, x, y, 1 + (i % 3) * 0.5); c.fill(); }
 }
-function bgAurora(c, viewW, camX, t) {
+function bgPolarice(c, viewW, camX, t) {
   const R = rng(77);
   for (let i = 0; i < 70; i++) { const x = wrapX(R() * 1500 - camX * 0.04, viewW + 20) - 10, y = R() * 160, tw = 0.5 + 0.5 * Math.sin(t * 2 + i * 1.3); c.fillStyle = `rgba(255,255,255,${0.3 + tw * 0.6})`; circ(c, x, y, 0.6 + R() * 1.1); c.fill(); }
   for (let b = 0; b < 3; b++) {
@@ -300,4 +300,4 @@ function bgIceberg(c, viewW, camX, t) {
   c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 1.4;
   for (let row = 0; row < 3; row++) { c.beginPath(); for (let x = -20; x < viewW + 20; x += 6) { const y = 188 + row * 16 + Math.sin(x * 0.05 + t * 1.6 + row * 2) * 2; if (x === -20) c.moveTo(x, y); else c.lineTo(x, y); } c.stroke(); }
 }
-Object.assign(BG2, { hotair: bgHotair, snowvalley: bgSnowvalley, aurora: bgAurora, sledtrack: bgSledtrack, iceberg: bgIceberg });
+Object.assign(BG2, { hotair: bgHotair, snowvalley: bgSnowvalley, polarice: bgPolarice, sledtrack: bgSledtrack, iceberg: bgIceberg });

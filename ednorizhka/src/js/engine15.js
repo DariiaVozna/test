@@ -17,9 +17,9 @@ function spawnEnemy15(e, b, hover, g) {
     case 'ladybug': return g(22, 14, { speed: 30 });
     case 'butterfly': return hover(22, 18, 3, 0.9, 10);
   }
-  return null;
+  return spawnEnemy16(e, b, hover, g);
 }
-function updateEnemy15(e, dt) { return false; }
+function updateEnemy15(e, dt) { return updateEnemy16(e, dt); }
 
 /* ===== Підготовка рівня ===== */
 function initLevel15(G, L) {
@@ -28,11 +28,13 @@ function initLevel15(G, L) {
   for (const m of G.movers) if (m.pump) { m.level = 0; m.press = 0; m.target = m.lift != null ? G.movers[m.lift] : G.bridges19[m.bridge]; }
   for (const m of G.movers) if (m.lift19) { m.level = 0; m.wait = 0; }
   for (const m of G.movers) if (m.stork) { m.state = 'wait'; m.seg = 0; m.on = 0; m.off = 0; m.flap = 0; }
+  initLevel16(G, L);
 }
 
 /* ===== Бонуси: пого-стрибунець і пляшечка з хмаринками ===== */
 function powerUp15(P, p) {
   if (p.k === 'pogo') { P.pogoT = 25; say(G.pogoHint ? 'Знову пого-стрибунець!' : 'Пого-стрибунець! Ти стрибаєш сама. Тримай «Стрибок» — скачеш вище, а колючки тепер не страшні', 3.2); G.pogoHint = true; }
+  else if (p.k === 'rainbow') powerUp16(P, p);
   else { P.cloudN = 3; P.cloudFill = true; say(G.cloudHint ? 'Ще три хмаринки!' : 'Пляшечка з хмаринками! У стрибку тисни «Ріг» — під ногами з\'явиться хмаринка', 3.2); G.cloudHint = true; }
 }
 
@@ -131,14 +133,16 @@ function update15(dt) {
   updatePogo(P, dt);
   updatePumps(P, dt);
   updateClouds19(P, dt);
+  update16(dt);
 }
 function updatePlatform15(m, dt) {
   if (m.stork) return updateStork(m, dt);
   if (m.lift19) return updateLift19(m, dt);
   if (m.tmpCloud) { m.dx = 0; m.dy = 0; if (m.state !== 'gone') { m.life -= dt; if (m.life <= 0) { m.state = 'gone'; burst(m.x + m.w / 2, m.y + 6, 8, ['#ffffff'], 60); } } return; }
   if (m.pump) { m.dx = 0; m.dy = 0; return; }
+  return updatePlatform16(m, dt);
 }
-function respawn15(P) { P.pogoT = 0; }
+function respawn15(P) { P.pogoT = 0; respawn16(P); }
 
 /* ===== Гусениця Ненажерка: повзе з капусти в капусту, плюється листям, а тоді жує листочок ===== */
 const CAT_SEGS = 6, CAT_GAP = 22;
@@ -216,8 +220,9 @@ function armored15(s, B) {
     if (!B.armHint) { B.armHint = true; say('Гусениця ховає голову! Стріляй, коли вона жуватиме листочок', 2.6); }
     return true;
   }
-  return false;
+  return armored16(s, B);
 }
 function resetBoss15(B) {
   if (B.kind === 'caterpillar') { B.state = 'gone'; B.st = 0; B.rear = 0; B.hideSide = 'R'; B.hideX = G.arena.x1 - 24; }
+  resetBoss16(B);
 }

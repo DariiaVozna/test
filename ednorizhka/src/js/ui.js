@@ -212,6 +212,7 @@ function renderGame(dt) {
     else if (B.kind === 'monkey') drawMonkeyBoss(c, B, B.t);
     else if (B.kind === 'penguin') drawPenguinBoss(c, B, B.t);
     else if (B.kind === 'caterpillar') drawCaterpillarBoss(c, B, B.t);
+    else if (B.kind === 'frog') drawFrogBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -331,7 +332,7 @@ function drawHud(c) {
   drawHud9(c, x2 + w2 + 10, top, H);
   // бонуси з таймером
   let px = left, py = top + H + 8;
-  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME], ['hourglass', P.stopT || 0, STOP_TIME], ['pogo', P.pogoT || 0, 25], ['cloud', P.cloudN || 0, 3]]) {
+  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME], ['hourglass', P.stopT || 0, STOP_TIME], ['pogo', P.pogoT || 0, 25], ['cloud', P.cloudN || 0, 3], ['rainbow', P.rainbowT || 0, 10]]) {
     if (v <= 0) continue;
     c.fillStyle = 'rgba(255,255,255,.9)'; circ(c, px + 17, py + 17, 17); c.fill();
     c.strokeStyle = '#ff4fa3'; c.lineWidth = 3.5; c.beginPath(); c.arc(px + 17, py + 17, 15, -Math.PI / 2, -Math.PI / 2 + TAU * (v / max)); c.stroke();
@@ -432,7 +433,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -505,7 +506,7 @@ function showWin() {
   save.bestR[i] = Math.max(save.bestR[i] || 0, G.rainbows); save.bestF[i] = Math.max(save.bestF[i] || 0, G.defeated); writeSave();
   if (i === LEVELS.length - 1) {
     mode = 'final'; setPlayUi(false);
-    $('finalText').textContent = nameOf() + ' пройшла всі країни! ' + PARTS.join(', ').replace(/, ([^,]*)$/, ' і $1') + ' тепер друзі, а веселка сяє в небі.';
+    $('finalText').textContent = nameOf() + ' пройшла всі ' + LEVELS.length + ' країн! ' + PARTS.join(', ').replace(/, ([^,]*)$/, ' і $1') + ' тепер друзі, а веселка сяє в небі.';
     const sum = o => Object.values(o).reduce((a, b) => a + b, 0);
     $('fStars').textContent = save.record; $('fRain').textContent = sum(save.bestR); $('fFoes').textContent = sum(save.bestF);
     show('scrFinal'); return;
@@ -516,8 +517,9 @@ function showWin() {
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 94) { $('winTitle').textContent = 'Гусениця Ненажерка повернула зірочки!'; $('winText').textContent = 'Але Жабка Квакуша подумала, що зірочки — це світлячки, і сховала їх у своєму ставку: через небо паперових літачків, країну морозива, веселкову доріжку й підводне царство морських коників. Наступна країна: ' + LEVELS[95].name + '.'; }
   if (i === 89) { $('winTitle').textContent = 'Пінгвін Ковзанчик повернув зірочки!'; $('winText').textContent = 'Але Гусениця Ненажерка вирішила, що зірочки — це солодкі листочки, і поповзла з ними до свого капустяного городу: через лелечий хутір, пого-парк, надувне містечко й хмаринкову майстерню. Наступна країна: ' + LEVELS[90].name + '.'; }
-  if (i === 84) { $('winTitle').textContent = 'Мавпочка Шкода повернула зірочки!'; $('winText').textContent = 'Але Пінгвін Ковзанчик вирішив, що зірочки — це сніжинки, які ніколи не тануть, і забрав їх на свій айсберг: через гори на повітряній кулі, сніжну долину, північне сяйво й санну трасу. Наступна країна: ' + LEVELS[85].name + '.'; }
+  if (i === 84) { $('winTitle').textContent = 'Мавпочка Шкода повернула зірочки!'; $('winText').textContent = 'Але Пінгвін Ковзанчик вирішив, що зірочки — це сніжинки, які ніколи не тануть, і забрав їх на свій айсберг: через гори на повітряній кулі, сніжну долину, крижану рівнину й санну трасу. Наступна країна: ' + LEVELS[85].name + '.'; }
   if (i === 79) { $('winTitle').textContent = 'Павич Пишнохвіст повернув зірочки!'; $('winText').textContent = 'Але Мавпочка Шкода подумала, що зірочки — це блискучі банани, і потягла їх до свого бананового гаю: через вітрильне озеро, зоопарк, співочу галявину й скарбовий пагорб. Наступна країна: ' + LEVELS[80].name + '.'; }
   if (i === 74) { $('winTitle').textContent = 'Лис Хитрик повернув зірочки!'; $('winText').textContent = 'Але Павич Пишнохвіст побачив, як вони сяють, і захотів прикрасити ними свій хвіст. Він поніс зірочки до свого саду: через батутне містечко, футбольне поле, дзеркальну майстерню й обсерваторію. Наступна країна: ' + LEVELS[75].name + '.'; }
   if (i === 69) { $('winTitle').textContent = 'Ведмідь Бурмило повернув зірочки!'; $('winText').textContent = 'Але вночі до пасіки підкрався Лис Хитрик, сховав зірочки у свій пухнастий хвіст і побіг до нори: через мильне озеро, горіховий гай, морський форт і мотузковий парк. Наступна країна: ' + LEVELS[70].name + '.'; }

@@ -3,7 +3,7 @@
 Object.assign(TUNES, {
   hotair: { base: 587.33, ms: 210, n: [0, null, 4, null, 7, null, 11, null, 12, null, 11, null, 7, null, null, null, 5, null, 9, null, 12, null, 14, null, 12, null, 9, null, 7, null, null, null], b: [0, -5, -3, -7] },
   snowvalley: { base: 659.25, ms: 190, n: [12, null, 7, 9, 7, null, 4, null, 5, null, 7, null, 4, null, null, null, 9, null, 7, 9, 12, null, 11, null, 9, null, 7, null, 4, null, null, null], b: [0, -3, -7, -5] },
-  aurora: { base: 523.25, ms: 240, n: [0, null, null, 7, null, null, 12, null, 11, null, null, 7, null, null, 4, null, 5, null, null, 9, null, null, 12, null, 14, null, null, 12, null, null, 7, null], b: [0, -5, -3, -7] },
+  polarice: { base: 523.25, ms: 240, n: [0, null, null, 7, null, null, 12, null, 11, null, null, 7, null, null, 4, null, 5, null, null, 9, null, null, 12, null, 14, null, null, 12, null, null, 7, null], b: [0, -5, -3, -7] },
   sledtrack: { base: 587.33, ms: 150, n: [0, 4, 7, 12, 7, 4, 0, null, 2, 5, 9, 14, 9, 5, 2, null, 4, 7, 11, 16, 11, 7, 4, null, 5, 9, 12, 17, 12, 9, 5, null], b: [0, -5, -3, -7] },
   iceberg: { base: 493.88, ms: 190, n: [0, null, 3, null, 7, null, 12, null, 10, null, 7, null, 3, null, null, null, 5, null, 8, null, 12, null, 15, null, 14, null, 12, null, 7, null, null, null], b: [0, -4, -5, -7] },
 });
