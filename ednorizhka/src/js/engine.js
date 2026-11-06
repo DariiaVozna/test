@@ -303,10 +303,12 @@ function updatePlayer(dt) {
     if (P.jumpBuf > 0 && P.coyote > 0) { P.vy = P.flip ? JUMP : -(P.mount ? MOUNT_JUMP : JUMP); P.jumpBuf = 0; P.coyote = 0; P.onGround = false; P.onMover = null; P.cut = false; Snd.jump(); G.parts.push({ k: 'puff', x: P.x + P.w / 2, y: P.y + P.h, vx: 0, vy: 0, t: 0, life: 0.35, r: 6 }); }
     else if (P.jumpBuf > 0 && P.wingsT > 0 && !P.onGround) { P.vy = Math.min(P.vy, -340); P.jumpBuf = 0; P.cut = true; Snd.flap(); burst(P.x + 4, P.y + 8, 4, ['#fff'], 60); }
     if (!In.jump && !P.cut && (P.flip ? P.vy > 340 : P.vy < -340)) { P.vy = P.flip ? 340 : -340; P.cut = true; }
-    const glide = P.wingsT > 0 && In.jump && P.vy > 0;
+    // парасолька: у стрибку тримаєш «Стрибок» — і повільно опускаєшся
+    const umb = P.umbT > 0 && In.jump && P.vy > 0;
+    const glide = (P.wingsT > 0 && In.jump && P.vy > 0) || umb;
     const gk = G.grav * lowGravAt(P);
     if (P.flip) P.vy = Math.max(P.vy - GRAV * dt, -620);
-    else P.vy = Math.min(P.vy + (glide ? 450 : GRAV * gk) * dt, P.wingsT > 0 ? 230 : (gk < 1 ? 470 : 620));
+    else P.vy = Math.min(P.vy + (glide ? 450 : GRAV * gk) * dt, umb ? 70 : P.wingsT > 0 ? 230 : (gk < 1 ? 470 : 620));
     const wx = P.x + P.w / 2, wy = P.y + P.h / 2;
     for (const z of G.winds) if ((!z.cyc || (G.t + z.ph) % z.cyc < z.on) && wx > z.x0 && wx < z.x1 && wy > z.y - 10 && wy < z.y1) { const k = Math.max(0, Math.min(1, (wy - z.y + 10) / 50)); P.vy -= 2700 * k * dt; if (P.vy < -270) P.vy = -270; P.cut = true; }
   }
@@ -445,6 +447,7 @@ function updateBoss(dt) {
   if (B.kind === 'penguin') return updatePenguinBoss(dt);
   if (B.kind === 'caterpillar') return updateCaterpillarBoss(dt);
   if (B.kind === 'frog') return updateFrogBoss(dt);
+  if (B.kind === 'smiley') return updateSmileyBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -659,6 +662,7 @@ function update(dt) {
       else if (p.k === 'hourglass') { P.stopT = STOP_TIME; Snd.seq([0, 7, 12, 7, 0], 392, 0.08, 'triangle', 0.07); say(G.stopHint ? 'Час знову зупинився!' : 'Пісочний годинник! Час зупинився на 6 секунд — біжи!', 2.4); G.stopHint = true; }
       else if (p.k === 'big') { setBig(P, true, BIG_TIME); say(G.bigHint ? 'Знову велика!' : 'Гриб-велетень! Ти велика: ламай стіни з кубиків', 2.4); G.bigHint = true; }
       else if (p.k === 'pogo' || p.k === 'cloud' || p.k === 'rainbow') powerUp15(P, p);
+      else if (POW17[p.k]) powerUp17(P, p);
       else { P.magnetT = 12; say('Магніт! Зірочки самі летять до тебе'); }
     }
   }
@@ -676,7 +680,7 @@ function update(dt) {
     for (const e of G.enemies) {
       if (e.dead || e.ghost || s.life <= 0 || s.hit.has(e) || !circleRect(s, e, 2)) continue;
       s.hit.add(e);
-      if (IMMUNE[e.k]) { Snd.tink(); burst(s.x, s.y, 4, ['#fff'], 70); if (s.big) s.life = 0; else { s.vx *= -0.7; s.life = Math.min(s.life, 0.25); } }
+      if (IMMUNE[e.k] && !P.heartPow) { Snd.tink(); burst(s.x, s.y, 4, ['#fff'], 70); if (s.big) s.life = 0; else { s.vx *= -0.7; s.life = Math.min(s.life, 0.25); } }
       else if (s.frost && freezeEnemy(e)) { if (!s.big) s.life = 0; }
       else { e.hp -= s.dmg; e.flash = 0.15; if (e.hp <= 0) defeat(e); if (!s.big) s.life = 0; }
     }
@@ -810,8 +814,9 @@ function levelComplete() {
   G.done = true; G.doneT = 0; Snd.win(); burst(G.gate.x, G.gate.gy - 30, 40, RAINBOW, 200);
   const prev = save.best[G.idx] || 0;
   save.best[G.idx] = Math.max(prev, G.points);
-  save.unlocked = Math.max(save.unlocked, Math.min(LEVELS.length, G.idx + 2));
-  if (G.idx === LEVELS.length - 1) save.finished = true;
+  // рівень Маші відкритий завжди: якщо його пройшли наперед, далі нічого не відкривається
+  if (!(G.def.masha && G.idx + 1 > save.unlocked)) save.unlocked = Math.max(save.unlocked, Math.min(LEVELS.length, G.idx + 2));
+  if (G.idx === LEVELS.length - 1 && LEVELS.every((l, k) => save.best[k] != null)) save.finished = true;
   save.record = Object.values(save.best).reduce((a, b) => a + b, 0);
   writeSave();
   setTimeout(() => showWin(), 1100);

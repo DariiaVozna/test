@@ -37,7 +37,7 @@ function drawEnemy16(c, e, cx, fl) {
     case 'icecone': drawIceCone(c, cx, e.y + e.h, e.dir, e.t, fl); return true;
     case 'goldfish': drawGoldfish(c, cx, e.y + e.h / 2, e.t, e.dir || 1, fl); return true;
   }
-  return false;
+  return drawEnemy21(c, e, cx, fl);
 }
 
 /* ===== Рухомі: паперовий літачок, кулька морозива, шматочок веселки ===== */
@@ -107,7 +107,7 @@ function drawMover16(c, m) {
   if (m.plane) { drawPlane(c, m, G.t); return true; }
   if (m.scoop) { drawScoop(c, m, G.t); return true; }
   if (m.rbSeg) { drawRainbowSeg(c, m, G.t); return true; }
-  return false;
+  return drawMover21(c, m);
 }
 
 /* ===== Світ: кільця для літачків, морські коники, латаття на арені ===== */
@@ -155,10 +155,12 @@ function drawWorld16(c, t, vis) {
   }
   const B = G.boss;
   if (B && B.kind === 'frog' && G.arena) for (let k = 0; k < 5; k++) { const x = G.arena.x0 + (4 + k * 9) * T; if (vis(x)) drawLilyPad(c, x, B.gy - 1, 0.8); }
+  drawWorld21(c, t, vis);
 }
 function drawUnder16(c, P, t) {
   if (P.seahorse) drawSeahorseShape(c, P.x + P.w / 2 + P.dir * 2, P.y + P.h - 1, t, P.dir, true);
   if (P.rainbowT > 0 && !P.onGround) { c.save(); c.globalAlpha = 0.6; for (let i = 0; i < 6; i++) { c.fillStyle = RAINBOW[i]; circ(c, P.x + P.w / 2 - P.dir * (8 + i * 3), P.y + P.h - 2 + Math.sin(t * 10 + i) * 1.5, 1.8); c.fill(); } c.restore(); }
+  drawUnder21(c, P, t);
 }
 function drawOver16(c, P, t) {
   if (P.plane) for (let i = 0; i < P.plane.puffs; i++) {
@@ -166,13 +168,14 @@ function drawOver16(c, P, t) {
     c.save(); c.translate(x, y); c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 0.9; c.lineJoin = 'round';
     c.beginPath(); c.moveTo(5, 0); c.lineTo(-5, -3); c.lineTo(-3, 0); c.lineTo(-5, 3); c.closePath(); c.fill(); c.stroke(); c.restore();
   }
+  drawOver21(c, P, t);
 }
 function drawPowerIcon20(c, kind, t) {
   c.lineJoin = 'round'; c.lineCap = 'round';
   if (kind === 'rainbow') {
     for (let i = 0; i < 6; i++) { c.strokeStyle = RAINBOW[i]; c.lineWidth = 1.6; c.beginPath(); c.arc(0, 4, 9 - i * 1.5, Math.PI, TAU); c.stroke(); }
     c.fillStyle = '#ffffff'; circ(c, -8, 5, 3); c.fill(); circ(c, 8, 5, 3); c.fill();
-  }
+  } else drawPowerIcon21(c, kind, t);
 }
 
 /* ===== Жабка Квакуша ===== */
@@ -247,7 +250,7 @@ function drawBlock17(c, b) {
     rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#5fbf4a'; c.fill(); c.stroke();
     c.strokeStyle = 'rgba(40,90,30,.6)'; c.lineWidth = 1; c.beginPath(); c.moveTo(T / 2, T / 2); c.lineTo(4, 4); c.moveTo(T / 2, T / 2); c.lineTo(T - 4, 6); c.moveTo(T / 2, T / 2); c.lineTo(T / 2, T - 3); c.stroke();
     c.fillStyle = '#ffb3d6'; circ(c, 16, 8, 3); c.fill();
-  } else return false;
+  } else return drawBlock21(c, b);
   return true;
 }
 
@@ -278,6 +281,7 @@ function drawDecor20(c, d, t) {
       c.strokeStyle = '#4f9f3a'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 20); c.moveTo(x + 3, y); c.quadraticCurveTo(x + 6, y - 10, x + 9, y - 14); c.stroke();
       c.fillStyle = '#8a5a30'; c.strokeStyle = INK; c.lineWidth = 0.8; rr(c, x - 2, y - 26, 4, 9, 2); c.fill(); c.stroke();
       break;
+    default: drawDecor21(c, d, t);
   }
 }
 

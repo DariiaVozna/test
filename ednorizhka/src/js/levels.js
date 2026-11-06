@@ -3975,12 +3975,207 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  {
+    id: 'rainvalley', theme: 'rainvalley', name: 'Дощова долина', blurb: 'Розвесели хмаринки — і по них пройдеш', w: 172,
+    build(L) {
+      L.ground(0, 18);
+      L.sign(3, 'Дощова долина! Хмаринки сумують і плачуть дощем. Стрельни в хмаринку рогом — вона усміхнеться, і по ній можна буде пройти');
+      L.row(6, 9, 3);
+      L.enemy('snail', 13, 10);
+      L.sadcloud(19, 9, 3); L.row(19, 8, 3);
+      L.sadcloud(24, 8, 3); L.row(24, 7, 3);
+      L.ground(29, 50);
+      L.check(32);
+      L.row(34, 9, 4);
+      L.enemy('frog', 40, 10);
+      L.qblock(44, 6, 'star');
+      L.sadcloud(51, 9, 3); L.row(51, 8, 3);
+      L.sadcloud(56, 8, 3); L.row(56, 7, 3);
+      L.sadcloud(61, 7, 3); L.rainbow(62, 4);
+      L.ground(66, 100);
+      L.check(69);
+      L.row(72, 9, 4);
+      L.enemy('snail', 78, 10);
+      L.sadcloud(82, 8, 2); L.sadcloud(85, 6, 2); L.sadcloud(88, 4, 3); L.row(88, 3, 3); L.qblock(89, 1, 'star5');
+      L.enemy('bird', 95, 6);
+      L.sadcloud(101, 9, 3); L.row(101, 8, 3);
+      L.sadcloud(106, 9, 3); L.row(106, 8, 3);
+      L.sadcloud(111, 8, 3); L.row(111, 7, 3);
+      L.sadcloud(116, 8, 3); L.row(116, 7, 3);
+      L.ground(121, 145);
+      L.check(124);
+      L.power('magnet', 127, 8);
+      L.row(129, 9, 6);
+      L.enemy('frog', 137, 10);
+      L.sadcloud(146, 9, 3); L.row(146, 8, 3);
+      L.sadcloud(151, 8, 3); L.row(151, 7, 3);
+      L.ground(156, 172);
+      L.gate(167);
+    }
+  },
+  {
+    id: 'umbrellas', theme: 'umbrellas', name: 'Парасольковий перевал', blurb: 'З парасолькою пролетиш над прірвою', w: 172,
+    build(L) {
+      L.ground(0, 16);
+      L.sign(3, 'Парасольковий перевал! Візьми парасольку. У стрибку тримай «Стрибок» — і повільно опустишся, як пір\'їнка');
+      L.row(5, 9, 3);
+      L.power('umbrella', 10, 8);
+      L.arc(17, 7, 7, 1.5);
+      L.ground(25, 46);
+      L.check(28);
+      L.row(31, 9, 4);
+      L.enemy('bird', 36, 6);
+      L.block(38, 8, 2, 2);
+      L.ground(41, 46, 6); L.row(41, 5, 5);
+      L.row(48, 5, 4); L.row(53, 6, 4); L.row(58, 7, 3);
+      L.ground(62, 84);
+      L.check(65);
+      L.qblock(69, 6, 'star');
+      L.enemy('snail', 74, 10);
+      L.row(76, 9, 3);
+      L.power('umbrella', 80, 8);
+      L.sign(82, 'Долина вітрів! Вітер підкидає вгору, а парасолька несе далі');
+      L.wind(92, 95, 2); L.wind(104, 107, 2);
+      L.row(96, 3, 5); L.row(108, 3, 5);
+      L.ground(118, 140);
+      L.check(121);
+      L.power('umbrella', 124, 8);
+      L.enemy('bee', 130, 7);
+      L.row(126, 9, 5);
+      L.block(132, 8, 2, 2);
+      L.ground(135, 140, 6);
+      L.rainbow(145, 2);
+      L.row(142, 5, 2); L.arc(147, 6, 5, 1);
+      L.ground(154, 172);
+      L.gate(167);
+    }
+  },
+  {
+    id: 'ticklegarden', theme: 'ticklegarden', name: 'Лоскотний сад', blurb: 'Розсміши квіточки — і вони підкинуть угору', w: 172,
+    build(L) {
+      L.ground(0, 22);
+      L.sign(3, 'Лоскотний сад! Квіточки засумували. Стрельни в квіточку — вона засміється, а тоді стрибни на неї — і вона підкине високо-високо');
+      L.row(6, 9, 3);
+      L.tickle(14);
+      L.ground(17, 30, 4); L.row(19, 3, 6);
+      L.enemy('snail', 26, 4);
+      L.ground(30, 52);
+      L.check(33);
+      L.row(35, 9, 4);
+      L.enemy('frog', 40, 10);
+      L.tickle(45); L.qblock(45, 3, 'star5');
+      L.ground(52, 100);
+      L.tickle(56); L.cloud(58, 4, 4); L.row(58, 3, 4);
+      L.cloud(64, 3, 3); L.rainbow(65, 1);
+      L.check(70);
+      L.enemy('bee', 74, 7);
+      L.row(72, 9, 4);
+      L.tickle(81); L.block(84, 4, 2, 6); L.row(84, 3, 2);
+      L.enemy('snail', 92, 10);
+      L.arc(100, 7, 4, 2);
+      L.ground(104, 134);
+      L.check(107);
+      L.power('magnet', 111, 8);
+      L.row(113, 9, 6);
+      L.ground(127, 134, 7); L.tickle(130);
+      L.ground(134, 142, 2); L.row(135, 1, 6);
+      L.ground(142, 172);
+      L.enemy('snail', 150, 10);
+      L.row(153, 9, 4);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'smiletown', theme: 'smiletown', name: 'Містечко усмішок', blurb: 'Розвесели кубики — і вони стануть сходинками', w: 172,
+    build(L) {
+      L.ground(0, 16);
+      L.sign(3, 'Містечко усмішок! Сумні кубики не хочуть підніматися. Стрельни в кубик — він усміхнеться й підніметься сходинкою');
+      L.row(5, 9, 3);
+      L.mood(12, 9, 3);
+      L.ground(16, 30, 4); L.row(18, 3, 6);
+      L.enemy('snail', 25, 4);
+      L.ground(30, 50);
+      L.check(33);
+      L.row(35, 9, 4);
+      L.enemy('frog', 40, 10);
+      L.mood(44, 9, 3); L.qblock(44, 3, 'star5'); L.qblock(45, 3, 'star');
+      L.ground(50, 70);
+      L.mood(54, 9, 2); L.mood(57, 9, 5);
+      L.ground(59, 70, 2); L.row(60, 1, 8);
+      L.ground(70, 126);
+      L.check(73);
+      L.row(76, 9, 5);
+      L.enemy('bee', 82, 7);
+      L.power('magnet', 86, 8);
+      L.mood(91, 9, 2); L.mood(94, 9, 4); L.mood(97, 9, 6);
+      L.row(91, 6, 2); L.row(94, 4, 2); L.rainbow(98, 1);
+      L.check(104);
+      L.enemy('snail', 108, 10);
+      L.row(110, 9, 4);
+      L.mood(118, 9, 3);
+      L.ground(121, 140, 4); L.row(123, 3, 8);
+      L.enemy('snail', 132, 4);
+      L.ground(140, 172);
+      L.check(143);
+      L.row(146, 9, 5);
+      L.enemy('frog', 154, 10);
+      L.gate(166);
+    }
+  },
+  {
+    // цей рівень придумала Маша: малюнки й опис — її
+    id: 'mashaland', theme: 'mashaland', name: 'Країна Маші', blurb: 'Рівень придумала Маша! Зілля, пузирки й Сумний Смайлик', w: 200, boss: 'smiley', masha: true,
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Цей рівень придумала Маша! Тут живуть равлики, їжачки, пташки, кажанчики й бджілки');
+      L.row(6, 9, 3);
+      L.enemy('snail', 11, 10);
+      L.power('heart', 15, 8);
+      L.enemy('hedgehog', 21, 10);
+      L.sign(24, 'Кубики Маші: стукни знизу — і вилетить зірочка');
+      L.mbricks(27, 6, 1, 'B');
+      L.mbricks(30, 6, 3, 'B'); L.enemy('bee', 31, 3);
+      L.row(34, 5, 1);
+      L.mbricks(36, 6, 3, 'B');
+      L.enemy('bird', 40, 5);
+      L.enemy('bat', 44, 4);
+      L.check(42);
+      L.arc(46, 8, 4, 1.5);
+      L.ground(50, 118);
+      L.mbricks(53, 6, 2, 'P'); L.mbricks(58, 6, 1, 'P'); L.mbricks(62, 6, 3, 'P');
+      L.enemy('hedgehog', 67, 10);
+      L.enemy('snail', 72, 10);
+      L.check(76);
+      L.power('potbig', 80, 8);
+      L.bricks(86, 3, 7, 2);
+      L.row(89, 9, 3);
+      L.enemy('hedgehog', 93, 10);
+      L.power('potsmall', 98, 9);
+      L.block(102, 0, 8, 9);
+      L.row(102, 9, 8);
+      L.enemy('snail', 112, 10);
+      L.block(116, 7, 2, 3);
+      L.power('air', 117, 6);
+      L.row(121, 5, 8); L.rainbow(130, 4); L.row(132, 5, 9);
+      L.ground(144, 200);
+      L.check(147);
+      L.sign(150, 'Сумний Смайлик! Він дуже сумний. Коли він сяде поплакати — стріляй або стрибни на нього, і він повеселішає');
+      L.power('candy', 154, 8);
+      L.arena(156, 200);
+      L.gate(196);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  rainvalley: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'puddleS', x, y } : r < 0.65 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: ['#9fd0ff', '#ffffff', '#c9b6ff'][Math.floor(R() * 3)] }; },
+  umbrellas: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'umbS', x, y } : r < 0.6 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] }; },
+  ticklegarden: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'daisyS', x, y, c: ['#ffffff', '#ffb3d6', '#fff3a8'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'flower', x, y, c: ['#ff7ab8', '#b98cff', '#4cb6ff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  smiletown: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'smileS', x, y, c: ['#ffd23f', '#ff9fd0', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#9fe08a'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  mashaland: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'heartS', x, y, c: ['#ff7ab8', '#ff4f9a'][Math.floor(R() * 2)] } : r < 0.55 ? { k: 'pstarS', x, y, c: ['#b06ad8', '#ffd23f'][Math.floor(R() * 2)] } : r < 0.8 ? { k: 'daisyS', x, y, c: ['#ffffff', '#ffb3d6'][Math.floor(R() * 2)] } : { k: 'flower', x, y, c: '#5cc8ff' }; },
   storks: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hayS', x, y } : r < 0.6 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: ['#ffffff', '#ff7ab8', '#ffd54a'][Math.floor(R() * 3)] }; },
   pogopark: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'balloonS', x, y } : r < 0.6 ? { k: 'ballS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#9fe0ff'][Math.floor(R() * 3)] }; },
   inflatables: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'ballS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : r < 0.7 ? { k: 'balloonS', x, y } : { k: 'tuft', x, y }; },
@@ -4086,7 +4281,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map() };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -4261,6 +4456,14 @@ function buildLevel(idx) {
     current(x0, x1, row, flow) { L.water.push({ x0: x0 * T, x1: x1 * T, y: row * T + 6, flow: flow || -150 }); },
     // морський коник чекає у воді в x, рядок row
     seahorse(x, row) { L.seahorses.push({ x: x * T + 12, y: row * T + 12 }); },
+    // сумна хмаринка: x, рядок, ширина; після пострілу стає хмаринкою-містком (плитки 3)
+    sadcloud(x, row, w) { L.sadClouds.push({ x0: x, row, w: w || 3 }); },
+    // лоскотна квіточка на землі в x: після пострілу підкидає, як пружинка
+    tickle(x) { later.push(() => L.tickles.push({ x: x * T + 12, gy: groundY(x) })); },
+    // кубик-смайлик: x, рядок верху, на скільки рядків підніметься після пострілу, ширина
+    mood(x, row, rise, w) { L.movers.push({ special15: true, mood: true, bx: x * T, by: row * T, w: (w || 2) * T, rise: rise * T, ax: 0, ay: 0, period: 1 }); },
+    // кубики Маші: удар знизу — вилітає зірочка; col — 'B' (блакитні) чи 'P' (рожеві)
+    mbricks(x, row, w, col) { for (let i = 0; i < (w || 1); i++) { set(x + i, row, 7); L.qContent.set(row * W + x + i, 'star'); L.mcol.set(row * W + x + i, col || 'B'); } },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

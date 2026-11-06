@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -35,6 +35,8 @@ function runLevel(idx, maxT) {
       if (g) { gap = true; break; }
     }
     if (G.water.some(z => P.x + P.w + 10 > z.x0 && P.x < z.x1)) gap = false;
+    // зілля: на повітряній доріжці яму не перестрибуємо, а йдемо
+    if (P.airT > 1 && P.airY != null) gap = false;
     let foe = null; for (const e of G.enemies) { const dx = e.x - P.x; if (dx > 0 && dx < 90 && Math.abs((e.y + e.h / 2) - (P.y + P.h / 2)) < 40) { foe = e; break; } }
     if (!foe && G.beans) for (const bn of G.beans) if (!bn.grown && bn.x - P.x > 0 && bn.x - P.x < 90) { foe = { x: bn.x - 10, y: bn.gy - 20, w: 20, h: 20 }; break; }
     if (foe && Math.floor(t * 10) % 2 === 0) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
@@ -189,6 +191,28 @@ function runLevel(idx, maxT) {
       const crashIn = vy0 => { const s = { x: m.x, y: m.y, vy: vy0 }; for (let k = 0; k < 120; k++) { const ev = planeAdvance(m, s, STEP); if (ev === 'crash') return k; if (ev === 'landed') return 999; } return 999; };
       if (m.puffs > 0 && m.vy > 0) { const c0 = crashIn(m.vy); if (c0 < 90 && crashIn(-150) > c0) In.jumpP = true; }
     }
+    // сумну хмаринку, квіточку чи кубик попереду розвеселяємо пострілом; біля ями чекаємо, поки хмаринка всміхнеться
+    const shY = P.y + P.h - 15, ahead = (x, d) => x - pcxB() > d && x - pcxB() < 300;
+    const sadThing = G.sadClouds.some(q => !q.happy && ahead(q.x0 * T, 0) && shY + 5 > q.row * T - 20 && shY - 5 < q.row * T + 40)
+      || G.tickles.some(f => !f.happy && ahead(f.x, 10) && shY + 5 > f.gy - 36 && shY - 5 < f.gy + 4)
+      || G.movers.some(m => m.mood && m.state === 'sad' && ahead(m.x, 10) && shY + 5 > m.y - 12 && shY - 5 < m.y + 30);
+    if (sadThing && P.onGround) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
+    if (gap && P.onGround && G.sadClouds.some(q => !q.happy && q.x0 * T - (P.x + P.w) > -12 && q.x0 * T - (P.x + P.w) < 110)) { In.right = false; In.jumpP = false; In.jump = false; }
+    // кубик-смайлик попереду вже веселий — застрибуємо на нього; поки він піднімається — стоїмо; на краю кубика стрибаємо далі
+    const mNear = st => G.movers.find(m => m.mood && m.state === st && m !== P.onMover && m.x - (P.x + P.w) > -6 && m.x - (P.x + P.w) < 60);
+    const mb = mNear('happy');
+    if (mb && P.onGround && mb.y < P.y + P.h - 8 && mb.y > P.y + P.h - 110 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; G._bt = mb; }
+    if (mNear('rise') && P.onGround && !(P.onMover && P.onMover.mood)) { In.right = false; In.jumpP = false; }
+    if (P.onMover && P.onMover.mood && P.onMover.state === 'rise') { In.right = In.left = false; In.jumpP = false; }
+    else if (P.onMover && P.onMover.mood && P.onMover.state === 'happy' && pcxB() > P.onMover.x + P.onMover.w - 10) {
+      // наступний кубик ще піднімається — чекаємо на краю
+      const nb = G.movers.find(m => m.mood && m !== P.onMover && m.state !== 'happy' && m.x - (P.x + P.w) > -6 && m.x - (P.x + P.w) < 80);
+      if (nb) { In.right = false; In.jumpP = false; } else if (cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; }
+    }
+    // парасолька: у повітрі завжди тримаємо «Стрибок»
+    if (P.umbT > 0 && !P.onGround) In.jump = true;
+    // зілля: стрибнули з постаменту — натискаємо «Ріг» на висоті зірочок, щоб іти по повітрю
+    if (P.airT > 0 && P.airY == null && !P.onGround && P.vy < 0 && P.y + P.h < 150) { In.shootP = true; In.shoot = true; }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;

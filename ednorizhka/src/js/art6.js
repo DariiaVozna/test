@@ -465,6 +465,7 @@ function drawBolt2(c, b) {
     case 'comb': drawCombBolt(c, b); return true;
     case 'cone': drawConeBolt(c, b); return true;
     case 'feather': drawFeatherBolt(c, b); return true;
+    case 'tear': drawTearBolt(c, b); return true;
   }
   return false;
 }

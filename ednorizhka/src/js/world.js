@@ -247,6 +247,8 @@ function tileSprite(theme, kind, l, r, ps) {
     drawBlinkTile(c, kind);
   } else if (kind === 'bounce') {
     drawBounceTile(c, theme);
+  } else if (kind.slice(0, 2) === 'mq' || kind.slice(0, 2) === 'mu') {
+    drawMashaBrick(c, kind);
   } else if (kind === 'qblock' || kind === 'used') {
     c.strokeStyle = INK; c.lineWidth = 1.4;
     rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = kind === 'qblock' ? '#ffcf3d' : '#c9a06a'; c.fill(); c.stroke();

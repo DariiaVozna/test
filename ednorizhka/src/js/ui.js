@@ -3,7 +3,7 @@
 const SAVE_KEY = 'zoriana-ednorizhka-v1';
 function defaultSave() { return { profile: { name: '', body: 'white', mane: 'rainbow', acc: ['crown', 'stars'], friend: 'cat', easy: false }, unlocked: 1, best: {}, bestR: {}, bestF: {}, record: 0, sound: true, finished: false }; }
 let save = (() => { try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); if (s && s.profile) { const d = defaultSave(); return Object.assign(d, s, { profile: Object.assign(d.profile, s.profile) }); } } catch (e) { } return defaultSave(); })();
-(() => { const done = Object.keys(save.best || {}).map(Number).filter(n => !isNaN(n)); if (done.length) save.unlocked = Math.max(save.unlocked, Math.min(LEVELS.length, Math.max(...done) + 2)); })();
+(() => { const done = Object.keys(save.best || {}).map(Number).filter(n => !isNaN(n) && !(LEVELS[n] && LEVELS[n].masha)); if (done.length) save.unlocked = Math.max(save.unlocked, Math.min(LEVELS.length, Math.max(...done) + 2)); })();
 function writeSave() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { } }
 Snd.on = save.sound !== false;
 
@@ -109,8 +109,8 @@ function renderGame(dt) {
         if (th.ceil && kind === 'fill' && ty < ROWS - 1 && G.map[(ty + 1) * G.Wt + tx] === 0) kind = 'ceil';
       }
       else if (v === 2) kind = 'block';
-      else if (v === 7) kind = 'qblock';
-      else if (v === 8) kind = 'used';
+      else if (v === 7) kind = G.mcol && G.mcol.has(ty * G.Wt + tx) ? 'mq' + G.mcol.get(ty * G.Wt + tx) : 'qblock';
+      else if (v === 8) kind = G.mcol && G.mcol.has(ty * G.Wt + tx) ? 'mu' + G.mcol.get(ty * G.Wt + tx) : 'used';
       else if (v === 9) kind = G.sw ? 'pinkS' : 'pinkG';
       else if (v === 10) kind = G.sw ? 'blueG' : 'blueS';
       else if (v === 11) kind = (ty > 0 && G.map[(ty - 1) * G.Wt + tx] === 11) ? 'door' : 'doorTop';
@@ -148,7 +148,7 @@ function renderGame(dt) {
   for (const z of G.zips) if (Math.max(z.x0, z.x1) > G.cam - 40 && Math.min(z.x0, z.x1) < G.cam + viewW + 40) drawZip(c, z, t);
   for (const l of G.lanterns) if (vis(l.x)) drawLanternObj(c, l, t);
   for (const m of G.movers) if (vis(m.x, 90)) drawMover(c, m, G.theme);
-  for (const s of G.springs) if (vis(s.x)) drawSpring(c, s.x, s.gy, s.sq, G.theme);
+  for (const s of G.springs) if (vis(s.x) && !s.flower) drawSpring(c, s.x, s.gy, s.sq, G.theme);
   for (const p of G.portals) if (vis(p.x)) drawPortal(c, p, t);
   for (const b of G.buttons) if (vis(b.x)) drawButton(c, b, G.sw, t);
   for (const k of G.keys) if (!k.got && vis(k.x)) drawKey(c, k.x, k.y, k.t);
@@ -213,6 +213,7 @@ function renderGame(dt) {
     else if (B.kind === 'penguin') drawPenguinBoss(c, B, B.t);
     else if (B.kind === 'caterpillar') drawCaterpillarBoss(c, B, B.t);
     else if (B.kind === 'frog') drawFrogBoss(c, B, B.t);
+    else if (B.kind === 'smiley') drawSmileyBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -332,11 +333,11 @@ function drawHud(c) {
   drawHud9(c, x2 + w2 + 10, top, H);
   // бонуси з таймером
   let px = left, py = top + H + 8;
-  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME], ['hourglass', P.stopT || 0, STOP_TIME], ['pogo', P.pogoT || 0, 25], ['cloud', P.cloudN || 0, 3], ['rainbow', P.rainbowT || 0, 10]]) {
+  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME], ['hourglass', P.stopT || 0, STOP_TIME], ['pogo', P.pogoT || 0, 25], ['cloud', P.cloudN || 0, 3], ['rainbow', P.rainbowT || 0, 10], ['umbrella', P.umbT || 0, UMB_TIME], ['air', P.airT || 0, AIR_TIME], ['heart', P.heartPow ? 1 : 0, 1]]) {
     if (v <= 0) continue;
     c.fillStyle = 'rgba(255,255,255,.9)'; circ(c, px + 17, py + 17, 17); c.fill();
     c.strokeStyle = '#ff4fa3'; c.lineWidth = 3.5; c.beginPath(); c.arc(px + 17, py + 17, 15, -Math.PI / 2, -Math.PI / 2 + TAU * (v / max)); c.stroke();
-    c.save(); c.translate(px + 17, py + 17); c.scale(1.3, 1.3); drawPowerIcon(c, k, 0); c.restore();
+    c.save(); c.translate(px + 17, py + 17); c.scale(1.3, 1.3); drawPowerIcon(c, G.def.masha && k === 'big' ? 'potbig' : G.def.masha && k === 'mini' ? 'potsmall' : k, 0); c.restore();
     px += 42;
   }
   // бос
@@ -433,7 +434,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -449,11 +450,12 @@ function showMap() {
     if (i % 5 === 0) {
       const p = i / 5, last = Math.min(LEVELS.length, i + 5), total = last - i, partLocked = i + 1 > save.unlocked, open = mapOpen.has(p);
       let passed = 0, dots = '';
-      for (let k = i; k < last; k++) { const done = save.best[k] != null, sky = THEMES[LEVELS[k].theme].sky; if (done) passed++; dots += '<i style="background:linear-gradient(160deg,' + sky[0] + ',' + sky[2] + ')">' + (done ? starSvg : '') + '</i>'; }
+      let hasMasha = false;
+      for (let k = i; k < last; k++) { const done = save.best[k] != null, sky = THEMES[LEVELS[k].theme].sky; if (done) passed++; if (LEVELS[k].masha) hasMasha = true; dots += '<i' + (LEVELS[k].masha ? ' class="mdot"' : '') + ' style="background:linear-gradient(160deg,' + sky[0] + ',' + sky[2] + ')">' + (done ? starSvg : '') + '</i>'; }
       const allDone = passed === total;
       const sec = document.createElement('section'); sec.className = 'part' + (partLocked ? ' locked' : '') + (allDone ? ' done' : '') + (p === curPart ? ' now' : '');
       const head = document.createElement('button'); head.type = 'button'; head.className = 'part-head'; head.setAttribute('aria-expanded', open ? 'true' : 'false'); head.setAttribute('aria-controls', 'part_' + p);
-      head.innerHTML = '<span class="part-badge">' + (allDone ? check : (p + 1)) + '</span><span class="part-text"><span class="part-kicker"></span><span class="part-title"></span><span class="part-row"><span class="part-dots">' + dots + '</span><span class="part-sub"></span></span></span>' + chev;
+      head.innerHTML = '<span class="part-badge">' + (allDone ? check : (p + 1)) + '</span><span class="part-text"><span class="part-kicker"></span><span class="part-title"></span><span class="part-row"><span class="part-dots">' + dots + '</span><span class="part-sub"></span>' + (hasMasha ? '<span class="mchip">' + starSvg + 'Рівень Маші</span>' : '') + '</span></span>' + chev;
       head.querySelector('.part-kicker').textContent = 'Частина ' + (p + 1) + (p === curPart && !allDone ? ' · ти тут' : '');
       head.querySelector('.part-title').textContent = PARTS[p] || '';
       head.querySelector('.part-sub').textContent = partLocked ? 'Відкриється після частини ' + p : allDone ? 'Усе пройдено!' : passed ? 'Пройдено ' + passed + ' з ' + total : 'Нова частина!';
@@ -464,10 +466,12 @@ function showMap() {
       if (p === curPart) curSec = sec;
     }
     const li = document.createElement('li'), b = document.createElement('button'); b.type = 'button'; b.className = 'world'; b.id = 'world_' + i;
-    const locked = i + 1 > save.unlocked, best = save.best[i];
+    // рівень, який придумала Маша, відкритий одразу й позначений зірочкою
+    const locked = i + 1 > save.unlocked && !lv.masha, best = save.best[i];
+    if (lv.masha) b.classList.add('masha');
     if (locked) b.disabled = true;
-    const status = locked ? 'Відкриється після країни ' + i : (best != null ? 'Пройдено · найкраще ' + best + ' ' + starWord(best) : (i >= 5 ? 'Нова країна!' : 'Можна грати'));
-    b.innerHTML = '<span class="thumb"><canvas data-i="' + i + '"></canvas><span class="num">' + (i + 1) + '</span>' + (locked ? '<span class="lock"><svg viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="11" rx="3" fill="#fff" stroke="#3b1f4f" stroke-width="1.8"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="#fff" stroke-width="3"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="#3b1f4f" stroke-width="1.6"/><circle cx="12" cy="15.5" r="1.8" fill="#3b1f4f"/></svg></span>' : '') + '</span>'
+    const status = locked ? 'Відкриється після країни ' + i : (best != null ? 'Пройдено · найкраще ' + best + ' ' + starWord(best) : lv.masha ? 'Відкритий одразу — можна грати!' : (i >= 5 ? 'Нова країна!' : 'Можна грати'));
+    b.innerHTML = '<span class="thumb"><canvas data-i="' + i + '"></canvas><span class="num">' + (i + 1) + '</span>' + (lv.masha ? '<span class="mribbon">' + starSvg + 'Рівень Маші</span>' : '') + (locked ? '<span class="lock"><svg viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="11" rx="3" fill="#fff" stroke="#3b1f4f" stroke-width="1.8"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="#fff" stroke-width="3"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none" stroke="#3b1f4f" stroke-width="1.6"/><circle cx="12" cy="15.5" r="1.8" fill="#3b1f4f"/></svg></span>' : '') + '</span>'
       + '<span class="wbody"><span class="wname"></span><span class="wblurb"></span><span class="wstat"></span></span>';
     b.querySelector('.wname').textContent = lv.name; b.querySelector('.wblurb').textContent = lv.blurb; b.querySelector('.wstat').textContent = status;
     b.onclick = () => { if (!locked) startPlay(i); };
@@ -504,7 +508,7 @@ function resumeGame() { Snd.init(); mode = 'play'; show(null); }
 function showWin() {
   const i = G.idx;
   save.bestR[i] = Math.max(save.bestR[i] || 0, G.rainbows); save.bestF[i] = Math.max(save.bestF[i] || 0, G.defeated); writeSave();
-  if (i === LEVELS.length - 1) {
+  if (i === LEVELS.length - 1 && LEVELS.every((l, k) => save.best[k] != null)) {
     mode = 'final'; setPlayUi(false);
     $('finalText').textContent = nameOf() + ' пройшла всі ' + LEVELS.length + ' країн! ' + PARTS.join(', ').replace(/, ([^,]*)$/, ' і $1') + ' тепер друзі, а веселка сяє в небі.';
     const sum = o => Object.values(o).reduce((a, b) => a + b, 0);
@@ -512,11 +516,19 @@ function showWin() {
     show('scrFinal'); return;
   }
   mode = 'win'; setPlayUi(false);
+  $('btnNext').hidden = false;
   $('winTitle').textContent = nameOf() + ' пройшла рівень!';
-  $('winText').textContent = LEVELS[i].name + ' позаду. Наступна країна: ' + LEVELS[i + 1].name + '.';
+  if (LEVELS[i + 1]) $('winText').textContent = LEVELS[i].name + ' позаду. Наступна країна: ' + LEVELS[i + 1].name + '.';
+  if (LEVELS[i].masha) {
+    // рівень Маші пройдено наперед: «Далі» немає куди, лишається мапа
+    $('winTitle').textContent = 'Сумний Смайлик тепер веселий!';
+    $('winText').textContent = 'Це був рівень, який придумала Маша. ' + (LEVELS[i + 1] ? 'Наступна країна: ' + LEVELS[i + 1].name + '.' : 'Решта країн чекає на мапі.');
+    if (!LEVELS[i + 1] || i + 1 >= save.unlocked) $('btnNext').hidden = true;
+  }
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 99) { $('winTitle').textContent = 'Жабка Квакуша повернула зірочки-світлячки!'; $('winText').textContent = 'Але далеко за веселкою живе Сумний Смайлик. Йому так сумно, що його сльози розлилися дощем, а всі зірочки він забрав собі, щоб хоч трошки посвітліло. Треба розвеселити хмаринки, квіточки й кубики — і самого Смайлика! Наступна країна: ' + LEVELS[100].name + '.'; }
   if (i === 94) { $('winTitle').textContent = 'Гусениця Ненажерка повернула зірочки!'; $('winText').textContent = 'Але Жабка Квакуша подумала, що зірочки — це світлячки, і сховала їх у своєму ставку: через небо паперових літачків, країну морозива, веселкову доріжку й підводне царство морських коників. Наступна країна: ' + LEVELS[95].name + '.'; }
   if (i === 89) { $('winTitle').textContent = 'Пінгвін Ковзанчик повернув зірочки!'; $('winText').textContent = 'Але Гусениця Ненажерка вирішила, що зірочки — це солодкі листочки, і поповзла з ними до свого капустяного городу: через лелечий хутір, пого-парк, надувне містечко й хмаринкову майстерню. Наступна країна: ' + LEVELS[90].name + '.'; }
   if (i === 84) { $('winTitle').textContent = 'Мавпочка Шкода повернула зірочки!'; $('winText').textContent = 'Але Пінгвін Ковзанчик вирішив, що зірочки — це сніжинки, які ніколи не тануть, і забрав їх на свій айсберг: через гори на повітряній кулі, сніжну долину, крижану рівнину й санну трасу. Наступна країна: ' + LEVELS[85].name + '.'; }

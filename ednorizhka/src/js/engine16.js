@@ -15,9 +15,9 @@ function spawnEnemy16(e, b, hover, g) {
     case 'icecone': return g(18, 26, { speed: 26 });
     case 'goldfish': return hover(22, 14, 3, 0.8, 6);
   }
-  return null;
+  return spawnEnemy17(e, b, hover, g);
 }
-function updateEnemy16(e, dt) { return false; }
+function updateEnemy16(e, dt) { return updateEnemy17(e, dt); }
 
 /* ===== Підготовка рівня ===== */
 function initLevel16(G, L) {
@@ -26,6 +26,7 @@ function initLevel16(G, L) {
   G.seahorses = (L.seahorses || []).map(s => Object.assign({ state: 'free', t: Math.random() * 3, hx: s.x, hy: s.y, ox: s.x, oy: s.y, dir: 1 }, s));
   for (const m of G.movers) if (m.scoop) { m.life = 1; m.state = 'full'; m.t = 0; }
   for (const m of G.movers) if (m.plane) { m.state = 'idle'; m.vy = 0; m.puffs = 3; m.t = 0; }
+  initLevel17(G, L);
 }
 function powerUp16(P, p) {
   P.rainbowT = 10; P.rbY = P.onGround ? P.y + P.h : null;
@@ -164,17 +165,20 @@ function update16(dt) {
   updateSeahorses(P, dt);
   // веселкова підставка з'являється знову, коли відійдеш
   for (const p of G.powers) if (p.k === 'rainbow' && p.got) { p.reT = (p.reT || 0) + dt; if (p.reT > 4 && Math.abs(P.x + P.w / 2 - p.x) > 60) { p.got = false; p.reT = 0; } }
+  update17(dt);
 }
 function updatePlatform16(m, dt) {
   if (m.plane) return updatePlane(m, dt);
   if (m.scoop) return updateScoop(m, dt);
   if (m.rbSeg) { m.dx = 0; m.dy = 0; if (m.state !== 'gone') { m.life -= dt; if (m.life <= 0) m.state = 'gone'; } return; }
+  return updatePlatform17(m, dt);
 }
 function respawn16(P) {
   if (P.plane) { const m = P.plane; m.state = 'idle'; m.x = m.bx; m.y = m.by; P.plane = null; }
   for (const m of G.movers) if (m.plane && m.state !== 'idle') { m.state = 'idle'; m.crashed = false; m.x = m.bx; m.y = m.by; }
   P.rainbowT = 0;
   if (P.seahorse) { const s = P.seahorse; s.state = 'free'; s.hx = s.x = s.ox; s.hy = s.y = s.oy; P.seahorse = null; }
+  respawn17(P);
 }
 
 /* ===== Жабка Квакуша: стріляє язиком, стрибає з хвилями, а потім співає «Ква!» ===== */
@@ -250,8 +254,9 @@ function armored16(s, B) {
     if (!B.armHint) { B.armHint = true; say('Квакуша надто швидка! Стріляй, коли вона співає «Ква!»', 2.6); }
     return true;
   }
-  return false;
+  return armored17(s, B);
 }
 function resetBoss16(B) {
   if (B.kind === 'frog') { B.state = 'sit'; B.st = 0; B.tongue = 0; B.tongues = 0; B.fy = B.gy; B.vy = 0; B.sac = 0; }
+  resetBoss17(B);
 }

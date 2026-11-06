@@ -99,6 +99,13 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
 .part-dots i svg { width: 14px; height: 14px; }
 .part.locked .part-dots i { filter: grayscale(.85) brightness(.97); }
 .part-sub { font-size: 13px; color: var(--ink-2); font-weight: 800; }
+/* рівень, який придумала Маша */
+.part-dots i.mdot { box-shadow: inset 0 0 0 2px #fff, 0 0 0 2.5px #ffb800, 0 1px 3px rgba(201,141,0,.5); }
+.mchip { display: inline-flex; align-items: center; gap: 3px; padding: 2px 9px 2px 5px; border-radius: 999px; background: linear-gradient(#fff1a8, #ffd23f); color: var(--ink); font-size: 12px; font-weight: 900; box-shadow: 0 1px 0 rgba(59,31,79,.25); }
+.mchip svg { width: 15px; height: 15px; }
+.world.masha { border-color: #ffd23f; box-shadow: 0 6px 0 #e0a820, 0 0 0 3px #fff6c4, 0 12px 26px rgba(201,141,0,.28); }
+.world .mribbon { position: absolute; right: 8px; top: 8px; display: flex; align-items: center; gap: 4px; padding: 4px 11px 4px 7px; border-radius: 999px; background: linear-gradient(#fff1a8, #ffd23f); color: var(--ink); font-weight: 900; font-size: 14px; box-shadow: 0 2px 0 rgba(59,31,79,.25); }
+.world .mribbon svg { width: 18px; height: 18px; }
 .chev { width: 28px; height: 28px; flex: none; transition: transform .2s; }
 .part-head[aria-expanded="true"] .chev { transform: rotate(180deg); }
 .part .worlds { padding: 6px 14px 16px; }
