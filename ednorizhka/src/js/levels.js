@@ -4027,7 +4027,7 @@ const LEVELS = [
       L.enemy('bird', 36, 6);
       L.block(38, 8, 2, 2);
       L.ground(41, 46, 6); L.row(41, 5, 5);
-      L.row(48, 5, 4); L.row(53, 6, 4); L.row(58, 7, 3);
+      L.row(50, 5, 2); L.row(53, 6, 4); L.row(58, 7, 3);
       L.ground(62, 84);
       L.check(65);
       L.qblock(69, 6, 'star');
@@ -4045,7 +4045,7 @@ const LEVELS = [
       L.block(132, 8, 2, 2);
       L.ground(135, 140, 6);
       L.rainbow(145, 2);
-      L.row(142, 5, 2); L.arc(147, 6, 5, 1);
+      L.arc(147, 6, 5, 1);
       L.ground(154, 172);
       L.gate(167);
     }
