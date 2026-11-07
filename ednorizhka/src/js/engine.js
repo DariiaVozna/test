@@ -448,6 +448,7 @@ function updateBoss(dt) {
   if (B.kind === 'caterpillar') return updateCaterpillarBoss(dt);
   if (B.kind === 'frog') return updateFrogBoss(dt);
   if (B.kind === 'smiley') return updateSmileyBoss(dt);
+  if (B.kind === 'owl') return updateOwlBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
@@ -663,6 +664,7 @@ function update(dt) {
       else if (p.k === 'big') { setBig(P, true, BIG_TIME); say(G.bigHint ? 'Знову велика!' : 'Гриб-велетень! Ти велика: ламай стіни з кубиків', 2.4); G.bigHint = true; }
       else if (p.k === 'pogo' || p.k === 'cloud' || p.k === 'rainbow') powerUp15(P, p);
       else if (POW17[p.k]) powerUp17(P, p);
+      else if (POW18[p.k]) powerUp18(P, p);
       else { P.magnetT = 12; say('Магніт! Зірочки самі летять до тебе'); }
     }
   }

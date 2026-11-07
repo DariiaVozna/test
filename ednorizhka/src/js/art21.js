@@ -131,6 +131,7 @@ function drawMover21(c, m) {
 function drawWorld21(c, t, vis) {
   if (G.sadClouds) for (const q of G.sadClouds) if (vis(q.x0 * T + q.w * T / 2, q.w * T)) drawSadCloud(c, q, t);
   if (G.tickles) for (const f of G.tickles) if (vis(f.x)) { const sp = f.spring; drawTickle(c, f, t, sp ? sp.sq : 0); }
+  drawWorld22(c, t, vis);
 }
 
 /* ===== Парасолька над єдиноріжкою, сердечко-суперсила, зілля ===== */
@@ -173,6 +174,7 @@ function drawOver21(c, P, t) {
     const a = t * 2.4, hx = P.x + P.w / 2 + Math.cos(a) * 18, hy = P.y + 4 + Math.sin(a) * 8;
     c.save(); c.globalAlpha = 0.9; heart21(c, hx, hy, 0.55); c.fillStyle = '#ff4f9a'; c.fill(); c.strokeStyle = '#ffffff'; c.lineWidth = 1; c.stroke(); c.restore();
   }
+  drawOver22(c, P, t);
 }
 
 /* ===== Значки бонусів ===== */
@@ -201,7 +203,7 @@ function drawPowerIcon21(c, kind, t) {
       else { for (let i = 0; i < 3; i++) sparkle(c, -3 + i * 3, 3 + (i % 2) * 2, 0.8, '#ffffff'); }
       c.fillStyle = 'rgba(255,255,255,.8)'; ell(c, -r * 0.45, -r * 0.1, 1.4, 2.4, 0.4); c.fill();
     }
-  } else return false;
+  } else return drawPowerIcon22(c, kind, t);
   return true;
 }
 
@@ -292,7 +294,7 @@ function drawBlock21(c, b) {
     c.lineWidth = 1.2; c.beginPath(); c.moveTo(8.5, 15); c.quadraticCurveTo(12, 18.5, 15.5, 15); c.stroke();
   } else if (b === 'mashablock') {
     drawMashaBrick(c, 'blk');
-  } else return false;
+  } else return drawBlock22(c, b);
   return true;
 }
 /* Кубики з малюнків Маші: зафарбовані фломастером, зі смужками всередині */
@@ -340,6 +342,7 @@ function drawDecor21(c, d, t) {
       c.fillStyle = INK; circ(c, x - 1.6, y - 7, 0.6); c.fill(); circ(c, x + 1.6, y - 7, 0.6); c.fill();
       c.beginPath(); c.arc(x, y - 6.4, 2.4, 0.2 * Math.PI, 0.8 * Math.PI); c.stroke();
       break;
+    default: drawDecor22(c, d, t);
   }
 }
 

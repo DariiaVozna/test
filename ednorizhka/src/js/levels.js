@@ -4165,12 +4165,180 @@ const LEVELS = [
       L.gate(196);
     }
   },
+  {
+    id: 'schoolyard', theme: 'schoolyard', name: 'Шкільне подвір\'я', blurb: 'Перестрибни скакалку, коли вона внизу', w: 172,
+    build(L) {
+      L.ground(0, 36);
+      L.sign(3, 'Шкільне подвір\'я! Зайчики крутять скакалку. Стрибай, коли вона внизу. Можна стрибати й на місці — кожен стрибок дає зірочку!');
+      L.row(6, 9, 3);
+      L.rope(14, 3);
+      L.enemy('snail', 22, 10);
+      L.qblock(26, 6, 'star');
+      L.rope(30, 3);
+      L.arc(36, 7, 4, 1.5);
+      L.ground(40, 74);
+      L.rope(46, 4); L.row(46, 6, 4);
+      L.check(53);
+      L.row(55, 9, 4);
+      L.rope(62, 3); L.row(62, 6, 3);
+      L.enemy('bird', 70, 6);
+      L.arc(74, 7, 4, 1.5);
+      L.ground(78, 172);
+      L.rope(84, 3); L.rope(90, 3);
+      L.check(97);
+      L.row(100, 9, 4);
+      L.qblock(104, 6, 'star5');
+      L.enemy('frog', 110, 10);
+      L.rope(116, 5); L.row(117, 6, 3);
+      L.check(126);
+      L.power('magnet', 129, 8);
+      L.row(131, 9, 6);
+      L.rope(142, 3); L.rope(148, 3);
+      L.enemy('snail', 156, 10);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'fireworks', theme: 'fireworks', name: 'Феєрверкове свято', blurb: 'Ракета підкине тебе аж до неба', w: 172,
+    build(L) {
+      L.ground(0, 54);
+      L.sign(3, 'Феєрверкове свято! Стань біля ракети й натисни «Ріг» — ракета підкине тебе високо в небо');
+      L.row(6, 9, 3);
+      L.rocket(13, 3);
+      L.ground(16, 30, 4); L.row(18, 3, 6);
+      L.enemy('snail', 25, 4);
+      L.check(33);
+      L.row(35, 9, 4);
+      L.enemy('frog', 41, 10);
+      L.rocket(46, 1); L.row(46, 7, 1); L.row(46, 5, 1); L.row(46, 3, 1);
+      L.qblock(51, 6, 'star');
+      L.ground(54, 74);
+      L.rocket(57, 2);
+      L.ground(60, 74, 3); L.row(61, 2, 8);
+      L.enemy('bee', 68, 1);
+      L.ground(74, 110);
+      L.check(77);
+      L.row(79, 9, 4);
+      L.rocket(86, 3); L.cloud(88, 4, 4); L.rainbow(90, 2);
+      L.rocket(94, 2);
+      L.ground(96, 110, 3); L.row(97, 2, 8);
+      L.ground(110, 172);
+      L.check(113);
+      L.enemy('snail', 118, 10);
+      L.power('magnet', 122, 8);
+      L.row(124, 9, 6);
+      L.rocket(134, 1); L.row(134, 6, 1); L.row(134, 4, 1); L.row(134, 2, 1);
+      L.rocket(146, 3);
+      L.ground(149, 160, 4); L.row(150, 3, 6);
+      L.gate(167);
+    }
+  },
+  {
+    id: 'climbwall', theme: 'climbwall', name: 'Скеледром', blurb: 'У чарівних рукавичках дерешся по стінах', w: 172,
+    build(L) {
+      L.ground(0, 60);
+      L.sign(3, 'Скеледром! Візьми чарівні рукавички. Стрибни до стіни й тримай «Стрибок» — полізеш угору');
+      L.power('gloves', 9, 8); L.row(5, 9, 3);
+      L.block(16, 2, 2, 8); L.row(16, 1, 2);
+      L.enemy('snail', 23, 10);
+      L.block(28, 3, 3, 7); L.row(28, 2, 3);
+      L.check(33);
+      L.row(34, 9, 3);
+      L.ground(38, 60, 2); L.row(40, 1, 8);
+      L.enemy('snail', 50, 2);
+      L.row(53, 1, 5);
+      L.ground(60, 172);
+      L.check(63);
+      L.row(65, 9, 4);
+      L.enemy('frog', 70, 10);
+      L.power('gloves', 75, 8);
+      L.block(82, 3, 2, 7); L.row(82, 2, 2);
+      L.block(88, 2, 2, 8); L.row(88, 1, 2);
+      L.row(84, 6, 4);
+      L.check(96);
+      L.enemy('bee', 102, 6);
+      L.row(99, 9, 4);
+      L.power('gloves', 106, 8);
+      L.ground(110, 124, 2); L.row(111, 1, 12);
+      L.check(127);
+      L.power('magnet', 130, 8);
+      L.row(132, 9, 6);
+      L.enemy('snail', 140, 10);
+      L.power('gloves', 143, 8);
+      L.block(148, 3, 2, 7); L.row(148, 2, 2);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'festsquare', theme: 'festsquare', name: 'Святкова площа', blurb: 'Скакалки, ракети й рукавички — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 172);
+      L.sign(3, 'Святкова площа! Тут і скакалки, і ракети, і скеледром');
+      L.row(6, 9, 3);
+      L.rope(13, 3);
+      L.enemy('snail', 19, 10);
+      L.rocket(24, 3);
+      L.ground(27, 40, 4); L.row(29, 3, 6);
+      L.check(43);
+      L.power('gloves', 46, 8);
+      L.block(52, 2, 2, 8); L.row(52, 1, 2);
+      L.rope(58, 3);
+      L.qblock(63, 6, 'star5');
+      L.enemy('frog', 67, 10);
+      L.check(73);
+      L.rocket(77, 1); L.row(77, 6, 1); L.row(77, 4, 1); L.row(77, 2, 1);
+      L.rope(83, 4); L.row(83, 6, 4);
+      L.power('gloves', 90, 8);
+      L.ground(94, 110, 3); L.row(96, 2, 8);
+      L.check(113);
+      L.rope(118, 3); L.rope(124, 3);
+      L.power('magnet', 129, 8);
+      L.row(131, 9, 5);
+      L.rocket(138, 3);
+      L.ground(141, 152, 4); L.row(142, 3, 6);
+      L.enemy('snail', 157, 10);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'owlwood', theme: 'owlwood', name: 'Совиний гай', blurb: 'Битва із Совою Ухнюшкою', w: 172, boss: 'owl',
+    build(L) {
+      L.ground(0, 172);
+      L.sign(3, 'Совиний гай. Тут живе Сова Ухнюшка. Вдень вона спить, а свято її розбудило…');
+      L.row(6, 9, 3);
+      L.rope(12, 3);
+      L.enemy('snail', 18, 10);
+      L.rocket(24, 3);
+      L.ground(27, 38, 4); L.row(29, 3, 6);
+      L.check(42);
+      L.power('gloves', 46, 8);
+      L.block(52, 2, 2, 8); L.row(52, 1, 2);
+      L.enemy('frog', 60, 10);
+      L.rope(66, 3);
+      L.row(72, 9, 4);
+      L.check(80);
+      L.rocket(86, 1); L.row(86, 6, 1); L.row(86, 4, 1); L.row(86, 2, 1);
+      L.enemy('bee', 94, 6);
+      L.row(98, 9, 5);
+      L.rope(106, 4);
+      L.check(116);
+      L.sign(119, 'Сова Ухнюшка! Коли вона задрімає на пеньку — стріляй або стрибни на неї');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
+  fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
+  climbwall: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'matS', x, y, c: ['#4cb6ff', '#ff7ab8', '#7fd46a'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'ballS', x, y, c: '#ffd23f' } : { k: 'tuft', x, y }; },
+  festsquare: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'flagsS', x, y, n: Math.floor(R() * 6) } : r < 0.6 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a'][Math.floor(R() * 2)] }; },
+  owlwood: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'mushS', x, y, c: ['#c0392b', '#e08a3a'][Math.floor(R() * 2)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: ['#ffffff', '#c9b6ff'][Math.floor(R() * 2)] }; },
   rainvalley: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'puddleS', x, y } : r < 0.65 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: ['#9fd0ff', '#ffffff', '#c9b6ff'][Math.floor(R() * 3)] }; },
   umbrellas: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'umbS', x, y } : r < 0.6 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] }; },
   ticklegarden: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'daisyS', x, y, c: ['#ffffff', '#ffb3d6', '#fff3a8'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'flower', x, y, c: ['#ff7ab8', '#b98cff', '#4cb6ff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
@@ -4281,7 +4449,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map() };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -4464,6 +4632,10 @@ function buildLevel(idx) {
     mood(x, row, rise, w) { L.movers.push({ special15: true, mood: true, bx: x * T, by: row * T, w: (w || 2) * T, rise: rise * T, ax: 0, ay: 0, period: 1 }); },
     // кубики Маші: удар знизу — вилітає зірочка; col — 'B' (блакитні) чи 'P' (рожеві)
     mbricks(x, row, w, col) { for (let i = 0; i < (w || 1); i++) { set(x + i, row, 7); L.qContent.set(row * W + x + i, 'star'); L.mcol.set(row * W + x + i, col || 'B'); } },
+    // скакалка над землею: x, ширина в плитках (типово 3); два зайчики крутять її
+    rope(x, w) { later.push(() => L.ropes.push({ x0: x * T, x1: (x + (w || 3)) * T, gy: groundY(x), ph: (x * 0.7) % TAU })); },
+    // ракета на землі в x: «Ріг» поруч — і підкидає так, що ноги доходять до рядка top
+    rocket(x, top) { later.push(() => L.rockets.push({ x: x * T + 12, gy: groundY(x), top: top * T })); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

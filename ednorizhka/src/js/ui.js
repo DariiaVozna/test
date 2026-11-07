@@ -214,6 +214,7 @@ function renderGame(dt) {
     else if (B.kind === 'caterpillar') drawCaterpillarBoss(c, B, B.t);
     else if (B.kind === 'frog') drawFrogBoss(c, B, B.t);
     else if (B.kind === 'smiley') drawSmileyBoss(c, B, B.t);
+    else if (B.kind === 'owl') drawOwlBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -333,7 +334,7 @@ function drawHud(c) {
   drawHud9(c, x2 + w2 + 10, top, H);
   // бонуси з таймером
   let px = left, py = top + H + 8;
-  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME], ['hourglass', P.stopT || 0, STOP_TIME], ['pogo', P.pogoT || 0, 25], ['cloud', P.cloudN || 0, 3], ['rainbow', P.rainbowT || 0, 10], ['umbrella', P.umbT || 0, UMB_TIME], ['air', P.airT || 0, AIR_TIME], ['heart', P.heartPow ? 1 : 0, 1]]) {
+  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME], ['hourglass', P.stopT || 0, STOP_TIME], ['pogo', P.pogoT || 0, 25], ['cloud', P.cloudN || 0, 3], ['rainbow', P.rainbowT || 0, 10], ['umbrella', P.umbT || 0, UMB_TIME], ['air', P.airT || 0, AIR_TIME], ['heart', P.heartPow ? 1 : 0, 1], ['gloves', P.gloveT || 0, GLOVE_TIME]]) {
     if (v <= 0) continue;
     c.fillStyle = 'rgba(255,255,255,.9)'; circ(c, px + 17, py + 17, 17); c.fill();
     c.strokeStyle = '#ff4fa3'; c.lineWidth = 3.5; c.beginPath(); c.arc(px + 17, py + 17, 15, -Math.PI / 2, -Math.PI / 2 + TAU * (v / max)); c.stroke();
@@ -434,7 +435,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -528,6 +529,7 @@ function showWin() {
   if (i === 4) { $('winTitle').textContent = 'Веселка повернулася!'; $('winText').textContent = 'Король Похмурої Хмари подобрішав. Але Пан Колючка заховав чарівні зірочки в нових країнах. Наступна країна: ' + LEVELS[5].name + '.'; }
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
+  if (i === 104 && i + 1 < save.unlocked) $('winText').textContent = 'Веселий Смайлик повернув усі зірочки! А в Країні свят усі готуються до великого свята: стрибають через скакалку, запускають ракети-феєрверки й лазять по скеледромі. Тільки Сова Ухнюшка вдень хоче спати, а від галасу не може заснути. Вона розсердилася й поховала зірочки! Наступна країна: ' + LEVELS[105].name + '.';
   if (i === 99) { $('winTitle').textContent = 'Жабка Квакуша повернула зірочки-світлячки!'; $('winText').textContent = 'Але далеко за веселкою живе Сумний Смайлик. Йому так сумно, що його сльози розлилися дощем, а всі зірочки він забрав собі, щоб хоч трошки посвітліло. Треба розвеселити хмаринки, квіточки й кубики — і самого Смайлика! Наступна країна: ' + LEVELS[100].name + '.'; }
   if (i === 94) { $('winTitle').textContent = 'Гусениця Ненажерка повернула зірочки!'; $('winText').textContent = 'Але Жабка Квакуша подумала, що зірочки — це світлячки, і сховала їх у своєму ставку: через небо паперових літачків, країну морозива, веселкову доріжку й підводне царство морських коників. Наступна країна: ' + LEVELS[95].name + '.'; }
   if (i === 89) { $('winTitle').textContent = 'Пінгвін Ковзанчик повернув зірочки!'; $('winText').textContent = 'Але Гусениця Ненажерка вирішила, що зірочки — це солодкі листочки, і поповзла з ними до свого капустяного городу: через лелечий хутір, пого-парк, надувне містечко й хмаринкову майстерню. Наступна країна: ' + LEVELS[90].name + '.'; }

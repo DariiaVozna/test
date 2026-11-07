@@ -20,6 +20,7 @@ function initLevel17(G, L) {
   G.tickles = (L.tickles || []).map(q => Object.assign({ happy: false, joy: 0, spring: null }, q));
   G.mcol = L.mcol && L.mcol.size ? L.mcol : null;
   for (const m of G.movers) if (m.mood) { m.state = 'sad'; m.joy = 0; }
+  initLevel18(G, L);
 }
 
 /* ===== Бонуси: серце-суперсила, зілля, парасолька, великий і маленький пузирки ===== */
@@ -122,12 +123,14 @@ function update17(dt) {
   updateTickles(dt);
   updateUmbrella(P, dt);
   updateAirWalk(P, dt);
+  update18(dt);
 }
 function updatePlatform17(m, dt) {
   if (m.mood) return updateMood(m, dt);
   if (m.airSeg) { m.dx = 0; m.dy = 0; if (m.state !== 'gone') { m.life -= dt; if (m.life <= 0) m.state = 'gone'; } return; }
+  return updatePlatform18(m, dt);
 }
-function respawn17(P) { P.airY = null; }
+function respawn17(P) { P.airY = null; respawn18(P); }
 
 /* ===== Сумний Смайлик: стрибає, піднімається й плаче, а потім сідає поплакати — тоді в нього можна влучити ===== */
 Object.assign(BOSS2, {
@@ -206,8 +209,9 @@ function armored17(s, B) {
     if (!B.armHint) { B.armHint = true; say('Смайлик зараз не слухає… Стріляй, коли він сяде поплакати', 2.6); }
     return true;
   }
-  return false;
+  return armored18(s, B);
 }
 function resetBoss17(B) {
   if (B.kind === 'smiley') { B.state = 'hop'; B.st = 0; B.hops = 0; B.vy = 0; B.vx = 0; B.cy = B.gy - B.R; B.y = B.cy; }
+  resetBoss18(B);
 }

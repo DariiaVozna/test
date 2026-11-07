@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -213,6 +213,21 @@ function runLevel(idx, maxT) {
     if (P.umbT > 0 && !P.onGround) In.jump = true;
     // зілля: стрибнули з постаменту — натискаємо «Ріг» на висоті зірочок, щоб іти по повітрю
     if (P.airT > 0 && P.airY == null && !P.onGround && P.vy < 0 && P.y + P.h < 150) { In.shootP = true; In.shoot = true; }
+    // скакалка попереду: стрибаємо так, щоб бути в повітрі, коли вона внизу; інакше чекаємо на краю
+    const rp = G.ropes.find(r => r.x0 - (P.x + P.w) > -6 && r.x0 - (P.x + P.w) < 18);
+    const rz = G.ropes.find(r => pcxB() > r.x0 && pcxB() < r.x1);
+    const ropeTb = r => ((TAU - ropePhase(r)) % TAU) / ROPE_W;
+    if (rp && !rz && P.onGround) { const tb = ropeTb(rp); if (tb > 0.12 && tb < 0.34) { In.jumpP = true; In.jump = true; } else { In.right = false; In.jumpP = false; } }
+    if (rz && P.onGround && ropeTb(rz) < 0.3) { In.jumpP = true; In.jump = true; }
+    // ракета: стаємо біля неї й натискаємо «Ріг», поки вона шипить — стоїмо
+    const rk = G.rockets.find(r => r.state === 'idle' && (!r.botT || t - r.botT > 4) && Math.abs(pcxB() - r.x) < 30);
+    if (rk && P.onGround) {
+      if (Math.abs(pcxB() - rk.x) > 6) { In.right = pcxB() < rk.x; In.left = !In.right; In.jumpP = false; }
+      else { In.right = In.left = false; In.jumpP = false; In.shootP = true; In.shoot = true; rk.botT = t; }
+    }
+    if (G.rockets.some(r => r.state === 'fuse' && Math.abs(pcxB() - r.x) < 26) && P.onGround) { In.right = In.left = false; In.jumpP = false; }
+    // рукавички: біля стіни тримаємо «Стрибок»
+    if (P.climbing) In.jump = true;
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;
