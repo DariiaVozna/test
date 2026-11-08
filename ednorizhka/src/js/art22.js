@@ -64,6 +64,7 @@ function drawWorld22(c, t, vis) {
   if (G.rockets) for (const r of G.rockets) if (vis(r.x)) drawRocket(c, r, t);
   const B = G.boss;
   if (B && B.kind === 'owl') { if (vis(B.stumpX)) drawStump22(c, B.stumpX, B.gy); if (B.state === 'dive' || B.state === 'windup') { c.save(); c.fillStyle = 'rgba(31,58,42,.25)'; ell(c, B.tx, B.gy - 2, 24, 5); c.fill(); c.restore(); } }
+  drawWorld23(c, t, vis);
 }
 function drawStump22(c, x, gy) {
   c.save(); c.strokeStyle = INK; c.lineWidth = 1.4; c.fillStyle = '#9a6a3e'; rr(c, x - 20, gy - 10, 40, 10, 3); c.fill(); c.stroke();
@@ -85,10 +86,11 @@ function drawOver22(c, P, t) {
     drawGlove(c, P.x + P.w / 2 + P.dir * P.w * 0.45, P.y + P.h - 6, s, t);
     if (P.climbing) for (let i = 0; i < 3; i++) sparkle(c, P.x + (P.dir > 0 ? P.w : 0) + Math.sin(t * 9 + i) * 2, P.y + 6 + i * 9, 1.3, i % 2 ? '#ffd23f' : '#b98cff');
   }
+  drawOver23(c, P, t);
 }
 function drawPowerIcon22(c, kind, t) {
   if (kind === 'gloves') { drawGlove(c, 0, 1, 1.1, t); return true; }
-  return false;
+  return drawPowerIcon23(c, kind, t);
 }
 
 /* ===== Сова Ухнюшка ===== */
@@ -160,7 +162,7 @@ function drawBlock22(c, b) {
     rr(c, 1, 1, T - 2, T - 2, 5); c.fillStyle = '#8a6440'; c.fill(); c.stroke();
     c.strokeStyle = 'rgba(60,40,20,.5)'; c.lineWidth = 1; c.beginPath(); c.ellipse(12, 12, 6, 4, 0, 0, TAU); c.stroke(); c.beginPath(); c.ellipse(12, 12, 2.5, 1.6, 0, 0, TAU); c.stroke();
     c.fillStyle = '#6fbf5a'; ell(c, 6, 3, 4, 2); c.fill();
-  } else return false;
+  } else return drawBlock23(c, b);
   return true;
 }
 
@@ -181,6 +183,7 @@ function drawDecor22(c, d, t) {
       break;
     case 'matS': c.fillStyle = d.c || '#4cb6ff'; rr(c, x - 10, y - 4, 20, 4, 1.5); c.fill(); c.stroke(); break;
     case 'mushS': c.fillStyle = '#f2e6d0'; rr(c, x - 1.6, y - 6, 3.2, 6, 1); c.fill(); c.stroke(); c.fillStyle = d.c || '#c0392b'; c.beginPath(); c.arc(x, y - 6, 5, Math.PI, TAU); c.closePath(); c.fill(); c.stroke(); c.fillStyle = '#fff'; circ(c, x - 2, y - 8, 0.9); c.fill(); circ(c, x + 2, y - 7.5, 0.8); c.fill(); break;
+    default: drawDecor23(c, d, t); break;
     case 'lanternS': c.strokeStyle = INK; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 16); c.stroke(); c.fillStyle = d.c || '#ffd23f'; ell(c, x, y - 20, 4.5, 5.5); c.fill(); c.stroke(); c.save(); c.globalAlpha = 0.3 + 0.2 * Math.sin(t * 3 + x); c.fillStyle = d.c || '#ffd23f'; circ(c, x, y - 20, 10); c.fill(); c.restore(); break;
   }
 }

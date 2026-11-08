@@ -4328,12 +4328,355 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  {
+    id: 'postoffice', theme: 'postoffice', name: 'Поштове містечко', blurb: 'Віднеси посилку в поштомат — і шлагбаум відчиниться', w: 172,
+    build(L) {
+      L.ground(0, 32);
+      L.sign(3, 'Поштове містечко! Візьми посилку й віднеси в поштомат — тоді шлагбаум відчиниться');
+      L.row(6, 9, 3);
+      L.parcel(11, 9);
+      L.locker(15, 0); L.pdoor(20, 0, 4);
+      L.enemy('snail', 25, 10);
+      L.qblock(28, 6, 'star');
+      L.arc(32, 7, 4, 1.5);
+      L.ground(36, 100);
+      L.check(38);
+      L.parcel(42, 9);
+      L.enemy('bird', 46, 6);
+      L.locker(50, 1); L.pdoor(54, 1, 4);
+      L.row(56, 9, 4);
+      L.block(61, 7, 3, 1); L.parcel(62, 6);
+      L.row(66, 9, 2);
+      L.locker(69, 2); L.pdoor(73, 2, 4);
+      L.check(76);
+      L.enemy('frog', 80, 10);
+      L.power('magnet', 84, 8);
+      L.row(86, 9, 6);
+      L.arc(100, 7, 4, 1.5);
+      L.ground(104, 172);
+      L.parcel(107, 9);
+      L.locker(112, 3); L.pdoor(116, 3, 4);
+      L.row(118, 9, 3);
+      L.check(122);
+      L.parcel(126, 9);
+      L.enemy('snail', 130, 10);
+      L.locker(135, 4); L.pdoor(139, 4, 4);
+      L.row(141, 9, 5);
+      L.enemy('bee', 150, 6);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'firestation', theme: 'firestation', name: 'Пожежна частина', blurb: 'Загаси вогонь із пожежного шланга', w: 172,
+    build(L) {
+      L.ground(0, 40);
+      L.sign(3, 'Пожежна частина! Візьми пожежний шланг — і ріг стрілятиме водою. Гаси вогонь!');
+      L.row(5, 9, 3);
+      L.power('hose', 9, 8);
+      L.fire(14, 8, 2);
+      L.row(17, 9, 2);
+      L.fire(21, 5, 5);
+      L.enemy('snail', 26, 10);
+      L.qblock(30, 6, 'star');
+      L.fire(34, 7, 3);
+      L.arc(40, 7, 4, 1.5);
+      L.ground(44, 84);
+      L.check(46);
+      L.block(50, 7, 4, 1); L.row(50, 6, 4);
+      L.fire(56, 5, 5);
+      L.enemy('frog', 61, 10);
+      L.fire(66, 5, 5); L.fire(68, 5, 5);
+      L.check(73);
+      L.row(76, 9, 4);
+      L.arc(84, 7, 4, 1.5);
+      L.ground(88, 172);
+      L.fire(90, 5, 5);
+      L.power('magnet', 96, 8);
+      L.row(98, 9, 6);
+      L.fire(106, 5, 5);
+      L.enemy('bird', 110, 6);
+      L.fire(114, 8, 2); L.fire(116, 8, 2); L.fire(118, 8, 2);
+      L.check(122);
+      L.block(126, 6, 6, 1); L.fire(128, 3, 3); L.row(129, 5, 3);
+      L.fire(140, 5, 5);
+      L.enemy('snail', 146, 10);
+      L.fire(152, 5, 5);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'construction', theme: 'construction', name: 'Будмайданчик', blurb: 'У касці гупни згори — і тріснута плита розсиплеться', w: 172,
+    build(L) {
+      L.ground(0, 14);
+      L.sign(3, 'Будмайданчик! Візьми каску. У стрибку натисни «Ріг» — гупнеш згори й розіб\'єш тріснуту плиту');
+      L.power('helmet', 9, 8);
+      L.row(5, 9, 3);
+      L.ground(14, 40, 6); L.clear(18, 7, 22, 3); L.cracks(18, 6, 3); L.block(24, 0, 2, 6);
+      L.row(26, 8, 10);
+      L.enemy('snail', 33, 10);
+      L.ground(40, 54);
+      L.check(42);
+      L.row(44, 9, 4);
+      L.enemy('frog', 49, 10);
+      L.ground(54, 64, 6); L.clear(56, 7, 8, 3); L.cracks(56, 6, 3); L.row(57, 8, 6);
+      L.ground(64, 80);
+      L.check(66);
+      L.enemy('snail', 71, 10);
+      L.qblock(74, 6, 'star');
+      L.block(77, 7, 2, 3);
+      L.ground(80, 100, 4); L.clear(82, 5, 3, 2); L.clear(82, 8, 18, 2); L.cracks(82, 4, 3); L.cracks(82, 7, 3); L.block(88, 0, 2, 4);
+      L.row(83, 6, 1); L.row(86, 9, 12);
+      L.ground(100, 172);
+      L.check(103);
+      L.power('magnet', 106, 8);
+      L.row(108, 9, 6);
+      L.enemy('frog', 116, 10);
+      L.ground(122, 136, 6); L.clear(126, 7, 10, 3); L.cracks(126, 6, 3); L.block(131, 0, 2, 6); L.row(128, 8, 7);
+      L.enemy('snail', 148, 10);
+      L.row(150, 9, 4);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'citynight', theme: 'citynight', name: 'Нічне місто', blurb: 'Посилки, вогонь і тріснуті плити — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 34);
+      L.sign(3, 'Нічне місто! Тут треба й посилки носити, і вогонь гасити, і плити розбивати');
+      L.power('hose', 8, 8); L.power('helmet', 11, 8);
+      L.row(5, 9, 2);
+      L.parcel(15, 9);
+      L.fire(19, 8, 2);
+      L.locker(23, 0); L.pdoor(28, 0, 4);
+      L.check(30);
+      L.ground(34, 52, 6); L.clear(38, 7, 14, 3); L.cracks(38, 6, 3); L.block(43, 0, 2, 6); L.row(41, 8, 8);
+      L.ground(52, 90);
+      L.fire(55, 5, 5);
+      L.enemy('snail', 60, 10);
+      L.parcel(64, 9);
+      L.locker(70, 1); L.pdoor(75, 1, 4);
+      L.check(78);
+      L.power('magnet', 81, 8); L.row(83, 9, 5);
+      L.arc(90, 7, 4, 1.5);
+      L.ground(94, 172);
+      L.fire(97, 5, 5); L.fire(99, 5, 5);
+      L.enemy('frog', 104, 10);
+      L.ground(108, 124, 6); L.clear(112, 7, 12, 3); L.cracks(112, 6, 3); L.block(117, 0, 2, 6); L.row(114, 8, 8);
+      L.check(127);
+      L.parcel(130, 9); L.fire(134, 8, 2); L.locker(138, 2); L.pdoor(143, 2, 4);
+      L.row(146, 9, 5);
+      L.enemy('snail', 152, 10);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'dogpark', theme: 'dogpark', name: 'Собачий парк', blurb: 'Битва з Цуциком Гавчиком', w: 172, boss: 'puppy',
+    build(L) {
+      L.ground(0, 172);
+      L.sign(3, 'Собачий парк. Тут живе Цуцик Гавчик — це він розгриз коробки із зірочками!');
+      L.row(6, 9, 3);
+      L.parcel(12, 9); L.locker(16, 0); L.pdoor(21, 0, 4);
+      L.power('hose', 25, 8); L.fire(30, 5, 5);
+      L.enemy('snail', 35, 10);
+      L.power('helmet', 39, 8);
+      L.ground(44, 60, 6); L.clear(48, 7, 12, 3); L.cracks(48, 6, 3); L.block(53, 0, 2, 6); L.row(50, 8, 8);
+      L.check(64);
+      L.row(66, 9, 5);
+      L.enemy('frog', 74, 10);
+      L.qblock(80, 6, 'star5');
+      L.fire(88, 8, 2);
+      L.row(92, 9, 6);
+      L.check(104);
+      L.enemy('bee', 110, 6);
+      L.sign(119, 'Цуцик Гавчик! Коли він ляже на спинку відпочити — стріляй або стрибни йому на пузико');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
+  },
+  {
+    id: 'jetlab', theme: 'jetlab', name: 'Майстерня ранців', blurb: 'З реактивним ранцем злітаєш угору', w: 172,
+    build(L) {
+      L.ground(0, 34);
+      L.sign(3, 'Майстерня ранців! Візьми реактивний ранець. У стрибку тримай «Стрибок» — і полетиш угору. Паливо набирається на землі');
+      L.power('jetpack', 9, 8); L.row(5, 9, 3);
+      L.ground(20, 34, 2); L.row(21, 1, 12);
+      L.enemy('snail', 28, 2);
+      L.arc(35, 3, 7, 2);
+      L.ground(43, 80);
+      L.check(46);
+      L.row(50, 9, 4);
+      L.enemy('frog', 56, 10);
+      L.power('jetpack', 60, 8);
+      L.ground(64, 72, 2); L.row(65, 1, 6);
+      L.arc(81, 4, 6, 2);
+      L.ground(88, 130);
+      L.check(95);
+      L.power('jetpack', 98, 8);
+      L.enemy('bird', 102, 5);
+      L.row(104, 9, 6);
+      L.qblock(112, 2, 'star5');
+      L.power('magnet', 116, 8);
+      L.power('jetpack', 126, 8);
+      L.arc(131, 4, 6, 2);
+      L.ground(138, 172);
+      L.enemy('snail', 150, 10);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'switchworks', theme: 'switchworks', name: 'Фабрика перемикачів', blurb: 'Торкнися перемикача — і кубики поміняються', w: 172,
+    build(L) {
+      L.ground(0, 22);
+      L.sign(3, 'Фабрика перемикачів! Торкнися перемикача — червоні кубики сховаються, а сині з\'являться. І навпаки!');
+      L.row(6, 9, 2);
+      L.sw(10);
+      L.rblk(14, 4, 1, 6);
+      L.row(16, 9, 4);
+      L.bblk(22, 10, 8, 1); L.row(23, 8, 6);
+      L.ground(30, 46);
+      L.check(32);
+      L.enemy('snail', 35, 10);
+      L.sw(40);
+      L.bblk(43, 5, 1, 5);
+      L.rblk(46, 10, 7, 1); L.row(47, 8, 5);
+      L.ground(53, 80);
+      L.check(55);
+      L.qblock(58, 6, 'star');
+      L.sw(64);
+      L.rblk(67, 3, 1, 7);
+      L.bblk(70, 8, 2, 1); L.bblk(73, 6, 2, 1); L.bblk(76, 4, 2, 1); L.row(76, 3, 2);
+      L.bblk(80, 10, 6, 1); L.row(81, 8, 4);
+      L.ground(86, 112);
+      L.check(88);
+      L.enemy('frog', 94, 10);
+      L.power('magnet', 98, 8);
+      L.row(100, 9, 5);
+      L.sw(106);
+      L.bblk(109, 4, 1, 6);
+      L.rblk(112, 10, 7, 1); L.row(113, 8, 5);
+      L.ground(119, 172);
+      L.check(122);
+      L.sw(126);
+      L.rblk(129, 4, 1, 6);
+      L.enemy('snail', 136, 10);
+      L.sw(142);
+      L.bblk(145, 4, 1, 6);
+      L.row(148, 9, 5);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'glassbridge', theme: 'glassbridge', name: 'Невидимі містки', blurb: 'У чарівних окулярах видно невидимі містки', w: 172,
+    build(L) {
+      L.ground(0, 20);
+      L.sign(3, 'Невидимі містки! Візьми чарівні окуляри — і побачиш містки над прірвою. Поспішай, поки окуляри діють!');
+      L.row(6, 9, 3);
+      L.power('glasses', 14, 8);
+      L.ghost(20, 10, 12); L.row(21, 8, 10);
+      L.ground(32, 56);
+      L.check(34);
+      L.enemy('snail', 40, 10);
+      L.qblock(44, 6, 'star');
+      L.power('glasses', 50, 8);
+      L.ghost(56, 10, 4); L.ghost(60, 9, 4); L.ghost(64, 10, 6); L.row(57, 8, 12);
+      L.ground(70, 100);
+      L.check(72);
+      L.row(74, 9, 4);
+      L.enemy('frog', 80, 10);
+      L.power('magnet', 84, 8);
+      L.row(86, 9, 4);
+      L.power('glasses', 93, 8);
+      L.ghost(96, 7, 2); L.ghost(99, 5, 2); L.ghost(102, 3, 3); L.row(102, 2, 3);
+      L.ghost(100, 10, 14); L.row(104, 8, 8);
+      L.ground(114, 134);
+      L.check(116);
+      L.enemy('snail', 122, 10);
+      L.power('glasses', 128, 8);
+      L.ghost(134, 10, 5); L.ghost(141, 10, 4); L.ghost(147, 10, 3); L.row(135, 8, 3); L.row(141, 8, 3); L.row(147, 8, 2);
+      L.ground(150, 172);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'inventfair', theme: 'inventfair', name: 'Виставка винаходів', blurb: 'Ранець, перемикачі й окуляри — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 38);
+      L.sign(3, 'Виставка винаходів! Ранець, перемикачі й чарівні окуляри — усе разом');
+      L.row(6, 9, 3);
+      L.power('jetpack', 10, 8);
+      L.ground(16, 28, 3); L.row(17, 2, 8);
+      L.sw(34);
+      L.rblk(35, 4, 1, 6);
+      L.bblk(38, 10, 7, 1); L.row(39, 8, 5);
+      L.ground(45, 60);
+      L.check(47);
+      L.enemy('snail', 52, 10);
+      L.power('glasses', 56, 8);
+      L.ghost(60, 10, 12); L.row(61, 8, 10);
+      L.ground(72, 100);
+      L.check(74);
+      L.power('jetpack', 77, 8);
+      L.ground(82, 92, 2); L.row(83, 1, 8);
+      L.sw(97);
+      L.bblk(98, 4, 1, 6);
+      L.rblk(100, 10, 7, 1); L.row(101, 8, 5);
+      L.ground(107, 130);
+      L.check(109);
+      L.enemy('frog', 114, 10);
+      L.power('magnet', 118, 8);
+      L.row(120, 9, 5);
+      L.power('glasses', 127, 8);
+      L.ghost(130, 10, 12); L.row(131, 8, 10);
+      L.ground(142, 172);
+      L.enemy('snail', 150, 10);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'gearden', theme: 'gearden', name: 'Нора Клацика', blurb: 'Битва з Мишеням Клациком', w: 172, boss: 'mouse',
+    build(L) {
+      L.ground(0, 48);
+      L.sign(3, 'Нора Клацика. Заводне Мишеня закрутило всі зірочки у свої шестерні!');
+      L.row(6, 9, 3);
+      L.power('jetpack', 10, 8);
+      L.ground(16, 26, 3); L.row(17, 2, 8);
+      L.sw(32);
+      L.rblk(33, 4, 1, 6);
+      L.enemy('snail', 38, 10);
+      L.power('glasses', 44, 8);
+      L.ghost(48, 10, 10); L.row(49, 8, 8);
+      L.ground(58, 172);
+      L.check(61);
+      L.row(63, 9, 5);
+      L.enemy('frog', 70, 10);
+      L.qblock(76, 6, 'star5');
+      L.sw(84);
+      L.bblk(87, 4, 1, 6);
+      L.row(92, 9, 6);
+      L.check(104);
+      L.enemy('bee', 110, 6);
+      L.sign(119, 'Мишеня Клацик! Коли його ключик зупиниться — стріляй або стрибни на нього');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
   upside: (R, x, y) => R() < 0.55 ? { k: 'hangflower', x, y, c: ['#ff7ab8', '#ffd23f', '#9fe0ff', '#c5a8ff'][Math.floor(R() * 4)] } : { k: 'hangvine', x, y },
 };
 const DECOR = {
+  postoffice: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'mailS', x, y } : r < 0.55 ? { k: 'lampS', x, y } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ff7ab8' }; },
+  firestation: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'hydrantS', x, y } : r < 0.6 ? { k: 'coneS', x, y } : { k: 'tuft', x, y }; },
+  construction: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'coneS', x, y } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd54a' }; },
+  citynight: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'lampS', x, y } : r < 0.55 ? { k: 'hydrantS', x, y } : r < 0.75 ? { k: 'mailS', x, y } : { k: 'tuft', x, y }; },
+  dogpark: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'boneS', x, y } : r < 0.5 ? { k: 'ballS', x, y, c: '#ff5c7a' } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
+  jetlab: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'gearS', x, y, c: '#9aa8bc' } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#4cb6ff' }; },
+  switchworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'gearS', x, y, c: R() < 0.5 ? '#ff8a8a' : '#8ab0ff' } : { k: 'tuft', x, y }; },
+  glassbridge: (R, x, y) => { const r = R(); return r < 0.5 ? { k: 'flower', x, y, c: ['#ffffff', '#9ff0e0'][Math.floor(R() * 2)] } : { k: 'tuft', x, y }; },
+  inventfair: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'gearS', x, y, c: '#e0a040' } : r < 0.6 ? { k: 'flagsS', x, y, n: Math.floor(R() * 6) } : { k: 'tuft', x, y }; },
+  gearden: (R, x, y) => { const r = R(); return r < 0.5 ? { k: 'gearS', x, y, c: '#c9a24a' } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
   climbwall: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'matS', x, y, c: ['#4cb6ff', '#ff7ab8', '#7fd46a'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'ballS', x, y, c: '#ffd23f' } : { k: 'tuft', x, y }; },
@@ -4449,7 +4792,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -4636,6 +4979,21 @@ function buildLevel(idx) {
     rope(x, w) { later.push(() => L.ropes.push({ x0: x * T, x1: (x + (w || 3)) * T, gy: groundY(x), ph: (x * 0.7) % TAU })); },
     // ракета на землі в x: «Ріг» поруч — і підкидає так, що ноги доходять до рядка top
     rocket(x, top) { later.push(() => L.rockets.push({ x: x * T + 12, gy: groundY(x), top: top * T })); },
+    // посилка (x, рядок) і поштомат (x, id, скільки посилок треба): доставлена посилка відчиняє шлагбаум pdoor(x, id, top) — стовпчик плиток від рядка top до 9
+    parcel(x, row) { L.parcels.push({ x: x * T + 12, y: row * T + 12 }); },
+    locker(x, id, need) { later.push(() => L.lockers.push({ x: x * T, gy: groundY(x), id: id || 0, need: need || 1 })); },
+    pdoor(x, id, top) { for (let y = top; y < 10; y++) set(x, y, 2); L.pdoors.push({ x, id: id || 0, top }); },
+    // вогонь: x, верхній рядок, висота в плитках; гасиш водою з пожежного шланга
+    fire(x, row, h) { L.fires.push({ x, row, h: h || 2 }); },
+    // прибрати плитки (коридори під тріснутими плитами) і ряд тріснутих плит (плитка 18)
+    clear(x, row, w, h) { for (let i = 0; i < w; i++) for (let j = 0; j < (h || 1); j++) set(x + i, row + j, 0); },
+    cracks(x, row, w) { for (let i = 0; i < (w || 1); i++) set(x + i, row, 18); },
+    // перемикач на землі й червоні/сині кубики: на початку тверді червоні
+    sw(x) { later.push(() => L.switches.push({ x: x * T + 12, gy: groundY(x) })); },
+    rblk(x, row, w, h) { for (let i = 0; i < (w || 1); i++) for (let j = 0; j < (h || 1); j++) L.swBlocks.push({ x: x + i, y: row + j, c: 'R' }); },
+    bblk(x, row, w, h) { for (let i = 0; i < (w || 1); i++) for (let j = 0; j < (h || 1); j++) L.swBlocks.push({ x: x + i, y: row + j, c: 'B' }); },
+    // невидимий місток: тверді плитки лише поки діють чарівні окуляри
+    ghost(x, row, w) { for (let i = 0; i < (w || 1); i++) L.ghosts.push({ x: x + i, y: row }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

@@ -15,6 +15,7 @@ function initLevel18(G, L) {
   const P = G.P; P.gloveT = 0; P.climbing = false;
   G.ropes = (L.ropes || []).map(r => Object.assign({ combo: 0, prevTh: null }, r));
   G.rockets = (L.rockets || []).map(r => Object.assign({ state: 'idle', t: 0, ry: 0, by: 0 }, r));
+  initLevel19(G, L);
 }
 function powerUp18(P, p) {
   if (p.k === 'gloves') { P.gloveT = GLOVE_TIME; say(G.gloveHint ? 'Знову чарівні рукавички!' : 'Чарівні рукавички! Стрибни до стіни й тримай «Стрибок» — полізеш угору, як павучок', 3.6); G.gloveHint = true; }
@@ -93,9 +94,10 @@ function update18(dt) {
   updateRopes(dt);
   updateRockets(dt);
   updateGloves(G.P, dt);
+  update19(dt);
 }
 function updatePlatform18(m, dt) { }
-function respawn18(P) { P.climbing = false; }
+function respawn18(P) { P.climbing = false; respawn19(P); }
 
 /* ===== Сова Ухнюшка: ухає звуковими хвилями, пікірує, а потім дрімає на пеньку — тоді в неї можна влучити ===== */
 Object.assign(BOSS2, {
@@ -160,8 +162,9 @@ function armored18(s, B) {
     if (!B.armHint) { B.armHint = true; say('Сова ухиляється! Стріляй, коли вона задрімає на пеньку', 2.6); }
     return true;
   }
-  return false;
+  return armored19(s, B);
 }
 function resetBoss18(B) {
   if (B.kind === 'owl') { B.state = 'hoot'; B.st = 0; B.n = 0; B.y = 3 * T; }
+  resetBoss19(B);
 }
