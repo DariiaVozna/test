@@ -66,8 +66,9 @@ function initLevel9(G, L) {
 }
 /* Слово з імені: літери, які можна зібрати (якщо ім'я незвичне — «ЗІРКА») */
 function nameWord() {
-  const n = (save.profile.name || '').trim().toUpperCase().replace(/['’ʼ`-]/g, '');
-  return /^[A-ZА-ЯІЇЄҐЁ]{2,8}$/.test(n) ? n : 'ЗІРКА';
+  // усі літери поточного імені (пробіли, цифри, знаки й смайлики пропускаємо), до 14 літер
+  const n = ((save.profile.name || '').toUpperCase().match(/\p{L}/gu) || []).join('').slice(0, 14);
+  return n.length >= 2 ? n : 'ЗІРКА';
 }
 
 /* ===== Кенгуру ===== */
