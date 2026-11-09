@@ -48,7 +48,7 @@ function drawDoorCol(c, x, top, kind, col, t) {
     if (kind === 'paint') { c.fillStyle = 'rgba(255,255,255,.5)'; circ(c, xx + 15, yy + 8 + ((y * 7) % 9), 2.2); c.fill(); }
     c.restore();
   }
-  if (!any) return;
+  if (!any || tileAt(x, 8) !== 2) return;
   const cx = x * T + 12, cy = 8 * T + 12;
   c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.3;
   c.fillStyle = '#ffd23f'; rr(c, cx - 8, cy - 4, 16, 13, 3); c.fill(); c.stroke();

@@ -28,7 +28,7 @@ function initLevel20(G, L) {
   G.cgates = (L.cgates || []).map(g => Object.assign({ open: false, hintT: 0 }, g));
 }
 function doorTouch(x, top) { const P = G.P; return overlap(P, { x: x * T - 4, y: top * T, w: T + 8, h: (10 - top) * T }); }
-function openColumn(x, top) { for (let y = top; y < 10; y++) if (tileAt(x, y) === 2) { G.map[y * G.Wt + x] = 0; burst(x * T + 12, y * T + 12, 5, RAINBOW, 90); } }
+function openColumn(x, top) { for (let y = top; y < 10; y++) if (tileAt(x, y) === 2) { G.map[y * G.Wt + x] = 0; burst(x * T + 12, y * T + 12, 5, RAINBOW, 90); } floatText(x * T + 12, 7 * T, 'Відчинено!', '#4cc35a'); }
 
 /* ===== Приклади: стукни знизу кубик із правильною відповіддю ===== */
 function updateQuizzes(dt) {
@@ -40,7 +40,7 @@ function updateQuizzes(dt) {
     const o = q.opts.find(o => o.tx === h.tx && o.ty === h.ty);
     if (!o) continue;
     if (o.n === q.ans) {
-      q.solved = true; q.okT = 1.5; openColumn(q.door, 3);
+      q.solved = true; q.okT = 1.5; openColumn(q.door, q.top);
       G.points += 3; floatText(o.tx * T + 12, o.ty * T - 10, '+3', '#4cc35a'); Snd.seq([0, 4, 7, 12], 659, 0.07, 'triangle', 0.08); burst(o.tx * T + 12, o.ty * T, 18, RAINBOW, 150);
       say('Правильно! ' + q.a + ' ' + q.op + ' ' + q.b + ' = ' + q.ans + '. Двері відчинилися', 2.6);
     } else if (q.wrongT <= 0.3) {
@@ -65,7 +65,7 @@ function updateWords(dt) {
       if (l.taken || !overlap(P, { x: l.x - 11, y: l.y - 11, w: 22, h: 22 })) continue;
       if (i === w.got) {
         l.taken = true; w.got++; Snd.star(); burst(l.x, l.y, 10, RAINBOW, 110); G.points++; floatText(l.x, l.y - 14, l.ch, '#3f8fff');
-        if (w.got >= w.w.length) { w.done = true; openColumn(w.door, 3); G.points += 5; Snd.seq([0, 4, 7, 12, 16], 523, 0.07, 'triangle', 0.08); say(w.w + ' — це «' + (WORD_UA[w.w] || '') + '»! Двері відчинилися', 3); }
+        if (w.got >= w.w.length) { w.done = true; openColumn(w.door, w.top); G.points += 5; Snd.seq([0, 4, 7, 12, 16], 523, 0.07, 'triangle', 0.08); say(w.w + ' — це «' + (WORD_UA[w.w] || '') + '»! Двері відчинилися', 3); }
       } else if (l.wob <= 0) { l.wob = 0.6; wordHint(w, need); }
     }
     for (const d of w.decoys) if (d.wob <= 0 && overlap(P, { x: d.x - 11, y: d.y - 11, w: 22, h: 22 })) { d.wob = 0.6; wordHint(w, need); }
