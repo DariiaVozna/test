@@ -64,7 +64,7 @@ function updateWords(dt) {
       const l = w.letters[i];
       if (l.taken || !overlap(P, { x: l.x - 11, y: l.y - 11, w: 22, h: 22 })) continue;
       if (i === w.got) {
-        l.taken = true; w.got++; Snd.star(); burst(l.x, l.y, 10, RAINBOW, 110); G.points++; floatText(l.x, l.y - 14, l.ch, '#3f8fff');
+        l.taken = true; w.got++; Snd.star(w.got); burst(l.x, l.y, 10, RAINBOW, 110); G.points++; floatText(l.x, l.y - 14, l.ch, '#3f8fff');
         if (w.got >= w.w.length) { w.done = true; openColumn(w.door, w.top); G.points += 5; Snd.seq([0, 4, 7, 12, 16], 523, 0.07, 'triangle', 0.08); say(w.w + ' — це «' + (WORD_UA[w.w] || '') + '»! Двері відчинилися', 3); }
       } else if (l.wob <= 0) { l.wob = 0.6; wordHint(w, need); }
     }

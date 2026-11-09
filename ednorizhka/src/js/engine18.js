@@ -35,7 +35,7 @@ function updateRopes(dt) {
       if (!G.ropeHint) { G.ropeHint = true; say('Ой! Стрибай, коли скакалка внизу', 2.2); }
     }
     if (prev > th + 1 && inZone && !onFloor) {
-      r.combo++; G.points++; Snd.star(); burst(pcx, r.gy - 6, 8, RAINBOW, 90);
+      r.combo++; G.points++; Snd.star(r.combo); burst(pcx, r.gy - 6, 8, RAINBOW, 90);
       floatText(pcx, P.y - 8, '+1', '#ff4fa3');
       if (r.combo === 3) { G.points += 3; floatText(pcx, P.y - 26, 'Молодець! +3', '#ff4fa3'); Snd.seq([0, 4, 7, 12], 659, 0.06, 'triangle', 0.07); }
     }

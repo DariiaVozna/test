@@ -24,7 +24,8 @@ const Snd = {
     try { const o = this.ctx.createOscillator(), g = this.ctx.createGain(); g.gain.value = 0; o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.02); } catch (e) { }
   },
   tone(f, d, type, v, f2, delay) {
-    if (!this.on || !this.ctx || this.ctx.state !== 'running') return;
+    if (!this.on || !this.ctx || this.ctx.state !== 'running' || !isFinite(f)) return;
+    if (f2 != null && !isFinite(f2)) f2 = null;
     const t = this.ctx.currentTime + (delay || 0), o = this.ctx.createOscillator(), g = this.ctx.createGain();
     o.type = type || 'sine'; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v || 0.1, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
@@ -33,7 +34,7 @@ const Snd = {
   seq(notes, base, gap, type, v) { notes.forEach((s, i) => this.tone(base * Math.pow(2, s / 12), 0.2, type || 'triangle', v || 0.12, null, i * gap)); },
   jump() { this.tone(330, 0.16, 'square', 0.05, 700); },
   flap() { this.tone(260, 0.12, 'sine', 0.09, 480); },
-  star(n) { const f = 988 * Math.pow(2, (n % 8) * 2 / 12); this.tone(f, 0.1, 'triangle', 0.13); this.tone(f * 1.5, 0.12, 'triangle', 0.08, null, 0.05); },
+  star(n) { const f = 988 * Math.pow(2, ((n || 0) % 8) * 2 / 12); this.tone(f, 0.1, 'triangle', 0.13); this.tone(f * 1.5, 0.12, 'triangle', 0.08, null, 0.05); },
   rainbow() { this.seq([0, 4, 7, 12, 16, 19], 784, 0.05, 'triangle', 0.12); },
   shoot() { this.tone(1300, 0.09, 'sine', 0.07, 2100); },
   charged() { this.tone(700, 0.12, 'triangle', 0.06, 1400); },
