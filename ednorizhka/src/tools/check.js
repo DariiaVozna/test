@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -241,6 +241,20 @@ function runLevel(idx, maxT) {
     if (P.helmet && !P.onGround && !pdNow) In.shootP = false;
     // ранець: у повітрі тримаємо «Стрибок»
     if (P.jetT > 0 && !P.onGround) In.jump = true;
+    // приклад: підходимо під кубик із правильною відповіддю й стукаємо його знизу
+    const qz = G.quizzes.find(q => !q.solved && pcxB() > q.opts[0].tx * T - 80 && pcxB() < q.door * T + 12);
+    if (qz) {
+      const qo = qz.opts.find(o => o.n === qz.ans), qx = qo.tx * T + 12;
+      In.right = pcxB() < qx - 3; In.left = pcxB() > qx + 3; In.jumpP = false;
+      if (P.onGround && Math.abs(pcxB() - qx) <= 3 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.5; }
+    }
+    // фарби: відерце, якого немає в кольорі наступних воріт, перестрибуємо
+    const cg = G.cgates.find(g => !g.open && g.x * T + 12 > pcxB());
+    if (cg && P.onGround) {
+      const ncols = { orange: ['red', 'yellow'], green: ['yellow', 'blue'], purple: ['red', 'blue'] }[cg.c] || [cg.c];
+      const pt = G.pots.find(p => p.x - pcxB() > 8 && p.x - pcxB() < 30 && Math.abs(p.gy - (P.y + P.h)) < 4 && p.x < cg.x * T);
+      if (pt && !ncols.includes(pt.c) && !P.mixC.includes(pt.c) && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; }
+    }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;

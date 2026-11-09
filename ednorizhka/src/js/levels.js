@@ -3650,7 +3650,6 @@ const LEVELS = [
       L.row(96, 9, 3);
       L.stork([[102, 'g'], [106, 6], [114, 4], [120, 6], [126, 4], [131, 'g']]);
       L.thorns(106, 129);
-      L.enemy('butterfly', 116, 2);
       L.row(110, 3, 3); L.row(122, 3, 3); L.arc(117, 5, 3, 1);
       L.ground(129, 170);
       L.check(133);
@@ -4661,6 +4660,158 @@ const LEVELS = [
       L.gate(168);
     }
   },
+  /* ===== Частина 25: Розумна країна ===== */
+  {
+    id: 'numberland', theme: 'numberland', name: 'Країна чисел', blurb: 'Порахуй приклад і стукни правильний кубик', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Країна чисел! Порахуй приклад на дошці й стукни головою знизу кубик із правильною відповіддю — двері відчиняться');
+      L.row(6, 9, 3);
+      L.quiz(12, 2, '+', 1, [2, 5], 23, 1);
+      L.row(12, 4, 3, 3);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.quiz(53, 5, '-', 2, [4, 6], 64, 0);
+      L.row(53, 4, 3, 3);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.quiz(103, 3, '+', 4, [5, 6], 114, 2);
+      L.row(103, 4, 3, 3);
+      L.enemy('bee', 121, 6);
+      L.row(118, 9, 5);
+      L.ground(135, 170);
+      L.check(137);
+      L.quiz(141, 6, '+', 2, [7, 9], 152, 1);
+      L.row(141, 4, 3, 3);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'abcmeadow', theme: 'abcmeadow', name: 'Англійська галявина', blurb: 'Збирай англійські слова по літерах', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Англійська галявина! Збирай літери слова по черзі — і двері відчиняться. Зайві літери висять угорі, їх не треба');
+      L.word(8, 'CAT', 22, 3, [[12, 6, 'K'], [16, 6, 'O']]);
+      L.row(25, 9, 4);
+      L.enemy('snail', 35, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.word(54, 'SUN', 68, 3, [[61, 6, 'Z']]);
+      L.block(72, 7, 4); L.row(72, 5, 4);
+      L.enemy('bee', 83, 6);
+      L.row(80, 9, 5);
+      L.ground(95, 132);
+      L.check(97);
+      L.word(101, 'DOG', 115, 3, [[105, 6, 'B'], [111, 6, 'Q']]);
+      L.row(118, 9, 4);
+      L.enemy('frog', 126, 10);
+      L.ground(135, 172);
+      L.check(137);
+      L.word(140, 'FISH', 156, 3, [[147, 6, 'W'], [153, 6, 'Y']]);
+      L.row(158, 9, 3);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'colorlab', theme: 'colorlab', name: 'Майстерня фарб', blurb: 'Змішуй фарби й відчиняй кольорові ворота', w: 172,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Майстерня фарб! Торкнися двох відерець — фарби змішаються. Кольорові ворота відчиняє тільки фарба їхнього кольору');
+      L.row(6, 9, 3);
+      L.pot(11, 'red'); L.pot(15, 'yellow');
+      L.cgate(20, 'orange');
+      L.row(23, 9, 4);
+      L.enemy('snail', 33, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.pot(54, 'blue');
+      L.block(57, 6, 3); L.pot(58, 'red', 6); L.row(57, 4, 3);
+      L.pot(63, 'yellow');
+      L.cgate(68, 'green');
+      L.row(70, 9, 3);
+      L.enemy('frog', 76, 10);
+      L.pot(81, 'red'); L.pot(85, 'blue');
+      L.cgate(89, 'purple');
+      L.ground(95, 132);
+      L.check(97);
+      L.sign(100, 'Не всі фарби потрібні! Зайве відерце можна перестрибнути');
+      L.pot(104, 'red'); L.pot(108, 'yellow'); L.pot(112, 'blue');
+      L.cgate(117, 'green');
+      L.row(119, 9, 4);
+      L.enemy('bee', 127, 6);
+      L.ground(135, 172);
+      L.check(137);
+      L.pot(141, 'blue'); L.pot(145, 'red'); L.pot(149, 'yellow');
+      L.cgate(154, 'orange');
+      L.row(157, 9, 3);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'smartschool', theme: 'smartschool', name: 'Розумна школа', blurb: 'Приклади, слова й фарби — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 40);
+      L.sign(3, 'Розумна школа! Тут усе разом: приклади, англійські слова й фарби');
+      L.row(6, 9, 3);
+      L.quiz(11, 4, '+', 4, [6, 9], 22, 1);
+      L.row(11, 4, 3, 3);
+      L.enemy('snail', 31, 10);
+      L.ground(43, 90);
+      L.check(45);
+      L.word(48, 'BEE', 62, 3, [[55, 6, 'P']]);
+      L.row(64, 9, 3);
+      L.enemy('frog', 68, 10);
+      L.pot(73, 'yellow');
+      L.block(76, 6, 3); L.pot(77, 'red', 6); L.row(76, 4, 3);
+      L.pot(81, 'blue');
+      L.cgate(86, 'green');
+      L.ground(93, 136);
+      L.check(95);
+      L.quiz(99, 9, '-', 4, [4, 6], 110, 1);
+      L.row(99, 4, 3, 3);
+      L.word(114, 'STAR', 130, 3, [[121, 6, 'X']]);
+      L.row(132, 9, 3);
+      L.ground(139, 172);
+      L.check(141);
+      L.enemy('bee', 146, 6);
+      L.pot(149, 'red'); L.pot(153, 'blue');
+      L.cgate(158, 'purple');
+      L.row(160, 9, 3);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'inkwell', theme: 'inkwell', name: 'Чорнильниця', blurb: 'Битва з Кляксою Бризкою', w: 172, boss: 'blot',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Чорнильниця. Клякса Бризка заляпала всі підказки! Порахуй приклад, збери слово й зміши фарби');
+      L.row(6, 9, 3);
+      L.quiz(11, 5, '+', 5, [9, 11], 22, 1);
+      L.row(11, 4, 3, 3);
+      L.row(25, 9, 3);
+      L.enemy('snail', 33, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.word(55, 'SUN', 69, 3, [[62, 6, 'M']]);
+      L.row(71, 9, 3);
+      L.pot(77, 'red'); L.pot(81, 'blue');
+      L.cgate(86, 'purple');
+      L.check(90);
+      L.enemy('bee', 98, 6);
+      L.row(100, 9, 5);
+      L.check(108);
+      L.sign(119, 'Клякса Бризка! Коли вона висохне й застигне — стріляй або стрибни на неї');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
+  },
 ];
 
 const DECOR_UNDER = {
@@ -4677,6 +4828,11 @@ const DECOR = {
   glassbridge: (R, x, y) => { const r = R(); return r < 0.5 ? { k: 'flower', x, y, c: ['#ffffff', '#9ff0e0'][Math.floor(R() * 2)] } : { k: 'tuft', x, y }; },
   inventfair: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'gearS', x, y, c: '#e0a040' } : r < 0.6 ? { k: 'flagsS', x, y, n: Math.floor(R() * 6) } : { k: 'tuft', x, y }; },
   gearden: (R, x, y) => { const r = R(); return r < 0.5 ? { k: 'gearS', x, y, c: '#c9a24a' } : { k: 'tuft', x, y }; },
+  numberland: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'abacusS', x, y } : r < 0.55 ? { k: 'flower', x, y, c: ['#ff7a9a', '#ffd54a', '#4cb6ff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  abcmeadow: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'abcS', x, y, ch: 'ABCDEFG'[Math.floor(R() * 7)], c: ['#9fd0ff', '#ff9fc4', '#9fe08a', '#ffd23f'][Math.floor(R() * 4)] } : r < 0.65 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  colorlab: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'paintS', x, y, c: ['#ff4d4d', '#ffd23f', '#3f8fff', '#4cc35a', '#a05ad8', '#ff9a2a'][Math.floor(R() * 6)] } : r < 0.7 ? { k: 'pencilS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
+  smartschool: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'bookS', x, y } : r < 0.5 ? { k: 'abacusS', x, y } : r < 0.7 ? { k: 'pencilS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
+  inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
   climbwall: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'matS', x, y, c: ['#4cb6ff', '#ff7ab8', '#7fd46a'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'ballS', x, y, c: '#ffd23f' } : { k: 'tuft', x, y }; },
@@ -4792,7 +4948,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -4994,6 +5150,26 @@ function buildLevel(idx) {
     bblk(x, row, w, h) { for (let i = 0; i < (w || 1); i++) for (let j = 0; j < (h || 1); j++) L.swBlocks.push({ x: x + i, y: row + j, c: 'B' }); },
     // невидимий місток: тверді плитки лише поки діють чарівні окуляри
     ghost(x, row, w) { for (let i = 0; i < (w || 1); i++) L.ghosts.push({ x: x + i, y: row }); },
+    // частина 25: приклад (три кубики-відповіді в рядку 6 через 2 клітинки, правильна — на місці pos) і двері-стовп
+    quiz(x, a, op, b, wrong, door, pos) {
+      const ans = op === '+' ? a + b : a - b, nums = wrong.slice(); nums.splice(pos || 0, 0, ans);
+      const opts = nums.map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ a, op, b, ans, opts, door, top: 1 });
+    },
+    // англійське слово: дошка з картинкою на x, літери по черзі на землі через step клітинок, зайві літери [[x, row, 'K'], …]
+    word(x, w, door, step, decoys) {
+      step = step || 3;
+      const ws = { w, door, top: 1, bx: x * T + 12, gy: 10 * T, letters: [...w].map((ch, i) => ({ ch, tx: x + 3 + i * step })), decoys: (decoys || []).map(([dx, row, ch]) => ({ ch, x: dx * T + 12, y: row * T + 12 })) };
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      later.push(() => { ws.gy = groundY(x); for (const l of ws.letters) { l.x = l.tx * T + 12; l.y = groundY(l.tx) - 16; } });
+      L.words25.push(ws);
+    },
+    // відерце з фарбою (red, yellow, blue); row — якщо стоїть на уступі
+    pot(x, c, row) { const p = { x: x * T + 12, gy: row ? row * T : 10 * T, c }; if (!row) later.push(() => { p.gy = groundY(x); }); L.pots.push(p); },
+    // кольорові ворота: відчиняються, коли фарба на гриві того самого кольору
+    cgate(x, c) { for (let y = 1; y < 10; y++) set(x, y, 2); L.cgates.push({ x, c, top: 1 }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
@@ -5025,7 +5201,7 @@ function buildLevel(idx) {
   const normal = L.stars.filter(s => !s.rainbow).length;
   L.total = normal;
   L.need = def.boss ? 0 : Math.max(5, Math.round(normal * (def.needK || 0.5)));
-  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, ...L.roos, ...L.totems, L.gate].filter(Boolean).map(o => o.x);
+  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, ...L.roos, ...L.totems, ...L.pots, ...L.words25.map(w => ({ x: w.bx })), L.gate].filter(Boolean).map(o => o.x);
   for (const d of L.dominoes) avoid.push(d.x * T + 12, d.x * T + 60);
   for (const c of L.crystals) avoid.push(c.x);
   for (const q of L.pendulums) avoid.push(q.ax);

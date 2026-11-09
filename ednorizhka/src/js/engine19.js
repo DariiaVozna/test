@@ -26,6 +26,7 @@ function initLevel19(G, L) {
   G.swBlocks = L.swBlocks || []; G.rbSw = 'R'; G.swPending = [];
   G.ghosts = L.ghosts || []; G.ghostOn = false; G.ghostPending = [];
   applySwitch(true);
+  initLevel20(G, L);
 }
 function powerUp19(P, p) {
   if (p.k === 'hose') { P.hose = true; say('Пожежний шланг! Тепер ріг стріляє водою — гаси вогонь', 3.2); }
@@ -160,6 +161,7 @@ function update19(dt) {
   updateJet(P, dt);
   updateSwitches(dt);
   updateGlasses(P, dt);
+  update20(dt);
 }
 function respawn19(P) { P.pound = false; }
 
@@ -200,7 +202,7 @@ function updateRunnerBoss(dt) {
     }
   } else if (B.state === 'rest') {
     if (!B.restHint && B.st > 0.3) { B.restHint = true; say(R.rest, 3); }
-    if (B.st > 0.3 && G.t % 1 < dt) floatText(B.x, B.y - 34, B.kind === 'puppy' ? 'Хек-хек…' : 'Клац… клац…', '#8a5a30');
+    if (B.st > 0.3 && G.t % 1 < dt) floatText(B.x, B.y - 34, R.restText || (B.kind === 'puppy' ? 'Хек-хек…' : 'Клац… клац…'), '#8a5a30');
     if (B.st > (angry ? 2.3 : 2.9)) { B.state = 'dash'; B.st = 0; B.n = 0; B.tx = B.x < (left + right) / 2 ? right : left; }
   }
   const box = { x: B.x - 26, y: B.y - 24, w: 52, h: 48 };

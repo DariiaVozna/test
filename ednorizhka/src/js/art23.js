@@ -50,6 +50,7 @@ function drawWorld23(c, t, vis) {
   if (G.ghosts) for (const g of G.ghosts) if (vis(g.x * T + 12)) drawGhostTile(c, g, t);
   const B = G.boss;
   if (B && B.kind === 'mouse' && G.arena) for (let k = 0; k < 4; k++) { const x = G.arena.x0 + (6 + k * 10) * T; if (vis(x)) drawGear(c, x, 3 * T + 10, 16, t * (k % 2 ? 0.4 : -0.4), 'rgba(201,162,74,.5)'); }
+  drawWorld24(c, t, vis);
 }
 function drawFire23(c, f, t) {
   const x = f.x * T, y0 = f.row * T, h = f.h * T;
@@ -122,6 +123,7 @@ function drawOver23(c, P, t) {
     c.restore();
   }
   if (P.glassT > 0) { c.save(); c.translate(cx + P.dir * 9 * s, P.y + 9 * s); c.scale(s, s); c.strokeStyle = INK; c.lineWidth = 1.2; c.fillStyle = 'rgba(127,224,255,.6)'; circ(c, -3, 0, 3.4); c.fill(); c.stroke(); circ(c, 4, 0, 3.4); c.fill(); c.stroke(); c.restore(); }
+  drawOver24(c, P, t);
 }
 function drawPowerIcon23(c, kind, t) {
   c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1;
@@ -214,7 +216,7 @@ function drawBlock23(c, b) {
   else if (b === 'metalblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#b8c4d4'; c.fill(); c.stroke(); c.fillStyle = '#dce4ee'; rr(c, 3.5, 3.5, T - 7, 4, 2); c.fill(); c.fillStyle = '#6a7a8e'; for (const [a, d] of [[5, 5], [19, 5], [5, 19], [19, 19]]) { circ(c, a, d, 1.3); c.fill(); } }
   else if (b === 'glassblock') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#9fd8cc'; c.fill(); c.stroke(); c.fillStyle = 'rgba(255,255,255,.6)'; c.beginPath(); c.moveTo(4, 14); c.lineTo(12, 4); c.lineTo(16, 4); c.lineTo(8, 14); c.closePath(); c.fill(); }
   else if (b === 'gearblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#a89070'; c.fill(); c.stroke(); drawGear(c, 12, 12, 8, 0.3, '#ffd23f'); }
-  else return false;
+  else return drawBlock24(c, b);
   return true;
 }
 
@@ -229,6 +231,7 @@ function drawDecor23(c, d, t) {
     case 'lampS': c.strokeStyle = '#4a4a6a'; c.lineWidth = 2; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 26); c.stroke(); c.fillStyle = '#ffe9a0'; circ(c, x, y - 28, 4); c.fill(); c.save(); c.globalAlpha = 0.25; circ(c, x, y - 28, 14); c.fill(); c.restore(); break;
     case 'boneS': c.fillStyle = '#fffaf0'; rr(c, x - 6, y - 4, 12, 3, 1.5); c.fill(); c.stroke(); for (const s of [-6, 6]) { circ(c, x + s, y - 4, 1.8); c.fill(); c.stroke(); circ(c, x + s, y - 1, 1.8); c.fill(); c.stroke(); } break;
     case 'gearS': drawGear(c, x, y - 8, 7, t * 0.8 + x, d.c || '#c9a24a'); break;
+    default: drawDecor24(c, d, t); break;
   }
 }
 

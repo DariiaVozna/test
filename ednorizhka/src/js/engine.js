@@ -449,7 +449,7 @@ function updateBoss(dt) {
   if (B.kind === 'frog') return updateFrogBoss(dt);
   if (B.kind === 'smiley') return updateSmileyBoss(dt);
   if (B.kind === 'owl') return updateOwlBoss(dt);
-  if (B.kind === 'puppy' || B.kind === 'mouse') return updateRunnerBoss(dt);
+  if (RUNNERS[B.kind]) return updateRunnerBoss(dt);
   if (B.dead) { B.deadT += dt; B.y -= 18 * dt; B.alpha = Math.max(0, 1 - B.deadT / 4); return; }
   if (!G.bossActive) {
     if (P.x > A.x0 + 2 * T) { G.bossActive = true; G.arenaLock = true; B.phase = 'float'; Music.start('boss'); say('Король Похмурої Хмари!', 2.4); G.flash = 0.6; }
