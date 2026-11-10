@@ -4811,6 +4811,140 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 26: Базар і хованки ===== */
+  {
+    id: 'fruitmarket', theme: 'fruitmarket', name: 'Фруктовий базар', blurb: 'Збери все зі списку покупок', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Фруктовий базар! На дошці — список покупок. Збери все зі списку в будь-якому порядку, і каса відчиниться');
+      L.shop(8, ['apple', 'pear', 'banana'], 25, [['apple', 12], ['carrot', 15, 6], ['pear', 17, 7], ['banana', 21]]);
+      L.row(27, 9, 3);
+      L.enemy('snail', 35, 10);
+      L.ground(47, 92);
+      L.check(48);
+      L.shop(53, ['carrot', 'cheese', 'bread'], 71, [['cheese', 57], ['grapes', 59, 6], ['carrot', 62, 7], ['milk', 65, 6], ['bread', 67]]);
+      L.block(75, 7, 3); L.row(75, 5, 3);
+      L.enemy('frog', 82, 10);
+      L.row(86, 9, 3);
+      L.ground(95, 132);
+      L.check(96);
+      L.shop(101, ['milk', 'grapes', 'apple', 'banana'], 121, [['banana', 105], ['milk', 108, 7], ['pear', 111, 6], ['grapes', 113], ['apple', 117, 7]]);
+      L.row(123, 9, 4);
+      L.ground(135, 170);
+      L.check(136);
+      L.shop(141, ['bread', 'cheese', 'pear'], 159, [['pear', 145, 7], ['bread', 148], ['banana', 151, 6], ['cheese', 154]]);
+      L.row(161, 9, 3);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'hideforest', theme: 'hideforest', name: 'Ліс хованок', blurb: 'Знайди друзів, що сховалися в кущах', w: 170,
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Ліс хованок! У кущах сховалися друзі. Торкнися куща — і друг піде з тобою. Будиночок друзів відчиниться, коли всі будуть разом');
+      L.hide(9, 'bunny'); L.row(12, 9, 3); L.hide(17, 'hedgehog');
+      L.fgate(23, 2);
+      L.row(26, 9, 3);
+      L.enemy('snail', 33, 10);
+      L.block(38, 8, 4, 2); L.hide(40, 'fox', 8);
+      L.ground(49, 94);
+      L.check(51);
+      L.hide(56, 'squirrel');
+      L.block(60, 6, 3); L.row(60, 4, 3);
+      L.hide(65, 'mouse');
+      L.fgate(71, 5);
+      L.enemy('frog', 78, 10);
+      L.row(82, 9, 4);
+      L.ground(97, 134);
+      L.check(99);
+      L.hide(103, 'duck');
+      L.row(107, 9, 4);
+      L.enemy('bee', 112, 6);
+      L.fgate(118, 6);
+      L.row(121, 9, 4);
+      L.ground(137, 170);
+      L.check(139);
+      L.block(144, 7, 5); L.row(144, 5, 5);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'shapetown', theme: 'shapetown', name: 'Містечко фігур', blurb: 'Принеси фігуру до дверей із такою діркою', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Містечко фігур! Візьми фігуру й принеси до дверей із такою самою діркою. Нова фігура міняється з тією, що несеш');
+      L.shape(10, 'circle'); L.sdoor(16, 'circle');
+      L.row(18, 9, 3);
+      L.shape(25, 'square'); L.shape(30, 'triangle'); L.sdoor(36, 'triangle');
+      L.enemy('snail', 39, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.shape(53, 'star'); L.shape(57, 'heart'); L.sdoor(63, 'star');
+      L.block(67, 7, 3); L.row(67, 5, 3);
+      L.enemy('frog', 75, 10);
+      L.shape(82, 'heart'); L.sdoor(88, 'heart');
+      L.ground(95, 134);
+      L.check(97);
+      L.shape(100, 'triangle'); L.shape(104, 'circle'); L.shape(108, 'square'); L.sdoor(114, 'square');
+      L.row(117, 9, 4);
+      L.enemy('bee', 126, 6);
+      L.ground(137, 170);
+      L.check(139);
+      L.shape(143, 'circle'); L.shape(147, 'heart'); L.sdoor(152, 'circle');
+      L.row(154, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'bigshop', theme: 'bigshop', name: 'Великий магазин', blurb: 'Покупки, хованки й фігури — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Великий магазин! Тут треба і покупки зібрати, і друзів знайти в коробках, і фігури підібрати');
+      L.shop(8, ['milk', 'bread'], 19, [['milk', 12], ['cheese', 14, 6], ['bread', 16, 7]]);
+      L.hide(23, 'mouse'); L.hide(28, 'bunny');
+      L.fgate(33, 2);
+      L.enemy('snail', 38, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.shape(53, 'triangle'); L.shape(57, 'star'); L.sdoor(62, 'triangle');
+      L.shop(67, ['apple', 'grapes', 'carrot'], 85, [['grapes', 71], ['apple', 74, 7], ['banana', 77, 6], ['carrot', 80]]);
+      L.row(87, 9, 3);
+      L.ground(95, 136);
+      L.check(97);
+      L.hide(101, 'duck');
+      L.enemy('frog', 106, 10);
+      L.hide(111, 'hedgehog');
+      L.fgate(116, 4);
+      L.shape(120, 'heart'); L.shape(124, 'square'); L.sdoor(130, 'square');
+      L.ground(139, 172);
+      L.check(141);
+      L.enemy('bee', 146, 6);
+      L.row(150, 9, 5);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'hamsterhole', theme: 'hamsterhole', name: 'Комора Жуйка', blurb: "Битва з Хом'ячком Жуйком", w: 172, boss: 'hamster',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, "Комора Жуйка. Хом'ячок сховав усі покупки! Збери список, знайди друга й принеси фігуру");
+      L.shop(8, ['carrot', 'apple'], 18, [['carrot', 12], ['apple', 15, 7]]);
+      L.hide(23, 'squirrel');
+      L.fgate(28, 1);
+      L.enemy('snail', 34, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.shape(55, 'heart'); L.shape(59, 'circle'); L.sdoor(65, 'heart');
+      L.row(68, 9, 4);
+      L.check(75);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, "Хом'ячок Жуйко! Коли він наїсться й задрімає — стріляй або стрибни на нього");
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -4832,6 +4966,11 @@ const DECOR = {
   abcmeadow: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'abcS', x, y, ch: 'ABCDEFG'[Math.floor(R() * 7)], c: ['#9fd0ff', '#ff9fc4', '#9fe08a', '#ffd23f'][Math.floor(R() * 4)] } : r < 0.65 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   colorlab: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'paintS', x, y, c: ['#ff4d4d', '#ffd23f', '#3f8fff', '#4cc35a', '#a05ad8', '#ff9a2a'][Math.floor(R() * 6)] } : r < 0.7 ? { k: 'pencilS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
   smartschool: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'bookS', x, y } : r < 0.5 ? { k: 'abacusS', x, y } : r < 0.7 ? { k: 'pencilS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
+  fruitmarket: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'basketS', x, y, it: ['apple', 'banana', 'grapes'][Math.floor(R() * 3)] } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7a9a', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  hideforest: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'mushS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  shapetown: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'shapeS', x, y, s: ['circle', 'square', 'triangle', 'star', 'heart'][Math.floor(R() * 5)] } : { k: 'tuft', x, y }; },
+  bigshop: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'cartS', x, y } : r < 0.6 ? { k: 'basketS', x, y, it: ['apple', 'banana', 'grapes'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  hamsterhole: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'seedS', x, y } : r < 0.6 ? { k: 'mushS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -4948,7 +5087,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -5170,6 +5309,20 @@ function buildLevel(idx) {
     pot(x, c, row) { const p = { x: x * T + 12, gy: row ? row * T : 10 * T, c }; if (!row) later.push(() => { p.gy = groundY(x); }); L.pots.push(p); },
     // кольорові ворота: відчиняються, коли фарба на гриві того самого кольору
     cgate(x, c) { for (let y = 1; y < 10; y++) set(x, y, 2); L.cgates.push({ x, c, top: 1 }); },
+    // частина 26: список покупок — дошка на x, товари [[k, x, row], …] (row не вказано — на землі), каса-двері door (рядки 1–9)
+    shop(x, list, door, items) {
+      const s = { list, door, top: 1, bx: x * T + 12, gy: 10 * T, items: items.map(([k, tx, row]) => ({ k, tx, row, x: tx * T + 12, y: row ? row * T + 12 : 0 })) };
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      later.push(() => { s.gy = groundY(x); for (const it of s.items) if (!it.row) it.y = groundY(it.tx) - 14; });
+      L.shops26.push(s);
+    },
+    // кущ, у якому сховався друг (bunny, hedgehog, fox, squirrel, mouse, duck); row — якщо кущ на уступі
+    hide(x, k, row) { const h = { x: x * T + 12, gy: row ? row * T : 10 * T, k }; if (!row) later.push(() => { h.gy = groundY(x); }); L.hiders.push(h); },
+    // будиночок друзів: стовп відчиняється, коли знайдено n друзів (рахуються всі знайдені на рівні)
+    fgate(x, n) { for (let y = 1; y < 10; y++) set(x, y, 2); L.fgates.push({ x, n, top: 1 }); },
+    // фігура (circle, square, triangle, star, heart) і двері з діркою такої фігури
+    shape(x, s, row) { const p = { x: x * T + 12, y: row ? row * T + 12 : 0, s }; if (!row) later.push(() => { p.y = groundY(x) - 14; }); L.shapes26.push(p); },
+    sdoor(x, s) { for (let y = 1; y < 10; y++) set(x, y, 2); L.sdoors.push({ x, s, top: 1 }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
@@ -5201,7 +5354,7 @@ function buildLevel(idx) {
   const normal = L.stars.filter(s => !s.rainbow).length;
   L.total = normal;
   L.need = def.boss ? 0 : Math.max(5, Math.round(normal * (def.needK || 0.5)));
-  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, ...L.roos, ...L.totems, ...L.pots, ...L.words25.map(w => ({ x: w.bx })), L.gate].filter(Boolean).map(o => o.x);
+  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, ...L.roos, ...L.totems, ...L.pots, ...L.words25.map(w => ({ x: w.bx })), ...L.hiders, ...L.shops26.map(w => ({ x: w.bx })), L.gate].filter(Boolean).map(o => o.x);
   for (const d of L.dominoes) avoid.push(d.x * T + 12, d.x * T + 60);
   for (const c of L.crystals) avoid.push(c.x);
   for (const q of L.pendulums) avoid.push(q.ax);

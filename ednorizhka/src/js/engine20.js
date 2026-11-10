@@ -26,6 +26,7 @@ function initLevel20(G, L) {
   G.words25 = (L.words25 || []).map(w => Object.assign({ got: 0, done: false, hintT: 0 }, w, { letters: w.letters.map(l => Object.assign({ taken: false, wob: 0 }, l)), decoys: w.decoys.map(d => Object.assign({ wob: 0 }, d)) }));
   G.pots = (L.pots || []).map(p => Object.assign({ touch: false, joy: 0 }, p));
   G.cgates = (L.cgates || []).map(g => Object.assign({ open: false, hintT: 0 }, g));
+  initLevel21(G, L);
 }
 function doorTouch(x, top) { const P = G.P; return overlap(P, { x: x * T - 4, y: top * T, w: T + 8, h: (10 - top) * T }); }
 function openColumn(x, top) { for (let y = top; y < 10; y++) if (tileAt(x, y) === 2) { G.map[y * G.Wt + x] = 0; burst(x * T + 12, y * T + 12, 5, RAINBOW, 90); } floatText(x * T + 12, 7 * T, 'Відчинено!', '#4cc35a'); }
@@ -106,6 +107,7 @@ function update20(dt) {
   updateQuizzes(dt);
   updateWords(dt);
   updatePots(dt);
+  update21(dt);
 }
 
 /* ===== Клякса Бризка — ще одна бігунка: бризкає чорнилом, а висохнувши, застигає ===== */

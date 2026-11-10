@@ -3014,6 +3014,7 @@ function drawBolt2(c, b) {
     case 'hoot': drawHootBolt(c, b); return true;
     case 'bone': drawBoneBolt(c, b); return true;
     case 'ink': drawInkBolt(c, b); return true;
+    case 'sunseed': drawSeedBolt(c, b); return true;
   }
   return false;
 }
@@ -9239,10 +9240,12 @@ function drawWorld24(c, t, vis) {
   if (G.cgates) for (const g of G.cgates) if (vis(g.x * T + 12)) drawDoorCol(c, g.x, g.top, 'paint', COLORS25[g.c], t);
   const B = G.boss;
   if (B && B.kind === 'blot' && G.arena) for (let k = 0; k < 5; k++) { const x = G.arena.x0 + (5 + k * 8) * T; if (vis(x)) { c.save(); c.fillStyle = 'rgba(40,40,110,.25)'; ell(c, x, 10 * T - 1, 14 + (k % 2) * 6, 3); c.fill(); c.restore(); } }
+  drawWorld25(c, t, vis);
 }
 
 /* ===== Фарба на гриві ===== */
 function drawOver24(c, P, t) {
+  drawOver25(c, P, t);
   if (!P.mixC || !P.mixC.length) return;
   const s = P.big ? 1.3 : P.mini ? 0.6 : 1, cx = P.x + P.w / 2, mix = mixName(P.mixC), col = COLORS25[mix];
   c.save(); c.translate(cx, (P.flip ? P.y + P.h + 42 : P.y - 40) + Math.sin(t * 4) * 1.5); c.scale(1.2, 1.2); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.2;
@@ -9301,7 +9304,7 @@ function drawBlock24(c, b) {
   else if (b === 'paintblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#f4ead8'; c.fill(); c.stroke(); c.fillStyle = '#ff4d4d'; circ(c, 7, 8, 3.2); c.fill(); c.fillStyle = '#ffd23f'; circ(c, 16, 9, 3.6); c.fill(); c.fillStyle = '#3f8fff'; circ(c, 11, 17, 3.4); c.fill(); }
   else if (b === 'deskblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#c99a6a'; c.fill(); c.stroke(); c.fillStyle = '#e8c090'; c.fillRect(1.5, 1.5, T - 3, 5); c.fillStyle = '#2f5a4a'; rr(c, 5, 9, 14, 10, 1.5); c.fill(); c.fillStyle = '#ffffff'; c.fillRect(7, 12, 6, 1.2); c.fillRect(7, 15, 9, 1.2); }
   else if (b === 'inkblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#f2eefc'; c.fill(); c.stroke(); c.strokeStyle = '#b8c8ff'; c.lineWidth = 1; for (const yy of [8, 14, 20]) { c.beginPath(); c.moveTo(3, yy); c.lineTo(T - 3, yy); c.stroke(); } c.fillStyle = '#2a2a7a'; circ(c, 15, 9, 3.4); c.fill(); circ(c, 19, 13, 1.4); c.fill(); }
-  else return false;
+  else return drawBlock25(c, b);
   return true;
 }
 
@@ -9318,6 +9321,7 @@ function drawDecor24(c, d, t) {
     case 'paintS': c.fillStyle = d.c || '#ff4d4d'; ell(c, x, y - 1.5, 7, 2.4); c.fill(); circ(c, x + 8, y - 2, 1.4); c.fill(); circ(c, x - 9, y - 1, 1); c.fill(); break;
     case 'abcS': c.fillStyle = d.c || '#9fd0ff'; rr(c, x - 6, y - 12, 12, 12, 2); c.fill(); c.stroke(); txt24(c, d.ch || 'A', x, y - 5.5, 9, '#ffffff', INK, 2); break;
     case 'inkS': c.fillStyle = '#2a2a7a'; rr(c, x - 5, y - 10, 10, 10, 2); c.fill(); c.stroke(); c.fillStyle = '#5a5aaa'; c.fillRect(x - 3, y - 13, 6, 3); c.save(); c.translate(x + 2, y - 12); c.rotate(0.4); c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(5, -10, 2, -18); c.quadraticCurveTo(-2, -10, 0, 0); c.fill(); c.stroke(); c.restore(); break;
+    default: drawDecor25(c, d, t); break;
   }
 }
 
@@ -9365,6 +9369,274 @@ function bgInkwell(c, viewW, camX, t) {
   hill(c, viewW, 222, 3, 0.03, 1.2, camX * 0.45, '#3a3a72');
 }
 Object.assign(BG2, { numberland: bgNumberland, abcmeadow: bgAbcmeadow, colorlab: bgColorlab, smartschool: bgSmartschool, inkwell: bgInkwell });
+
+/* ===== Частина 26 «Базар і хованки»: Фруктовий базар, Ліс хованок, Містечко фігур, Великий магазин, Комора Жуйка ===== */
+Object.assign(THEMES, {
+  fruitmarket: { sky: ['#ffe2a8', '#fff0cc', '#fffbea'], panel: '#5a3010', top: '#8fd07a', topHi: '#bdf09e', topLo: '#5aa04a', fill: '#e0b080', fillLo: '#c89868', dots: ['#ff7a5a', '#ffd23f', '#7fd46a'], block: 'crateblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  hideforest: { sky: ['#bfeacc', '#dff6e4', '#f6fff2'], panel: '#1f4a2a', top: '#6ccf62', topHi: '#a4ee8e', topLo: '#3e9a48', fill: '#9a7050', fillLo: '#84603f', dots: ['#ffffff', '#ffd23f', '#ff9fc4'], block: 'leafblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  shapetown: { sky: ['#cfe0ff', '#e6eeff', '#fbfcff'], panel: '#22306a', top: '#ffcf5a', topHi: '#ffe89a', topLo: '#e0a830', fill: '#a8b8f0', fillLo: '#909fe0', dots: ['#ff4d4d', '#3f8fff', '#4cc35a'], block: 'shapeblock', ice: false, topStyle: 'plank', dotShape: 'sprinkle' },
+  bigshop: { sky: ['#e6f6ff', '#f2fbff', '#ffffff'], panel: '#1f3a5a', top: '#d8e4ee', topHi: '#f4f9ff', topLo: '#b0c0d0', fill: '#c0ccd8', fillLo: '#a8b6c4', dots: ['#ff7a9a', '#4cb6ff', '#ffd23f'], block: 'shelfblock', ice: false, topStyle: 'plank', dotShape: 'pebble' },
+  hamsterhole: { sky: ['#e8c89a', '#f2dcb8', '#fbefd8'], panel: '#4a2a10', top: '#c8945a', topHi: '#e4b47a', topLo: '#a0703e', fill: '#a87a4e', fillLo: '#926640', dots: ['#ffe08a', '#8a5a30', '#ffffff'], block: 'sackblock', ice: false, topStyle: 'stone', dotShape: 'pebble' },
+});
+
+/* ===== Товари ===== */
+function drawItem26(c, k, x, y, s, t) {
+  c.save(); c.translate(x, y); c.scale(s, s); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1.2;
+  if (k === 'apple') { c.fillStyle = '#ff4d4d'; c.beginPath(); c.arc(-3, 1, 6.5, 0, TAU); c.arc(3, 1, 6.5, 0, TAU); c.fill(); ell(c, 0, 1, 8.5, 7); c.fill(); c.stroke(); c.strokeStyle = '#8a5a30'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(0, -5); c.lineTo(1, -9); c.stroke(); c.fillStyle = '#4cc35a'; ell(c, 4, -8, 3.5, 1.8, -0.4); c.fill(); c.fillStyle = 'rgba(255,255,255,.6)'; ell(c, -4, -2, 2, 3, 0.3); c.fill(); }
+  else if (k === 'pear') { c.fillStyle = '#b8e04a'; c.beginPath(); c.arc(0, 3, 7, 0, TAU); c.fill(); c.stroke(); circ(c, 0, -3, 4.5); c.fill(); c.stroke(); circ(c, 0, 3, 6.3); c.fill(); c.strokeStyle = '#8a5a30'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(0, -7); c.lineTo(1, -11); c.stroke(); }
+  else if (k === 'banana') { c.fillStyle = '#ffd23f'; c.beginPath(); c.moveTo(-9, -4); c.quadraticCurveTo(-4, 9, 9, 3); c.quadraticCurveTo(9, 6, 6, 7); c.quadraticCurveTo(-8, 10, -10, -3); c.closePath(); c.fill(); c.stroke(); c.fillStyle = '#8a5a30'; circ(c, -9.5, -3.5, 1.4); c.fill(); }
+  else if (k === 'carrot') { c.fillStyle = '#ff9a2a'; c.beginPath(); c.moveTo(-4, -6); c.lineTo(4, -6); c.lineTo(0, 10); c.closePath(); c.fill(); c.stroke(); c.strokeStyle = '#c86a10'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(-2, -2); c.lineTo(0, -2); c.moveTo(1, 2); c.lineTo(2.5, 2); c.stroke(); c.fillStyle = '#4cc35a'; c.strokeStyle = INK; for (const a of [-0.5, 0, 0.5]) { c.save(); c.translate(0, -6); c.rotate(a); ell(c, 0, -4, 1.8, 4); c.fill(); c.restore(); } }
+  else if (k === 'cheese') { c.fillStyle = '#ffd23f'; c.beginPath(); c.moveTo(-9, 6); c.lineTo(9, 6); c.lineTo(9, -2); c.lineTo(-9, -6); c.closePath(); c.fill(); c.stroke(); c.fillStyle = '#e8b020'; circ(c, -3, 1, 1.8); c.fill(); circ(c, 4, 2, 1.4); c.fill(); circ(c, 2, -2, 1); c.fill(); }
+  else if (k === 'bread') { c.fillStyle = '#d99a52'; c.beginPath(); c.moveTo(-9, 6); c.lineTo(-9, -1); c.quadraticCurveTo(-9, -7, 0, -7); c.quadraticCurveTo(9, -7, 9, -1); c.lineTo(9, 6); c.closePath(); c.fill(); c.stroke(); c.strokeStyle = '#a86a2a'; c.lineWidth = 1; for (const sx of [-4, 0, 4]) { c.beginPath(); c.moveTo(sx - 1.5, -5); c.lineTo(sx + 1.5, -2); c.stroke(); } }
+  else if (k === 'milk') { c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(-6, 9); c.lineTo(-6, -3); c.lineTo(-3, -8); c.lineTo(3, -8); c.lineTo(6, -3); c.lineTo(6, 9); c.closePath(); c.fill(); c.stroke(); c.fillStyle = '#4cb6ff'; c.fillRect(-6, 1, 12, 5); c.fillStyle = '#ffffff'; ell(c, 0, 3.5, 3, 1.6); c.fill(); }
+  else if (k === 'grapes') { c.fillStyle = '#a05ad8'; for (const [gx, gy] of [[-4, -3], [0, -3], [4, -3], [-2, 1], [2, 1], [0, 5]]) { circ(c, gx, gy, 2.8); c.fill(); c.stroke(); } c.fillStyle = '#4cc35a'; ell(c, 2, -8, 3.5, 1.8, -0.3); c.fill(); }
+  c.restore();
+}
+function drawShopBoard(c, s, t) {
+  const x = s.bx, gy = s.gy, n = s.list.length, bw = 24 + n * 26, bh = 58, top = gy - 26 - bh;
+  c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4;
+  c.fillStyle = '#a8683a'; for (const px of [x - bw / 2 + 6, x + bw / 2 - 11]) { c.fillRect(px, top + bh, 5, gy - top - bh); c.strokeRect(px, top + bh, 5, gy - top - bh); }
+  c.fillStyle = s.done ? '#e8ffe0' : '#fffaf0'; rr(c, x - bw / 2, top, bw, bh, 7); c.fill(); c.stroke();
+  txt24(c, 'КУПИТИ', x, top + 11, 10, '#a8683a');
+  s.list.forEach((k, i) => {
+    const ix = x - (n - 1) * 13 + i * 26, iy = top + 34, got = s.got.includes(k);
+    c.fillStyle = got ? '#d8f8d0' : '#f4ece0'; rr(c, ix - 11, iy - 13, 22, 26, 4); c.fill(); c.lineWidth = 1; c.stroke();
+    drawItem26(c, k, ix, iy, 0.95, t);
+    if (got) { c.strokeStyle = '#2f9a3a'; c.lineWidth = 2.6; c.beginPath(); c.moveTo(ix - 7, iy + 2); c.lineTo(ix - 2, iy + 8); c.lineTo(ix + 8, iy - 6); c.stroke(); c.strokeStyle = INK; }
+  });
+  c.restore();
+}
+function drawShopItem(c, it, t) {
+  const bob = Math.sin(t * 3 + it.x * 0.05) * 2, dx = it.wob > 0 ? Math.sin(it.wob * 40) * 3 : 0;
+  c.save(); c.globalAlpha = 0.5; c.fillStyle = '#ffffff'; circ(c, it.x + dx, it.y + bob, 13); c.fill(); c.restore();
+  drawItem26(c, it.k, it.x + dx, it.y + bob, 1.05, t);
+}
+
+/* ===== Друзі й кущі ===== */
+function drawPal26(c, k, x, y, dir, t, s) {
+  c.save(); c.translate(x, y); c.scale(dir * s, s); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1.2;
+  const hop = Math.abs(Math.sin(t * 8 + x * 0.1)) * 1.5;
+  c.translate(0, -hop);
+  const eye = (ex, ey) => { c.fillStyle = INK; circ(c, ex, ey, 1.3); c.fill(); c.fillStyle = '#fff'; circ(c, ex - 0.4, ey - 0.5, 0.5); c.fill(); };
+  if (k === 'bunny') {
+    c.fillStyle = '#ffffff'; ell(c, -3, -24, 2.6, 7, -0.15); c.fill(); c.stroke(); ell(c, 3, -24, 2.6, 7, 0.15); c.fill(); c.stroke();
+    ell(c, 0, -6, 8, 6.5); c.fill(); c.stroke(); circ(c, 2, -14, 6.5); c.fill(); c.stroke(); c.fillStyle = '#ffb0c8'; circ(c, 8.2, -13, 1.3); c.fill(); eye(5, -15.5); circ(c, -8, -6, 2.6); c.fillStyle = '#ffffff'; c.fill(); c.stroke();
+  } else if (k === 'hedgehog') {
+    c.fillStyle = '#8a5a30'; c.beginPath(); for (let i = 0; i <= 8; i++) { const a = Math.PI + i * Math.PI / 8, r = i % 2 ? 9 : 12; c.lineTo(Math.cos(a) * r - 1, -6 + Math.sin(a) * r); } c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#f0c890'; ell(c, 6, -5, 5, 4.5); c.fill(); c.stroke(); c.fillStyle = INK; circ(c, 11, -5, 1.4); c.fill(); eye(7, -7);
+  } else if (k === 'fox') {
+    c.fillStyle = '#ff8a3a'; c.beginPath(); c.moveTo(-6, -5); c.quadraticCurveTo(-16, -8, -15, -16); c.quadraticCurveTo(-10, -10, -5, -9); c.closePath(); c.fill(); c.stroke(); c.fillStyle = '#ffffff'; circ(c, -15, -15.5, 2); c.fill();
+    c.fillStyle = '#ff8a3a'; ell(c, -1, -6, 7, 5.5); c.fill(); c.stroke();
+    c.beginPath(); c.moveTo(-1, -16); c.lineTo(1, -23); c.lineTo(4, -17); c.moveTo(6, -16); c.lineTo(9, -22); c.lineTo(10, -15); c.fill(); c.stroke();
+    circ(c, 5, -13, 6); c.fill(); c.stroke(); c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(5, -11); c.quadraticCurveTo(10, -7, 13, -11); c.quadraticCurveTo(9, -10, 5, -11); c.fill(); c.fillStyle = INK; circ(c, 12.5, -11, 1.2); c.fill(); eye(7, -14);
+  } else if (k === 'squirrel') {
+    c.fillStyle = '#c8783a'; c.beginPath(); c.moveTo(-5, -3); c.quadraticCurveTo(-17, -4, -12, -18); c.quadraticCurveTo(-6, -25, -3, -16); c.quadraticCurveTo(-8, -12, -4, -8); c.closePath(); c.fill(); c.stroke();
+    ell(c, 1, -6, 6, 5.5); c.fill(); c.stroke(); circ(c, 4, -14, 5.5); c.fill(); c.stroke(); c.beginPath(); c.moveTo(2, -18); c.lineTo(3, -23); c.lineTo(5, -19); c.fill(); c.stroke(); c.fillStyle = '#f4d0a0'; ell(c, 3, -5, 2.6, 3.5); c.fill(); eye(6, -15); c.fillStyle = '#8a5a30'; ell(c, 6, -7, 2.4, 3); c.fill(); c.stroke();
+  } else if (k === 'mouse') {
+    c.strokeStyle = '#ff9fbf'; c.lineWidth = 1.3; c.beginPath(); c.moveTo(-7, -4); c.quadraticCurveTo(-14, -2, -13, -9); c.stroke(); c.strokeStyle = INK; c.lineWidth = 1.2;
+    c.fillStyle = '#b8b8c8'; ell(c, 0, -5, 7, 5); c.fill(); c.stroke(); circ(c, 5, -16, 3.6); c.fill(); c.stroke(); c.fillStyle = '#ffc0d4'; circ(c, 5, -16, 2); c.fill(); c.fillStyle = '#b8b8c8'; ell(c, 6, -9, 5, 4.5); c.fill(); c.stroke(); c.fillStyle = '#ff7a9a'; circ(c, 11, -9, 1.3); c.fill(); eye(8, -11);
+  } else if (k === 'duck') {
+    c.fillStyle = '#ffd23f'; ell(c, -1, -6, 8, 6); c.fill(); c.stroke(); circ(c, 5, -15, 5.5); c.fill(); c.stroke(); c.fillStyle = '#ff9a2a'; c.beginPath(); c.moveTo(9, -15); c.lineTo(14, -13); c.lineTo(9, -12); c.closePath(); c.fill(); c.stroke(); eye(6, -16); c.fillStyle = '#ffc020'; ell(c, -3, -6, 4, 2.5, -0.3); c.fill();
+  }
+  c.restore();
+}
+function drawBush26(c, h, t) {
+  const x = h.x, gy = h.gy, box = G.theme === 'bigshop', sh = h.found ? 0 : Math.sin(t * 9) * (Math.sin(t * 1.3 + x) > 0.6 ? 1.6 : 0);
+  c.save(); c.translate(x + sh, gy); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4;
+  if (!h.found && Math.sin(t * 1.1 + x * 0.3) > 0.2) {
+    // визирає кінчик вушка чи хвостика
+    const peek = Math.min(1, (Math.sin(t * 1.1 + x * 0.3) - 0.2) * 3);
+    c.save(); c.beginPath(); c.rect(-20, -60, 40, 40); c.clip(); drawPal26(c, h.k, 4, -8 + (1 - peek) * 14, 1, t, 1); c.restore();
+  }
+  if (box) {
+    c.fillStyle = '#d9a86a'; rr(c, -15, -24, 30, 24, 2); c.fill(); c.stroke(); c.strokeStyle = '#a8783a'; c.beginPath(); c.moveTo(-15, -17); c.lineTo(15, -17); c.stroke();
+    c.fillStyle = '#c08a4a'; c.fillRect(-4, -24, 8, 7); txt24(c, '?', 0, -8, 11, h.found ? 'rgba(59,31,79,.25)' : '#8a5a30');
+  } else {
+    c.fillStyle = h.found ? '#8ad87a' : '#5cc05a';
+    c.beginPath(); c.arc(-9, -9, 9, 0, TAU); c.arc(9, -9, 9, 0, TAU); c.arc(0, -16, 11, 0, TAU); c.fill();
+    c.beginPath(); c.arc(-9, -9, 9, Math.PI * 0.55, Math.PI * 1.6); c.arc(0, -16, 11, Math.PI * 1.1, Math.PI * 1.9); c.arc(9, -9, 9, Math.PI * 1.4, Math.PI * 0.45); c.stroke();
+    c.fillStyle = 'rgba(255,255,255,.35)'; circ(c, -4, -20, 3); c.fill();
+    if (!h.found) { c.fillStyle = '#ff7a9a'; circ(c, -10, -12, 1.8); c.fill(); circ(c, 8, -6, 1.8); c.fill(); }
+  }
+  c.restore();
+  if (h.pop > 0) { c.save(); c.globalAlpha = Math.min(1, h.pop * 2); txt24(c, '!', x, gy - 44 - (0.8 - h.pop) * 20, 18, '#ff4f9a', '#ffffff', 3); c.restore(); }
+}
+
+/* ===== Фігури ===== */
+function shapePath26(c, s, r) {
+  c.beginPath();
+  if (s === 'circle') c.arc(0, 0, r, 0, TAU);
+  else if (s === 'square') c.rect(-r * 0.85, -r * 0.85, r * 1.7, r * 1.7);
+  else if (s === 'triangle') { c.moveTo(0, -r); c.lineTo(r * 0.95, r * 0.75); c.lineTo(-r * 0.95, r * 0.75); c.closePath(); }
+  else if (s === 'star') { for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr2 = i % 2 ? r * 0.45 : r; c.lineTo(Math.cos(a) * rr2, Math.sin(a) * rr2); } c.closePath(); }
+  else if (s === 'heart') { c.moveTo(0, r * 0.9); c.bezierCurveTo(-r * 1.3, -r * 0.1, -r * 0.6, -r * 1.1, 0, -r * 0.4); c.bezierCurveTo(r * 0.6, -r * 1.1, r * 1.3, -r * 0.1, 0, r * 0.9); c.closePath(); }
+}
+function drawShapePiece(c, s, x, y, r, t) {
+  c.save(); c.translate(x, y); c.lineJoin = 'round'; c.fillStyle = SHAPE_COL[s]; c.strokeStyle = INK; c.lineWidth = 1.5;
+  shapePath26(c, s, r); c.fill(); c.stroke();
+  c.fillStyle = 'rgba(255,255,255,.55)'; circ(c, -r * 0.35, -r * 0.3, r * 0.22); c.fill();
+  c.restore();
+}
+function drawShapeDoor(c, d, t) {
+  drawDoorCol(c, d.x, d.top, 'shape', '#b8c4e8', t);
+  if (tileAt(d.x, 8) !== 2) return;
+  const cx = d.x * T + 12, cy = 5 * T + 12;
+  c.save(); c.translate(cx, cy); const pulse = 1 + 0.08 * Math.sin(t * 4); c.scale(pulse, pulse); c.fillStyle = '#3b2a5a'; shapePath26(c, d.s, 12); c.fill(); c.fillStyle = SHAPE_COL[d.s]; shapePath26(c, d.s, 10); c.fill();
+  c.strokeStyle = '#ffffff'; c.lineWidth = 2; c.setLineDash([3, 2]); c.lineDashOffset = -t * 8; c.stroke(); c.restore();
+}
+
+/* ===== На єдиноріжці: фігура над головою ===== */
+function drawOver25(c, P, t) {
+  if (!P.shape26) return;
+  const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
+  c.save(); c.globalAlpha = 0.5; c.fillStyle = '#ffffff'; circ(c, cx, y, 12); c.fill(); c.restore();
+  drawShapePiece(c, P.shape26, cx, y, 9, t);
+}
+
+function drawWorld25(c, t, vis) {
+  if (G.shops26) for (const s of G.shops26) {
+    if (vis(s.bx, 120)) drawShopBoard(c, s, t);
+    if (!s.done) for (const it of s.items) if (!it.taken && vis(it.x)) drawShopItem(c, it, t);
+    if (vis(s.door * T + 12) && tileAt(s.door, 8) === 2) {
+      drawDoorCol(c, s.door, s.top, 'shop', '#7fd0a0', t);
+      c.save(); c.translate(s.door * T + 12, 4 * T + 12); c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 1.2; rr(c, -15, -8, 30, 16, 4); c.fill(); c.stroke(); txt24(c, 'КАСА', 0, 0.5, 8, '#2f9a3a'); c.restore();
+    }
+  }
+  if (G.hiders) for (const h of G.hiders) if (vis(h.x)) drawBush26(c, h, t);
+  if (G.fgates) {
+    const found = G.hiders ? G.hiders.filter(h => h.found).length : 0;
+    for (const g of G.fgates) if (vis(g.x * T + 12) && tileAt(g.x, 8) === 2) {
+      drawDoorCol(c, g.x, g.top, 'friend', '#ffb07a', t);
+      c.save(); c.translate(g.x * T + 12, 4 * T + 10); c.strokeStyle = INK; c.lineWidth = 1.3; c.fillStyle = '#ff6a6a';
+      c.beginPath(); c.moveTo(-14, 0); c.lineTo(0, -12); c.lineTo(14, 0); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = '#fff6dc'; rr(c, -11, 0, 22, 16, 2); c.fill(); c.stroke();
+      txt24(c, Math.min(found, g.n) + '/' + g.n, 0, 8.5, 9, found >= g.n ? '#2f9a3a' : '#a8683a');
+      c.restore();
+    }
+  }
+  if (G.shapes26) for (const s of G.shapes26) if (!s.taken && vis(s.x)) { const j = s.joy > 0 ? Math.sin(s.joy * 20) * 2 : 0; drawShapePiece(c, s.s, s.x, s.y + Math.sin(t * 3 + s.x) * 2 - j, 9, t); }
+  if (G.sdoors) for (const d of G.sdoors) if (vis(d.x * T + 12)) drawShapeDoor(c, d, t);
+  if (G.pals26) for (const p of G.pals26) if (vis(p.x)) drawPal26(c, p.k, p.x, p.y, p.dir, t, 0.85);
+}
+
+/* ===== Хом'ячок Жуйко ===== */
+function drawHamsterBoss(c, B, t) {
+  const x = B.x, y = B.y, fl = B.flash > 0, rest = B.state === 'rest' && !B.dead, run = B.state === 'dash' && !B.dead;
+  c.save(); c.translate(x, y + 4); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1.6;
+  if (B.dir > 0) c.scale(-1, 1);
+  const fur = fl ? '#ffffff' : B.dead ? '#ffd0a0' : '#f0a85a', belly = fl ? '#ffffff' : '#fff0d8';
+  if (run) c.translate(0, -Math.abs(Math.sin(t * 18)) * 3);
+  // лапки
+  c.fillStyle = '#ffb0a0'; for (const fx of [-14, 12]) { ell(c, fx + (run ? Math.sin(t * 18 + fx) * 3 : 0), 22, 6, 3.5); c.fill(); c.stroke(); }
+  // тулуб
+  c.fillStyle = fur; ell(c, 0, 2, 30, 24); c.fill(); c.stroke();
+  c.fillStyle = belly; ell(c, -4, 9, 16, 13); c.fill();
+  // вушка
+  c.fillStyle = fur; circ(c, -16, -20, 7); c.fill(); c.stroke(); circ(c, 8, -22, 7); c.fill(); c.stroke();
+  c.fillStyle = '#ffb0c0'; circ(c, -16, -20, 3.5); c.fill(); circ(c, 8, -22, 3.5); c.fill();
+  // щічки, напхані насінням
+  const cheek = rest ? 10 : 8 + Math.sin(t * 6) * 0.8;
+  c.fillStyle = belly; ell(c, -20, 2, cheek, cheek * 0.85); c.fill(); c.stroke(); ell(c, 10, 3, cheek * 0.9, cheek * 0.8); c.fill(); c.stroke();
+  // очі
+  if (rest) { c.lineWidth = 1.6; c.beginPath(); c.arc(-11, -6, 3.5, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); c.beginPath(); c.arc(1, -7, 3.5, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); }
+  else { c.fillStyle = INK; circ(c, -11, -7, 3.4); c.fill(); circ(c, 1, -8, 3.4); c.fill(); c.fillStyle = '#fff'; circ(c, -12, -8.5, 1.2); c.fill(); circ(c, 0, -9.5, 1.2); c.fill(); }
+  // носик і зубки
+  c.fillStyle = '#ff7a9a'; ell(c, -5, -1, 2.6, 2); c.fill(); c.stroke();
+  c.fillStyle = '#ffffff'; c.fillRect(-7, 3, 2.6, 4); c.strokeRect(-7, 3, 2.6, 4); c.fillRect(-4.4, 3, 2.6, 4); c.strokeRect(-4.4, 3, 2.6, 4);
+  // вусики
+  c.lineWidth = 0.8; c.beginPath(); c.moveTo(-9, 0); c.lineTo(-24, -3); c.moveTo(-9, 2); c.lineTo(-24, 4); c.moveTo(-1, 0); c.lineTo(12, -4); c.stroke();
+  if (B.dead) { c.fillStyle = 'rgba(255,120,170,.6)'; circ(c, -22, 8, 3); c.fill(); circ(c, 14, 8, 3); c.fill(); }
+  if (rest) { c.restore(); c.save(); txt24(c, 'z', x + 18, y - 34 - (t * 10) % 10, 12, '#8a5a30', '#ffffff', 2); c.restore(); return; }
+  c.restore();
+}
+function drawSeedBolt(c, b) {
+  c.save(); c.translate(b.x, b.y); c.rotate(b.t * 10); c.strokeStyle = INK; c.lineWidth = 1.2; c.fillStyle = '#3a3030';
+  c.beginPath(); c.moveTo(0, -8); c.quadraticCurveTo(6, 0, 0, 8); c.quadraticCurveTo(-6, 0, 0, -8); c.closePath(); c.fill(); c.stroke();
+  c.strokeStyle = '#e8e0d0'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(-1.5, -5); c.quadraticCurveTo(-3, 0, -1.5, 5); c.moveTo(1.5, -5); c.quadraticCurveTo(3, 0, 1.5, 5); c.stroke();
+  c.restore();
+}
+
+/* ===== Блоки ===== */
+function drawBlock25(c, b) {
+  c.strokeStyle = INK; c.lineWidth = 1.4;
+  if (b === 'crateblock') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#d9a86a'; c.fill(); c.stroke(); c.strokeStyle = '#a8783a'; c.lineWidth = 1; for (const yy of [8, 16]) { c.beginPath(); c.moveTo(2, yy); c.lineTo(T - 2, yy); c.stroke(); } c.fillStyle = '#ff4d4d'; circ(c, 8, 5, 2.6); c.fill(); c.fillStyle = '#ffd23f'; circ(c, 15, 5, 2.6); c.fill(); }
+  else if (b === 'leafblock') { rr(c, 1, 1, T - 2, T - 2, 6); c.fillStyle = '#5cc05a'; c.fill(); c.stroke(); c.fillStyle = '#8ad87a'; circ(c, 8, 8, 4); c.fill(); circ(c, 16, 14, 3.4); c.fill(); c.fillStyle = '#ff7a9a'; circ(c, 15, 7, 1.6); c.fill(); }
+  else if (b === 'shapeblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#ffffff'; c.fill(); c.stroke(); c.fillStyle = '#ff4d4d'; circ(c, 7, 7, 3.4); c.fill(); c.fillStyle = '#3f8fff'; c.fillRect(13, 4, 7, 7); c.fillStyle = '#4cc35a'; c.beginPath(); c.moveTo(12, 13); c.lineTo(17, 21); c.lineTo(7, 21); c.closePath(); c.fill(); }
+  else if (b === 'shelfblock') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#e8eef4'; c.fill(); c.stroke(); c.fillStyle = '#b0c0d0'; c.fillRect(1.5, 18, T - 3, 4); c.fillStyle = '#ff7a9a'; rr(c, 4, 7, 5, 11, 1); c.fill(); c.fillStyle = '#4cb6ff'; rr(c, 10, 9, 5, 9, 1); c.fill(); c.fillStyle = '#ffd23f'; rr(c, 16, 6, 4, 12, 1); c.fill(); }
+  else if (b === 'sackblock') { rr(c, 1, 2, T - 2, T - 3, 7); c.fillStyle = '#e8d4a8'; c.fill(); c.stroke(); c.strokeStyle = '#a8783a'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(6, 6); c.lineTo(18, 6); c.stroke(); c.fillStyle = '#3a3030'; for (const [a, d] of [[8, 13], [14, 15], [11, 18]]) { ell(c, a, d, 1.6, 2.6, 0.4); c.fill(); } }
+  else return false;
+  return true;
+}
+
+/* ===== Декор ===== */
+function drawDecor25(c, d, t) {
+  const x = d.x, y = d.y;
+  c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 0.8;
+  switch (d.k) {
+    case 'basketS': c.fillStyle = '#c8945a'; c.beginPath(); c.moveTo(-9 + x, y - 9); c.lineTo(9 + x, y - 9); c.lineTo(7 + x, y); c.lineTo(-7 + x, y); c.closePath(); c.fill(); c.stroke(); drawItem26(c, d.it || 'apple', x - 3, y - 11, 0.55, t); drawItem26(c, 'pear', x + 4, y - 11, 0.5, t); c.strokeStyle = '#8a5a30'; c.lineWidth = 1.2; c.beginPath(); c.arc(x, y - 9, 8, Math.PI, TAU); c.stroke(); break;
+    case 'mushS': c.fillStyle = '#f4ead8'; c.fillRect(x - 2, y - 7, 4, 7); c.strokeRect(x - 2, y - 7, 4, 7); c.fillStyle = '#ff5a5a'; c.beginPath(); c.arc(x, y - 7, 7, Math.PI, TAU); c.closePath(); c.fill(); c.stroke(); c.fillStyle = '#fff'; circ(c, x - 3, y - 10, 1.3); c.fill(); circ(c, x + 3, y - 9, 1.1); c.fill(); break;
+    case 'shapeS': drawShapePiece(c, d.s || 'circle', x, y - 7, 6, t); break;
+    case 'cartS': c.strokeStyle = '#8a9ab0'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x - 12, y - 16); c.lineTo(x - 8, y - 16); c.lineTo(x - 5, y - 5); c.lineTo(x + 9, y - 5); c.lineTo(x + 11, y - 13); c.lineTo(x - 7, y - 13); c.stroke(); c.fillStyle = INK; circ(c, x - 3, y - 2, 1.8); c.fill(); circ(c, x + 7, y - 2, 1.8); c.fill(); break;
+    case 'seedS': c.fillStyle = '#3a3030'; for (let i = 0; i < 4; i++) { ell(c, x - 5 + i * 3.5, y - 1.5 - (i % 2), 1.4, 2.4, 0.5 + i); c.fill(); } break;
+  }
+}
+
+/* ===== Фони ===== */
+function bgFruitmarket(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  const span = 170;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.3, span) + 30, k = ((i % 3) + 3) % 3, cols = [['#ff6a6a', '#ffffff'], ['#4cb6ff', '#ffffff'], ['#7fd46a', '#fffbe0']][k];
+    c.fillStyle = '#a8683a'; c.fillRect(wx + 2, 150, 4, 72); c.fillRect(wx + 94, 150, 4, 72);
+    for (let s = 0; s < 6; s++) { c.fillStyle = cols[s % 2]; c.beginPath(); c.moveTo(wx + s * 17, 140); c.lineTo(wx + s * 17 + 17, 140); c.lineTo(wx + s * 17 + 17, 156); c.quadraticCurveTo(wx + s * 17 + 8.5, 162, wx + s * 17, 156); c.closePath(); c.fill(); }
+    c.fillStyle = '#d9a86a'; c.fillRect(wx, 196, 100, 26);
+    for (let f = 0; f < 7; f++) { c.fillStyle = ['#ff4d4d', '#ffd23f', '#ff9a2a', '#b8e04a'][(f + k) % 4]; circ(c, wx + 10 + f * 13, 194, 6); c.fill(); }
+  }
+  hill(c, viewW, 222, 3, 0.03, 1.2, camX * 0.45, '#b8e090');
+}
+function bgHideforest(c, viewW, camX, t) {
+  for (let i = 0; i < 3; i++) { const x = wrapX(i * 300 - camX * 0.08 + t * 4, viewW + 300) - 150; puffCloud(c, x, 34 + (i % 2) * 20, 0.8, 'rgba(255,255,255,.9)'); }
+  const span = 120;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.22, span) + 20, h = 90 + ((i * 37) % 3 + 3) % 3 * 18;
+    c.fillStyle = '#9a7050'; c.fillRect(wx - 5, 222 - h + 30, 10, h - 30);
+    c.fillStyle = '#7fcf86'; circ(c, wx, 222 - h + 20, 30); c.fill(); circ(c, wx - 20, 222 - h + 40, 22); c.fill(); circ(c, wx + 20, 222 - h + 38, 22); c.fill();
+  }
+  hill(c, viewW, 222, 4, 0.03, 1.2, camX * 0.45, '#5cbf62');
+}
+function bgShapetown(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  const span = 110, SH = ['circle', 'square', 'triangle', 'star', 'heart'];
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.25, span) + 30, k = ((i % 5) + 5) % 5, h = 60 + (k % 3) * 18;
+    c.fillStyle = ['#ffd6d6', '#d6e4ff', '#d8f4d0', '#fff2c0', '#ffd8ec'][k]; c.fillRect(wx, 222 - h, 60, h);
+    c.fillStyle = ['#ff8a8a', '#7fa8ff', '#7fd47a', '#ffd23f', '#ff9fc4'][k];
+    c.beginPath(); if (k % 2) { c.moveTo(wx - 6, 222 - h); c.lineTo(wx + 30, 222 - h - 28); c.lineTo(wx + 66, 222 - h); } else { c.arc(wx + 30, 222 - h, 30, Math.PI, TAU); } c.closePath(); c.fill();
+    c.save(); c.globalAlpha = 0.9; c.translate(wx + 30, 222 - h + 26); c.fillStyle = '#ffffff'; shapePath26(c, SH[k], 9); c.fill(); c.restore();
+  }
+}
+function bgBigshop(c, viewW, camX, t) {
+  c.fillStyle = 'rgba(255,255,255,.7)'; for (let i = 0; i < viewW / 160 + 2; i++) { const lx = i * 160 + wrapX(-camX * 0.1, 160); c.fillRect(lx, 18, 90, 6); }
+  const span = 140;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.3, span) + 10;
+    c.fillStyle = '#c8d4e0'; c.fillRect(wx, 120, 110, 102); c.fillStyle = '#e8eef4';
+    for (let r = 0; r < 4; r++) { c.fillStyle = '#a8b6c4'; c.fillRect(wx, 140 + r * 22, 110, 3); for (let p = 0; p < 8; p++) { c.fillStyle = ['#ff7a9a', '#4cb6ff', '#ffd23f', '#7fd46a', '#ff9a2a'][(p + r + i * 3 + 50) % 5]; rr(c, wx + 4 + p * 13, 126 + r * 22, 10, 14, 2); c.fill(); } }
+  }
+  c.fillStyle = '#ffffff'; c.fillRect(0, 216, viewW, 6);
+}
+function bgHamsterhole(c, viewW, camX, t) {
+  c.fillStyle = 'rgba(160,110,60,.25)'; for (let i = 0; i < viewW / 90 + 2; i++) { const rx = i * 90 + wrapX(-camX * 0.15, 90); ell(c, rx, 60 + (i % 3) * 30, 24, 14); c.fill(); }
+  const span = 130;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.3, span) + 30;
+    c.fillStyle = '#e8d4a8'; rr(c, wx - 18, 180, 36, 42, 12); c.fill(); c.fillStyle = '#c8b088'; c.fillRect(wx - 8, 176, 16, 6);
+    c.fillStyle = '#3a3030'; for (let s = 0; s < 6; s++) { ell(c, wx - 14 + s * 6, 178 - (s % 2) * 2, 1.6, 2.6, s); c.fill(); }
+    c.fillStyle = '#ffd23f'; circ(c, wx + 40, 206, 10); c.fill(); c.fillStyle = '#8a5a30'; circ(c, wx + 40, 206, 5); c.fill();
+  }
+  hill(c, viewW, 222, 3, 0.03, 1.2, camX * 0.45, '#b88a5a');
+}
+Object.assign(BG2, { fruitmarket: bgFruitmarket, hideforest: bgHideforest, shapetown: bgShapetown, bigshop: bgBigshop, hamsterhole: bgHamsterhole });
 
 /* ===== Рівні. Координати в плитках: x — стовпчик, y — рядок (0 угорі, земля з рядка 10) ===== */
 const LEVELS = [
@@ -14178,6 +14450,140 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 26: Базар і хованки ===== */
+  {
+    id: 'fruitmarket', theme: 'fruitmarket', name: 'Фруктовий базар', blurb: 'Збери все зі списку покупок', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Фруктовий базар! На дошці — список покупок. Збери все зі списку в будь-якому порядку, і каса відчиниться');
+      L.shop(8, ['apple', 'pear', 'banana'], 25, [['apple', 12], ['carrot', 15, 6], ['pear', 17, 7], ['banana', 21]]);
+      L.row(27, 9, 3);
+      L.enemy('snail', 35, 10);
+      L.ground(47, 92);
+      L.check(48);
+      L.shop(53, ['carrot', 'cheese', 'bread'], 71, [['cheese', 57], ['grapes', 59, 6], ['carrot', 62, 7], ['milk', 65, 6], ['bread', 67]]);
+      L.block(75, 7, 3); L.row(75, 5, 3);
+      L.enemy('frog', 82, 10);
+      L.row(86, 9, 3);
+      L.ground(95, 132);
+      L.check(96);
+      L.shop(101, ['milk', 'grapes', 'apple', 'banana'], 121, [['banana', 105], ['milk', 108, 7], ['pear', 111, 6], ['grapes', 113], ['apple', 117, 7]]);
+      L.row(123, 9, 4);
+      L.ground(135, 170);
+      L.check(136);
+      L.shop(141, ['bread', 'cheese', 'pear'], 159, [['pear', 145, 7], ['bread', 148], ['banana', 151, 6], ['cheese', 154]]);
+      L.row(161, 9, 3);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'hideforest', theme: 'hideforest', name: 'Ліс хованок', blurb: 'Знайди друзів, що сховалися в кущах', w: 170,
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Ліс хованок! У кущах сховалися друзі. Торкнися куща — і друг піде з тобою. Будиночок друзів відчиниться, коли всі будуть разом');
+      L.hide(9, 'bunny'); L.row(12, 9, 3); L.hide(17, 'hedgehog');
+      L.fgate(23, 2);
+      L.row(26, 9, 3);
+      L.enemy('snail', 33, 10);
+      L.block(38, 8, 4, 2); L.hide(40, 'fox', 8);
+      L.ground(49, 94);
+      L.check(51);
+      L.hide(56, 'squirrel');
+      L.block(60, 6, 3); L.row(60, 4, 3);
+      L.hide(65, 'mouse');
+      L.fgate(71, 5);
+      L.enemy('frog', 78, 10);
+      L.row(82, 9, 4);
+      L.ground(97, 134);
+      L.check(99);
+      L.hide(103, 'duck');
+      L.row(107, 9, 4);
+      L.enemy('bee', 112, 6);
+      L.fgate(118, 6);
+      L.row(121, 9, 4);
+      L.ground(137, 170);
+      L.check(139);
+      L.block(144, 7, 5); L.row(144, 5, 5);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'shapetown', theme: 'shapetown', name: 'Містечко фігур', blurb: 'Принеси фігуру до дверей із такою діркою', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Містечко фігур! Візьми фігуру й принеси до дверей із такою самою діркою. Нова фігура міняється з тією, що несеш');
+      L.shape(10, 'circle'); L.sdoor(16, 'circle');
+      L.row(18, 9, 3);
+      L.shape(25, 'square'); L.shape(30, 'triangle'); L.sdoor(36, 'triangle');
+      L.enemy('snail', 39, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.shape(53, 'star'); L.shape(57, 'heart'); L.sdoor(63, 'star');
+      L.block(67, 7, 3); L.row(67, 5, 3);
+      L.enemy('frog', 75, 10);
+      L.shape(82, 'heart'); L.sdoor(88, 'heart');
+      L.ground(95, 134);
+      L.check(97);
+      L.shape(100, 'triangle'); L.shape(104, 'circle'); L.shape(108, 'square'); L.sdoor(114, 'square');
+      L.row(117, 9, 4);
+      L.enemy('bee', 126, 6);
+      L.ground(137, 170);
+      L.check(139);
+      L.shape(143, 'circle'); L.shape(147, 'heart'); L.sdoor(152, 'circle');
+      L.row(154, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'bigshop', theme: 'bigshop', name: 'Великий магазин', blurb: 'Покупки, хованки й фігури — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Великий магазин! Тут треба і покупки зібрати, і друзів знайти в коробках, і фігури підібрати');
+      L.shop(8, ['milk', 'bread'], 19, [['milk', 12], ['cheese', 14, 6], ['bread', 16, 7]]);
+      L.hide(23, 'mouse'); L.hide(28, 'bunny');
+      L.fgate(33, 2);
+      L.enemy('snail', 38, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.shape(53, 'triangle'); L.shape(57, 'star'); L.sdoor(62, 'triangle');
+      L.shop(67, ['apple', 'grapes', 'carrot'], 85, [['grapes', 71], ['apple', 74, 7], ['banana', 77, 6], ['carrot', 80]]);
+      L.row(87, 9, 3);
+      L.ground(95, 136);
+      L.check(97);
+      L.hide(101, 'duck');
+      L.enemy('frog', 106, 10);
+      L.hide(111, 'hedgehog');
+      L.fgate(116, 4);
+      L.shape(120, 'heart'); L.shape(124, 'square'); L.sdoor(130, 'square');
+      L.ground(139, 172);
+      L.check(141);
+      L.enemy('bee', 146, 6);
+      L.row(150, 9, 5);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'hamsterhole', theme: 'hamsterhole', name: 'Комора Жуйка', blurb: "Битва з Хом'ячком Жуйком", w: 172, boss: 'hamster',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, "Комора Жуйка. Хом'ячок сховав усі покупки! Збери список, знайди друга й принеси фігуру");
+      L.shop(8, ['carrot', 'apple'], 18, [['carrot', 12], ['apple', 15, 7]]);
+      L.hide(23, 'squirrel');
+      L.fgate(28, 1);
+      L.enemy('snail', 34, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.shape(55, 'heart'); L.shape(59, 'circle'); L.sdoor(65, 'heart');
+      L.row(68, 9, 4);
+      L.check(75);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, "Хом'ячок Жуйко! Коли він наїсться й задрімає — стріляй або стрибни на нього");
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -14199,6 +14605,11 @@ const DECOR = {
   abcmeadow: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'abcS', x, y, ch: 'ABCDEFG'[Math.floor(R() * 7)], c: ['#9fd0ff', '#ff9fc4', '#9fe08a', '#ffd23f'][Math.floor(R() * 4)] } : r < 0.65 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   colorlab: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'paintS', x, y, c: ['#ff4d4d', '#ffd23f', '#3f8fff', '#4cc35a', '#a05ad8', '#ff9a2a'][Math.floor(R() * 6)] } : r < 0.7 ? { k: 'pencilS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
   smartschool: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'bookS', x, y } : r < 0.5 ? { k: 'abacusS', x, y } : r < 0.7 ? { k: 'pencilS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
+  fruitmarket: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'basketS', x, y, it: ['apple', 'banana', 'grapes'][Math.floor(R() * 3)] } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7a9a', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  hideforest: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'mushS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  shapetown: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'shapeS', x, y, s: ['circle', 'square', 'triangle', 'star', 'heart'][Math.floor(R() * 5)] } : { k: 'tuft', x, y }; },
+  bigshop: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'cartS', x, y } : r < 0.6 ? { k: 'basketS', x, y, it: ['apple', 'banana', 'grapes'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  hamsterhole: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'seedS', x, y } : r < 0.6 ? { k: 'mushS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -14315,7 +14726,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -14537,6 +14948,20 @@ function buildLevel(idx) {
     pot(x, c, row) { const p = { x: x * T + 12, gy: row ? row * T : 10 * T, c }; if (!row) later.push(() => { p.gy = groundY(x); }); L.pots.push(p); },
     // кольорові ворота: відчиняються, коли фарба на гриві того самого кольору
     cgate(x, c) { for (let y = 1; y < 10; y++) set(x, y, 2); L.cgates.push({ x, c, top: 1 }); },
+    // частина 26: список покупок — дошка на x, товари [[k, x, row], …] (row не вказано — на землі), каса-двері door (рядки 1–9)
+    shop(x, list, door, items) {
+      const s = { list, door, top: 1, bx: x * T + 12, gy: 10 * T, items: items.map(([k, tx, row]) => ({ k, tx, row, x: tx * T + 12, y: row ? row * T + 12 : 0 })) };
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      later.push(() => { s.gy = groundY(x); for (const it of s.items) if (!it.row) it.y = groundY(it.tx) - 14; });
+      L.shops26.push(s);
+    },
+    // кущ, у якому сховався друг (bunny, hedgehog, fox, squirrel, mouse, duck); row — якщо кущ на уступі
+    hide(x, k, row) { const h = { x: x * T + 12, gy: row ? row * T : 10 * T, k }; if (!row) later.push(() => { h.gy = groundY(x); }); L.hiders.push(h); },
+    // будиночок друзів: стовп відчиняється, коли знайдено n друзів (рахуються всі знайдені на рівні)
+    fgate(x, n) { for (let y = 1; y < 10; y++) set(x, y, 2); L.fgates.push({ x, n, top: 1 }); },
+    // фігура (circle, square, triangle, star, heart) і двері з діркою такої фігури
+    shape(x, s, row) { const p = { x: x * T + 12, y: row ? row * T + 12 : 0, s }; if (!row) later.push(() => { p.y = groundY(x) - 14; }); L.shapes26.push(p); },
+    sdoor(x, s) { for (let y = 1; y < 10; y++) set(x, y, 2); L.sdoors.push({ x, s, top: 1 }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
@@ -14568,7 +14993,7 @@ function buildLevel(idx) {
   const normal = L.stars.filter(s => !s.rainbow).length;
   L.total = normal;
   L.need = def.boss ? 0 : Math.max(5, Math.round(normal * (def.needK || 0.5)));
-  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, ...L.roos, ...L.totems, ...L.pots, ...L.words25.map(w => ({ x: w.bx })), L.gate].filter(Boolean).map(o => o.x);
+  const R = rng(idx * 1013 + 77), avoid = [...L.signs, ...L.checks, ...L.springs, ...L.buttons, ...L.portals, ...L.beans, ...L.lanterns, ...L.coops, ...L.chicks, ...L.roos, ...L.totems, ...L.pots, ...L.words25.map(w => ({ x: w.bx })), ...L.hiders, ...L.shops26.map(w => ({ x: w.bx })), L.gate].filter(Boolean).map(o => o.x);
   for (const d of L.dominoes) avoid.push(d.x * T + 12, d.x * T + 60);
   for (const c of L.crystals) avoid.push(c.x);
   for (const q of L.pendulums) avoid.push(q.ax);
@@ -19791,6 +20216,7 @@ function initLevel20(G, L) {
   G.words25 = (L.words25 || []).map(w => Object.assign({ got: 0, done: false, hintT: 0 }, w, { letters: w.letters.map(l => Object.assign({ taken: false, wob: 0 }, l)), decoys: w.decoys.map(d => Object.assign({ wob: 0 }, d)) }));
   G.pots = (L.pots || []).map(p => Object.assign({ touch: false, joy: 0 }, p));
   G.cgates = (L.cgates || []).map(g => Object.assign({ open: false, hintT: 0 }, g));
+  initLevel21(G, L);
 }
 function doorTouch(x, top) { const P = G.P; return overlap(P, { x: x * T - 4, y: top * T, w: T + 8, h: (10 - top) * T }); }
 function openColumn(x, top) { for (let y = top; y < 10; y++) if (tileAt(x, y) === 2) { G.map[y * G.Wt + x] = 0; burst(x * T + 12, y * T + 12, 5, RAINBOW, 90); } floatText(x * T + 12, 7 * T, 'Відчинено!', '#4cc35a'); }
@@ -19871,11 +20297,123 @@ function update20(dt) {
   updateQuizzes(dt);
   updateWords(dt);
   updatePots(dt);
+  update21(dt);
 }
 
 /* ===== Клякса Бризка — ще одна бігунка: бризкає чорнилом, а висохнувши, застигає ===== */
 RUNNERS.blot = { name: 'Клякса Бризка', acc: 'Кляксу Бризку', win: ' Тепер вона стала гарним малюнком, а всі підказки знову чисті.', bolt: 'ink', hello: 'Клякса Бризка: «Бризь-бризь! Заляпаю всі приклади!»', rest: 'Клякса висохла й застигла! Стріляй або стрибни на неї', arm: 'Клякса надто мокра й слизька! Стріляй, коли вона висохне', restText: 'Сохну…' };
 BOSS2.blot = L => ({ kind: 'blot', name: RUNNERS.blot.name, acc: RUNNERS.blot.acc, win: RUNNERS.blot.win, x: L.arena.x0 + 30 * T, gy: 10 * T, y: 10 * T - 26, hw: 28, hh: 26, hp: 22, max: 22, t: 0, st: 0, state: 'wait', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, n: 0, tx: 0, vy: 0, hop: 0 });
+
+/* ===== Частина 26 «Базар і хованки»: список покупок, друзі в кущах, двері-фігури й Хом'ячок Жуйко ===== */
+Object.assign(TUNES, {
+  fruitmarket: { base: 587.33, ms: 170, n: [0, 4, 7, 4, 9, 7, 4, null, 2, 5, 9, 5, 7, null, null, null, 0, 4, 7, 12, 11, 9, 7, null, 5, 4, 2, 4, 0, null, null, null], b: [0, -5, -3, -7] },
+  hideforest: { base: 523.25, ms: 190, n: [0, null, 7, null, 4, 5, 7, null, 9, null, 7, null, 5, 4, 2, null, 0, null, 7, null, 4, 5, 7, null, 12, null, 11, 9, 7, null, null, null], b: [0, -5, -3, -7] },
+  shapetown: { base: 659.25, ms: 165, n: [0, 7, 4, 7, 0, 7, 4, 7, 2, 9, 5, 9, 2, 9, 5, 9, 4, 11, 7, 11, 4, 11, 7, 11, 12, null, 7, null, 0, null, null, null], b: [0, -5, -3, -7] },
+  bigshop: { base: 698.46, ms: 160, n: [0, 4, 7, 9, 7, 4, 0, null, 2, 5, 9, 11, 9, 5, 2, null, 4, 7, 11, 12, 11, 7, 4, null, 12, 11, 9, 7, 5, 4, 2, null], b: [0, -5, -3, -7] },
+  hamsterhole: { base: 493.88, ms: 185, n: [0, 3, 7, 3, 0, null, 5, 8, 12, 8, 5, null, 7, 10, 14, 10, 7, null, 5, null, 3, null, 2, null, 0, null, null, null, 7, null, null, null], b: [0, -5, -2, -7] },
+});
+const ITEM_UA = { apple: 'яблуко', pear: 'груша', banana: 'банан', carrot: 'морква', cheese: 'сир', bread: 'хліб', milk: 'молоко', grapes: 'виноград' };
+const PAL_UA = { bunny: 'Зайчик', hedgehog: 'Їжачок', fox: 'Лисичка', squirrel: 'Білочка', mouse: 'Мишка', duck: 'Каченя' };
+const SHAPE_UA = { circle: 'червоне коло', square: 'синій квадрат', triangle: 'зелений трикутник', star: 'жовта зірка', heart: 'рожеве сердечко' };
+const SHAPE_COL = { circle: '#ff4d4d', square: '#3f8fff', triangle: '#4cc35a', star: '#ffd23f', heart: '#ff7ab8' };
+
+/* ===== Підготовка рівня ===== */
+function initLevel21(G, L) {
+  const P = G.P; P.shape26 = null;
+  G.shops26 = (L.shops26 || []).map(s => Object.assign({ got: [], done: false, hintT: 0 }, s, { items: s.items.map(i => Object.assign({ taken: false, wob: 0 }, i)) }));
+  G.hiders = (L.hiders || []).map(h => Object.assign({ found: false, pop: 0 }, h));
+  G.fgates = (L.fgates || []).map(g => Object.assign({ open: false, hintT: 0 }, g));
+  G.shapes26 = (L.shapes26 || []).map(s => Object.assign({ taken: false, touch: false, joy: 0 }, s));
+  G.sdoors = (L.sdoors || []).map(d => Object.assign({ open: false, hintT: 0 }, d));
+  G.pals26 = []; G.trail26 = [];
+}
+
+/* ===== Список покупок: збери все зі списку в будь-якому порядку ===== */
+function updateShops(dt) {
+  const P = G.P;
+  for (const s of G.shops26) {
+    if (s.hintT > 0) s.hintT -= dt;
+    for (const it of s.items) if (it.wob > 0) it.wob -= dt;
+    if (s.done) continue;
+    if (!(s.hintT > 0) && doorTouch(s.door, s.top)) { s.hintT = 4; say('Каса відчиниться, коли збереш усе зі списку: ' + s.list.map(k => ITEM_UA[k]).join(', '), 3.4); }
+    for (const it of s.items) {
+      if (it.taken || !overlap(P, { x: it.x - 11, y: it.y - 11, w: 22, h: 22 })) continue;
+      if (s.list.includes(it.k) && !s.got.includes(it.k)) {
+        it.taken = true; s.got.push(it.k); G.points++; Snd.star(s.got.length); burst(it.x, it.y, 10, RAINBOW, 110); floatText(it.x, it.y - 14, ITEM_UA[it.k], '#4cc35a');
+        if (s.got.length >= s.list.length) { s.done = true; openColumn(s.door, s.top); G.points += 3; Snd.seq([0, 4, 7, 12, 16], 587, 0.07, 'triangle', 0.08); say('Усе зі списку в кошику! Каса відчинилася', 2.8); }
+      } else if (it.wob <= 0) {
+        it.wob = 0.6; Snd.tone(260, 0.15, 'triangle', 0.05, 200);
+        if (s.hintT <= 0) { s.hintT = 2.5; say(s.got.includes(it.k) ? ITEM_UA[it.k][0].toUpperCase() + ITEM_UA[it.k].slice(1) + ' вже є в кошику' : 'Цього немає в списку. Подивись на дошку', 2.2); }
+      }
+    }
+  }
+}
+
+/* ===== Хованки: торкнися куща — і друг піде за тобою ===== */
+function updateHiders(dt) {
+  const P = G.P;
+  for (const h of G.hiders) {
+    if (h.pop > 0) h.pop -= dt;
+    if (h.found || !overlap(P, { x: h.x - 14, y: h.gy - 26, w: 28, h: 26 })) continue;
+    h.found = true; h.pop = 0.8; G.points++;
+    G.pals26.push({ k: h.k, x: h.x, y: h.gy, dir: 1 });
+    Snd.seq([0, 7, 12], 784, 0.06, 'triangle', 0.08); burst(h.x, h.gy - 14, 14, ['#7fd46a', '#b4f08e', '#ffffff'], 130);
+    floatText(h.x, h.gy - 34, PAL_UA[h.k] + '!', '#ff7ab8');
+    say(PAL_UA[h.k] + ' знайшовся! Тепер ' + (h.k === 'fox' || h.k === 'squirrel' || h.k === 'mouse' ? 'вона' : 'він') + ' іде з тобою', 2.4);
+  }
+  // друзі йдуть слідом за єдиноріжкою
+  const fx = P.x + P.w / 2, fy = P.flip ? P.y : P.y + P.h, last = G.trail26[G.trail26.length - 1];
+  if (last && Math.hypot(fx - last.x, fy - last.y) > 80) { G.trail26 = []; for (const p of G.pals26) { p.x = fx; p.y = fy; } }
+  if (!last || Math.hypot(fx - last.x, fy - last.y) > 3) { G.trail26.push({ x: fx, y: fy }); if (G.trail26.length > 160) G.trail26.shift(); }
+  G.pals26.forEach((p, i) => {
+    const tp = G.trail26[Math.max(0, G.trail26.length - 1 - (i + 1) * 9)];
+    if (!tp) return;
+    const nx = p.x + (tp.x - p.x) * Math.min(1, dt * 10);
+    if (Math.abs(nx - p.x) > 0.3) p.dir = nx > p.x ? 1 : -1;
+    p.x = nx; p.y += (tp.y - p.y) * Math.min(1, dt * 10);
+  });
+  const found = G.hiders.filter(h => h.found).length;
+  for (const g of G.fgates) {
+    if (g.hintT > 0) g.hintT -= dt;
+    if (g.open) continue;
+    if (found >= g.n) { g.open = true; openColumn(g.x, g.top); G.points += 2; Snd.seq([0, 4, 7, 12], 659, 0.07, 'triangle', 0.08); say('Усі друзі разом! Будиночок відчинився', 2.4); }
+    else if (g.hintT <= 0 && doorTouch(g.x, g.top)) { g.hintT = 4; say('Будиночок друзів відчиниться, коли знайдеш ' + g.n + ' друзів. Зараз — ' + found + '. Зазирни в кущі!', 3.2); }
+  }
+}
+
+/* ===== Фігури: принеси до дверей фігуру, як дірка на них ===== */
+function updateShapes(dt) {
+  const P = G.P;
+  for (const s of G.shapes26) {
+    if (s.joy > 0) s.joy -= dt;
+    if (s.taken) continue;
+    const touch = overlap(P, { x: s.x - 11, y: s.y - 11, w: 22, h: 22 });
+    if (touch && !s.touch) {
+      const old = P.shape26;
+      P.shape26 = s.s; Snd.tone(600, 0.12, 'sine', 0.06, 900); burst(s.x, s.y, 8, [SHAPE_COL[s.s], '#ffffff'], 100);
+      floatText(P.x + P.w / 2, P.y - 14, SHAPE_UA[s.s], SHAPE_COL[s.s]);
+      if (old) { s.s = old; s.joy = 0.6; } else s.taken = true;
+      if (!G.shapeHint) { G.shapeHint = true; say('Ти несеш ' + SHAPE_UA[P.shape26] + '. Неси до дверей із такою самою діркою', 2.8); }
+    }
+    s.touch = touch;
+  }
+  for (const d of G.sdoors) {
+    if (d.hintT > 0) d.hintT -= dt;
+    if (d.open || !doorTouch(d.x, d.top)) continue;
+    if (P.shape26 === d.s) { d.open = true; P.shape26 = null; openColumn(d.x, d.top); G.points += 2; Snd.seq([0, 4, 7, 12], 659, 0.07, 'triangle', 0.08); say('Фігура підійшла! Двері відчинилися', 2.2); }
+    else if (d.hintT <= 0) { d.hintT = 3.4; say('На дверях дірка — ' + SHAPE_UA[d.s] + '. ' + (P.shape26 ? 'А в тебе — ' + SHAPE_UA[P.shape26] + '. Поміняй фігуру' : 'Знайди таку фігуру'), 3.2); }
+  }
+}
+
+function update21(dt) {
+  updateShops(dt);
+  updateHiders(dt);
+  updateShapes(dt);
+}
+
+/* ===== Хом'ячок Жуйко — ще один бігун: кидає насінинки, а наївшись, дрімає ===== */
+RUNNERS.hamster = { name: "Хом'ячок Жуйко", acc: "Хом'ячка Жуйка", win: ' Він поділився всіма запасами, і на базарі знову свято.', bolt: 'sunseed', hello: "Хом'ячок Жуйко: «Усе моє! Усе в мої щічки!»", rest: 'Жуйко наївся й задрімав! Стріляй або стрибни на нього', arm: 'Жуйко надто швидкий! Стріляй, коли він задрімає', restText: 'Хрум-хрум… хр-р-р' };
+BOSS2.hamster = L => ({ kind: 'hamster', name: RUNNERS.hamster.name, acc: RUNNERS.hamster.acc, win: RUNNERS.hamster.win, x: L.arena.x0 + 30 * T, gy: 10 * T, y: 10 * T - 26, hw: 28, hh: 26, hp: 22, max: 22, t: 0, st: 0, state: 'wait', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, n: 0, tx: 0, vy: 0, hop: 0 });
 
 /* ===== Збереження ===== */
 const SAVE_KEY = 'zoriana-ednorizhka-v1';
@@ -20096,6 +20634,7 @@ function renderGame(dt) {
     else if (B.kind === 'puppy') drawPuppyBoss(c, B, B.t);
     else if (B.kind === 'mouse') drawMouseBoss(c, B, B.t);
     else if (B.kind === 'blot') drawBlotBoss(c, B, B.t);
+    else if (B.kind === 'hamster') drawHamsterBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -20316,7 +20855,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко"];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -20411,6 +20950,7 @@ function showWin() {
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
   if (i === 109) { $('winTitle').textContent = 'Сова Ухнюшка виспалась і повернула зірочки!'; $('winText').textContent = 'А в Місті всі чекають посилок. Тільки Цуцик Гавчик розгриз коробки, і зірочки розсипалися по всьому місту: на пошті, в пожежній частині й на будмайданчику. Треба все зібрати! Наступна країна: ' + LEVELS[110].name + '.'; }
+  if (i === 124) { $('winTitle').textContent = 'Клякса Бризка стала гарним малюнком!'; $('winText').textContent = "Далі — веселий базар і ліс хованок. Тільки Хом'ячок Жуйко сховав усі покупки собі в щічки, а лісові друзі з переляку поховалися в кущі. Наступна країна: " + LEVELS[125].name + '.'; }
   if (i === 119) { $('winTitle').textContent = 'Мишеня Клацик повернуло всі зірочки!'; $('winText').textContent = 'Далі — Розумна країна: приклади на дверях, англійські слова й чарівні фарби. Але Клякса Бризка заляпала всі підказки чорнилом, і зірочки загубилися! Наступна країна: ' + LEVELS[120].name + '.'; }
   if (i === 114) { $('winTitle').textContent = 'Цуцик Гавчик повернув усі посилки!'; $('winText').textContent = 'Далі — Країна винаходів: реактивні ранці, перемикачі й невидимі містки. Але заводне Мишеня Клацик закрутило всі зірочки у свої шестерні! Наступна країна: ' + LEVELS[115].name + '.'; }
   if (i === 104 && i + 1 < save.unlocked) $('winText').textContent = 'Веселий Смайлик повернув усі зірочки! А в Країні свят усі готуються до великого свята: стрибають через скакалку, запускають ракети-феєрверки й лазять по скеледромі. Тільки Сова Ухнюшка вдень хоче спати, а від галасу не може заснути. Вона розсердилася й поховала зірочки! Наступна країна: ' + LEVELS[105].name + '.';

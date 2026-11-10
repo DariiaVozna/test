@@ -147,10 +147,12 @@ function drawWorld24(c, t, vis) {
   if (G.cgates) for (const g of G.cgates) if (vis(g.x * T + 12)) drawDoorCol(c, g.x, g.top, 'paint', COLORS25[g.c], t);
   const B = G.boss;
   if (B && B.kind === 'blot' && G.arena) for (let k = 0; k < 5; k++) { const x = G.arena.x0 + (5 + k * 8) * T; if (vis(x)) { c.save(); c.fillStyle = 'rgba(40,40,110,.25)'; ell(c, x, 10 * T - 1, 14 + (k % 2) * 6, 3); c.fill(); c.restore(); } }
+  drawWorld25(c, t, vis);
 }
 
 /* ===== Фарба на гриві ===== */
 function drawOver24(c, P, t) {
+  drawOver25(c, P, t);
   if (!P.mixC || !P.mixC.length) return;
   const s = P.big ? 1.3 : P.mini ? 0.6 : 1, cx = P.x + P.w / 2, mix = mixName(P.mixC), col = COLORS25[mix];
   c.save(); c.translate(cx, (P.flip ? P.y + P.h + 42 : P.y - 40) + Math.sin(t * 4) * 1.5); c.scale(1.2, 1.2); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.2;
@@ -209,7 +211,7 @@ function drawBlock24(c, b) {
   else if (b === 'paintblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#f4ead8'; c.fill(); c.stroke(); c.fillStyle = '#ff4d4d'; circ(c, 7, 8, 3.2); c.fill(); c.fillStyle = '#ffd23f'; circ(c, 16, 9, 3.6); c.fill(); c.fillStyle = '#3f8fff'; circ(c, 11, 17, 3.4); c.fill(); }
   else if (b === 'deskblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#c99a6a'; c.fill(); c.stroke(); c.fillStyle = '#e8c090'; c.fillRect(1.5, 1.5, T - 3, 5); c.fillStyle = '#2f5a4a'; rr(c, 5, 9, 14, 10, 1.5); c.fill(); c.fillStyle = '#ffffff'; c.fillRect(7, 12, 6, 1.2); c.fillRect(7, 15, 9, 1.2); }
   else if (b === 'inkblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#f2eefc'; c.fill(); c.stroke(); c.strokeStyle = '#b8c8ff'; c.lineWidth = 1; for (const yy of [8, 14, 20]) { c.beginPath(); c.moveTo(3, yy); c.lineTo(T - 3, yy); c.stroke(); } c.fillStyle = '#2a2a7a'; circ(c, 15, 9, 3.4); c.fill(); circ(c, 19, 13, 1.4); c.fill(); }
-  else return false;
+  else return drawBlock25(c, b);
   return true;
 }
 
@@ -226,6 +228,7 @@ function drawDecor24(c, d, t) {
     case 'paintS': c.fillStyle = d.c || '#ff4d4d'; ell(c, x, y - 1.5, 7, 2.4); c.fill(); circ(c, x + 8, y - 2, 1.4); c.fill(); circ(c, x - 9, y - 1, 1); c.fill(); break;
     case 'abcS': c.fillStyle = d.c || '#9fd0ff'; rr(c, x - 6, y - 12, 12, 12, 2); c.fill(); c.stroke(); txt24(c, d.ch || 'A', x, y - 5.5, 9, '#ffffff', INK, 2); break;
     case 'inkS': c.fillStyle = '#2a2a7a'; rr(c, x - 5, y - 10, 10, 10, 2); c.fill(); c.stroke(); c.fillStyle = '#5a5aaa'; c.fillRect(x - 3, y - 13, 6, 3); c.save(); c.translate(x + 2, y - 12); c.rotate(0.4); c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(5, -10, 2, -18); c.quadraticCurveTo(-2, -10, 0, 0); c.fill(); c.stroke(); c.restore(); break;
+    default: drawDecor25(c, d, t); break;
   }
 }
 

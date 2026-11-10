@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -254,6 +254,18 @@ function runLevel(idx, maxT) {
       const ncols = { orange: ['red', 'yellow'], green: ['yellow', 'blue'], purple: ['red', 'blue'] }[cg.c] || [cg.c];
       const pt = G.pots.find(p => p.x - pcxB() > 8 && p.x - pcxB() < 30 && Math.abs(p.gy - (P.y + P.h)) < 4 && p.x < cg.x * T);
       if (pt && !ncols.includes(pt.c) && !P.mixC.includes(pt.c) && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; }
+    }
+    // покупки: товар зі списку попереду вгорі — підстрибуємо
+    for (const s of G.shops26) if (!s.done) for (const it of s.items) {
+      if (it.taken || !s.list.includes(it.k) || s.got.includes(it.k)) continue;
+      const idx = it.x - pcxB();
+      if (idx > -4 && idx < 34 && it.y < P.y + 6 && P.onGround && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; }
+    }
+    // фігури: несемо потрібну — чужу фігуру перестрибуємо
+    const sd = G.sdoors.find(d => !d.open && d.x * T + 12 > pcxB());
+    if (sd && P.onGround && P.shape26 === sd.s) {
+      const sp = G.shapes26.find(s => !s.taken && s.s !== sd.s && s.x - pcxB() > 8 && s.x - pcxB() < 30 && s.x < sd.x * T);
+      if (sp && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; }
     }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
