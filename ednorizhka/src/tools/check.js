@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -267,6 +267,18 @@ function runLevel(idx, maxT) {
       const sp = G.shapes26.find(s => !s.taken && s.s !== sd.s && s.x - pcxB() > 8 && s.x - pcxB() < 30 && s.x < sd.x * T);
       if (sp && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.35; }
     }
+    // подарунки: стукаємо знизу по черзі, поки не знайдеться ключик
+    const kd = G.kdoors.find(d => !d.open && pcxB() < d.x * T + 12 && G.gifts.some(g => g.group === d.group && pcxB() > g.tx * T - 80));
+    if (kd) {
+      const gg = G.gifts.find(g => g.group === kd.group && !g.open), gx = gg ? gg.tx * T + 12 : 0;
+      if (gg) {
+        In.right = pcxB() < gx - 3; In.left = pcxB() > gx + 3; In.jumpP = false;
+        if (P.onGround && Math.abs(pcxB() - gx) <= 3 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.5; }
+      }
+    }
+    // міст із дощечок: перед річкою чекаємо, поки збудується
+    const pb = G.pbridges.find(b => !b.done && pcxB() > (b.x0 - 3.5) * T && pcxB() < b.x0 * T);
+    if (pb) { In.right = false; In.left = false; In.jumpP = false; In.jump = false; }
     if (typeof checkHooks === 'function') checkHooks(t);
     cool -= STEP; update(STEP); t += STEP;
     if (Math.abs(P.x - lastX) < 0.2) stuck += STEP; else stuck = 0; lastX = P.x;

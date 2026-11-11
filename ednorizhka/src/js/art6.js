@@ -470,6 +470,7 @@ function drawBolt2(c, b) {
     case 'bone': drawBoneBolt(c, b); return true;
     case 'ink': drawInkBolt(c, b); return true;
     case 'sunseed': drawSeedBolt(c, b); return true;
+    case 'cakebit': drawCakeBolt(c, b); return true;
   }
   return false;
 }

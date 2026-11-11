@@ -21,6 +21,7 @@ function initLevel21(G, L) {
   G.shapes26 = (L.shapes26 || []).map(s => Object.assign({ taken: false, touch: false, joy: 0 }, s));
   G.sdoors = (L.sdoors || []).map(d => Object.assign({ open: false, hintT: 0 }, d));
   G.pals26 = []; G.trail26 = [];
+  initLevel22(G, L);
 }
 
 /* ===== Список покупок: збери все зі списку в будь-якому порядку ===== */
@@ -104,6 +105,7 @@ function update21(dt) {
   updateShops(dt);
   updateHiders(dt);
   updateShapes(dt);
+  update22(dt);
 }
 
 /* ===== Хом'ячок Жуйко — ще один бігун: кидає насінинки, а наївшись, дрімає ===== */

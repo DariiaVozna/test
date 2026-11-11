@@ -116,6 +116,7 @@ function drawShapeDoor(c, d, t) {
 
 /* ===== На єдиноріжці: фігура над головою ===== */
 function drawOver25(c, P, t) {
+  drawOver26(c, P, t);
   if (!P.shape26) return;
   const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
   c.save(); c.globalAlpha = 0.5; c.fillStyle = '#ffffff'; circ(c, cx, y, 12); c.fill(); c.restore();
@@ -146,6 +147,7 @@ function drawWorld25(c, t, vis) {
   if (G.shapes26) for (const s of G.shapes26) if (!s.taken && vis(s.x)) { const j = s.joy > 0 ? Math.sin(s.joy * 20) * 2 : 0; drawShapePiece(c, s.s, s.x, s.y + Math.sin(t * 3 + s.x) * 2 - j, 9, t); }
   if (G.sdoors) for (const d of G.sdoors) if (vis(d.x * T + 12)) drawShapeDoor(c, d, t);
   if (G.pals26) for (const p of G.pals26) if (vis(p.x)) drawPal26(c, p.k, p.x, p.y, p.dir, t, 0.85);
+  drawWorld26(c, t, vis);
 }
 
 /* ===== Хом'ячок Жуйко ===== */
@@ -193,7 +195,7 @@ function drawBlock25(c, b) {
   else if (b === 'shapeblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#ffffff'; c.fill(); c.stroke(); c.fillStyle = '#ff4d4d'; circ(c, 7, 7, 3.4); c.fill(); c.fillStyle = '#3f8fff'; c.fillRect(13, 4, 7, 7); c.fillStyle = '#4cc35a'; c.beginPath(); c.moveTo(12, 13); c.lineTo(17, 21); c.lineTo(7, 21); c.closePath(); c.fill(); }
   else if (b === 'shelfblock') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#e8eef4'; c.fill(); c.stroke(); c.fillStyle = '#b0c0d0'; c.fillRect(1.5, 18, T - 3, 4); c.fillStyle = '#ff7a9a'; rr(c, 4, 7, 5, 11, 1); c.fill(); c.fillStyle = '#4cb6ff'; rr(c, 10, 9, 5, 9, 1); c.fill(); c.fillStyle = '#ffd23f'; rr(c, 16, 6, 4, 12, 1); c.fill(); }
   else if (b === 'sackblock') { rr(c, 1, 2, T - 2, T - 3, 7); c.fillStyle = '#e8d4a8'; c.fill(); c.stroke(); c.strokeStyle = '#a8783a'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(6, 6); c.lineTo(18, 6); c.stroke(); c.fillStyle = '#3a3030'; for (const [a, d] of [[8, 13], [14, 15], [11, 18]]) { ell(c, a, d, 1.6, 2.6, 0.4); c.fill(); } }
-  else return false;
+  else return drawBlock26(c, b);
   return true;
 }
 
@@ -207,6 +209,7 @@ function drawDecor25(c, d, t) {
     case 'shapeS': drawShapePiece(c, d.s || 'circle', x, y - 7, 6, t); break;
     case 'cartS': c.strokeStyle = '#8a9ab0'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x - 12, y - 16); c.lineTo(x - 8, y - 16); c.lineTo(x - 5, y - 5); c.lineTo(x + 9, y - 5); c.lineTo(x + 11, y - 13); c.lineTo(x - 7, y - 13); c.stroke(); c.fillStyle = INK; circ(c, x - 3, y - 2, 1.8); c.fill(); circ(c, x + 7, y - 2, 1.8); c.fill(); break;
     case 'seedS': c.fillStyle = '#3a3030'; for (let i = 0; i < 4; i++) { ell(c, x - 5 + i * 3.5, y - 1.5 - (i % 2), 1.4, 2.4, 0.5 + i); c.fill(); } break;
+    default: drawDecor26(c, d, t); break;
   }
 }
 

@@ -4945,6 +4945,147 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 27: День народження ===== */
+  {
+    id: 'cakehill', theme: 'cakehill', name: 'Свічки на торті', blurb: 'Запали всі свічки — і торт відчиниться', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Свічки на торті! Торкнися свічки або стрельни в неї рогом — вона засвітиться. Торт-двері відчиняться, коли засвітиш усі свічки');
+      L.candle(8); L.candle(11); L.candle(14);
+      L.cake(19, 3);
+      L.row(21, 9, 3);
+      L.enemy('snail', 29, 10);
+      L.block(34, 7, 4); L.candle(35, 7); L.candle(37, 7); L.row(34, 4, 4);
+      L.ground(47, 92);
+      L.check(49);
+      L.candle(53); L.candle(56); L.candle(59); L.candle(62);
+      L.cake(67, 7);
+      L.row(69, 9, 3);
+      L.enemy('frog', 76, 10);
+      L.block(80, 6, 3); L.row(80, 4, 3);
+      L.ground(95, 132);
+      L.check(97);
+      L.candle(101); L.candle(103); L.candle(105); L.candle(107); L.candle(109);
+      L.cake(114, 12);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.block(141, 8, 3, 2); L.candle(142, 8);
+      L.candle(147); L.candle(150);
+      L.cake(155, 15);
+      L.row(157, 9, 3);
+      L.gate(165);
+    }
+  },
+  {
+    id: 'giftland', theme: 'giftland', name: 'Країна подарунків', blurb: 'Знайди ключик у подарунках', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Країна подарунків! Стукни подарунок головою знизу — він відкриється. В одному з подарунків ключик від дверей');
+      L.gifts(10, 2, 21);
+      L.row(10, 4, 3, 3);
+      L.row(23, 9, 3);
+      L.enemy('snail', 31, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.gifts(53, 0, 64);
+      L.row(53, 4, 3, 3);
+      L.block(68, 7, 3); L.row(68, 5, 3);
+      L.enemy('frog', 76, 10);
+      L.row(80, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.gifts(101, 1, 112);
+      L.row(101, 4, 3, 3);
+      L.row(114, 9, 4);
+      L.enemy('bee', 122, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.gifts(141, 2, 152);
+      L.row(141, 4, 3, 3);
+      L.row(154, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'plankbridge', theme: 'plankbridge', name: 'Міст із дощечок', blurb: 'Збирай дощечки й будуй мости', w: 172,
+    build(L) {
+      L.ground(0, 40);
+      L.sign(3, 'Міст із дощечок! Збирай дощечки. Коли їх вистачить, підійди до річки — і міст збудується сам');
+      L.plank(8); L.plank(12); L.plank(16); L.plank(20);
+      L.block(24, 7, 3); L.plank(25, 6); L.row(24, 4, 3);
+      L.enemy('snail', 31, 10);
+      L.pbridge(40, 48);
+      L.ground(48, 92);
+      L.check(50);
+      L.plank(54); L.plank(57); L.plank(60); L.plank(63); L.plank(66);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.pbridge(92, 102);
+      L.ground(102, 132);
+      L.check(104);
+      L.plank(108); L.plank(111); L.plank(114); L.plank(117);
+      L.enemy('bee', 122, 6);
+      L.pbridge(132, 140);
+      L.ground(140, 172);
+      L.check(142);
+      L.row(146, 9, 5);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'partyhall', theme: 'partyhall', name: 'Велике свято', blurb: 'Свічки, подарунки й мости — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Велике свято! Запали свічки, знайди ключик у подарунках і збудуй міст із дощечок');
+      L.candle(8); L.candle(10); L.candle(12);
+      L.cake(16, 3);
+      L.plank(20); L.plank(23); L.plank(26); L.plank(29);
+      L.enemy('snail', 34, 10);
+      L.pbridge(44, 52);
+      L.ground(52, 98);
+      L.check(54);
+      L.gifts(58, 0, 69);
+      L.row(58, 4, 3, 3);
+      L.candle(73); L.candle(76);
+      L.block(79, 8, 3, 2); L.candle(80, 8);
+      L.cake(86, 6);
+      L.enemy('frog', 91, 10);
+      L.ground(101, 140);
+      L.check(103);
+      L.gifts(107, 2, 118);
+      L.row(107, 4, 3, 3);
+      L.plank(121); L.plank(124); L.plank(127); L.plank(130);
+      L.pbridge(140, 148);
+      L.ground(148, 172);
+      L.check(150);
+      L.row(153, 9, 5);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'raccoonden', theme: 'raccoonden', name: 'Нора Шкодька', blurb: 'Битва з Єнотом Шкодьком', w: 172, boss: 'raccoon',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Нора Шкодька. Єнот потягнув подарунки! Запали свічки й знайди ключик');
+      L.candle(8); L.candle(11);
+      L.cake(15, 2);
+      L.gifts(19, 1, 30);
+      L.row(19, 4, 3, 3);
+      L.enemy('snail', 36, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.row(55, 9, 4);
+      L.check(75);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, 'Єнот Шкодько! Коли він заплутається у стрічці — стріляй або стрибни на нього');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -4971,6 +5112,11 @@ const DECOR = {
   shapetown: (R, x, y) => { const r = R(); return r < 0.45 ? { k: 'shapeS', x, y, s: ['circle', 'square', 'triangle', 'star', 'heart'][Math.floor(R() * 5)] } : { k: 'tuft', x, y }; },
   bigshop: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'cartS', x, y } : r < 0.6 ? { k: 'basketS', x, y, it: ['apple', 'banana', 'grapes'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   hamsterhole: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'seedS', x, y } : r < 0.6 ? { k: 'mushS', x, y } : { k: 'tuft', x, y }; },
+  cakehill: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'presentS', x, y, c: ['#ff7ab8', '#7fb8ff', '#9fe08a'][Math.floor(R() * 3)] } : r < 0.55 ? { k: 'confS', x, y } : { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] }; },
+  giftland: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'presentS', x, y, c: ['#ff7ab8', '#7fb8ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.6 ? { k: 'balloonS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
+  plankbridge: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'stumpS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  partyhall: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'balloonS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : r < 0.65 ? { k: 'presentS', x, y, c: ['#ff7ab8', '#7fb8ff', '#9fe08a'][Math.floor(R() * 3)] } : { k: 'confS', x, y }; },
+  raccoonden: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'stumpS', x, y } : r < 0.55 ? { k: 'mushS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -5087,7 +5233,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -5323,6 +5469,19 @@ function buildLevel(idx) {
     // фігура (circle, square, triangle, star, heart) і двері з діркою такої фігури
     shape(x, s, row) { const p = { x: x * T + 12, y: row ? row * T + 12 : 0, s }; if (!row) later.push(() => { p.y = groundY(x) - 14; }); L.shapes26.push(p); },
     sdoor(x, s) { for (let y = 1; y < 10; y++) set(x, y, 2); L.sdoors.push({ x, s, top: 1 }); },
+    // частина 27: свічка (row — якщо на уступі); торт-двері cake(x, n) відчиняються, коли на рівні горить n свічок
+    candle(x, row) { const c = { x: x * T + 12, gy: row ? row * T : 10 * T }; if (!row) later.push(() => { c.gy = groundY(x); }); L.candles.push(c); },
+    cake(x, n) { for (let y = 1; y < 10; y++) set(x, y, 2); L.cakes.push({ x, n, top: 1 }); },
+    // три подарунки в рядку 6 на x, x+3, x+6; ключик у подарунку key (0–2) відчиняє двері door (рядки 1–9)
+    gifts(x, key, door) {
+      const group = L.kdoors.length;
+      for (let j = 0; j < 3; j++) { set(x + j * 3, 6, 2); L.gifts.push({ tx: x + j * 3, ty: 6, key: j === key, group }); }
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.kdoors.push({ x: door, top: 1, group });
+    },
+    // дощечка (row — якщо на уступі) і міст через яму від x0 до x1 (там не має бути землі); одна дощечка — дві клітинки
+    plank(x, row) { const p = { x: x * T + 12, y: row ? row * T + 12 : 0 }; if (!row) later.push(() => { p.y = groundY(x) - 12; }); L.planks.push(p); },
+    pbridge(x0, x1) { L.pbridges.push({ x0, x1, need: Math.ceil((x1 - x0) / 2) }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
