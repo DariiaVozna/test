@@ -18,6 +18,7 @@ function initLevel22(G, L) {
   G.kdoors = (L.kdoors || []).map(d => Object.assign({ open: false, hintT: 0 }, d));
   G.planks = (L.planks || []).map(p => Object.assign({ taken: false }, p));
   G.pbridges = (L.pbridges || []).map(b => Object.assign({ built: 0, building: false, done: false, hintT: 0, bt: 0 }, b));
+  initLevel23(G, L);
 }
 
 /* ===== Свічки: торкнися або стрельни — засвітиться ===== */
@@ -101,6 +102,7 @@ function update22(dt) {
   updateCandles(dt);
   updateGifts(dt);
   updatePlanks(dt);
+  update23(dt);
 }
 
 /* ===== Єнот Шкодько — ще один бігун: кидається тістечками, а потім заплутується у стрічці ===== */

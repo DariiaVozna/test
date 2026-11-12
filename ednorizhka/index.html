@@ -3016,6 +3016,7 @@ function drawBolt2(c, b) {
     case 'ink': drawInkBolt(c, b); return true;
     case 'sunseed': drawSeedBolt(c, b); return true;
     case 'cakebit': drawCakeBolt(c, b); return true;
+    case 'woodchip': drawChipBolt(c, b); return true;
   }
   return false;
 }
@@ -9110,6 +9111,7 @@ function txt24(c, s, x, y, size, fill, stroke, lw) {
 
 /* ===== Приклади ===== */
 function drawQuizBoard(c, q, t) {
+  if (q.kind) return drawQuizBoard27(c, q, t);
   const o = q.opts[1], cx = o.tx * T + 12, y = 2 * T + 4, w = 120, h = 44;
   c.save(); c.lineJoin = 'round';
   // мотузочки
@@ -9741,6 +9743,7 @@ function drawBridge26(c, b, t) {
 
 /* ===== Над єдиноріжкою: скільки дощечок ===== */
 function drawOver26(c, P, t) {
+  drawOver27(c, P, t);
   if (!P.planks) return;
   const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
   c.save(); c.globalAlpha = 0.6; c.fillStyle = '#ffffff'; rr(c, cx - 22, y - 10, 44, 20, 8); c.fill(); c.restore();
@@ -9760,6 +9763,7 @@ function drawWorld26(c, t, vis) {
   }
   if (G.planks) for (const p of G.planks) if (!p.taken && vis(p.x)) drawPlank26(c, p.x, p.y + Math.sin(t * 3 + p.x) * 2, Math.sin(t * 2 + p.x) * 0.15, 1);
   if (G.pbridges) for (const b of G.pbridges) if (vis((b.x0 + b.x1) / 2 * T, (b.x1 - b.x0) * T)) drawBridge26(c, b, t);
+  drawWorld27(c, t, vis);
 }
 
 /* ===== Єнот Шкодько ===== */
@@ -9810,7 +9814,7 @@ function drawBlock26(c, b) {
   else if (b === 'plankblock') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#d9a86a'; c.fill(); c.stroke(); c.strokeStyle = '#a8783a'; c.lineWidth = 1; for (const yy of [8, 16]) { c.beginPath(); c.moveTo(2, yy); c.lineTo(T - 2, yy); c.stroke(); } c.fillStyle = '#8a8a9a'; circ(c, 5, 4, 1); c.fill(); circ(c, 19, 12, 1); c.fill(); }
   else if (b === 'partyblock') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#ffffff'; c.fill(); c.stroke(); for (let i = 0; i < 6; i++) { c.fillStyle = RAINBOW[i]; c.fillRect(4 + (i * 7) % 16, 4 + Math.floor(i / 3) * 9 + (i % 2) * 3, 3, 3); } }
   else if (b === 'stumpblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#8a6040'; c.fill(); c.stroke(); c.fillStyle = '#c8a070'; ell(c, 12, 5, 9, 3.5); c.fill(); c.strokeStyle = '#8a6040'; c.lineWidth = 0.8; ell(c, 12, 5, 5, 2); c.stroke(); }
-  else return false;
+  else return drawBlock27(c, b);
   return true;
 }
 
@@ -9823,6 +9827,7 @@ function drawDecor26(c, d, t) {
     case 'presentS': c.fillStyle = d.c || '#7fb8ff'; rr(c, x - 6, y - 10, 12, 10, 1.5); c.fill(); c.stroke(); c.fillStyle = '#ffd23f'; c.fillRect(x - 1, y - 10, 2, 10); ell(c, x - 3, y - 11, 3, 1.8, -0.4); c.fill(); ell(c, x + 3, y - 11, 3, 1.8, 0.4); c.fill(); break;
     case 'confS': for (let i = 0; i < 5; i++) { c.fillStyle = RAINBOW[(i + Math.floor(x)) % 6]; c.fillRect(x - 8 + i * 4, y - 2 - (i % 2) * 2, 2.5, 2.5); } break;
     case 'stumpS': c.fillStyle = '#8a6040'; c.fillRect(x - 6, y - 8, 12, 8); c.strokeRect(x - 6, y - 8, 12, 8); c.fillStyle = '#c8a070'; ell(c, x, y - 8, 6, 2.4); c.fill(); c.stroke(); break;
+    default: drawDecor27(c, d, t); break;
   }
 }
 
@@ -9873,6 +9878,229 @@ function bgRaccoonden(c, viewW, camX, t) {
   hill(c, viewW, 222, 4, 0.03, 1.2, camX * 0.45, '#3a5a4a');
 }
 Object.assign(BG2, { cakehill: bgCakehill, giftland: bgGiftland, plankbridge: bgPlankbridge, partyhall: bgPartyhall, raccoonden: bgRaccoonden });
+
+/* ===== Частина 28 «Розумна ферма»: Котра година?, Лічильна галявина, Де моя мама?, Розумна ферма, Гребля Тріска ===== */
+Object.assign(THEMES, {
+  clockvillage: { sky: ['#c8e4ff', '#e2f0ff', '#fbfdff'], panel: '#22306a', top: '#8fd07a', topHi: '#bdf09e', topLo: '#5aa04a', fill: '#d8b088', fillLo: '#c49a72', dots: ['#ffffff', '#ffd23f', '#7fb8ff'], block: 'clockblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  countmeadow: { sky: ['#fff2b0', '#fff8d8', '#fffef4'], panel: '#4a3a10', top: '#7fd46a', topHi: '#b4f08e', topLo: '#4f9f4a', fill: '#c8a070', fillLo: '#b08a5a', dots: ['#ff7ab8', '#ffffff', '#ffd23f'], block: 'beadblock', ice: false, topStyle: 'grass', dotShape: 'sprinkle' },
+  mamafarm: { sky: ['#bfe8ff', '#e0f4ff', '#fffbe8'], panel: '#5a2a10', top: '#8fd07a', topHi: '#bdf09e', topLo: '#5aa04a', fill: '#b88a5a', fillLo: '#a07648', dots: ['#ffffff', '#ffd23f', '#ff9a8a'], block: 'hayblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  smartfarm: { sky: ['#ffe0c0', '#fff0dc', '#fffbf2'], panel: '#5a2a10', top: '#a0d87a', topHi: '#c8f0a0', topLo: '#6aa850', fill: '#c89a6a', fillLo: '#b08454', dots: ['#ffffff', '#ff7a5a', '#ffd23f'], block: 'barnblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  beaverdam: { sky: ['#a8d8f0', '#cfe8f4', '#f0f8fc'], panel: '#1f3a4a', top: '#6ac06a', topHi: '#9ae08a', topLo: '#3e8a4a', fill: '#8a6a4a', fillLo: '#765a3e', dots: ['#c8a070', '#ffffff', '#ffd23f'], block: 'logblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+});
+
+/* ===== Дошки: годинник і лічилка ===== */
+function drawClockFace(c, cx, cy, r, hour, t, solved) {
+  c.save(); c.translate(cx, cy); c.lineJoin = 'round'; c.lineCap = 'round';
+  c.fillStyle = solved ? '#e8ffe0' : '#ffffff'; c.strokeStyle = INK; c.lineWidth = 2; circ(c, 0, 0, r); c.fill(); c.stroke();
+  c.strokeStyle = '#ff7ab8'; c.lineWidth = 3; circ(c, 0, 0, r - 2.5); c.stroke();
+  for (let i = 1; i <= 12; i++) {
+    const a = i * TAU / 12 - Math.PI / 2;
+    if (r >= 24) txt24(c, String(i), Math.cos(a) * (r - 11), Math.sin(a) * (r - 11) + 0.5, i % 3 === 0 ? 11 : 9, i % 3 === 0 ? INK : '#6a5a8a');
+    else { c.fillStyle = INK; circ(c, Math.cos(a) * (r - 5), Math.sin(a) * (r - 5), i % 3 === 0 ? 1.4 : 0.8); c.fill(); }
+  }
+  // хвилинна стрілка на 12, годинна на hour
+  c.strokeStyle = '#3f5aff'; c.lineWidth = r >= 24 ? 2.4 : 1.6; c.beginPath(); c.moveTo(0, 2); c.lineTo(0, -(r - 7)); c.stroke();
+  const ha = hour * TAU / 12 - Math.PI / 2;
+  c.strokeStyle = '#ff4d4d'; c.lineWidth = r >= 24 ? 4.2 : 2.6; c.beginPath(); c.moveTo(-Math.cos(ha) * 2, -Math.sin(ha) * 2); c.lineTo(Math.cos(ha) * (r * 0.5), Math.sin(ha) * (r * 0.5)); c.stroke();
+  c.fillStyle = INK; circ(c, 0, 0, 2.4); c.fill();
+  c.restore();
+}
+function drawCountPic(c, k, x, y, t, i) {
+  c.save(); c.translate(x, y); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1;
+  if (k === 'butterfly') { const f = Math.abs(Math.sin(t * 8 + i)) * 0.5 + 0.5; c.fillStyle = RAINBOW[i % 6]; ell(c, -3.5 * f, -2, 3.5 * f, 3.4); c.fill(); c.stroke(); ell(c, 3.5 * f, -2, 3.5 * f, 3.4); c.fill(); c.stroke(); ell(c, -2.6 * f, 3, 2.4 * f, 2.2); c.fill(); ell(c, 2.6 * f, 3, 2.4 * f, 2.2); c.fill(); c.fillStyle = INK; c.fillRect(-0.8, -4, 1.6, 9); }
+  else if (k === 'apple') { c.restore(); drawItem26(c, 'apple', x, y, 0.62, t); return; }
+  else if (k === 'flower') { c.fillStyle = ['#ff7ab8', '#ffd23f', '#7fb8ff', '#ff9a5a'][i % 4]; for (let p = 0; p < 5; p++) { const a = p * TAU / 5; circ(c, Math.cos(a) * 3.4, Math.sin(a) * 3.4, 2.6); c.fill(); } c.fillStyle = '#ffe066'; circ(c, 0, 0, 2.2); c.fill(); c.stroke(); }
+  else if (k === 'fish') { c.fillStyle = ['#ff9a2a', '#4cb6ff', '#ff7ab8'][i % 3]; c.beginPath(); c.moveTo(4, 0); c.lineTo(8, -3.5); c.lineTo(8, 3.5); c.closePath(); c.fill(); c.stroke(); ell(c, 0, 0, 5.5, 3.6); c.fill(); c.stroke(); c.fillStyle = INK; circ(c, -2.6, -0.6, 0.9); c.fill(); }
+  c.restore();
+}
+function drawQuizBoard27(c, q, t) {
+  const o = q.opts[1], cx = o.tx * T + 12;
+  c.save(); c.lineJoin = 'round';
+  if (q.kind === 'clock') {
+    const cy = 2 * T + 30;
+    c.strokeStyle = '#8a6a4a'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx, cy - 40); c.lineTo(cx, cy - 56); c.stroke();
+    c.fillStyle = '#a8683a'; c.strokeStyle = INK; c.lineWidth = 1.4; circ(c, cx, cy, 40); c.fill(); c.stroke();
+    drawClockFace(c, cx, cy, 36, q.ans, t, q.solved);
+    if (q.solved) txt24(c, q.ans + ':00', cx + 64, cy, 18, '#2f9a3a', '#ffffff', 4);
+    else { c.globalAlpha = 0.5 + 0.5 * Math.sin(t * 4); txt24(c, '?', cx + 56, cy, 26, '#ffd23f', INK, 3); c.globalAlpha = 1; }
+  } else {
+    const n = q.ans, cols = Math.min(5, n), rows = Math.ceil(n / 5), w = 24 + cols * 28, h = 16 + rows * 28, y = 2 * T - 4;
+    c.strokeStyle = '#8a6a4a'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx - w / 3, y); c.lineTo(cx - w / 3 + 6, y - 26); c.moveTo(cx + w / 3, y); c.lineTo(cx + w / 3 - 6, y - 26); c.stroke();
+    c.fillStyle = '#a8683a'; c.strokeStyle = INK; rr(c, cx - w / 2 - 4, y - 4, w + 8, h + 8, 6); c.fill(); c.stroke();
+    c.fillStyle = q.solved ? '#e8ffe0' : '#fffaf0'; rr(c, cx - w / 2, y, w, h, 4); c.fill();
+    for (let i = 0; i < n; i++) { const r = Math.floor(i / 5), k = i % 5, inRow = Math.min(5, n - r * 5), px = cx - (inRow - 1) * 14 + k * 28, py = y + 22 + r * 28 + Math.sin(t * 2 + i) * 1; c.save(); c.translate(px, py); c.scale(1.5, 1.5); drawCountPic(c, q.pic, 0, 0, t, i); c.restore(); }
+    if (q.solved) txt24(c, String(q.ans), cx + w / 2 + 18, y + h / 2, 18, '#2f9a3a', '#ffffff', 4);
+    else { c.globalAlpha = 0.5 + 0.5 * Math.sin(t * 4); txt24(c, '?', cx + w / 2 + 16, y + h / 2, 22, '#ffd23f', INK, 3); c.globalAlpha = 1; }
+  }
+  c.restore();
+}
+
+/* ===== Тваринки: малюки й мами ===== */
+function drawAnimal27(c, k, x, gy, dir, t, s, baby) {
+  c.save(); c.translate(x, gy); c.scale(dir * s, s); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1.3 / s * (baby ? 0.8 : 1);
+  const hop = baby ? Math.abs(Math.sin(t * 7 + x * 0.1)) * 1.5 : 0; c.translate(0, -hop);
+  const eye = (ex, ey, r) => { c.fillStyle = INK; circ(c, ex, ey, r); c.fill(); c.fillStyle = '#fff'; circ(c, ex - r * 0.35, ey - r * 0.4, r * 0.4); c.fill(); };
+  const er = baby ? 1.8 : 1.4;
+  if (k === 'duck') {
+    c.fillStyle = baby ? '#ffe066' : '#ffffff'; ell(c, -2, -7, 10, 7); c.fill(); c.stroke(); circ(c, 6, -17, 6); c.fill(); c.stroke();
+    c.fillStyle = '#ff9a2a'; c.beginPath(); c.moveTo(11, -17); c.lineTo(16, -15); c.lineTo(11, -13.5); c.closePath(); c.fill(); c.stroke();
+    eye(7.5, -18.5, er); c.fillStyle = baby ? '#ffd23f' : '#e8e8f0'; ell(c, -4, -7, 5, 3, -0.3); c.fill();
+    c.fillStyle = '#ff9a2a'; c.fillRect(-4, -1, 2, 2); c.fillRect(1, -1, 2, 2);
+  } else if (k === 'cat') {
+    c.fillStyle = baby ? '#ffc890' : '#ff9a4a'; c.lineWidth *= 1;
+    c.beginPath(); c.moveTo(-10, -6); c.quadraticCurveTo(-18, -10, -15, -20); c.stroke();
+    ell(c, -2, -7, 10, 7); c.fill(); c.stroke();
+    c.beginPath(); c.moveTo(1, -20); c.lineTo(3, -27); c.lineTo(7, -22); c.moveTo(9, -22); c.lineTo(13, -27); c.lineTo(13, -19); c.fill(); c.stroke();
+    circ(c, 7, -17, 7); c.fill(); c.stroke(); eye(5, -18, er); eye(10, -18, er); c.fillStyle = '#ff7a9a'; circ(c, 8, -15, 1.1); c.fill();
+    c.strokeStyle = '#c86a20'; c.lineWidth = 1; c.beginPath(); c.moveTo(-6, -12); c.lineTo(-5, -8); c.moveTo(-1, -13); c.lineTo(0, -9); c.stroke();
+  } else if (k === 'dog') {
+    c.fillStyle = baby ? '#f0d0a0' : '#d9a86a';
+    c.beginPath(); c.moveTo(-10, -9); c.quadraticCurveTo(-16, -14 + Math.sin(t * 12) * 2, -13, -18); c.stroke();
+    ell(c, -2, -7, 10, 7); c.fill(); c.stroke(); circ(c, 7, -17, 7); c.fill(); c.stroke();
+    c.fillStyle = '#8a5a30'; ell(c, 2, -16, 3, 6, 0.3); c.fill(); c.stroke(); ell(c, 12.5, -15, 3, 5.5, -0.3); c.fill(); c.stroke();
+    eye(6, -18, er); eye(10, -18, er); c.fillStyle = INK; ell(c, 8, -13.5, 2, 1.5); c.fill();
+  } else if (k === 'hen') {
+    if (baby) { c.fillStyle = '#ffe066'; circ(c, 0, -7, 7); c.fill(); c.stroke(); circ(c, 5, -14, 5); c.fill(); c.stroke(); c.fillStyle = '#ff9a2a'; c.beginPath(); c.moveTo(9, -14); c.lineTo(13, -13); c.lineTo(9, -11.5); c.closePath(); c.fill(); eye(6, -15, er); }
+    else {
+      c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(-12, -14); c.lineTo(-16, -22); c.lineTo(-9, -16); c.closePath(); c.fill(); c.stroke();
+      ell(c, -2, -8, 11, 8); c.fill(); c.stroke(); circ(c, 7, -18, 6); c.fill(); c.stroke();
+      c.fillStyle = '#ff4d4d'; circ(c, 5, -25, 2.4); c.fill(); circ(c, 8.5, -25, 2.4); c.fill(); ell(c, 12, -14, 1.6, 2.6); c.fill();
+      c.fillStyle = '#ffb030'; c.beginPath(); c.moveTo(12, -19); c.lineTo(16, -17); c.lineTo(12, -16); c.closePath(); c.fill(); eye(8.5, -19.5, er);
+    }
+  } else if (k === 'pig') {
+    c.fillStyle = baby ? '#ffd0dc' : '#ffb0c8';
+    ell(c, -2, -8, 11, 8); c.fill(); c.stroke(); circ(c, 7, -15, 7); c.fill(); c.stroke();
+    c.beginPath(); c.moveTo(3, -21); c.lineTo(4, -26); c.lineTo(8, -22); c.fill(); c.stroke();
+    c.fillStyle = '#ff8aa8'; ell(c, 13, -14, 3.4, 3); c.fill(); c.stroke(); c.fillStyle = INK; circ(c, 12.2, -14, 0.7); c.fill(); circ(c, 13.8, -14, 0.7); c.fill(); eye(8, -17.5, er);
+    c.strokeStyle = '#ff8aa8'; c.lineWidth = 1.2; c.beginPath(); c.arc(-14, -10, 2.4, 0, Math.PI * 1.6); c.stroke();
+  }
+  // ніжки
+  if (k !== 'duck') { c.strokeStyle = INK; c.lineWidth = 1.2 / s; for (const fx of [-6, 3]) { c.beginPath(); c.moveTo(fx, -1); c.lineTo(fx, 0); c.stroke(); } }
+  c.restore();
+}
+function drawMomGate(c, m, t) {
+  // хвірточка-паркан і мама за нею
+  const x = m.x * T, gy = m.gy;
+  if (tileAt(m.x, 8) === 2) {
+    for (let y = m.top; y < 10; y++) if (tileAt(m.x, y) === 2) {
+      c.save(); c.fillStyle = '#f4ead8'; c.strokeStyle = INK; c.lineWidth = 1.2; c.fillRect(x + 2, y * T, T - 4, T); c.strokeRect(x + 2, y * T, T - 4, T);
+      c.fillStyle = '#e8d8b8'; c.fillRect(x + 4, y * T + 2, 3, T - 4); c.restore();
+    }
+    c.save(); c.fillStyle = '#c8945a'; c.strokeStyle = INK; c.lineWidth = 1.2; for (const yy of [5.4, 8.4]) { c.fillRect(x - 2, yy * T, T + 4, 5); c.strokeRect(x - 2, yy * T, T + 4, 5); } c.restore();
+    // бульбашка з малюком: кого шукає мама
+    const bx = (m.x + 1.6) * T, by = gy - 64 + Math.sin(t * 2 + m.x) * 2;
+    c.save(); c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 1.2; circ(c, bx, by, 15); c.fill(); c.stroke(); c.beginPath(); c.moveTo(bx - 4, by + 13); c.lineTo(bx - 8, by + 22); c.lineTo(bx + 2, by + 14); c.fill(); c.restore();
+    drawAnimal27(c, m.k, bx, by + 10, -1, t, 0.75, true);
+  }
+  const dir = m.open ? -1 : -1, jump = m.happy > 0 ? Math.abs(Math.sin(m.happy * 12)) * 5 : 0;
+  drawAnimal27(c, m.k, (m.x + 1.6) * T, gy - jump, dir, t, 1.25, false);
+  if (m.open) drawAnimal27(c, m.k, (m.x + 0.6) * T, gy, 1, t, 0.75, true);
+  if (m.happy > 0) { c.save(); c.globalAlpha = Math.min(1, m.happy); for (let i = 0; i < 3; i++) { heart21 && heart21(c, (m.x + 1) * T + Math.sin(i * 2 + t * 3) * 10, gy - 40 - (2 - m.happy) * 20 - i * 10, 4); } c.restore(); }
+}
+
+/* ===== Над єдиноріжкою: малюк, якого несеш ===== */
+function drawOver27(c, P, t) {
+  if (!P.baby) return;
+  const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
+  c.save(); c.globalAlpha = 0.55; c.fillStyle = '#ffffff'; circ(c, cx, y, 14); c.fill(); c.restore();
+  drawAnimal27(c, P.baby, cx, y + 10, P.dir, t, 0.75, true);
+}
+
+function drawWorld27(c, t, vis) {
+  if (G.babies) for (const b of G.babies) if (!b.taken && vis(b.x)) { const j = b.joy > 0 ? Math.abs(Math.sin(b.joy * 20)) * 4 : 0; drawAnimal27(c, b.k, b.x, b.y - j, -1, t, 0.85, true); }
+  if (G.moms) for (const m of G.moms) if (vis((m.x + 1) * T, 120)) drawMomGate(c, m, t);
+}
+
+/* ===== Бобер Тріско ===== */
+function drawBeaverBoss(c, B, t) {
+  const rest = B.state === 'rest' && !B.dead, fl = B.flash > 0, run = B.state === 'dash' && !B.dead;
+  c.save(); c.translate(B.x, B.gy - (run ? Math.abs(Math.sin(t * 16)) * 3 : 0)); c.scale(2.3, 2.3);
+  drawBeaver(c, 0, 0, B.dir > 0 ? 1 : -1, run ? t * 2 : t, fl, B.dead);
+  c.restore();
+  if (rest) {
+    const lx = B.x + (B.dir > 0 ? 34 : -34);
+    c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4; c.fillStyle = '#a8783e'; rr(c, lx - 16, B.gy - 16, 32, 16, 7); c.fill(); c.stroke();
+    c.fillStyle = '#e8c890'; ell(c, lx + (B.dir > 0 ? -16 : 16), B.gy - 8, 4, 8); c.fill(); c.stroke();
+    for (let i = 0; i < 3; i++) { c.fillStyle = '#e8c890'; c.save(); c.translate(lx + Math.sin(t * 9 + i * 2) * 14, B.gy - 22 - ((t * 40 + i * 12) % 26)); c.rotate(t * 6 + i); c.fillRect(-2.5, -1.2, 5, 2.4); c.restore(); }
+    c.restore();
+  }
+  if (B.dead) { c.save(); c.fillStyle = 'rgba(255,120,170,.6)'; circ(c, B.x - 14, B.gy - 30, 3); c.fill(); circ(c, B.x + 14, B.gy - 30, 3); c.fill(); c.restore(); }
+}
+function drawChipBolt(c, b) {
+  c.save(); c.translate(b.x, b.y); c.rotate(b.t * 12); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.2; c.fillStyle = '#e8c890';
+  c.beginPath(); c.moveTo(-8, -2); c.lineTo(6, -4); c.lineTo(8, 2); c.lineTo(-6, 4); c.closePath(); c.fill(); c.stroke();
+  c.strokeStyle = '#a8783e'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(-5, 0); c.lineTo(5, -1); c.stroke();
+  c.restore();
+}
+
+/* ===== Блоки ===== */
+function drawBlock27(c, b) {
+  c.strokeStyle = INK; c.lineWidth = 1.4;
+  if (b === 'clockblock') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#ffe0a0'; c.fill(); c.stroke(); c.fillStyle = '#ffffff'; circ(c, 12, 12, 7.5); c.fill(); c.lineWidth = 1; c.stroke(); c.beginPath(); c.moveTo(12, 12); c.lineTo(12, 7); c.moveTo(12, 12); c.lineTo(15.5, 12); c.stroke(); }
+  else if (b === 'beadblock') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#c8e8ff'; c.fill(); c.stroke(); for (let i = 0; i < 4; i++) { c.fillStyle = RAINBOW[i]; circ(c, 5 + i * 4.6, 12, 2.2); c.fill(); } c.strokeStyle = '#8a8a9a'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(2, 12); c.lineTo(T - 2, 12); c.stroke(); }
+  else if (b === 'hayblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#ffd86a'; c.fill(); c.stroke(); c.strokeStyle = '#d0a830'; c.lineWidth = 1; for (const yy of [6, 11, 16]) { c.beginPath(); c.moveTo(3, yy); c.lineTo(T - 3, yy + 1); c.stroke(); } c.strokeStyle = '#c86a30'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(7, 1.5); c.lineTo(7, T - 1.5); c.moveTo(17, 1.5); c.lineTo(17, T - 1.5); c.stroke(); }
+  else if (b === 'barnblock') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#e05a4a'; c.fill(); c.stroke(); c.strokeStyle = '#ffffff'; c.lineWidth = 1.8; c.beginPath(); c.moveTo(3, 3); c.lineTo(T - 3, T - 3); c.moveTo(T - 3, 3); c.lineTo(3, T - 3); c.stroke(); c.strokeRect(3, 3, T - 6, T - 6); }
+  else if (b === 'logblock') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#a8783e'; c.fill(); c.stroke(); c.fillStyle = '#e8c890'; circ(c, 12, 12, 7); c.fill(); c.lineWidth = 0.8; c.strokeStyle = '#a8783e'; circ(c, 12, 12, 4); c.stroke(); circ(c, 12, 12, 1.5); c.stroke(); }
+  else return false;
+  return true;
+}
+
+/* ===== Декор ===== */
+function drawDecor27(c, d, t) {
+  const x = d.x, y = d.y;
+  c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 0.8;
+  switch (d.k) {
+    case 'clockS': c.fillStyle = '#a8683a'; c.fillRect(x - 1.5, y - 14, 3, 14); drawClockFace(c, x, y - 20, 8, (Math.floor(x) % 12) + 1, t, false); break;
+    case 'butterS': drawCountPic(c, 'butterfly', x + Math.sin(t * 2 + x) * 4, y - 14 + Math.cos(t * 3 + x) * 3, t, Math.floor(x)); break;
+    case 'fenceS': c.fillStyle = '#f4ead8'; for (const fx of [-8, 0, 8]) { c.beginPath(); c.moveTo(x + fx - 3, y); c.lineTo(x + fx - 3, y - 12); c.lineTo(x + fx, y - 15); c.lineTo(x + fx + 3, y - 12); c.lineTo(x + fx + 3, y); c.closePath(); c.fill(); c.stroke(); } c.fillStyle = '#c8945a'; c.fillRect(x - 12, y - 9, 24, 3); break;
+    case 'logS': c.fillStyle = '#a8783e'; rr(c, x - 10, y - 7, 20, 7, 3.5); c.fill(); c.stroke(); c.fillStyle = '#e8c890'; ell(c, x + 10, y - 3.5, 2.4, 3.5); c.fill(); c.stroke(); break;
+  }
+}
+
+/* ===== Фони ===== */
+function bgClockvillage(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  const span = 180;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.22, span) + 40, h = 90 + ((i % 2) + 2) % 2 * 20;
+    c.fillStyle = '#f0d8b8'; c.fillRect(wx, 222 - h, 44, h); c.fillStyle = '#d06a5a'; c.beginPath(); c.moveTo(wx - 6, 222 - h); c.lineTo(wx + 22, 222 - h - 30); c.lineTo(wx + 50, 222 - h); c.closePath(); c.fill();
+    drawClockFace(c, wx + 22, 222 - h + 22, 15, ((i % 12) + 12) % 12 + 1, t, false);
+    c.fillStyle = '#9fd8ff'; c.fillRect(wx + 14, 222 - h + 48, 16, 18);
+  }
+  hill(c, viewW, 222, 4, 0.03, 1.2, camX * 0.45, '#a8dc90');
+}
+function bgCountmeadow(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  for (let i = 0; i < 10; i++) { const x = wrapX(i * 91 + 30 - camX * 0.18 + Math.sin(t + i) * 8, viewW + 100) - 50, y = 80 + ((i * 37) % 70) + Math.cos(t * 1.3 + i) * 6; c.save(); c.globalAlpha = 0.5; drawCountPic(c, 'butterfly', x, y, t, i); c.restore(); }
+  hill(c, viewW, 200, 10, 0.012, 0.4, camX * 0.12, '#d8f0a8');
+  hill(c, viewW, 218, 6, 0.03, 1.2, camX * 0.45, '#a8dc80');
+}
+function bgMamafarm(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  const bx = wrapX(300 - camX * 0.2, viewW + 360) - 180;
+  c.fillStyle = '#e05a4a'; c.fillRect(bx, 130, 120, 92); c.fillStyle = '#b04030'; c.beginPath(); c.moveTo(bx - 10, 132); c.lineTo(bx + 60, 90); c.lineTo(bx + 130, 132); c.closePath(); c.fill();
+  c.fillStyle = '#ffffff'; c.fillRect(bx + 40, 170, 40, 52); c.strokeStyle = '#e05a4a'; c.lineWidth = 3; c.beginPath(); c.moveTo(bx + 40, 170); c.lineTo(bx + 80, 222); c.moveTo(bx + 80, 170); c.lineTo(bx + 40, 222); c.stroke();
+  c.fillStyle = '#ffd86a'; c.fillRect(bx + 52, 110, 16, 16);
+  hill(c, viewW, 222, 4, 0.03, 1.2, camX * 0.45, '#a8dc90');
+}
+function bgSmartfarm(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  const span = 150;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.25, span) + 30;
+    c.fillStyle = '#ffd86a'; rr(c, wx, 190, 40, 32, 10); c.fill(); c.strokeStyle = '#d0a830'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(wx + 4, 200); c.lineTo(wx + 36, 202); c.moveTo(wx + 4, 210); c.lineTo(wx + 36, 212); c.stroke();
+    c.fillStyle = '#a8683a'; c.fillRect(wx + 80, 150, 6, 72); drawClockFace(c, wx + 83, 146, 12, ((i % 12) + 12) % 12 + 1, t, false);
+  }
+  hill(c, viewW, 222, 4, 0.03, 1.2, camX * 0.45, '#b8e090');
+}
+function bgBeaverdam(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  hill(c, viewW, 190, 10, 0.012, 0.4, camX * 0.12, '#9ad0a0');
+  c.fillStyle = '#7ac0e8'; c.fillRect(0, 200, viewW, 30);
+  const span = 220;
+  for (let i = -1; i < viewW / span + 2; i++) { const wx = i * span + wrapX(-camX * 0.3, span); for (let l = 0; l < 4; l++) { c.fillStyle = l % 2 ? '#8a6040' : '#a8783e'; rr(c, wx + l * 8, 182 + l * 7, 90 - l * 10, 8, 4); c.fill(); } }
+}
+Object.assign(BG2, { clockvillage: bgClockvillage, countmeadow: bgCountmeadow, mamafarm: bgMamafarm, smartfarm: bgSmartfarm, beaverdam: bgBeaverdam });
 
 /* ===== Рівні. Координати в плитках: x — стовпчик, y — рядок (0 угорі, земля з рядка 10) ===== */
 const LEVELS = [
@@ -14961,6 +15189,134 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 28: Розумна ферма ===== */
+  {
+    id: 'clockvillage', theme: 'clockvillage', name: 'Котра година?', blurb: 'Подивись на годинник і відчини двері', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Котра година? Подивись на годинник: коротка червона стрілка показує годину. Стукни головою знизу кубик із цим числом');
+      L.row(6, 9, 3);
+      L.clockq(12, 3, [2, 6], 23, 1);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.clockq(53, 6, [9, 12], 64, 0);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.clockq(103, 9, [4, 7], 114, 2);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.clockq(141, 12, [1, 10], 152, 2);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'countmeadow', theme: 'countmeadow', name: 'Лічильна галявина', blurb: 'Порахуй картинки на дошці', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Лічильна галявина! Порахуй картинки на дошці й стукни головою знизу кубик із правильним числом');
+      L.row(6, 9, 3);
+      L.countq(12, 3, 'apple', [2, 4], 23, 1);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.countq(53, 5, 'butterfly', [4, 6], 64, 1);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.countq(103, 7, 'flower', [8, 9], 114, 0);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.countq(141, 9, 'fish', [6, 8], 152, 2);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'mamafarm', theme: 'mamafarm', name: 'Де моя мама?', blurb: 'Допоможи малюкам знайти своїх мам', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Де моя мама? Візьми малюка й віднеси до його мами за хвірточкою. Новий малюк міняється з тим, якого несеш');
+      L.baby(10, 'duck'); L.mom(16, 'duck');
+      L.row(20, 9, 3);
+      L.baby(25, 'cat'); L.baby(29, 'dog'); L.mom(35, 'dog');
+      L.enemy('snail', 40, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.baby(53, 'pig'); L.baby(57, 'hen'); L.mom(63, 'pig');
+      L.block(68, 7, 3); L.row(68, 5, 3);
+      L.enemy('frog', 76, 10);
+      L.baby(81, 'cat'); L.mom(87, 'cat');
+      L.ground(95, 134);
+      L.check(97);
+      L.baby(100, 'hen'); L.baby(104, 'duck'); L.baby(108, 'pig'); L.mom(114, 'pig');
+      L.row(118, 9, 4);
+      L.enemy('bee', 126, 6);
+      L.ground(137, 170);
+      L.check(139);
+      L.baby(143, 'hen'); L.baby(147, 'dog'); L.mom(152, 'hen');
+      L.row(156, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'smartfarm', theme: 'smartfarm', name: 'Розумна ферма', blurb: 'Годинник, лічилка й малюки — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Розумна ферма! Тут і годинник, і лічилка, і малюки, що шукають маму');
+      L.row(6, 9, 3);
+      L.clockq(10, 4, [3, 8], 21, 1);
+      L.baby(25, 'duck'); L.mom(31, 'duck');
+      L.enemy('snail', 38, 10);
+      L.ground(47, 94);
+      L.check(49);
+      L.countq(53, 6, 'butterfly', [5, 8], 64, 1);
+      L.baby(68, 'pig'); L.baby(72, 'cat'); L.mom(78, 'cat');
+      L.enemy('frog', 86, 10);
+      L.ground(97, 136);
+      L.check(99);
+      L.clockq(103, 2, [5, 11], 114, 0);
+      L.countq(117, 8, 'apple', [7, 10], 128, 1);
+      L.ground(139, 172);
+      L.check(141);
+      L.baby(145, 'dog'); L.mom(150, 'dog');
+      L.row(154, 9, 5);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'beaverdam', theme: 'beaverdam', name: 'Гребля Тріска', blurb: 'Битва з Бобром Тріском', w: 172, boss: 'bigbeaver',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Гребля Тріска. Бобер перегородив річку! Визнач час, порахуй рибок і допоможи малюкові');
+      L.clockq(10, 5, [3, 7], 21, 1);
+      L.countq(24, 4, 'fish', [3, 5], 35, 1);
+      L.enemy('snail', 40, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.baby(55, 'duck'); L.mom(61, 'duck');
+      L.row(66, 9, 4);
+      L.check(75);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, 'Бобер Тріско! Коли він засяде гризти колоду — стріляй або стрибни на нього');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -14992,6 +15348,11 @@ const DECOR = {
   plankbridge: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'stumpS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   partyhall: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'balloonS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : r < 0.65 ? { k: 'presentS', x, y, c: ['#ff7ab8', '#7fb8ff', '#9fe08a'][Math.floor(R() * 3)] } : { k: 'confS', x, y }; },
   raccoonden: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'stumpS', x, y } : r < 0.55 ? { k: 'mushS', x, y } : { k: 'tuft', x, y }; },
+  clockvillage: (R, x, y) => { const r = R(); return r < 0.25 ? { k: 'clockS', x, y } : r < 0.55 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  countmeadow: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'butterS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#7fb8ff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  mamafarm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fenceS', x, y } : r < 0.55 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  smartfarm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fenceS', x, y } : r < 0.45 ? { k: 'clockS', x, y } : { k: 'tuft', x, y }; },
+  beaverdam: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'logS', x, y } : r < 0.55 ? { k: 'stumpS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -15108,7 +15469,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -15357,6 +15718,25 @@ function buildLevel(idx) {
     // дощечка (row — якщо на уступі) і міст через яму від x0 до x1 (там не має бути землі); одна дощечка — дві клітинки
     plank(x, row) { const p = { x: x * T + 12, y: row ? row * T + 12 : 0 }; if (!row) later.push(() => { p.y = groundY(x) - 12; }); L.planks.push(p); },
     pbridge(x0, x1) { L.pbridges.push({ x0, x1, need: Math.ceil((x1 - x0) / 2) }); },
+    // частина 28: «Котра година?» — дошка з годинником (стрілка на hour), кубики-відповіді як у quiz
+    clockq(x, hour, wrong, door, pos) {
+      const nums = wrong.slice(); nums.splice(pos || 0, 0, hour);
+      const opts = nums.map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'clock', ans: hour, opts, door, top: 1 });
+    },
+    // лічилка: на дошці n картинок (butterfly, apple, flower, fish), кубики-відповіді як у quiz
+    countq(x, n, pic, wrong, door, pos) {
+      const nums = wrong.slice(); nums.splice(pos || 0, 0, n);
+      const opts = nums.map((v, j) => ({ tx: x + j * 3, ty: 6, n: v }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'count', pic, ans: n, opts, door, top: 1 });
+    },
+    // малюк (duck, cat, dog, hen, pig) і хвірточка mom(x, k): за нею чекає мама, відчиняється, коли принесеш її малюка
+    baby(x, k, row) { const b = { x: x * T + 12, y: row ? row * T : 10 * T, k }; if (!row) later.push(() => { b.y = groundY(x); }); L.babies.push(b); },
+    mom(x, k) { for (let y = 1; y < 10; y++) set(x, y, 2); const m = { x, k, top: 1, gy: 10 * T }; later.push(() => { m.gy = groundY(x + 1); }); L.moms.push(m); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
@@ -20621,17 +21001,17 @@ function updateQuizzes(dt) {
   const P = G.P, h = P.headHit;
   for (const q of G.quizzes) {
     if (q.wrongT > 0) q.wrongT -= dt; if (q.okT > 0) q.okT -= dt; if (q.hintT > 0) q.hintT -= dt;
-    if (!q.solved && !(q.hintT > 0) && doorTouch(q.door, q.top)) { q.hintT = 4; say('Двері з прикладом! Порахуй ' + q.a + ' ' + q.op + ' ' + q.b + ' і стукни головою знизу кубик із правильною відповіддю', 3.4); }
+    if (!q.solved && !(q.hintT > 0) && doorTouch(q.door, q.top)) { q.hintT = 4; say(quizMsg(q, 'hint'), 3.4); }
     if (q.solved || !h || P.flip) continue;
     const o = q.opts.find(o => o.tx === h.tx && o.ty === h.ty);
     if (!o) continue;
     if (o.n === q.ans) {
       q.solved = true; q.okT = 1.5; openColumn(q.door, q.top);
       G.points += 3; floatText(o.tx * T + 12, o.ty * T - 10, '+3', '#4cc35a'); Snd.seq([0, 4, 7, 12], 659, 0.07, 'triangle', 0.08); burst(o.tx * T + 12, o.ty * T, 18, RAINBOW, 150);
-      say('Правильно! ' + q.a + ' ' + q.op + ' ' + q.b + ' = ' + q.ans + '. Двері відчинилися', 2.6);
+      say(quizMsg(q, 'ok'), 2.6);
     } else if (q.wrongT <= 0.3) {
       q.wrongT = 0.8; q.wrongTx = o.tx; Snd.tone(220, 0.2, 'triangle', 0.05, 180);
-      say('Ой, ні. Порахуй ще раз: ' + q.a + ' ' + q.op + ' ' + q.b + ' = ?', 2.2);
+      say(quizMsg(q, 'bad'), 2.2);
     }
   }
 }
@@ -20831,6 +21211,7 @@ function initLevel22(G, L) {
   G.kdoors = (L.kdoors || []).map(d => Object.assign({ open: false, hintT: 0 }, d));
   G.planks = (L.planks || []).map(p => Object.assign({ taken: false }, p));
   G.pbridges = (L.pbridges || []).map(b => Object.assign({ built: 0, building: false, done: false, hintT: 0, bt: 0 }, b));
+  initLevel23(G, L);
 }
 
 /* ===== Свічки: торкнися або стрельни — засвітиться ===== */
@@ -20914,11 +21295,91 @@ function update22(dt) {
   updateCandles(dt);
   updateGifts(dt);
   updatePlanks(dt);
+  update23(dt);
 }
 
 /* ===== Єнот Шкодько — ще один бігун: кидається тістечками, а потім заплутується у стрічці ===== */
 RUNNERS.raccoon = { name: 'Єнот Шкодько', acc: 'Єнота Шкодька', win: ' Він повернув усі подарунки й попросився на свято. Звісно, його запросили!', bolt: 'cakebit', hello: 'Єнот Шкодько: «Усі подарунки мої! І торт теж мій!»', rest: 'Шкодько заплутався у стрічці! Стріляй або стрибни на нього', arm: 'Шкодько надто спритний! Стріляй, коли він заплутається у стрічці', restText: 'Ой, стрічка…' };
 BOSS2.raccoon = L => ({ kind: 'raccoon', name: RUNNERS.raccoon.name, acc: RUNNERS.raccoon.acc, win: RUNNERS.raccoon.win, x: L.arena.x0 + 30 * T, gy: 10 * T, y: 10 * T - 26, hw: 28, hh: 26, hp: 22, max: 22, t: 0, st: 0, state: 'wait', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, n: 0, tx: 0, vy: 0, hop: 0 });
+
+/* ===== Частина 28 «Розумна ферма»: котра година, лічилка, малюки шукають маму й Бобер Тріско ===== */
+Object.assign(TUNES, {
+  clockvillage: { base: 587.33, ms: 180, n: [0, null, 7, null, 0, null, 7, null, 4, 5, 7, null, 12, null, 7, null, 0, null, 7, null, 0, null, 7, null, 5, 4, 2, null, 0, null, null, null], b: [0, -5, -3, -7] },
+  countmeadow: { base: 523.25, ms: 170, n: [0, 2, 4, 5, 7, null, 7, null, 9, 9, 9, 9, 7, null, null, null, 5, 5, 5, 5, 4, null, 4, null, 2, 2, 2, 2, 0, null, null, null], b: [0, -5, -3, -7] },
+  mamafarm: { base: 659.25, ms: 175, n: [0, 0, 7, 7, 9, 9, 7, null, 5, 5, 4, 4, 2, 2, 0, null, 7, 7, 5, 5, 4, 4, 2, null, 7, 7, 5, 5, 4, 4, 2, null], b: [0, -5, -3, -7] },
+  smartfarm: { base: 698.46, ms: 165, n: [0, 4, 7, 4, 0, 4, 7, 12, 11, 7, 4, 7, 2, null, null, null, 5, 9, 12, 9, 5, 9, 12, 17, 16, 12, 9, 12, 7, null, null, null], b: [0, -5, -3, -7] },
+  beaverdam: { base: 466.16, ms: 185, n: [0, 3, 7, null, 5, 8, 12, null, 7, 10, 14, null, 12, 10, 7, null, 5, null, 3, null, 2, null, 0, null, 7, 5, 3, 2, 0, null, null, null], b: [0, -4, -2, -5] },
+});
+const COUNT_GEN = { butterfly: 'метеликів', apple: 'яблучок', flower: 'квіточок', fish: 'рибок' };
+const BABY_UA = { duck: 'каченя', cat: 'кошеня', dog: 'цуценя', hen: 'курча', pig: 'порося' };
+const MOM_UA = { duck: 'мама-качка', cat: 'мама-кішка', dog: 'мама-собака', hen: 'мама-курка', pig: 'мама-свинка' };
+function hourWord(h) { return h + ' ' + (h === 1 ? 'година' : h >= 2 && h <= 4 ? 'години' : 'годин'); }
+
+/* ===== Тексти для дверей-завдань: приклад, годинник, лічилка ===== */
+function quizMsg(q, what) {
+  if (q.kind === 'clock') return {
+    hint: 'Котра година на годиннику? Коротка стрілка показує годину. Стукни головою знизу кубик із правильним числом',
+    ok: 'Правильно! Зараз ' + hourWord(q.ans) + '. Двері відчинилися',
+    bad: 'Ой, ні. Подивись, на яке число показує коротка стрілка',
+  }[what];
+  if (q.kind === 'count') return {
+    hint: 'Скільки ' + COUNT_GEN[q.pic] + ' на дошці? Порахуй по одному й стукни головою знизу кубик із правильним числом',
+    ok: 'Правильно! Їх ' + q.ans + '. Двері відчинилися',
+    bad: 'Ой, ні. Порахуй ще раз, по одному',
+  }[what];
+  const e = q.a + ' ' + q.op + ' ' + q.b;
+  return {
+    hint: 'Двері з прикладом! Порахуй ' + e + ' і стукни головою знизу кубик із правильною відповіддю',
+    ok: 'Правильно! ' + e + ' = ' + q.ans + '. Двері відчинилися',
+    bad: 'Ой, ні. Порахуй ще раз: ' + e + ' = ?',
+  }[what];
+}
+
+/* ===== Підготовка рівня ===== */
+function initLevel23(G, L) {
+  const P = G.P; P.baby = null;
+  G.babies = (L.babies || []).map(b => Object.assign({ taken: false, touch: false, joy: 0 }, b));
+  G.moms = (L.moms || []).map(m => Object.assign({ open: false, hintT: 0, happy: 0 }, m));
+}
+
+/* ===== Малюки шукають маму: неси малюка до його мами ===== */
+function updateBabies(dt) {
+  const P = G.P;
+  for (const b of G.babies) {
+    if (b.joy > 0) b.joy -= dt;
+    if (b.taken) continue;
+    const touch = overlap(P, { x: b.x - 12, y: b.y - 22, w: 24, h: 22 });
+    if (touch && !b.touch) {
+      const old = P.baby;
+      P.baby = b.k; Snd.tone(700, 0.12, 'sine', 0.06, 1000); burst(b.x, b.y - 10, 8, ['#ffd23f', '#ffffff'], 90);
+      floatText(P.x + P.w / 2, P.y - 14, BABY_UA[b.k], '#ff7ab8');
+      if (old) { b.k = old; b.joy = 0.6; } else b.taken = true;
+      if (!G.babyHint) { G.babyHint = true; say('Ти несеш ' + BABY_UA[P.baby] + '. Допоможи знайти його маму!', 2.8); }
+    }
+    b.touch = touch;
+  }
+  for (const m of G.moms) {
+    if (m.hintT > 0) m.hintT -= dt;
+    if (m.happy > 0) m.happy -= dt;
+    if (m.open || !doorTouch(m.x, m.top)) continue;
+    if (P.baby === m.k) {
+      m.open = true; m.happy = 2; P.baby = null; openColumn(m.x, m.top); G.points += 3;
+      Snd.seq([0, 4, 7, 12, 16], 659, 0.07, 'triangle', 0.08);
+      const B = BABY_UA[m.k]; say(B[0].toUpperCase() + B.slice(1) + ' знайшло маму! Хвірточка відчинилася', 2.6);
+    } else if (m.hintT <= 0) {
+      m.hintT = 3.4;
+      say('Тут чекає ' + MOM_UA[m.k] + '. Вона шукає своє ' + BABY_UA[m.k] + (P.baby ? ', а в тебе ' + BABY_UA[P.baby] + '. Поміняй малюка' : '. Знайди його'), 3.2);
+    }
+  }
+}
+
+function update23(dt) {
+  updateBabies(dt);
+}
+
+/* ===== Бобер Тріско — ще один бігун: кидає тріски, а потім гризе колоду ===== */
+RUNNERS.bigbeaver = { name: 'Бобер Тріско', acc: 'Бобра Тріска', win: ' Тепер він будує для звіряток місток, а не греблю поперек дороги.', bolt: 'woodchip', hello: 'Бобер Тріско: «Гриз-гриз! Перегороджу всю ферму!»', rest: 'Тріско засів гризти колоду! Стріляй або стрибни на нього', arm: 'Тріско надто швидкий! Стріляй, коли він гризтиме колоду', restText: 'Гриз-гриз…' };
+BOSS2.bigbeaver = L => ({ kind: 'bigbeaver', name: RUNNERS.bigbeaver.name, acc: RUNNERS.bigbeaver.acc, win: RUNNERS.bigbeaver.win, x: L.arena.x0 + 30 * T, gy: 10 * T, y: 10 * T - 26, hw: 28, hh: 26, hp: 22, max: 22, t: 0, st: 0, state: 'wait', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, n: 0, tx: 0, vy: 0, hop: 0 });
 
 /* ===== Збереження ===== */
 const SAVE_KEY = 'zoriana-ednorizhka-v1';
@@ -21141,6 +21602,7 @@ function renderGame(dt) {
     else if (B.kind === 'blot') drawBlotBoss(c, B, B.t);
     else if (B.kind === 'hamster') drawHamsterBoss(c, B, B.t);
     else if (B.kind === 'raccoon') drawRaccoonBoss(c, B, B.t);
+    else if (B.kind === 'bigbeaver') drawBeaverBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -21361,7 +21823,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко", 'Єнот Шкодько'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко", 'Єнот Шкодько', 'Бобер Тріско'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -21456,6 +21918,7 @@ function showWin() {
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
   if (i === 109) { $('winTitle').textContent = 'Сова Ухнюшка виспалась і повернула зірочки!'; $('winText').textContent = 'А в Місті всі чекають посилок. Тільки Цуцик Гавчик розгриз коробки, і зірочки розсипалися по всьому місту: на пошті, в пожежній частині й на будмайданчику. Треба все зібрати! Наступна країна: ' + LEVELS[110].name + '.'; }
+  if (i === 134) { $('winTitle').textContent = 'Єнот Шкодько повернув подарунки!'; $('winText').textContent = 'Далі — розумна ферма: годинники, лічилки й малюки, які загубили своїх мам. А на річці вже стукає зубами Бобер Тріско. Наступна країна: ' + LEVELS[135].name + '.'; }
   if (i === 129) { $('winTitle').textContent = "Хом'ячок Жуйко поділився запасами!"; $('winText').textContent = 'А тепер — день народження! Свічки на торті, подарунки й міст до свята. Тільки Єнот Шкодько вже нишпорить біля подарунків. Наступна країна: ' + LEVELS[130].name + '.'; }
   if (i === 124) { $('winTitle').textContent = 'Клякса Бризка стала гарним малюнком!'; $('winText').textContent = "Далі — веселий базар і ліс хованок. Тільки Хом'ячок Жуйко сховав усі покупки собі в щічки, а лісові друзі з переляку поховалися в кущі. Наступна країна: " + LEVELS[125].name + '.'; }
   if (i === 119) { $('winTitle').textContent = 'Мишеня Клацик повернуло всі зірочки!'; $('winText').textContent = 'Далі — Розумна країна: приклади на дверях, англійські слова й чарівні фарби. Але Клякса Бризка заляпала всі підказки чорнилом, і зірочки загубилися! Наступна країна: ' + LEVELS[120].name + '.'; }

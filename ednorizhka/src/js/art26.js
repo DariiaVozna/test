@@ -98,6 +98,7 @@ function drawBridge26(c, b, t) {
 
 /* ===== Над єдиноріжкою: скільки дощечок ===== */
 function drawOver26(c, P, t) {
+  drawOver27(c, P, t);
   if (!P.planks) return;
   const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
   c.save(); c.globalAlpha = 0.6; c.fillStyle = '#ffffff'; rr(c, cx - 22, y - 10, 44, 20, 8); c.fill(); c.restore();
@@ -117,6 +118,7 @@ function drawWorld26(c, t, vis) {
   }
   if (G.planks) for (const p of G.planks) if (!p.taken && vis(p.x)) drawPlank26(c, p.x, p.y + Math.sin(t * 3 + p.x) * 2, Math.sin(t * 2 + p.x) * 0.15, 1);
   if (G.pbridges) for (const b of G.pbridges) if (vis((b.x0 + b.x1) / 2 * T, (b.x1 - b.x0) * T)) drawBridge26(c, b, t);
+  drawWorld27(c, t, vis);
 }
 
 /* ===== Єнот Шкодько ===== */
@@ -167,7 +169,7 @@ function drawBlock26(c, b) {
   else if (b === 'plankblock') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#d9a86a'; c.fill(); c.stroke(); c.strokeStyle = '#a8783a'; c.lineWidth = 1; for (const yy of [8, 16]) { c.beginPath(); c.moveTo(2, yy); c.lineTo(T - 2, yy); c.stroke(); } c.fillStyle = '#8a8a9a'; circ(c, 5, 4, 1); c.fill(); circ(c, 19, 12, 1); c.fill(); }
   else if (b === 'partyblock') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#ffffff'; c.fill(); c.stroke(); for (let i = 0; i < 6; i++) { c.fillStyle = RAINBOW[i]; c.fillRect(4 + (i * 7) % 16, 4 + Math.floor(i / 3) * 9 + (i % 2) * 3, 3, 3); } }
   else if (b === 'stumpblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#8a6040'; c.fill(); c.stroke(); c.fillStyle = '#c8a070'; ell(c, 12, 5, 9, 3.5); c.fill(); c.strokeStyle = '#8a6040'; c.lineWidth = 0.8; ell(c, 12, 5, 5, 2); c.stroke(); }
-  else return false;
+  else return drawBlock27(c, b);
   return true;
 }
 
@@ -180,6 +182,7 @@ function drawDecor26(c, d, t) {
     case 'presentS': c.fillStyle = d.c || '#7fb8ff'; rr(c, x - 6, y - 10, 12, 10, 1.5); c.fill(); c.stroke(); c.fillStyle = '#ffd23f'; c.fillRect(x - 1, y - 10, 2, 10); ell(c, x - 3, y - 11, 3, 1.8, -0.4); c.fill(); ell(c, x + 3, y - 11, 3, 1.8, 0.4); c.fill(); break;
     case 'confS': for (let i = 0; i < 5; i++) { c.fillStyle = RAINBOW[(i + Math.floor(x)) % 6]; c.fillRect(x - 8 + i * 4, y - 2 - (i % 2) * 2, 2.5, 2.5); } break;
     case 'stumpS': c.fillStyle = '#8a6040'; c.fillRect(x - 6, y - 8, 12, 8); c.strokeRect(x - 6, y - 8, 12, 8); c.fillStyle = '#c8a070'; ell(c, x, y - 8, 6, 2.4); c.fill(); c.stroke(); break;
+    default: drawDecor27(c, d, t); break;
   }
 }
 

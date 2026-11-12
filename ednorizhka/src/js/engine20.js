@@ -36,17 +36,17 @@ function updateQuizzes(dt) {
   const P = G.P, h = P.headHit;
   for (const q of G.quizzes) {
     if (q.wrongT > 0) q.wrongT -= dt; if (q.okT > 0) q.okT -= dt; if (q.hintT > 0) q.hintT -= dt;
-    if (!q.solved && !(q.hintT > 0) && doorTouch(q.door, q.top)) { q.hintT = 4; say('Двері з прикладом! Порахуй ' + q.a + ' ' + q.op + ' ' + q.b + ' і стукни головою знизу кубик із правильною відповіддю', 3.4); }
+    if (!q.solved && !(q.hintT > 0) && doorTouch(q.door, q.top)) { q.hintT = 4; say(quizMsg(q, 'hint'), 3.4); }
     if (q.solved || !h || P.flip) continue;
     const o = q.opts.find(o => o.tx === h.tx && o.ty === h.ty);
     if (!o) continue;
     if (o.n === q.ans) {
       q.solved = true; q.okT = 1.5; openColumn(q.door, q.top);
       G.points += 3; floatText(o.tx * T + 12, o.ty * T - 10, '+3', '#4cc35a'); Snd.seq([0, 4, 7, 12], 659, 0.07, 'triangle', 0.08); burst(o.tx * T + 12, o.ty * T, 18, RAINBOW, 150);
-      say('Правильно! ' + q.a + ' ' + q.op + ' ' + q.b + ' = ' + q.ans + '. Двері відчинилися', 2.6);
+      say(quizMsg(q, 'ok'), 2.6);
     } else if (q.wrongT <= 0.3) {
       q.wrongT = 0.8; q.wrongTx = o.tx; Snd.tone(220, 0.2, 'triangle', 0.05, 180);
-      say('Ой, ні. Порахуй ще раз: ' + q.a + ' ' + q.op + ' ' + q.b + ' = ?', 2.2);
+      say(quizMsg(q, 'bad'), 2.2);
     }
   }
 }

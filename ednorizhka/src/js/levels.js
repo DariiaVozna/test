@@ -5086,6 +5086,134 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 28: Розумна ферма ===== */
+  {
+    id: 'clockvillage', theme: 'clockvillage', name: 'Котра година?', blurb: 'Подивись на годинник і відчини двері', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Котра година? Подивись на годинник: коротка червона стрілка показує годину. Стукни головою знизу кубик із цим числом');
+      L.row(6, 9, 3);
+      L.clockq(12, 3, [2, 6], 23, 1);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.clockq(53, 6, [9, 12], 64, 0);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.clockq(103, 9, [4, 7], 114, 2);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.clockq(141, 12, [1, 10], 152, 2);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'countmeadow', theme: 'countmeadow', name: 'Лічильна галявина', blurb: 'Порахуй картинки на дошці', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Лічильна галявина! Порахуй картинки на дошці й стукни головою знизу кубик із правильним числом');
+      L.row(6, 9, 3);
+      L.countq(12, 3, 'apple', [2, 4], 23, 1);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.countq(53, 5, 'butterfly', [4, 6], 64, 1);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.countq(103, 7, 'flower', [8, 9], 114, 0);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.countq(141, 9, 'fish', [6, 8], 152, 2);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'mamafarm', theme: 'mamafarm', name: 'Де моя мама?', blurb: 'Допоможи малюкам знайти своїх мам', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Де моя мама? Візьми малюка й віднеси до його мами за хвірточкою. Новий малюк міняється з тим, якого несеш');
+      L.baby(10, 'duck'); L.mom(16, 'duck');
+      L.row(20, 9, 3);
+      L.baby(25, 'cat'); L.baby(29, 'dog'); L.mom(35, 'dog');
+      L.enemy('snail', 40, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.baby(53, 'pig'); L.baby(57, 'hen'); L.mom(63, 'pig');
+      L.block(68, 7, 3); L.row(68, 5, 3);
+      L.enemy('frog', 76, 10);
+      L.baby(81, 'cat'); L.mom(87, 'cat');
+      L.ground(95, 134);
+      L.check(97);
+      L.baby(100, 'hen'); L.baby(104, 'duck'); L.baby(108, 'pig'); L.mom(114, 'pig');
+      L.row(118, 9, 4);
+      L.enemy('bee', 126, 6);
+      L.ground(137, 170);
+      L.check(139);
+      L.baby(143, 'hen'); L.baby(147, 'dog'); L.mom(152, 'hen');
+      L.row(156, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'smartfarm', theme: 'smartfarm', name: 'Розумна ферма', blurb: 'Годинник, лічилка й малюки — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Розумна ферма! Тут і годинник, і лічилка, і малюки, що шукають маму');
+      L.row(6, 9, 3);
+      L.clockq(10, 4, [3, 8], 21, 1);
+      L.baby(25, 'duck'); L.mom(31, 'duck');
+      L.enemy('snail', 38, 10);
+      L.ground(47, 94);
+      L.check(49);
+      L.countq(53, 6, 'butterfly', [5, 8], 64, 1);
+      L.baby(68, 'pig'); L.baby(72, 'cat'); L.mom(78, 'cat');
+      L.enemy('frog', 86, 10);
+      L.ground(97, 136);
+      L.check(99);
+      L.clockq(103, 2, [5, 11], 114, 0);
+      L.countq(117, 8, 'apple', [7, 10], 128, 1);
+      L.ground(139, 172);
+      L.check(141);
+      L.baby(145, 'dog'); L.mom(150, 'dog');
+      L.row(154, 9, 5);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'beaverdam', theme: 'beaverdam', name: 'Гребля Тріска', blurb: 'Битва з Бобром Тріском', w: 172, boss: 'bigbeaver',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Гребля Тріска. Бобер перегородив річку! Визнач час, порахуй рибок і допоможи малюкові');
+      L.clockq(10, 5, [3, 7], 21, 1);
+      L.countq(24, 4, 'fish', [3, 5], 35, 1);
+      L.enemy('snail', 40, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.baby(55, 'duck'); L.mom(61, 'duck');
+      L.row(66, 9, 4);
+      L.check(75);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, 'Бобер Тріско! Коли він засяде гризти колоду — стріляй або стрибни на нього');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -5117,6 +5245,11 @@ const DECOR = {
   plankbridge: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'stumpS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   partyhall: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'balloonS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : r < 0.65 ? { k: 'presentS', x, y, c: ['#ff7ab8', '#7fb8ff', '#9fe08a'][Math.floor(R() * 3)] } : { k: 'confS', x, y }; },
   raccoonden: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'stumpS', x, y } : r < 0.55 ? { k: 'mushS', x, y } : { k: 'tuft', x, y }; },
+  clockvillage: (R, x, y) => { const r = R(); return r < 0.25 ? { k: 'clockS', x, y } : r < 0.55 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  countmeadow: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'butterS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#7fb8ff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  mamafarm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fenceS', x, y } : r < 0.55 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  smartfarm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fenceS', x, y } : r < 0.45 ? { k: 'clockS', x, y } : { k: 'tuft', x, y }; },
+  beaverdam: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'logS', x, y } : r < 0.55 ? { k: 'stumpS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -5233,7 +5366,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -5482,6 +5615,25 @@ function buildLevel(idx) {
     // дощечка (row — якщо на уступі) і міст через яму від x0 до x1 (там не має бути землі); одна дощечка — дві клітинки
     plank(x, row) { const p = { x: x * T + 12, y: row ? row * T + 12 : 0 }; if (!row) later.push(() => { p.y = groundY(x) - 12; }); L.planks.push(p); },
     pbridge(x0, x1) { L.pbridges.push({ x0, x1, need: Math.ceil((x1 - x0) / 2) }); },
+    // частина 28: «Котра година?» — дошка з годинником (стрілка на hour), кубики-відповіді як у quiz
+    clockq(x, hour, wrong, door, pos) {
+      const nums = wrong.slice(); nums.splice(pos || 0, 0, hour);
+      const opts = nums.map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'clock', ans: hour, opts, door, top: 1 });
+    },
+    // лічилка: на дошці n картинок (butterfly, apple, flower, fish), кубики-відповіді як у quiz
+    countq(x, n, pic, wrong, door, pos) {
+      const nums = wrong.slice(); nums.splice(pos || 0, 0, n);
+      const opts = nums.map((v, j) => ({ tx: x + j * 3, ty: 6, n: v }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'count', pic, ans: n, opts, door, top: 1 });
+    },
+    // малюк (duck, cat, dog, hen, pig) і хвірточка mom(x, k): за нею чекає мама, відчиняється, коли принесеш її малюка
+    baby(x, k, row) { const b = { x: x * T + 12, y: row ? row * T : 10 * T, k }; if (!row) later.push(() => { b.y = groundY(x); }); L.babies.push(b); },
+    mom(x, k) { for (let y = 1; y < 10; y++) set(x, y, 2); const m = { x, k, top: 1, gy: 10 * T }; later.push(() => { m.gy = groundY(x + 1); }); L.moms.push(m); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

@@ -16,6 +16,7 @@ function txt24(c, s, x, y, size, fill, stroke, lw) {
 
 /* ===== Приклади ===== */
 function drawQuizBoard(c, q, t) {
+  if (q.kind) return drawQuizBoard27(c, q, t);
   const o = q.opts[1], cx = o.tx * T + 12, y = 2 * T + 4, w = 120, h = 44;
   c.save(); c.lineJoin = 'round';
   // мотузочки
