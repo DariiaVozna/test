@@ -37,6 +37,7 @@ function initLevel23(G, L) {
   const P = G.P; P.baby = null;
   G.babies = (L.babies || []).map(b => Object.assign({ taken: false, touch: false, joy: 0 }, b));
   G.moms = (L.moms || []).map(m => Object.assign({ open: false, hintT: 0, happy: 0 }, m));
+  initLevel24(G, L);
 }
 
 /* ===== Малюки шукають маму: неси малюка до його мами ===== */
@@ -72,6 +73,7 @@ function updateBabies(dt) {
 
 function update23(dt) {
   updateBabies(dt);
+  update24(dt);
 }
 
 /* ===== Бобер Тріско — ще один бігун: кидає тріски, а потім гризе колоду ===== */

@@ -5214,6 +5214,139 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 29: Сад і двір ===== */
+  {
+    id: 'recyclepark', theme: 'recyclepark', name: 'Чистий парк', blurb: 'Розсортуй сміття по контейнерах', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Чистий парк! Підбирай сміття й неси в контейнер свого кольору: жовтий — пластик і бляшанки, синій — папір, зелений — очистки');
+      L.trash(9, 'bottle'); L.bin(14, 'yellow');
+      L.trash(18, 'paper'); L.bin(22, 'green'); L.bin(25, 'blue');
+      L.cleangate(30, 2);
+      L.row(32, 9, 3);
+      L.enemy('snail', 39, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.trash(53, 'peel'); L.bin(58, 'green');
+      L.trash(62, 'can'); L.bin(66, 'blue'); L.bin(69, 'yellow');
+      L.trash(73, 'box'); L.bin(77, 'blue');
+      L.cleangate(82, 5);
+      L.enemy('frog', 87, 10);
+      L.ground(95, 134);
+      L.check(97);
+      L.trash(101, 'core'); L.bin(105, 'yellow'); L.bin(108, 'green');
+      L.trash(112, 'bottle'); L.bin(116, 'yellow');
+      L.trash(120, 'paper'); L.bin(124, 'blue');
+      L.cleangate(129, 8);
+      L.ground(137, 170);
+      L.check(139);
+      L.row(143, 9, 5);
+      L.enemy('bee', 151, 6);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'beanstalk', theme: 'beanstalk', name: 'Чарівна квасоля', blurb: 'Посади зернятко й вилізь на скелю', w: 172,
+    build(L) {
+      L.ground(0, 101);
+      L.sign(3, 'Чарівна квасоля! Збери зернятко й посади в грядку біля високої скелі — виросте стебло-драбинка');
+      L.seed(9); L.row(12, 9, 3);
+      L.soil(18, 5); L.block(24, 5, 6, 5); L.row(25, 3, 4);
+      L.enemy('snail', 36, 10);
+      L.check(40);
+      L.seed(44);
+      L.soil(50, 6); L.block(57, 4, 5, 6); L.row(58, 2, 3);
+      L.enemy('frog', 70, 10);
+      L.check(74);
+      L.seed(78);
+      L.soil(83, 5); L.block(89, 5, 5, 5); L.row(90, 3, 3);
+      L.ground(104, 172);
+      L.check(105);
+      L.seed(107); L.seed(109);
+      L.soil(112, 6); L.block(119, 4, 6, 6); L.row(120, 2, 4);
+      L.row(127, 9, 4);
+      L.enemy('bee', 133, 6);
+      L.check(138);
+      L.row(145, 9, 5);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'hopscotch', theme: 'hopscotch', name: 'Класики', blurb: 'Пострибай по числах по порядку', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Класики! Стань на клітинки з числами по порядку: 1, 2, 3… Числа переплутані — шукай уважно');
+      L.hops(8, [1, 2, 3], 16);
+      L.row(18, 9, 3);
+      L.enemy('snail', 25, 10);
+      L.hops(30, [2, 1, 3, 4], 40);
+      L.ground(47, 92);
+      L.check(49);
+      L.hops(53, [3, 1, 4, 2, 5], 65);
+      L.block(69, 7, 3); L.row(69, 5, 3);
+      L.enemy('frog', 77, 10);
+      L.row(83, 9, 4);
+      L.ground(95, 134);
+      L.check(97);
+      L.hops(101, [5, 3, 1, 2, 4, 6], 115);
+      L.row(118, 9, 4);
+      L.enemy('bee', 126, 6);
+      L.ground(137, 170);
+      L.check(139);
+      L.hops(143, [2, 4, 1, 3], 153);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'gardenyard', theme: 'gardenyard', name: 'Сад і двір', blurb: 'Сміття, квасоля й класики — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 96);
+      L.sign(3, 'Сад і двір! Прибери сміття, посади квасолю й пострибай у класики');
+      L.trash(9, 'can'); L.bin(13, 'yellow');
+      L.trash(17, 'peel'); L.bin(21, 'green');
+      L.cleangate(26, 2);
+      L.seed(30);
+      L.soil(35, 5); L.block(41, 5, 5, 5); L.row(42, 3, 3);
+      L.enemy('snail', 52, 10);
+      L.check(56);
+      L.hops(60, [2, 3, 1], 68);
+      L.row(70, 9, 4);
+      L.enemy('frog', 80, 10);
+      L.ground(99, 172);
+      L.check(101);
+      L.trash(105, 'box'); L.bin(109, 'green'); L.bin(112, 'blue');
+      L.cleangate(117, 3);
+      L.seed(121);
+      L.soil(126, 6); L.block(133, 4, 5, 6); L.row(134, 2, 3);
+      L.check(141);
+      L.hops(146, [1, 3, 2, 4], 156);
+      L.row(158, 9, 3);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'goosemeadow', theme: 'goosemeadow', name: 'Двір Шипуна', blurb: 'Битва з Гусаком Шипуном', w: 172, boss: 'biggoose',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Двір Шипуна. Гусак розкидав сміття й не пускає до саду! Прибери, пройди класики й посади квасолю');
+      L.trash(8, 'bottle'); L.bin(12, 'yellow');
+      L.cleangate(16, 1);
+      L.hops(20, [2, 1, 3], 28);
+      L.enemy('snail', 36, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.seed(55);
+      L.soil(60, 5); L.block(66, 5, 4, 5); L.row(67, 3, 2);
+      L.check(76);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, 'Гусак Шипун! Коли він сховає голову під крило — стріляй або стрибни на нього');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -5250,6 +5383,11 @@ const DECOR = {
   mamafarm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fenceS', x, y } : r < 0.55 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   smartfarm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fenceS', x, y } : r < 0.45 ? { k: 'clockS', x, y } : { k: 'tuft', x, y }; },
   beaverdam: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'logS', x, y } : r < 0.55 ? { k: 'stumpS', x, y } : { k: 'tuft', x, y }; },
+  recyclepark: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'sproutS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  beanstalk: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'sproutS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  hopscotch: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'chalkS', x, y, c: ['#ff7ab8', '#7fb8ff', '#ffd23f', '#9fe08a'][Math.floor(R() * 4)] } : { k: 'tuft', x, y }; },
+  gardenyard: (R, x, y) => { const r = R(); return r < 0.2 ? { k: 'canS', x, y } : r < 0.45 ? { k: 'sproutS', x, y } : r < 0.7 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  goosemeadow: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : r < 0.5 ? { k: 'sproutS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -5366,7 +5504,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -5634,6 +5772,15 @@ function buildLevel(idx) {
     // малюк (duck, cat, dog, hen, pig) і хвірточка mom(x, k): за нею чекає мама, відчиняється, коли принесеш її малюка
     baby(x, k, row) { const b = { x: x * T + 12, y: row ? row * T : 10 * T, k }; if (!row) later.push(() => { b.y = groundY(x); }); L.babies.push(b); },
     mom(x, k) { for (let y = 1; y < 10; y++) set(x, y, 2); const m = { x, k, top: 1, gy: 10 * T }; later.push(() => { m.gy = groundY(x + 1); }); L.moms.push(m); },
+    // частина 29: сміття (bottle, can, paper, box, peel, core), контейнер bin(x, c) — yellow, blue, green; ворота cleangate(x, n) — коли розсортовано n речей
+    trash(x, k, row) { const o = { x: x * T + 12, y: row ? row * T + 12 : 0, k }; if (!row) later.push(() => { o.y = groundY(x) - 12; }); L.trashes.push(o); },
+    bin(x, c) { const b = { x: x * T + 12, gy: 10 * T, c }; later.push(() => { b.gy = groundY(x); }); L.bins.push(b); },
+    cleangate(x, n) { for (let y = 1; y < 10; y++) set(x, y, 2); L.cleangates.push({ x, n, top: 1 }); },
+    // чарівне зернятко; грядка soil(x, h): стебло-сходинки (x+1, 9), (x+2, 8) … h штук; скеля cliff ставимо з x+h+1 висотою h рядків
+    seed(x, row) { const s = { x: x * T + 12, y: row ? row * T + 12 : 0 }; if (!row) later.push(() => { s.y = groundY(x) - 12; }); L.seeds29.push(s); },
+    soil(x, h) { L.soils.push({ x, h }); },
+    // класики: числа nums на землі в клітинках x, x+2, x+4 …, двері door відчиняються, коли пройдено 1, 2, 3 … по порядку
+    hops(x, nums, door) { const cols = nums.map((n, i) => x + i * 2); for (let y = 1; y < 10; y++) set(door, y, 2); L.hops.push({ nums, cols, door, top: 1 }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

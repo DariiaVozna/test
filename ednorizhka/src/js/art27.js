@@ -120,6 +120,7 @@ function drawMomGate(c, m, t) {
 
 /* ===== Над єдиноріжкою: малюк, якого несеш ===== */
 function drawOver27(c, P, t) {
+  drawOver28(c, P, t);
   if (!P.baby) return;
   const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
   c.save(); c.globalAlpha = 0.55; c.fillStyle = '#ffffff'; circ(c, cx, y, 14); c.fill(); c.restore();
@@ -129,6 +130,7 @@ function drawOver27(c, P, t) {
 function drawWorld27(c, t, vis) {
   if (G.babies) for (const b of G.babies) if (!b.taken && vis(b.x)) { const j = b.joy > 0 ? Math.abs(Math.sin(b.joy * 20)) * 4 : 0; drawAnimal27(c, b.k, b.x, b.y - j, -1, t, 0.85, true); }
   if (G.moms) for (const m of G.moms) if (vis((m.x + 1) * T, 120)) drawMomGate(c, m, t);
+  drawWorld28(c, t, vis);
 }
 
 /* ===== Бобер Тріско ===== */
@@ -161,7 +163,7 @@ function drawBlock27(c, b) {
   else if (b === 'hayblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#ffd86a'; c.fill(); c.stroke(); c.strokeStyle = '#d0a830'; c.lineWidth = 1; for (const yy of [6, 11, 16]) { c.beginPath(); c.moveTo(3, yy); c.lineTo(T - 3, yy + 1); c.stroke(); } c.strokeStyle = '#c86a30'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(7, 1.5); c.lineTo(7, T - 1.5); c.moveTo(17, 1.5); c.lineTo(17, T - 1.5); c.stroke(); }
   else if (b === 'barnblock') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#e05a4a'; c.fill(); c.stroke(); c.strokeStyle = '#ffffff'; c.lineWidth = 1.8; c.beginPath(); c.moveTo(3, 3); c.lineTo(T - 3, T - 3); c.moveTo(T - 3, 3); c.lineTo(3, T - 3); c.stroke(); c.strokeRect(3, 3, T - 6, T - 6); }
   else if (b === 'logblock') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#a8783e'; c.fill(); c.stroke(); c.fillStyle = '#e8c890'; circ(c, 12, 12, 7); c.fill(); c.lineWidth = 0.8; c.strokeStyle = '#a8783e'; circ(c, 12, 12, 4); c.stroke(); circ(c, 12, 12, 1.5); c.stroke(); }
-  else return false;
+  else return drawBlock28(c, b);
   return true;
 }
 
@@ -174,6 +176,7 @@ function drawDecor27(c, d, t) {
     case 'butterS': drawCountPic(c, 'butterfly', x + Math.sin(t * 2 + x) * 4, y - 14 + Math.cos(t * 3 + x) * 3, t, Math.floor(x)); break;
     case 'fenceS': c.fillStyle = '#f4ead8'; for (const fx of [-8, 0, 8]) { c.beginPath(); c.moveTo(x + fx - 3, y); c.lineTo(x + fx - 3, y - 12); c.lineTo(x + fx, y - 15); c.lineTo(x + fx + 3, y - 12); c.lineTo(x + fx + 3, y); c.closePath(); c.fill(); c.stroke(); } c.fillStyle = '#c8945a'; c.fillRect(x - 12, y - 9, 24, 3); break;
     case 'logS': c.fillStyle = '#a8783e'; rr(c, x - 10, y - 7, 20, 7, 3.5); c.fill(); c.stroke(); c.fillStyle = '#e8c890'; ell(c, x + 10, y - 3.5, 2.4, 3.5); c.fill(); c.stroke(); break;
+    default: drawDecor28(c, d, t); break;
   }
 }
 

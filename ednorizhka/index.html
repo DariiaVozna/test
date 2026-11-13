@@ -10000,6 +10000,7 @@ function drawMomGate(c, m, t) {
 
 /* ===== Над єдиноріжкою: малюк, якого несеш ===== */
 function drawOver27(c, P, t) {
+  drawOver28(c, P, t);
   if (!P.baby) return;
   const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
   c.save(); c.globalAlpha = 0.55; c.fillStyle = '#ffffff'; circ(c, cx, y, 14); c.fill(); c.restore();
@@ -10009,6 +10010,7 @@ function drawOver27(c, P, t) {
 function drawWorld27(c, t, vis) {
   if (G.babies) for (const b of G.babies) if (!b.taken && vis(b.x)) { const j = b.joy > 0 ? Math.abs(Math.sin(b.joy * 20)) * 4 : 0; drawAnimal27(c, b.k, b.x, b.y - j, -1, t, 0.85, true); }
   if (G.moms) for (const m of G.moms) if (vis((m.x + 1) * T, 120)) drawMomGate(c, m, t);
+  drawWorld28(c, t, vis);
 }
 
 /* ===== Бобер Тріско ===== */
@@ -10041,7 +10043,7 @@ function drawBlock27(c, b) {
   else if (b === 'hayblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#ffd86a'; c.fill(); c.stroke(); c.strokeStyle = '#d0a830'; c.lineWidth = 1; for (const yy of [6, 11, 16]) { c.beginPath(); c.moveTo(3, yy); c.lineTo(T - 3, yy + 1); c.stroke(); } c.strokeStyle = '#c86a30'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(7, 1.5); c.lineTo(7, T - 1.5); c.moveTo(17, 1.5); c.lineTo(17, T - 1.5); c.stroke(); }
   else if (b === 'barnblock') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#e05a4a'; c.fill(); c.stroke(); c.strokeStyle = '#ffffff'; c.lineWidth = 1.8; c.beginPath(); c.moveTo(3, 3); c.lineTo(T - 3, T - 3); c.moveTo(T - 3, 3); c.lineTo(3, T - 3); c.stroke(); c.strokeRect(3, 3, T - 6, T - 6); }
   else if (b === 'logblock') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#a8783e'; c.fill(); c.stroke(); c.fillStyle = '#e8c890'; circ(c, 12, 12, 7); c.fill(); c.lineWidth = 0.8; c.strokeStyle = '#a8783e'; circ(c, 12, 12, 4); c.stroke(); circ(c, 12, 12, 1.5); c.stroke(); }
-  else return false;
+  else return drawBlock28(c, b);
   return true;
 }
 
@@ -10054,6 +10056,7 @@ function drawDecor27(c, d, t) {
     case 'butterS': drawCountPic(c, 'butterfly', x + Math.sin(t * 2 + x) * 4, y - 14 + Math.cos(t * 3 + x) * 3, t, Math.floor(x)); break;
     case 'fenceS': c.fillStyle = '#f4ead8'; for (const fx of [-8, 0, 8]) { c.beginPath(); c.moveTo(x + fx - 3, y); c.lineTo(x + fx - 3, y - 12); c.lineTo(x + fx, y - 15); c.lineTo(x + fx + 3, y - 12); c.lineTo(x + fx + 3, y); c.closePath(); c.fill(); c.stroke(); } c.fillStyle = '#c8945a'; c.fillRect(x - 12, y - 9, 24, 3); break;
     case 'logS': c.fillStyle = '#a8783e'; rr(c, x - 10, y - 7, 20, 7, 3.5); c.fill(); c.stroke(); c.fillStyle = '#e8c890'; ell(c, x + 10, y - 3.5, 2.4, 3.5); c.fill(); c.stroke(); break;
+    default: drawDecor28(c, d, t); break;
   }
 }
 
@@ -10101,6 +10104,186 @@ function bgBeaverdam(c, viewW, camX, t) {
   for (let i = -1; i < viewW / span + 2; i++) { const wx = i * span + wrapX(-camX * 0.3, span); for (let l = 0; l < 4; l++) { c.fillStyle = l % 2 ? '#8a6040' : '#a8783e'; rr(c, wx + l * 8, 182 + l * 7, 90 - l * 10, 8, 4); c.fill(); } }
 }
 Object.assign(BG2, { clockvillage: bgClockvillage, countmeadow: bgCountmeadow, mamafarm: bgMamafarm, smartfarm: bgSmartfarm, beaverdam: bgBeaverdam });
+
+/* ===== Частина 29 «Сад і двір»: Чистий парк, Чарівна квасоля, Класики, Сад і двір, Двір Шипуна ===== */
+Object.assign(THEMES, {
+  recyclepark: { sky: ['#bfe8ff', '#e0f4ff', '#f6fff4'], panel: '#1f4a2a', top: '#7fd46a', topHi: '#b4f08e', topLo: '#4f9f4a', fill: '#b08a60', fillLo: '#9a7650', dots: ['#ffffff', '#ffd23f', '#7fb8ff'], block: 'leafblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  beanstalk: { sky: ['#c8f0ff', '#e4f8ff', '#fbfff0'], panel: '#1f4a2a', top: '#6ccf62', topHi: '#a4ee8e', topLo: '#3e9a48', fill: '#a07a50', fillLo: '#8a6640', dots: ['#ffffff', '#ffd23f', '#ff9fc4'], block: 'cliffblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  hopscotch: { sky: ['#ffe0ec', '#fff0f4', '#fffcf8'], panel: '#3a2a4a', top: '#c8ccd8', topHi: '#e8ecf4', topLo: '#a0a8b8', fill: '#b8bcc8', fillLo: '#a4a8b4', dots: ['#ff7ab8', '#7fb8ff', '#ffd23f'], block: 'chalkblock', ice: false, topStyle: 'stone', dotShape: 'sprinkle' },
+  gardenyard: { sky: ['#d4f0c8', '#ecf8e4', '#fffef4'], panel: '#2a4a1f', top: '#8fd07a', topHi: '#bdf09e', topLo: '#5aa04a', fill: '#b08a60', fillLo: '#9a7650', dots: ['#ffffff', '#ff7a5a', '#ffd23f'], block: 'cliffblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+  goosemeadow: { sky: ['#ffe8b8', '#fff2d4', '#fffbee'], panel: '#5a3a10', top: '#a0d87a', topHi: '#c8f0a0', topLo: '#6aa850', fill: '#c89a6a', fillLo: '#b08454', dots: ['#ffffff', '#ffd23f', '#ff9a3d'], block: 'hayblock', ice: false, topStyle: 'grass', dotShape: 'pebble' },
+});
+
+/* ===== Сміття й контейнери ===== */
+function drawTrash29(c, k, x, y, s) {
+  c.save(); c.translate(x, y); c.scale(s, s); c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 1.2;
+  if (k === 'bottle') { c.save(); c.rotate(0.5); c.fillStyle = 'rgba(160,220,255,.9)'; rr(c, -4, -6, 8, 14, 3); c.fill(); c.stroke(); c.fillRect(-2, -10, 4, 4); c.strokeRect(-2, -10, 4, 4); c.fillStyle = '#3f8fff'; c.fillRect(-2.5, -11.5, 5, 2.4); c.fillStyle = '#ffffff'; c.fillRect(-4, -1, 8, 4); c.restore(); }
+  else if (k === 'can') { c.fillStyle = '#ff6a6a'; rr(c, -5, -7, 10, 14, 2); c.fill(); c.stroke(); c.fillStyle = '#d8dce4'; ell(c, 0, -7, 5, 1.6); c.fill(); c.stroke(); c.fillStyle = '#ffffff'; c.fillRect(-5, -2, 10, 3); }
+  else if (k === 'paper') { c.fillStyle = '#ffffff'; c.beginPath(); c.moveTo(-7, -6); c.lineTo(5, -8); c.lineTo(7, 5); c.lineTo(-5, 7); c.closePath(); c.fill(); c.stroke(); c.strokeStyle = '#a8b8d8'; c.lineWidth = 0.8; for (let i = 0; i < 3; i++) { c.beginPath(); c.moveTo(-4, -3 + i * 3.5); c.lineTo(4, -4 + i * 3.5); c.stroke(); } }
+  else if (k === 'box') { c.fillStyle = '#d9a86a'; c.beginPath(); c.moveTo(-7, -3); c.lineTo(0, -7); c.lineTo(7, -3); c.lineTo(7, 5); c.lineTo(0, 8); c.lineTo(-7, 5); c.closePath(); c.fill(); c.stroke(); c.beginPath(); c.moveTo(-7, -3); c.lineTo(0, 1); c.lineTo(7, -3); c.moveTo(0, 1); c.lineTo(0, 8); c.stroke(); }
+  else if (k === 'peel') { c.fillStyle = '#ffd23f'; for (const a of [-0.9, 0, 0.9]) { c.save(); c.rotate(a); c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(4, -5, 1, -10); c.quadraticCurveTo(-3, -5, 0, 0); c.fill(); c.stroke(); c.restore(); } c.fillStyle = '#8a5a30'; rr(c, -1.5, 0, 3, 5, 1); c.fill(); }
+  else if (k === 'core') { c.fillStyle = '#fff4dc'; c.beginPath(); c.moveTo(-3, -6); c.quadraticCurveTo(0, 0, -3, 6); c.lineTo(3, 6); c.quadraticCurveTo(0, 0, 3, -6); c.closePath(); c.fill(); c.stroke(); c.fillStyle = '#ff4d4d'; ell(c, 0, -7, 5, 2.4); c.fill(); c.stroke(); ell(c, 0, 7, 5, 2.4); c.fill(); c.stroke(); c.fillStyle = '#5a3a20'; circ(c, -0.8, 0, 0.9); c.fill(); }
+  c.restore();
+}
+function drawBin29(c, b, t) {
+  const x = b.x, gy = b.gy, col = BIN_COL[b.c], j = b.joy > 0 ? Math.sin(b.joy * 25) * 2 : 0, sh = b.bad > 0 ? Math.sin(b.bad * 40) * 2 : 0;
+  c.save(); c.translate(x + sh, gy - j); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4;
+  c.fillStyle = col; c.beginPath(); c.moveTo(-12, -26); c.lineTo(12, -26); c.lineTo(10, 0); c.lineTo(-10, 0); c.closePath(); c.fill(); c.stroke();
+  c.fillStyle = 'rgba(255,255,255,.25)'; c.fillRect(-9, -24, 3, 22);
+  c.save(); c.translate(0, -27 - (b.joy > 0 ? 6 : 0)); c.rotate(b.joy > 0 ? -0.4 : 0); c.fillStyle = col; rr(c, -14, -4, 28, 5, 2); c.fill(); c.stroke(); c.fillStyle = INK; rr(c, -4, -7, 8, 3, 1.5); c.fill(); c.restore();
+  c.fillStyle = '#ffffff'; circ(c, 0, -13, 8); c.fill();
+  drawTrash29(c, b.c === 'yellow' ? 'bottle' : b.c === 'blue' ? 'paper' : 'peel', 0, -13, 0.7);
+  c.restore();
+}
+function drawCleanGate(c, g, t) {
+  drawDoorCol(c, g.x, g.top, 'clean', '#9fe08a', t);
+  const cx = g.x * T + 12, cy = 4 * T + 8, n = G.sorted || 0;
+  c.save(); c.translate(cx, cy); c.strokeStyle = INK; c.lineWidth = 1.3; c.fillStyle = '#ffffff'; rr(c, -16, -14, 32, 30, 6); c.fill(); c.stroke();
+  c.strokeStyle = '#2f9a3a'; c.lineWidth = 2.4; for (let i = 0; i < 3; i++) { const a = i * TAU / 3 - Math.PI / 2 + t * 0.5; c.beginPath(); c.arc(0, -3, 7, a, a + 1.5); c.stroke(); }
+  c.restore();
+  txt24(c, Math.min(n, g.n) + '/' + g.n, cx, cy + 10, 9, n >= g.n ? '#2f9a3a' : '#a8683a');
+}
+
+/* ===== Квасоля ===== */
+function drawSeed29(c, x, y, t) {
+  c.save(); c.translate(x, y); c.globalAlpha = 0.4 + 0.25 * Math.sin(t * 5 + x); c.fillStyle = '#ffe066'; circ(c, 0, 0, 11); c.fill(); c.globalAlpha = 1;
+  c.rotate(0.4 + Math.sin(t * 3 + x) * 0.15); c.fillStyle = '#7fd46a'; c.strokeStyle = INK; c.lineWidth = 1.3; ell(c, 0, 0, 7, 4.6); c.fill(); c.stroke();
+  c.fillStyle = 'rgba(255,255,255,.7)'; ell(c, -2, -1.5, 2.4, 1.2); c.fill(); c.restore();
+}
+function drawSoil29(c, s, t) {
+  const x = s.x * T + 12, gy = 10 * T;
+  c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.3; c.fillStyle = '#7a4a28'; c.beginPath(); c.moveTo(x - 14, gy); c.quadraticCurveTo(x, gy - 12, x + 14, gy); c.closePath(); c.fill(); c.stroke();
+  if (!s.growing && !s.done) {
+    c.fillStyle = '#a8683a'; c.fillRect(x - 18, gy - 30, 3, 30); c.fillStyle = '#fffaf0'; rr(c, x - 30, gy - 44, 26, 18, 4); c.fill(); c.stroke();
+    drawSeed29(c, x - 17, gy - 35, t);
+  }
+  // стебло-ліана й листочки на виросших сходинках
+  if (s.grown > 0) {
+    c.strokeStyle = '#3e9a48'; c.lineWidth = 4; c.beginPath(); c.moveTo(x, gy - 6);
+    for (let i = 0; i < s.grown; i++) { const tx = (s.x + 1 + i) * T + 12, ty = (9 - i) * T + 12; c.quadraticCurveTo(tx - 16, ty + 10 + Math.sin(t * 2 + i) * 2, tx, ty); }
+    c.stroke();
+    for (let i = 0; i < s.grown; i++) {
+      const tx = (s.x + 1 + i) * T, ty = (9 - i) * T;
+      c.fillStyle = '#5cc05a'; c.strokeStyle = INK; c.lineWidth = 1.3; rr(c, tx, ty, T, T, 7); c.fill(); c.stroke();
+      c.fillStyle = '#8ad87a'; ell(c, tx + 12, ty + 7, 9, 4.5, -0.15); c.fill();
+      c.strokeStyle = '#3e9a48'; c.lineWidth = 1; c.beginPath(); c.moveTo(tx + 4, ty + 8); c.quadraticCurveTo(tx + 12, ty + 5, tx + 20, ty + 7); c.stroke();
+      c.fillStyle = '#3e9a48'; circ(c, tx + 7, ty + 16, 1.6); c.fill(); circ(c, tx + 16, ty + 18, 1.3); c.fill();
+    }
+  }
+  c.restore();
+}
+
+/* ===== Класики ===== */
+function drawHops29(c, h, t) {
+  const gy = 10 * T;
+  h.cols.forEach((cx, i) => {
+    const n = h.nums[i], done = n < h.next, now = n === h.next && !h.done, x = cx * T;
+    c.save(); c.lineJoin = 'round';
+    c.fillStyle = done ? 'rgba(127,212,106,.55)' : now ? 'rgba(255,210,63,' + (0.35 + 0.3 * Math.sin(t * 6)) + ')' : 'rgba(255,255,255,.35)'; c.fillRect(x + 1, gy - 1, T - 2, 9);
+    c.strokeStyle = '#ffffff'; c.lineWidth = 2.4; c.strokeRect(x + 1.5, gy - 0.5, T - 3, 9);
+    c.restore();
+    txt24(c, String(n), x + 12, gy - 12 + (now ? Math.sin(t * 6) * 1.5 : 0), 15, done ? '#2f9a3a' : RAINBOW[(n - 1) % 6], '#ffffff', 3.4);
+  });
+  if (vis26(h.door * T + 12) && tileAt(h.door, 8) === 2) {
+    drawDoorCol(c, h.door, h.top, 'hops', '#ffb0d0', t);
+    const sx = h.door * T + 12, sy = 4 * T + 8;
+    c.save(); c.strokeStyle = INK; c.lineWidth = 1.3; c.fillStyle = '#ffffff'; rr(c, -16 + sx, sy - 13, 32, 26, 6); c.fill(); c.stroke(); c.restore();
+    txt24(c, h.nums.length > 4 ? '1…' + h.nums.length : h.nums.slice().sort((a, b) => a - b).join(''), sx, sy - 2, h.nums.length > 4 ? 10 : 9, '#ff4fa3');
+    txt24(c, (h.next - 1) + '/' + h.nums.length, sx, sy + 8, 8, '#a8683a');
+  }
+}
+let vis26 = () => true;
+
+/* ===== Над єдиноріжкою: сміття в руках або зернятка ===== */
+function drawOver28(c, P, t) {
+  const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
+  if (P.trash) { c.save(); c.globalAlpha = 0.55; c.fillStyle = '#ffffff'; circ(c, cx, y, 13); c.fill(); c.restore(); drawTrash29(c, P.trash, cx, y, 1); }
+  else if (P.seeds) { c.save(); c.globalAlpha = 0.55; c.fillStyle = '#ffffff'; rr(c, cx - 20, y - 10, 40, 20, 8); c.fill(); c.restore(); drawSeed29(c, cx - 7, y, t); txt24(c, '×' + P.seeds, cx + 10, y + 1, 11, '#4a8a3a'); }
+}
+
+function drawWorld28(c, t, vis) {
+  vis26 = vis;
+  if (G.trashes) for (const o of G.trashes) if (!o.taken && vis(o.x)) { const j = o.joy > 0 ? Math.abs(Math.sin(o.joy * 20)) * 4 : 0; drawTrash29(c, o.k, o.x, o.y - j + Math.sin(t * 3 + o.x) * 1.5, 1.1); }
+  if (G.bins) for (const b of G.bins) if (vis(b.x)) drawBin29(c, b, t);
+  if (G.cleangates) for (const g of G.cleangates) if (vis(g.x * T + 12) && tileAt(g.x, 8) === 2) drawCleanGate(c, g, t);
+  if (G.seeds29) for (const s of G.seeds29) if (!s.taken && vis(s.x)) drawSeed29(c, s.x, s.y + Math.sin(t * 3 + s.x) * 2, t);
+  if (G.soils) for (const s of G.soils) if (vis((s.x + s.h / 2) * T, (s.h + 2) * T)) drawSoil29(c, s, t);
+  if (G.hops) for (const h of G.hops) if (vis((h.cols[0] + h.door) / 2 * T, (h.door - h.cols[0] + 2) * T)) drawHops29(c, h, t);
+}
+
+/* ===== Гусак Шипун ===== */
+function drawGooseBoss(c, B, t) {
+  const rest = B.state === 'rest' && !B.dead, run = B.state === 'dash' && !B.dead, dir = B.dir > 0 ? 1 : -1;
+  c.save(); c.translate(B.x, B.gy); c.scale(2.3, 2.3);
+  drawGoose(c, 0, 0, dir, t, run ? 'run' : B.state === 'throw' ? 'honk' : 'walk', B.flash > 0);
+  if (rest) { c.save(); c.scale(dir, 1); c.fillStyle = '#e6ebf5'; c.strokeStyle = INK; c.lineWidth = 0.6; ell(c, 8, -24, 6.5, 6, 0.3); c.fill(); c.stroke(); c.strokeStyle = '#b8c0d0'; c.beginPath(); c.moveTo(4, -24); c.quadraticCurveTo(8, -21, 12, -25); c.moveTo(5, -27); c.quadraticCurveTo(8, -25, 11, -28); c.stroke(); c.restore(); }
+  c.restore();
+  if (rest) txt24(c, 'z', B.x + 20, B.gy - 70 - (t * 10) % 10, 12, '#8a5a30', '#ffffff', 2);
+  if (B.dead) { c.save(); c.fillStyle = 'rgba(255,120,170,.6)'; circ(c, B.x - 10, B.gy - 40, 3); c.fill(); circ(c, B.x + 10, B.gy - 40, 3); c.fill(); c.restore(); }
+}
+
+/* ===== Блоки ===== */
+function drawBlock28(c, b) {
+  c.strokeStyle = INK; c.lineWidth = 1.4;
+  if (b === 'cliffblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#b8a088'; c.fill(); c.stroke(); c.fillStyle = '#a08870'; ell(c, 8, 9, 5, 3); c.fill(); ell(c, 16, 16, 4, 2.6); c.fill(); c.fillStyle = '#7fd46a'; c.fillRect(1.5, 1.5, T - 3, 3); }
+  else if (b === 'chalkblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#d8dce4'; c.fill(); c.stroke(); c.strokeStyle = ['#ff7ab8', '#7fb8ff', '#ffd23f'][0]; c.lineWidth = 1.6; c.beginPath(); c.moveTo(5, 16); c.quadraticCurveTo(12, 6, 19, 14); c.stroke(); }
+  else return false;
+  return true;
+}
+
+/* ===== Декор ===== */
+function drawDecor28(c, d, t) {
+  const x = d.x, y = d.y;
+  c.lineJoin = 'round'; c.lineCap = 'round'; c.strokeStyle = INK; c.lineWidth = 0.8;
+  switch (d.k) {
+    case 'sproutS': c.strokeStyle = '#3e9a48'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 9); c.stroke(); c.fillStyle = '#7fd46a'; c.strokeStyle = INK; c.lineWidth = 0.8; ell(c, x - 4, y - 10, 4, 2.2, -0.4); c.fill(); c.stroke(); ell(c, x + 4, y - 11, 4, 2.2, 0.4); c.fill(); c.stroke(); break;
+    case 'chalkS': c.fillStyle = d.c || '#ff7ab8'; c.save(); c.translate(x, y - 2); c.rotate(0.3); rr(c, -5, -1.5, 10, 3, 1.5); c.fill(); c.stroke(); c.restore(); break;
+    case 'canS': c.fillStyle = '#7fb8ff'; c.beginPath(); c.moveTo(x - 6, y - 10); c.lineTo(x + 5, y - 10); c.lineTo(x + 4, y); c.lineTo(x - 5, y); c.closePath(); c.fill(); c.stroke(); c.strokeStyle = '#7fb8ff'; c.lineWidth = 2; c.beginPath(); c.moveTo(x + 5, y - 8); c.lineTo(x + 11, y - 13); c.stroke(); break;
+  }
+}
+
+/* ===== Фони ===== */
+function bgRecyclepark(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  const span = 120;
+  for (let i = -1; i < viewW / span + 2; i++) { const wx = i * span + wrapX(-camX * 0.22, span) + 20; c.fillStyle = '#9a7050'; c.fillRect(wx - 4, 160, 8, 62); c.fillStyle = '#8fd88a'; circ(c, wx, 150, 26); c.fill(); circ(c, wx - 16, 166, 18); c.fill(); circ(c, wx + 16, 164, 18); c.fill(); }
+  hill(c, viewW, 222, 4, 0.03, 1.2, camX * 0.45, '#a8dc90');
+}
+function bgBeanstalk(c, viewW, camX, t) {
+  for (let i = 0; i < 5; i++) { const x = wrapX(i * 200 - camX * 0.06 + t * 4, viewW + 240) - 120; puffCloud(c, x, 24 + (i % 3) * 18, 0.9, 'rgba(255,255,255,.95)'); }
+  const span = 300;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.15, span) + 60;
+    c.strokeStyle = 'rgba(80,170,90,.45)'; c.lineWidth = 9; c.beginPath(); c.moveTo(wx, 222); for (let k = 1; k <= 6; k++) c.quadraticCurveTo(wx + (k % 2 ? 30 : -30), 222 - k * 34 + 17, wx, 222 - k * 34); c.stroke();
+    c.fillStyle = 'rgba(110,200,110,.45)'; for (let k = 1; k <= 5; k++) ell(c, wx + (k % 2 ? 18 : -18), 222 - k * 34, 12, 6, k % 2 ? -0.4 : 0.4), c.fill();
+  }
+  hill(c, viewW, 222, 4, 0.03, 1.2, camX * 0.45, '#9ad88a');
+}
+function bgHopscotch(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  const span = 170;
+  for (let i = -1; i < viewW / span + 2; i++) {
+    const wx = i * span + wrapX(-camX * 0.22, span) + 20, k = ((i % 3) + 3) % 3, h = 90 + k * 20;
+    c.fillStyle = ['#ffd0dc', '#d0e0ff', '#fff0b8'][k]; c.fillRect(wx, 222 - h, 90, h);
+    c.fillStyle = '#ffffff'; for (let r = 0; r < Math.floor(h / 34); r++) for (let w = 0; w < 3; w++) c.fillRect(wx + 10 + w * 27, 222 - h + 12 + r * 34, 16, 18);
+  }
+  c.fillStyle = '#e0e2ea'; c.fillRect(0, 214, viewW, 8);
+}
+function bgGardenyard(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  const hx = wrapX(320 - camX * 0.2, viewW + 360) - 180;
+  c.fillStyle = '#fff0d8'; c.fillRect(hx, 140, 110, 82); c.fillStyle = '#e07a5a'; c.beginPath(); c.moveTo(hx - 10, 142); c.lineTo(hx + 55, 100); c.lineTo(hx + 120, 142); c.closePath(); c.fill();
+  c.fillStyle = '#9fd8ff'; c.fillRect(hx + 14, 160, 24, 22); c.fillRect(hx + 72, 160, 24, 22); c.fillStyle = '#a8683a'; c.fillRect(hx + 44, 180, 22, 42);
+  const span = 26; c.fillStyle = '#f4ead8'; for (let i = 0; i < viewW / span + 2; i++) { const fx = i * span + wrapX(-camX * 0.35, span); c.fillRect(fx, 196, 8, 26); }
+  c.fillRect(0, 202, viewW, 4); c.fillRect(0, 212, viewW, 4);
+}
+function bgGoosemeadow(c, viewW, camX, t) {
+  for (let i = 0; i < 4; i++) { const x = wrapX(i * 230 - camX * 0.08 + t * 5, viewW + 240) - 120; puffCloud(c, x, 30 + (i % 2) * 22, 0.85, 'rgba(255,255,255,.95)'); }
+  hill(c, viewW, 196, 10, 0.012, 0.4, camX * 0.12, '#d8e8a8');
+  c.fillStyle = '#8ac8e8'; ell(c, wrapX(viewW * 0.4 - camX * 0.2, viewW + 300) - 150, 212, 120, 12); c.fill();
+  hill(c, viewW, 220, 5, 0.03, 1.2, camX * 0.45, '#b8e090');
+}
+Object.assign(BG2, { recyclepark: bgRecyclepark, beanstalk: bgBeanstalk, hopscotch: bgHopscotch, gardenyard: bgGardenyard, goosemeadow: bgGoosemeadow });
 
 /* ===== Рівні. Координати в плитках: x — стовпчик, y — рядок (0 угорі, земля з рядка 10) ===== */
 const LEVELS = [
@@ -15317,6 +15500,139 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 29: Сад і двір ===== */
+  {
+    id: 'recyclepark', theme: 'recyclepark', name: 'Чистий парк', blurb: 'Розсортуй сміття по контейнерах', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Чистий парк! Підбирай сміття й неси в контейнер свого кольору: жовтий — пластик і бляшанки, синій — папір, зелений — очистки');
+      L.trash(9, 'bottle'); L.bin(14, 'yellow');
+      L.trash(18, 'paper'); L.bin(22, 'green'); L.bin(25, 'blue');
+      L.cleangate(30, 2);
+      L.row(32, 9, 3);
+      L.enemy('snail', 39, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.trash(53, 'peel'); L.bin(58, 'green');
+      L.trash(62, 'can'); L.bin(66, 'blue'); L.bin(69, 'yellow');
+      L.trash(73, 'box'); L.bin(77, 'blue');
+      L.cleangate(82, 5);
+      L.enemy('frog', 87, 10);
+      L.ground(95, 134);
+      L.check(97);
+      L.trash(101, 'core'); L.bin(105, 'yellow'); L.bin(108, 'green');
+      L.trash(112, 'bottle'); L.bin(116, 'yellow');
+      L.trash(120, 'paper'); L.bin(124, 'blue');
+      L.cleangate(129, 8);
+      L.ground(137, 170);
+      L.check(139);
+      L.row(143, 9, 5);
+      L.enemy('bee', 151, 6);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'beanstalk', theme: 'beanstalk', name: 'Чарівна квасоля', blurb: 'Посади зернятко й вилізь на скелю', w: 172,
+    build(L) {
+      L.ground(0, 101);
+      L.sign(3, 'Чарівна квасоля! Збери зернятко й посади в грядку біля високої скелі — виросте стебло-драбинка');
+      L.seed(9); L.row(12, 9, 3);
+      L.soil(18, 5); L.block(24, 5, 6, 5); L.row(25, 3, 4);
+      L.enemy('snail', 36, 10);
+      L.check(40);
+      L.seed(44);
+      L.soil(50, 6); L.block(57, 4, 5, 6); L.row(58, 2, 3);
+      L.enemy('frog', 70, 10);
+      L.check(74);
+      L.seed(78);
+      L.soil(83, 5); L.block(89, 5, 5, 5); L.row(90, 3, 3);
+      L.ground(104, 172);
+      L.check(105);
+      L.seed(107); L.seed(109);
+      L.soil(112, 6); L.block(119, 4, 6, 6); L.row(120, 2, 4);
+      L.row(127, 9, 4);
+      L.enemy('bee', 133, 6);
+      L.check(138);
+      L.row(145, 9, 5);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'hopscotch', theme: 'hopscotch', name: 'Класики', blurb: 'Пострибай по числах по порядку', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Класики! Стань на клітинки з числами по порядку: 1, 2, 3… Числа переплутані — шукай уважно');
+      L.hops(8, [1, 2, 3], 16);
+      L.row(18, 9, 3);
+      L.enemy('snail', 25, 10);
+      L.hops(30, [2, 1, 3, 4], 40);
+      L.ground(47, 92);
+      L.check(49);
+      L.hops(53, [3, 1, 4, 2, 5], 65);
+      L.block(69, 7, 3); L.row(69, 5, 3);
+      L.enemy('frog', 77, 10);
+      L.row(83, 9, 4);
+      L.ground(95, 134);
+      L.check(97);
+      L.hops(101, [5, 3, 1, 2, 4, 6], 115);
+      L.row(118, 9, 4);
+      L.enemy('bee', 126, 6);
+      L.ground(137, 170);
+      L.check(139);
+      L.hops(143, [2, 4, 1, 3], 153);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'gardenyard', theme: 'gardenyard', name: 'Сад і двір', blurb: 'Сміття, квасоля й класики — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 96);
+      L.sign(3, 'Сад і двір! Прибери сміття, посади квасолю й пострибай у класики');
+      L.trash(9, 'can'); L.bin(13, 'yellow');
+      L.trash(17, 'peel'); L.bin(21, 'green');
+      L.cleangate(26, 2);
+      L.seed(30);
+      L.soil(35, 5); L.block(41, 5, 5, 5); L.row(42, 3, 3);
+      L.enemy('snail', 52, 10);
+      L.check(56);
+      L.hops(60, [2, 3, 1], 68);
+      L.row(70, 9, 4);
+      L.enemy('frog', 80, 10);
+      L.ground(99, 172);
+      L.check(101);
+      L.trash(105, 'box'); L.bin(109, 'green'); L.bin(112, 'blue');
+      L.cleangate(117, 3);
+      L.seed(121);
+      L.soil(126, 6); L.block(133, 4, 5, 6); L.row(134, 2, 3);
+      L.check(141);
+      L.hops(146, [1, 3, 2, 4], 156);
+      L.row(158, 9, 3);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'goosemeadow', theme: 'goosemeadow', name: 'Двір Шипуна', blurb: 'Битва з Гусаком Шипуном', w: 172, boss: 'biggoose',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Двір Шипуна. Гусак розкидав сміття й не пускає до саду! Прибери, пройди класики й посади квасолю');
+      L.trash(8, 'bottle'); L.bin(12, 'yellow');
+      L.cleangate(16, 1);
+      L.hops(20, [2, 1, 3], 28);
+      L.enemy('snail', 36, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.seed(55);
+      L.soil(60, 5); L.block(66, 5, 4, 5); L.row(67, 3, 2);
+      L.check(76);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, 'Гусак Шипун! Коли він сховає голову під крило — стріляй або стрибни на нього');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -15353,6 +15669,11 @@ const DECOR = {
   mamafarm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fenceS', x, y } : r < 0.55 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   smartfarm: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'fenceS', x, y } : r < 0.45 ? { k: 'clockS', x, y } : { k: 'tuft', x, y }; },
   beaverdam: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'logS', x, y } : r < 0.55 ? { k: 'stumpS', x, y } : { k: 'tuft', x, y }; },
+  recyclepark: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'sproutS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  beanstalk: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'sproutS', x, y } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  hopscotch: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'chalkS', x, y, c: ['#ff7ab8', '#7fb8ff', '#ffd23f', '#9fe08a'][Math.floor(R() * 4)] } : { k: 'tuft', x, y }; },
+  gardenyard: (R, x, y) => { const r = R(); return r < 0.2 ? { k: 'canS', x, y } : r < 0.45 ? { k: 'sproutS', x, y } : r < 0.7 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  goosemeadow: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : r < 0.5 ? { k: 'sproutS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -15469,7 +15790,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -15737,6 +16058,15 @@ function buildLevel(idx) {
     // малюк (duck, cat, dog, hen, pig) і хвірточка mom(x, k): за нею чекає мама, відчиняється, коли принесеш її малюка
     baby(x, k, row) { const b = { x: x * T + 12, y: row ? row * T : 10 * T, k }; if (!row) later.push(() => { b.y = groundY(x); }); L.babies.push(b); },
     mom(x, k) { for (let y = 1; y < 10; y++) set(x, y, 2); const m = { x, k, top: 1, gy: 10 * T }; later.push(() => { m.gy = groundY(x + 1); }); L.moms.push(m); },
+    // частина 29: сміття (bottle, can, paper, box, peel, core), контейнер bin(x, c) — yellow, blue, green; ворота cleangate(x, n) — коли розсортовано n речей
+    trash(x, k, row) { const o = { x: x * T + 12, y: row ? row * T + 12 : 0, k }; if (!row) later.push(() => { o.y = groundY(x) - 12; }); L.trashes.push(o); },
+    bin(x, c) { const b = { x: x * T + 12, gy: 10 * T, c }; later.push(() => { b.gy = groundY(x); }); L.bins.push(b); },
+    cleangate(x, n) { for (let y = 1; y < 10; y++) set(x, y, 2); L.cleangates.push({ x, n, top: 1 }); },
+    // чарівне зернятко; грядка soil(x, h): стебло-сходинки (x+1, 9), (x+2, 8) … h штук; скеля cliff ставимо з x+h+1 висотою h рядків
+    seed(x, row) { const s = { x: x * T + 12, y: row ? row * T + 12 : 0 }; if (!row) later.push(() => { s.y = groundY(x) - 12; }); L.seeds29.push(s); },
+    soil(x, h) { L.soils.push({ x, h }); },
+    // класики: числа nums на землі в клітинках x, x+2, x+4 …, двері door відчиняються, коли пройдено 1, 2, 3 … по порядку
+    hops(x, nums, door) { const cols = nums.map((n, i) => x + i * 2); for (let y = 1; y < 10; y++) set(door, y, 2); L.hops.push({ nums, cols, door, top: 1 }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
@@ -21340,6 +21670,7 @@ function initLevel23(G, L) {
   const P = G.P; P.baby = null;
   G.babies = (L.babies || []).map(b => Object.assign({ taken: false, touch: false, joy: 0 }, b));
   G.moms = (L.moms || []).map(m => Object.assign({ open: false, hintT: 0, happy: 0 }, m));
+  initLevel24(G, L);
 }
 
 /* ===== Малюки шукають маму: неси малюка до його мами ===== */
@@ -21375,11 +21706,137 @@ function updateBabies(dt) {
 
 function update23(dt) {
   updateBabies(dt);
+  update24(dt);
 }
 
 /* ===== Бобер Тріско — ще один бігун: кидає тріски, а потім гризе колоду ===== */
 RUNNERS.bigbeaver = { name: 'Бобер Тріско', acc: 'Бобра Тріска', win: ' Тепер він будує для звіряток місток, а не греблю поперек дороги.', bolt: 'woodchip', hello: 'Бобер Тріско: «Гриз-гриз! Перегороджу всю ферму!»', rest: 'Тріско засів гризти колоду! Стріляй або стрибни на нього', arm: 'Тріско надто швидкий! Стріляй, коли він гризтиме колоду', restText: 'Гриз-гриз…' };
 BOSS2.bigbeaver = L => ({ kind: 'bigbeaver', name: RUNNERS.bigbeaver.name, acc: RUNNERS.bigbeaver.acc, win: RUNNERS.bigbeaver.win, x: L.arena.x0 + 30 * T, gy: 10 * T, y: 10 * T - 26, hw: 28, hh: 26, hp: 22, max: 22, t: 0, st: 0, state: 'wait', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, n: 0, tx: 0, vy: 0, hop: 0 });
+
+/* ===== Частина 29 «Сад і двір»: сортування сміття, чарівна квасоля, класики й Гусак Шипун ===== */
+Object.assign(TUNES, {
+  recyclepark: { base: 587.33, ms: 175, n: [0, 4, 7, 4, 5, 9, 12, 9, 7, 11, 14, 11, 12, null, null, null, 0, 4, 7, 4, 5, 9, 12, 9, 7, 5, 4, 2, 0, null, null, null], b: [0, -5, -3, -7] },
+  beanstalk: { base: 523.25, ms: 185, n: [0, null, 4, null, 7, null, 12, null, 11, null, 7, null, 9, null, null, null, 0, null, 4, null, 7, null, 12, null, 14, null, 12, null, 16, null, null, null], b: [0, -5, -3, -7] },
+  hopscotch: { base: 659.25, ms: 160, n: [0, 2, 4, 5, 7, 5, 4, 2, 0, 2, 4, 5, 7, null, 7, null, 9, 7, 5, 4, 2, 4, 5, 7, 0, null, 0, null, 0, null, null, null], b: [0, -5, -3, -7] },
+  gardenyard: { base: 698.46, ms: 165, n: [0, 4, 7, 9, 7, 4, 0, null, 2, 5, 9, 11, 9, 5, 2, null, 4, 7, 11, 12, 11, 7, 4, null, 12, 11, 9, 7, 5, 4, 2, null], b: [0, -5, -3, -7] },
+  goosemeadow: { base: 466.16, ms: 180, n: [0, 3, 7, null, 5, 8, 12, null, 7, 10, 14, null, 12, 10, 7, null, 5, null, 3, null, 2, null, 0, null, 7, 5, 3, 2, 0, null, null, null], b: [0, -4, -2, -5] },
+});
+const TRASH_BIN = { bottle: 'yellow', can: 'yellow', paper: 'blue', box: 'blue', peel: 'green', core: 'green' };
+const TRASH_UA = { bottle: 'пляшка', can: 'бляшанка', paper: 'папірець', box: 'коробочка', peel: 'шкірка банана', core: 'огризок' };
+const TRASH_ACC = { bottle: 'пляшку', can: 'бляшанку', paper: 'папірець', box: 'коробочку', peel: 'шкірку банана', core: 'огризок' };
+const BIN_UA = { yellow: 'жовтий — для пластику й бляшанок', blue: 'синій — для паперу', green: 'зелений — для очистків' };
+const BIN_COL = { yellow: '#ffd23f', blue: '#3f8fff', green: '#4cc35a' };
+
+/* ===== Підготовка рівня ===== */
+function initLevel24(G, L) {
+  const P = G.P; P.trash = null; P.seeds = 0;
+  G.trashes = (L.trashes || []).map(o => Object.assign({ taken: false, touch: false, joy: 0 }, o));
+  G.bins = (L.bins || []).map(b => Object.assign({ touch: false, joy: 0, bad: 0 }, b));
+  G.cleangates = (L.cleangates || []).map(g => Object.assign({ open: false, hintT: 0 }, g));
+  G.sorted = 0;
+  G.seeds29 = (L.seeds29 || []).map(s => Object.assign({ taken: false }, s));
+  G.soils = (L.soils || []).map(s => Object.assign({ grown: 0, growing: false, done: false, hintT: 0, gt: 0 }, s));
+  G.hops = (L.hops || []).map(h => Object.assign({ next: 1, done: false, hintT: 0, okT: 0, badN: 0, badT: 0 }, h));
+}
+
+/* ===== Чистий парк: віднеси сміття в контейнер свого кольору ===== */
+function updateTrash(dt) {
+  const P = G.P;
+  for (const o of G.trashes) {
+    if (o.joy > 0) o.joy -= dt;
+    if (o.taken) continue;
+    const touch = overlap(P, { x: o.x - 11, y: o.y - 11, w: 22, h: 22 });
+    if (touch && !o.touch) {
+      const old = P.trash;
+      P.trash = o.k; Snd.tone(620, 0.1, 'sine', 0.05, 900); burst(o.x, o.y, 6, ['#ffffff', '#c8e8ff'], 80);
+      floatText(P.x + P.w / 2, P.y - 14, TRASH_UA[o.k], '#4a8a3a');
+      if (old) { o.k = old; o.joy = 0.6; } else o.taken = true;
+      if (!G.trashHint) { G.trashHint = true; say('Ти підняла ' + TRASH_ACC[P.trash] + '. Віднеси в контейнер ' + BIN_UA[TRASH_BIN[P.trash]], 3); }
+    }
+    o.touch = touch;
+  }
+  for (const b of G.bins) {
+    if (b.joy > 0) b.joy -= dt; if (b.bad > 0) b.bad -= dt;
+    const touch = overlap(P, { x: b.x - 13, y: b.gy - 30, w: 26, h: 30 });
+    if (touch && !b.touch && P.trash) {
+      if (TRASH_BIN[P.trash] === b.c) {
+        G.sorted++; b.joy = 0.8; G.points++; Snd.star(G.sorted); burst(b.x, b.gy - 30, 12, [BIN_COL[b.c], '#ffffff'], 120);
+        floatText(b.x, b.gy - 44, 'Дякую!', '#2f9a3a'); P.trash = null;
+      } else {
+        b.bad = 0.6; Snd.tone(240, 0.15, 'triangle', 0.05, 200);
+        say('Ні, ' + TRASH_ACC[P.trash] + ' сюди не кладемо. Неси в контейнер ' + BIN_UA[TRASH_BIN[P.trash]], 3);
+      }
+    }
+    b.touch = touch;
+  }
+  for (const g of G.cleangates) {
+    if (g.hintT > 0) g.hintT -= dt;
+    if (g.open) continue;
+    if (G.sorted >= g.n) { g.open = true; openColumn(g.x, g.top); G.points += 3; Snd.seq([0, 4, 7, 12, 16], 587, 0.07, 'triangle', 0.08); say('Парк чистий! Ворота відчинилися', 2.4); }
+    else if (g.hintT <= 0 && doorTouch(g.x, g.top)) { g.hintT = 4; say('Ворота відчиняться, коли в контейнерах буде ' + g.n + ' речей. Зараз — ' + G.sorted + '. Збери сміття!', 3.2); }
+  }
+}
+
+/* ===== Чарівна квасоля: посади зернятко — виросте стебло-драбинка ===== */
+function updateBeans(dt) {
+  const P = G.P;
+  for (const s of G.seeds29) {
+    if (s.taken || !overlap(P, { x: s.x - 10, y: s.y - 10, w: 20, h: 20 })) continue;
+    s.taken = true; P.seeds++; G.points++; Snd.star(P.seeds); burst(s.x, s.y, 8, ['#7fd46a', '#ffd23f'], 90);
+    floatText(s.x, s.y - 14, 'Зернятко!', '#4a8a3a');
+    if (!G.seedHint) { G.seedHint = true; say('Чарівне зернятко! Посади його в грядку біля високої скелі', 2.6); }
+  }
+  for (const s of G.soils) {
+    if (s.hintT > 0) s.hintT -= dt;
+    if (s.done) continue;
+    if (s.growing) {
+      s.gt -= dt;
+      while (s.gt <= 0 && s.grown < s.h) {
+        const x = s.x + 1 + s.grown, y = 9 - s.grown;
+        G.map[y * G.Wt + x] = 2; s.grown++; s.gt += 0.14;
+        if (overlap(P, { x: x * T, y: y * T, w: T, h: T })) { P.y = y * T - P.h; P.vy = 0; }
+        Snd.tone(400 + s.grown * 60, 0.08, 'sine', 0.05, 600 + s.grown * 60); burst(x * T + 12, y * T + 12, 6, ['#7fd46a', '#b4f08e'], 80);
+      }
+      if (s.grown >= s.h) { s.done = true; G.points += 2; Snd.seq([0, 4, 7, 12], 523, 0.07, 'triangle', 0.08); say('Квасоля виросла! Стрибай по листочках нагору', 2.4); }
+      continue;
+    }
+    const near = overlap(P, { x: s.x * T - 6, y: 10 * T - 30, w: T + 12, h: 30 });
+    if (!near) continue;
+    if (P.seeds > 0) { P.seeds--; s.growing = true; s.gt = 0.3; burst(s.x * T + 12, 10 * T - 6, 10, ['#8a5a30', '#7fd46a'], 90); say('Посадили зернятко… Дивись, росте!', 2); }
+    else if (s.hintT <= 0) { s.hintT = 4; say('Тут грядка для чарівної квасолі. Знайди зернятко!', 2.6); }
+  }
+}
+
+/* ===== Класики: стрибай по клітинках із числами по порядку ===== */
+function updateHops(dt) {
+  const P = G.P, cx = Math.floor((P.x + P.w / 2) / T);
+  for (const h of G.hops) {
+    if (h.hintT > 0) h.hintT -= dt; if (h.okT > 0) h.okT -= dt; if (h.badT > 0) h.badT -= dt;
+    if (h.done) continue;
+    if (h.hintT <= 0 && doorTouch(h.door, h.top)) { h.hintT = 4; say('Двері відчиняться, коли пройдеш класики по порядку: ' + h.nums.slice().sort((a, b) => a - b).join(', ') + '. Зараз шукай ' + h.next, 3.2); }
+    if (!P.onGround) continue;
+    const i = h.cols.indexOf(cx);
+    if (i < 0) continue;
+    const n = h.nums[i];
+    if (n === h.next) {
+      h.next++; h.okT = 0.6; G.points++; Snd.star(n); burst(cx * T + 12, 10 * T - 4, 10, RAINBOW, 110); floatText(cx * T + 12, 10 * T - 30, String(n), '#ff4fa3');
+      if (h.next > h.nums.length) { h.done = true; openColumn(h.door, h.top); G.points += 3; Snd.seq([0, 4, 7, 12, 16], 659, 0.07, 'triangle', 0.08); say('Класики пройдено! Двері відчинилися', 2.4); }
+    } else if (n > h.next && !(h.badT > 0 && h.badN === n)) {
+      h.badN = n; h.badT = 1.5; Snd.tone(260, 0.15, 'triangle', 0.05, 200);
+      say('Це ' + n + '. Спершу знайди клітинку ' + h.next, 2.2);
+    }
+  }
+}
+
+function update24(dt) {
+  updateTrash(dt);
+  updateBeans(dt);
+  updateHops(dt);
+}
+
+/* ===== Гусак Шипун — ще один бігун: кидається пір'їнами, а потім ховає голову під крило ===== */
+RUNNERS.biggoose = { name: 'Гусак Шипун', acc: 'Гусака Шипуна', win: ' Він перестав шипіти й тепер охороняє сад разом із друзями.', bolt: 'feather', hello: 'Гусак Шипун: «Ш-ш-ш! Це мій двір! Нікого не пущу!»', rest: 'Шипун сховав голову під крило! Стріляй або стрибни на нього', arm: 'Шипун надто швидкий! Стріляй, коли він сховає голову', restText: 'Ш-ш-ш… втомився' };
+BOSS2.biggoose = L => ({ kind: 'biggoose', name: RUNNERS.biggoose.name, acc: RUNNERS.biggoose.acc, win: RUNNERS.biggoose.win, x: L.arena.x0 + 30 * T, gy: 10 * T, y: 10 * T - 26, hw: 28, hh: 26, hp: 22, max: 22, t: 0, st: 0, state: 'wait', dir: -1, flash: 0, dead: false, deadT: 0, alpha: 1, n: 0, tx: 0, vy: 0, hop: 0 });
 
 /* ===== Збереження ===== */
 const SAVE_KEY = 'zoriana-ednorizhka-v1';
@@ -21603,6 +22060,7 @@ function renderGame(dt) {
     else if (B.kind === 'hamster') drawHamsterBoss(c, B, B.t);
     else if (B.kind === 'raccoon') drawRaccoonBoss(c, B, B.t);
     else if (B.kind === 'bigbeaver') drawBeaverBoss(c, B, B.t);
+    else if (B.kind === 'biggoose') drawGooseBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -21823,7 +22281,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко", 'Єнот Шкодько', 'Бобер Тріско'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко", 'Єнот Шкодько', 'Бобер Тріско', 'Гусак Шипун'];
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
@@ -21918,6 +22376,7 @@ function showWin() {
   if (i === 14) { $('winTitle').textContent = 'Дракон Чхун одужав!'; $('winText').textContent = 'Але Чарівник Плутанко все переплутав: скриньки, двері й мости в нових країнах. Наступна країна: ' + LEVELS[15].name + '.'; }
   if (i === 19) { $('winTitle').textContent = 'Плутанко тепер добрий чарівник!'; $('winText').textContent = 'Але Медуза Желейка сховала зірочки у свої бульбашки й розпустила їх по нових країнах. Наступна країна: ' + LEVELS[20].name + '.'; }
   if (i === 109) { $('winTitle').textContent = 'Сова Ухнюшка виспалась і повернула зірочки!'; $('winText').textContent = 'А в Місті всі чекають посилок. Тільки Цуцик Гавчик розгриз коробки, і зірочки розсипалися по всьому місту: на пошті, в пожежній частині й на будмайданчику. Треба все зібрати! Наступна країна: ' + LEVELS[110].name + '.'; }
+  if (i === 139) { $('winTitle').textContent = 'Бобер Тріско розібрав греблю!'; $('winText').textContent = 'Далі — сад і двір: прибрати парк, виростити чарівну квасолю й пострибати в класики. Тільки у дворі вже шипить Гусак Шипун. Наступна країна: ' + LEVELS[140].name + '.'; }
   if (i === 134) { $('winTitle').textContent = 'Єнот Шкодько повернув подарунки!'; $('winText').textContent = 'Далі — розумна ферма: годинники, лічилки й малюки, які загубили своїх мам. А на річці вже стукає зубами Бобер Тріско. Наступна країна: ' + LEVELS[135].name + '.'; }
   if (i === 129) { $('winTitle').textContent = "Хом'ячок Жуйко поділився запасами!"; $('winText').textContent = 'А тепер — день народження! Свічки на торті, подарунки й міст до свята. Тільки Єнот Шкодько вже нишпорить біля подарунків. Наступна країна: ' + LEVELS[130].name + '.'; }
   if (i === 124) { $('winTitle').textContent = 'Клякса Бризка стала гарним малюнком!'; $('winText').textContent = "Далі — веселий базар і ліс хованок. Тільки Хом'ячок Жуйко сховав усі покупки собі в щічки, а лісові друзі з переляку поховалися в кущі. Наступна країна: " + LEVELS[125].name + '.'; }
