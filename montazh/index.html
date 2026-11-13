@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Монтаж відео з Claude — гайд Дарії Возної</title>
+<meta name="description" content="Як монтувати відео з Claude: з телефона або через комп'ютер, Mac і Windows. Субтитри, плашки, звуки — покроково.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Монтаж відео з Claude — гайд Дарії Возної">
+<meta property="og:description" content="Від сирих кліпів до готового ролика з субтитрами, плашками й звуками. З телефона або через комп'ютер, Mac і Windows.">
+<meta property="og:image" content="https://dariiavozna.github.io/test/montazh/og.png">
+<meta property="og:url" content="https://dariiavozna.github.io/test/montazh/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#f2f2f0; --ink:#1d1d1b; --muted:#73736e; --orange:#e07a35; --hl:#fbe07a;
+  --py:#faefc8; --pb:#dce7f2; --pg:#e1efe3; --pp:#f6e0e1; --dark:#26392b;
+  --numy:#f2d04a; --red:#d9363e; --line:#e4e4df;
+  --mono:'JetBrains Mono','DejaVu Sans Mono',monospace;
+  --shadow:0 10px 30px rgba(0,0,0,.06);
+}
+*{ box-sizing:border-box }
+html{ -webkit-text-size-adjust:100% }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif; font-size:17px; line-height:1.55 }
+a{ color:inherit }
+.wrap{ max-width:860px; margin:0 auto; padding:0 22px }
+.mk{ background:linear-gradient(transparent 52%, var(--hl) 52% 94%, transparent 94%); padding:0 1px; margin:0 -1px }
+b,strong{ font-weight:700 }
+
+/* верхня смуга з авторкою */
+.topbar{ position:sticky; top:0; z-index:10; background:rgba(242,242,240,.92); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line) }
+.topbar .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; height:58px }
+.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:800; letter-spacing:-.02em; font-size:15px; white-space:nowrap }
+.brand .sq{ width:12px; height:12px; border-radius:3px; background:var(--orange); flex:none }
+.brand span.s{ color:var(--muted); font-weight:600 }
+.topbar nav{ display:flex; gap:8px; align-items:center }
+.btn{ display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding:10px 18px; font-weight:700; font-size:14.5px; text-decoration:none; border:0; cursor:pointer; font-family:inherit; line-height:1.2 }
+.btn.dark{ background:var(--dark); color:#fff }
+.btn.light{ background:#fff; color:var(--ink); border:1.5px solid var(--line) }
+.btn.or{ background:var(--orange); color:#fff }
+.btn svg{ flex:none }
+
+/* прогрес прокрутки */
+.progress{ position:fixed; top:0; left:0; height:3px; width:0; background:var(--orange); z-index:11 }
+
+/* hero */
+.hero{ padding:56px 0 24px }
+.kicker{ display:flex; align-items:center; gap:9px; font-size:14px; font-weight:600; color:var(--muted) }
+.kicker i{ width:10px; height:10px; border-radius:2.5px; background:var(--orange); display:inline-block; flex:none }
+h1{ margin:22px 0 0; font-size:clamp(46px, 9vw, 92px); font-weight:800; letter-spacing:-.05em; line-height:.98 }
+.lead{ font-size:clamp(18px,2.4vw,21px); line-height:1.45; margin:22px 0 0; max-width:640px; color:#3a3a37 }
+.hero-cta{ display:flex; flex-wrap:wrap; gap:10px; margin-top:28px }
+
+/* картка авторки */
+.author{ margin-top:34px; background:#fff; border:1.5px solid var(--line); border-radius:26px; padding:22px; display:grid; grid-template-columns:auto 1fr; gap:14px 16px; align-items:center; box-shadow:var(--shadow) }
+.author .rl{ grid-column:1 / -1 }
+.ava{ width:58px; height:58px; border-radius:18px; background:var(--dark); color:var(--numy); font-weight:800; font-size:24px; letter-spacing:-.03em; display:grid; place-items:center }
+.author .nm{ font-weight:800; font-size:19px; letter-spacing:-.02em }
+.author .rl{ color:#4a4a46; font-size:15.5px; line-height:1.5 }
+.author .sub2{ color:var(--muted); font-size:14px; font-weight:600; margin-top:2px }
+.socials{ grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:8px }
+.soc{ display:inline-flex; align-items:center; gap:8px; padding:8px 14px 8px 10px; border-radius:14px; text-decoration:none; font-size:14px; font-weight:600; background:var(--bg) }
+.soc .ic{ width:26px; height:26px; border-radius:8px; display:grid; place-items:center; flex:none }
+.soc.site{ background:var(--hl) }
+.soc.site .ic{ background:var(--orange) }
+
+/* розділи */
+section{ padding:44px 0 8px }
+.sec{ display:flex; align-items:center; gap:16px; margin-bottom:6px }
+.flag{ width:60px; height:60px; border-radius:16px; background:var(--pp); display:grid; place-items:center; flex:none }
+h2{ margin:0; font-size:clamp(32px,5vw,44px); font-weight:800; letter-spacing:-.04em; line-height:1 }
+.sec .kicker{ margin-top:8px }
+
+.step{ margin-top:34px }
+.step-h{ display:flex; align-items:center; gap:14px }
+.num{ width:42px; height:42px; border-radius:12px; background:var(--dark); color:var(--numy); font-weight:800; font-size:19px; display:grid; place-items:center; flex:none }
+h3{ margin:0; font-size:clamp(21px,3vw,26px); font-weight:800; letter-spacing:-.025em; line-height:1.15 }
+.body{ margin-left:56px }
+.body p{ margin:10px 0 0 }
+.full{ margin-top:16px }
+
+.grid2{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px }
+.grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px }
+.card{ border-radius:22px; padding:20px 20px 22px }
+.card h4{ margin:0 0 8px; font-size:18px; font-weight:800; letter-spacing:-.02em; line-height:1.2 }
+.card p{ margin:0; font-size:15px; line-height:1.5 }
+.card .tag{ font-family:var(--mono); font-size:12px; color:var(--muted); margin-bottom:6px }
+.y{ background:var(--py) } .b{ background:var(--pb) } .g{ background:var(--pg) } .r{ background:var(--pp) }
+.w{ background:#fff; border:1.5px solid var(--line) }
+
+.note{ border-left:4px solid var(--orange); padding:3px 0 3px 15px; font-weight:700; font-size:16px; line-height:1.5; margin-top:18px }
+
+/* два способи */
+.ways{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px }
+.way{ border-radius:26px; padding:24px; display:flex; flex-direction:column }
+.way .lbl{ display:flex; align-items:center; gap:9px; font-size:14px; font-weight:600; color:var(--muted) }
+.way .lbl:before{ content:""; width:10px; height:10px; border-radius:2.5px; background:var(--orange); flex:none }
+.way h3{ margin-top:8px }
+.way .sub{ margin:8px 0 0; font-size:15.5px }
+.way ol{ margin:16px 0 0; padding:0; list-style:none; counter-reset:w }
+.way li{ counter-increment:w; position:relative; padding-left:38px; margin-top:10px; font-size:15.5px; line-height:1.48 }
+.way li:before{ content:counter(w); position:absolute; left:0; top:0; width:26px; height:26px; border-radius:8px; background:var(--dark); color:var(--numy); font-weight:800; font-size:13.5px; display:grid; place-items:center }
+.way .lim{ margin-top:auto; padding-top:16px; font-size:13.5px; color:var(--muted); line-height:1.45 }
+.way .go{ margin-top:16px; align-self:flex-start }
+
+/* телефон-мокап */
+.phone{ background:#fff; border:1.5px solid var(--line); border-radius:30px; padding:14px; margin-top:18px; display:flex; flex-direction:column; gap:7px }
+.vid{ align-self:flex-end; display:flex; align-items:center; gap:10px; background:var(--dark); color:#fff; border-radius:16px 16px 5px 16px; padding:8px 14px 8px 8px; font-family:var(--mono); font-size:12.5px }
+.vid .th{ width:34px; height:48px; border-radius:8px; background:linear-gradient(160deg,#dce7f2,#b9cde2); display:grid; place-items:center }
+
+/* інтерфейси */
+.win{ background:#fff; border-radius:22px; border:1.5px solid var(--line); overflow:hidden; box-shadow:var(--shadow) }
+.bar{ height:38px; display:flex; align-items:center; gap:7px; padding:0 16px; background:#f6f6f3; border-bottom:1px solid #ecece8; position:relative }
+.bar .d{ width:11px; height:11px; border-radius:50% }
+.bar .t{ position:absolute; left:0; right:0; text-align:center; font-size:12.5px; color:#8a8a84; font-weight:600; pointer-events:none }
+.row{ display:flex; align-items:center; gap:13px; padding:12px 20px; border-top:1px solid #f0f0ec }
+.row:first-of-type{ border-top:0 }
+.row .nm{ font-weight:700; font-size:15px; width:76px; font-family:var(--mono); flex:none }
+.row .ds{ font-size:15px; color:var(--muted); line-height:1.4 }
+
+.chips{ display:flex; flex-direction:column; align-items:flex-start; gap:8px; margin-top:12px }
+.chip{ display:inline-flex; align-items:center; gap:10px; background:var(--hl); border-radius:14px; padding:9px 16px 9px 14px; font-size:15.5px; line-height:1.38 }
+.chip:before{ content:""; width:9px; height:9px; border-radius:2px; background:var(--orange); flex:none }
+.chip code{ font-family:var(--mono); font-size:13px }
+
+.chat{ background:#fff; border-radius:24px; border:1.5px solid var(--line); padding:16px 18px 18px; display:flex; flex-direction:column; gap:6px; box-shadow:var(--shadow) }
+.who{ font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-top:6px }
+.who.rt{ align-self:flex-end }
+.bub{ border-radius:18px; padding:12px 16px; font-size:15.5px; line-height:1.5; max-width:84% }
+.me{ align-self:flex-end; background:var(--dark); color:#fff; border-bottom-right-radius:5px }
+.ai{ align-self:flex-start; background:var(--bg); border-bottom-left-radius:5px }
+.me .h{ color:var(--numy); font-weight:700 }
+
+.composer{ display:flex; align-items:center; gap:14px; background:#fff; border-radius:24px; border:1.5px solid var(--line); padding:12px 12px 12px 22px; font-size:16px; line-height:1.5; box-shadow:var(--shadow) }
+.composer .txt{ flex:1 }
+.send{ width:42px; height:42px; border-radius:50%; background:var(--orange); display:grid; place-items:center; flex:none }
+
+.files{ display:flex; gap:16px; padding:16px 22px 14px; align-items:center; flex-wrap:wrap }
+.fl{ display:flex; flex-direction:column; align-items:center; gap:7px; font-family:var(--mono); font-size:12px }
+.fl .th{ width:46px; height:72px; border-radius:10px; display:grid; place-items:center }
+.files .hint{ flex:1; min-width:200px; font-size:14.5px; color:var(--muted); line-height:1.45 }
+
+.plan{ padding:12px 22px 10px }
+.plan .ln{ display:flex; gap:12px; align-items:baseline; padding:9px 0; border-top:1px dashed #e3e3de; font-size:15.5px }
+.plan .ln:first-child{ border-top:0 }
+.tc{ font-family:var(--mono); font-size:12.5px; color:var(--orange); background:#fdf0e6; border-radius:7px; padding:2px 7px; flex:none; font-weight:700 }
+
+.sheet{ display:grid; grid-template-columns:repeat(6,1fr); gap:10px }
+.fr{ display:flex; flex-direction:column; gap:6px; align-items:center }
+.tile{ width:100%; aspect-ratio:9/16; border-radius:12px; position:relative; overflow:hidden }
+.tile .hd{ position:absolute; width:34%; aspect-ratio:1; border-radius:50%; left:33%; top:30%; background:rgba(38,57,43,.55) }
+.tile .bd{ position:absolute; width:70%; height:34%; left:15%; top:52%; border-radius:40% 40% 0 0; background:rgba(38,57,43,.45) }
+.tile .pl{ position:absolute; left:12%; height:9%; border-radius:5px; background:var(--hl); border:1px solid rgba(0,0,0,.08) }
+.tile .sb{ position:absolute; left:18%; right:18%; bottom:9%; height:4%; border-radius:3px; background:#fff }
+.tile.bad{ outline:3px solid var(--red); outline-offset:-3px }
+.tcs{ font-family:var(--mono); font-size:11.5px; color:var(--muted) }
+.tcs.bad{ color:var(--red); font-weight:700 }
+
+.cmp .crow{ display:grid; grid-template-columns:1.1fr 1fr 1fr; gap:12px; padding:13px 22px; border-top:1px solid #f0f0ec; font-size:15.5px; align-items:center }
+.cmp .crow:first-of-type{ border-top:0 }
+.cmp .crow span:first-child{ color:var(--muted); font-weight:600 }
+.cmp .ch{ background:#f6f6f3; font-weight:800 }
+.cmp .ch span{ color:var(--ink) !important }
+.cmp .same{ font-weight:700; color:var(--dark) }
+
+.itogo{ background:var(--dark); color:#fff; border-radius:28px; padding:30px 30px 32px; margin-top:44px }
+.itogo .big{ font-size:clamp(24px,3.6vw,32px); font-weight:800; letter-spacing:-.03em; line-height:1.18 }
+.itogo .big .y2{ color:var(--numy) }
+.itogo p{ margin:14px 0 0; font-size:16.5px; color:#dfe7e0 }
+
+/* футер з контактами */
+footer{ margin-top:56px; padding:44px 0 56px; background:#fff; border-top:1.5px solid var(--line) }
+.fgrid{ display:grid; grid-template-columns:1.1fr 1fr; gap:28px; align-items:start }
+footer .who2{ font-size:28px; font-weight:800; letter-spacing:-.035em; line-height:1.05 }
+footer .who2 span{ color:var(--muted) }
+footer p{ margin:12px 0 0; color:#3a3a37; font-size:16px }
+.links{ display:grid; gap:8px }
+.lnk{ display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:16px; background:var(--bg); text-decoration:none; font-weight:700; font-size:15.5px }
+.lnk .ic{ width:32px; height:32px; border-radius:10px; display:grid; place-items:center; flex:none }
+.lnk small{ display:block; font-weight:500; color:var(--muted); font-size:13px; margin-top:1px }
+.lnk .arr{ margin-left:auto; color:var(--muted) }
+.lnk.main{ background:var(--hl) }
+.copy{ margin-top:30px; font-size:13px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px }
+
+.toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px); background:var(--dark); color:#fff; padding:12px 18px; border-radius:14px; font-size:14.5px; font-weight:600; opacity:0; transition:.25s; pointer-events:none; z-index:20 }
+.toast.on{ opacity:1; transform:translateX(-50%) translateY(0) }
+
+@media (max-width:720px){
+  body{ font-size:16.5px }
+  .topbar nav .btn.light{ display:none }
+  .brand span.s{ display:none }
+  .hero{ padding-top:36px }
+  .body{ margin-left:0 }
+  .grid3,.grid2,.ways,.fgrid{ grid-template-columns:1fr }
+  .sheet{ grid-template-columns:repeat(3,1fr) }
+  .cmp .crow{ grid-template-columns:1fr 1fr 1fr; padding:12px 14px; font-size:14px; gap:8px }
+  .row{ padding:11px 16px }
+  .row .nm{ width:64px; font-size:14px }
+  .row .ds{ font-size:14px }
+  .author{ padding:18px }
+  .bub{ max-width:92% }
+  .itogo{ padding:24px }
+}
+</style>
+</head>
+<body>
+<div class="progress" id="pr"></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="https://digitalspirit.com.ua" target="_blank" rel="noopener"><span class="sq"></span>Дарія Возна <span class="s">· Маркетинг Скаут</span></a>
+    <nav>
+      <a class="btn light" href="#contacts">Контакти</a>
+      <button class="btn dark" id="share" type="button"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Переслати</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="kicker"><i></i>Гайд · Маркетинг Скаут</div>
+    <h1>Монтаж відео<br>з <span class="mk">Claude</span></h1>
+    <p class="lead">Від сирих кліпів до готового ролика з субтитрами, плашками й звуками. З телефона або через комп'ютер, на Mac і Windows.</p>
+    <div class="hero-cta">
+      <a class="btn or" href="#ways">Почати</a>
+      <a class="btn light" href="#contacts">Контакти авторки</a>
+    </div>
+
+    <div class="author">
+      <div class="ava">ДВ</div>
+      <div>
+        <div class="nm">Дарія Возна</div>
+        <div class="sub2">Маркетинг Скаут · авторка гайду</div>
+      </div>
+      <div class="rl">Маркетолог здорового бізнесу, 7+ років у маркетингу. Будую маркетинг брендам і навчаю тих, хто робить це сам. Свої ролики монтую з Claude.</div>
+      <div class="socials">
+        <a class="soc site" href="https://digitalspirit.com.ua" target="_blank" rel="noopener"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9S14.6 18.4 12 21c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z" fill="none" stroke="#fff" stroke-width="2"/></svg></span>digitalspirit.com.ua</a>
+        <a class="soc" href="https://www.youtube.com/channel/UCYyzxF8mHDjKBg2WQ1wVAvg" target="_blank" rel="noopener"><span class="ic" style="background:var(--pp)"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="#d9363e"/></svg></span>YouTube</a>
+        <a class="soc" href="https://www.tiktok.com/@dariia_vozna" target="_blank" rel="noopener"><span class="ic" style="background:var(--pb)"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5" fill="none" stroke="#1d1d1b" stroke-width="2.4" stroke-linecap="round"/><path d="M14 3c.6 2.8 2.4 4.4 5 4.6" fill="none" stroke="#1d1d1b" stroke-width="2.4" stroke-linecap="round"/></svg></span>TikTok</a>
+        <a class="soc" href="https://www.instagram.com/dariia_vozna" target="_blank" rel="noopener"><span class="ic" style="background:var(--py)"><svg width="15" height="15" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#1d1d1b" stroke-width="2.2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#1d1d1b" stroke-width="2.2"/></svg></span>Instagram</a>
+        <a class="soc" href="https://t.me/atykupyslona" target="_blank" rel="noopener"><span class="ic" style="background:var(--pg)"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M21 4L3 11l6 2 2 6 3-4 5 4z" fill="none" stroke="#26392b" stroke-width="2" stroke-linejoin="round"/></svg></span>Telegram «Купи Слона»</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ДВА СПОСОБИ -->
+  <section id="ways">
+    <div class="kicker"><i></i>Спершу оберіть спосіб</div>
+    <h2 style="margin-top:14px">Два способи</h2>
+    <div class="ways">
+      <div class="way y">
+        <div class="lbl">Короткі ролики</div>
+        <h3>З телефона</h3>
+        <p class="sub">Нічого не встановлюєте. Claude монтує у своїй хмарній робочій зоні й повертає готовий файл у чат.</p>
+        <ol>
+          <li>У налаштуваннях Claude, розділ Capabilities, увімкніть <b>Create and edit files</b>.</li>
+          <li>Кидаєте відео прямо в чат і пишете ТЗ.</li>
+          <li>Отримуєте готовий ролик файлом.</li>
+        </ol>
+        <div class="phone">
+          <div class="vid"><span class="th"><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M10 8.2v7.6l6-3.8z" fill="#26392b"/></svg></span>IMG_5022.MOV</div>
+          <div class="bub me" style="font-size:14.5px">Змонтуй рілс: виріж паузи, субтитри по словах</div>
+          <div class="bub ai" style="font-size:14.5px">Готово 🎬 <b>reel.mp4</b></div>
+        </div>
+        <div class="lim">Ліміти Claude: завантажити в чат можна до 500 МБ на файл, а файл, який Claude віддає, до 30 МБ. Це приблизно хвилина вертикального відео.</div>
+      </div>
+      <div class="way b">
+        <div class="lbl">Довгі відео й регулярний монтаж</div>
+        <h3>Через комп'ютер</h3>
+        <p class="sub">Відео лежать у папці на вашому комп'ютері, і Claude працює з ними там. Ліміти чату на розмір файлів тут не заважають.</p>
+        <ol>
+          <li>Ставите застосунок Claude на Mac або Windows.</li>
+          <li>Створюєте папку «Монтаж».</li>
+          <li>Даєте Claude доступ до неї й пишете ТЗ.</li>
+        </ol>
+        <div class="win" style="margin-top:18px">
+          <div class="bar"><span class="d" style="background:#ff5f57"></span><span class="d" style="background:#febc2e"></span><span class="d" style="background:#28c840"></span><span class="t">Монтаж</span></div>
+          <div class="row"><svg width="26" height="20" viewBox="0 0 28 22"><path d="M2 4a2 2 0 0 1 2-2h6l2.5 2.5H24a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#a9c4de"/></svg><span class="nm">raw</span><span class="ds">01.MOV, 02.MOV</span></div>
+          <div class="row"><svg width="26" height="20" viewBox="0 0 28 22"><path d="M2 4a2 2 0 0 1 2-2h6l2.5 2.5H24a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#f2d04a"/></svg><span class="nm">assets</span><span class="ds">logo.png</span></div>
+          <div class="row"><svg width="26" height="20" viewBox="0 0 28 22"><path d="M2 4a2 2 0 0 1 2-2h6l2.5 2.5H24a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#9fcfa6"/></svg><span class="nm">done</span><span class="ds">reel.mp4 🎬</span></div>
+        </div>
+        <div class="lim">Потрібна платна підписка, від Pro і вище. На Windows застосунок поки в беті.</div>
+        <a class="btn dark go" href="#prep">Покроково ↓</a>
+      </div>
+    </div>
+    <p class="note">ТЗ, план монтажу, пробні кадри й правки однакові для обох способів. Різниця тільки в тому, куди ви кладете файли: у чат чи в папку.</p>
+  </section>
+
+  <!-- ПІДГОТОВКА -->
+  <section id="prep">
+    <div class="sec">
+      <div class="flag"><svg width="28" height="28" viewBox="0 0 24 24"><path d="M5.5 21.5V3" stroke="#d9363e" stroke-width="2.3" stroke-linecap="round"/><path d="M5.5 3.5h12.5l-2.6 4.6 2.6 4.6H5.5z" fill="#d9363e"/></svg></div>
+      <div><h2>Підготовка</h2><div class="kicker"><i></i>Для способу через комп'ютер · один раз</div></div>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">1</div><h3>Встановіть застосунок Claude</h3></div>
+      <div class="body">
+        <p>Десктопна версія для Mac і Windows качається з <a href="https://claude.com/download" target="_blank" rel="noopener"><b>claude.com/download</b></a>, далі входите у свій акаунт.</p>
+        <p>Дивіться, який фокус: монтаж відбувається на <span class="mk">вашому комп'ютері</span>. Тож під час роботи він має бути увімкнений, на зарядці й з відкритим застосунком. А писати Claude можна хоч із телефона.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">2</div><h3>Створіть папку «Монтаж»</h3></div>
+      <div class="body"><p>На Mac у «Фільмах», на Windows у «Відео». Підпапки Claude створить сам, ось що в кожній лежатиме:</p></div>
+      <div class="win full">
+        <div class="bar"><span class="d" style="background:#ff5f57"></span><span class="d" style="background:#febc2e"></span><span class="d" style="background:#28c840"></span><span class="t">Монтаж</span></div>
+        <div class="row"><svg width="28" height="22" viewBox="0 0 28 22"><path d="M2 4a2 2 0 0 1 2-2h6l2.5 2.5H24a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#a9c4de"/></svg><span class="nm">raw</span><span class="ds">сирі відео</span></div>
+        <div class="row"><svg width="28" height="22" viewBox="0 0 28 22"><path d="M2 4a2 2 0 0 1 2-2h6l2.5 2.5H24a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#e9b9bb"/></svg><span class="nm">ref</span><span class="ds">референси: відео чи скріни, які подобаються</span></div>
+        <div class="row"><svg width="28" height="22" viewBox="0 0 28 22"><path d="M2 4a2 2 0 0 1 2-2h6l2.5 2.5H24a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#f2d04a"/></svg><span class="nm">assets</span><span class="ds">фото, стікери, логотипи, шрифти, музика</span></div>
+        <div class="row"><svg width="28" height="22" viewBox="0 0 28 22"><path d="M2 4a2 2 0 0 1 2-2h6l2.5 2.5H24a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#9fcfa6"/></svg><span class="nm">done</span><span class="ds">готові відео</span></div>
+        <div class="row"><svg width="28" height="22" viewBox="0 0 28 22"><path d="M2 4a2 2 0 0 1 2-2h6l2.5 2.5H24a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#cfcfc9"/></svg><span class="nm">models</span><span class="ds">модель для розшифровки мови, її не чіпаєте</span></div>
+      </div>
+      <p class="note">Робочий стіл для цього гірший: він часто синхронізується з хмарою, і великі відео звідти вивантажуються з комп'ютера.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">3</div><h3>Перший запуск</h3></div>
+      <div class="body">
+        <p>Перше повідомлення надсилаєте <span class="mk">із застосунку на комп'ютері</span>. Claude попросить доступ до папки «Монтаж», ви підтверджуєте. Можна почати так:</p>
+      </div>
+      <div class="composer full"><span class="txt">Будемо монтувати відео з папки «Монтаж». Створи підпапки raw, ref, assets, done і models. Підготуй розшифровку мови, а модель збережи в models, щоб не качати вдруге.</span><span class="send"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    </div>
+
+    <div class="kicker" style="margin-top:40px"><i></i>Що вже є в робочій зоні Claude</div>
+    <div class="grid3 full">
+      <div class="card y"><div class="tag">ffmpeg</div><h4>Монтаж і рендер</h4><p>Уже вбудований: ріже, склеює, накладає субтитри й текст.</p></div>
+      <div class="card b"><div class="tag">python</div><h4>Графіка</h4><p>Бібліотеки для картинок і відео теж на місці. З них Claude збирає плашки, анімації й зуми.</p></div>
+      <div class="card g"><div class="tag">whisper</div><h4>Розшифровка</h4><p>Claude ставить її сам при першому монтажі. Перший раз займе на кілька хвилин довше.</p></div>
+    </div>
+
+    <div class="kicker" style="margin-top:40px"><i></i>Mac чи Windows</div>
+    <div class="win full cmp">
+      <div class="crow ch"><span></span><span>Mac</span><span>Windows</span></div>
+      <div class="crow"><span>Застосунок</span><span style="grid-column:2 / 4">claude.com/download, один для обох</span></div>
+      <div class="crow"><span>Папка «Монтаж»</span><span>у «Фільмах»</span><span>у «Відео»</span></div>
+      <div class="crow"><span>Відео з телефона</span><span>AirDrop</span><span>кабелем або через хмару</span></div>
+      <div class="crow"><span>Усе інше</span><span class="same">однаково</span><span class="same">однаково</span></div>
+    </div>
+  </section>
+
+  <!-- КОЖНЕ ВІДЕО -->
+  <section id="each">
+    <div class="sec">
+      <div class="flag"><svg width="28" height="28" viewBox="0 0 24 24"><path d="M5.5 21.5V3" stroke="#d9363e" stroke-width="2.3" stroke-linecap="round"/><path d="M5.5 3.5h12.5l-2.6 4.6 2.6 4.6H5.5z" fill="#d9363e"/></svg></div>
+      <div><h2>Кожне відео</h2><div class="kicker"><i></i>Повторюєте з кожним роликом</div></div>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">4</div><h3>Сирі відео кладете в raw</h3></div>
+      <div class="body">
+        <p>З телефона на Mac перекидайте через AirDrop, на Windows кабелем або через хмару. Telegram за замовчуванням стискає якість, а Claude потім працює з тим, що отримав.</p>
+        <p>Якщо порядок важливий, називайте файли <b>01, 02, 03</b>.</p>
+      </div>
+      <div class="win full">
+        <div class="bar"><span class="d" style="background:#ff5f57"></span><span class="d" style="background:#febc2e"></span><span class="d" style="background:#28c840"></span><span class="t">raw</span></div>
+        <div class="files">
+          <div class="fl"><div class="th" style="background:linear-gradient(160deg,#dce7f2,#b9cde2)"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M10 8.2v7.6l6-3.8z" fill="#26392b"/></svg></div>01.MOV</div>
+          <div class="fl"><div class="th" style="background:linear-gradient(160deg,#faefc8,#efd998)"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M10 8.2v7.6l6-3.8z" fill="#26392b"/></svg></div>02.MOV</div>
+          <div class="fl"><div class="th" style="background:linear-gradient(160deg,#e1efe3,#c3dfc8)"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M10 8.2v7.6l6-3.8z" fill="#26392b"/></svg></div>03.MOV</div>
+          <div class="hint">Оригінали з телефона, без стиснення. Усе обробляється на вашому комп'ютері.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">5</div><h3>Референси кладете в ref</h3></div>
+      <div class="body">
+        <p>Відео чи скріни, які подобаються. І обов'язково словами: що саме подобається, субтитри, темп чи плашки.</p>
+        <p>Claude бачить відео як <span class="mk">серію кадрів</span>, тому рух і динаміку краще описати.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">6</div><h3>Матеріали кладете в assets</h3></div>
+      <div class="body">
+        <p>Сюди йде все, що має з'явитися в кадрі:</p>
+        <div class="chips">
+          <span class="chip"><span>фото, скріни й логотипи з назвою за змістом: <code>do-pislya.jpg</code>, <code>logo.png</code></span></span>
+          <span class="chip">стікери у форматі PNG з прозорим фоном</span>
+          <span class="chip">шрифти у файлах .otf або .ttf</span>
+          <span class="chip">музика з вільною ліцензією</span>
+        </div>
+      </div>
+      <div class="grid2 full">
+        <div class="card w"><h4>Анімації класти не треба</h4><p>Плашки з текстом, стрілки, зуми, підсвітку слів у субтитрах і схеми Claude малює сам. Достатньо описати, що й де.</p></div>
+        <div class="card r"><h4>Фото й музику даєте ви</h4><p>Claude бере в кадр те, що лежить у папці. Так у ролику буде саме ваше, і без проблем із правами.</p></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">7</div><h3>ТЗ пишете одним повідомленням</h3></div>
+      <div class="body"><p>Чим конкретніше, тим менше кругів правок. Ось що туди писати:</p></div>
+      <div class="grid3 full">
+        <div class="card b"><h4>Формат</h4><p>Рілс 9:16 чи YouTube 16:9, бажана тривалість.</p></div>
+        <div class="card y"><h4>Що вирізати</h4><p>Паузи, дублі, слова-паразити.</p></div>
+        <div class="card g"><h4>Субтитри</h4><p>Чи потрібні, яким шрифтом і кольором.</p></div>
+        <div class="card r"><h4>Що й коли показувати</h4><p>Фраза у відео і файл чи анімація до неї.</p></div>
+        <div class="card b"><h4>Як пишуться бренди</h4><p>Розпізнавання мови назви часто перекручує.</p></div>
+        <div class="card y"><h4>Звук і фінал</h4><p>Музика, звуки, гучність, заклик наприкінці.</p></div>
+      </div>
+      <div class="kicker" style="margin-top:28px"><i></i>Приклад ТЗ</div>
+      <div class="chat full">
+        <div class="who rt">Ви</div>
+        <div class="bub me">
+          <span class="h">Рілс 9:16, до хвилини.</span><br>
+          Виріж паузи, дублі й «еее».<br>
+          Субтитри по словах, шрифт Gotham Pro з assets, ключові слова жовтим.<br>
+          Коли кажу «фотохромні лінзи», покажи do-pislya.jpg.<br>
+          Бренд пишеться Transitions.<br>
+          У фіналі плашка «Запис — у профілі». Звуки зовсім тихо.
+        </div>
+        <div class="who">Claude</div>
+        <div class="bub ai">Супер. Спершу надішлю план монтажу з таймкодами, рендер після вашого «ок».</div>
+      </div>
+      <p class="note">Файли з ref і assets у ТЗ називайте так само, як вони названі в папці. Тоді Claude нічого не переплутає.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">8</div><h3>Спершу план, потім рендер</h3></div>
+      <div class="body"><p>Просіть план текстом: таймкод і що в цей момент на екрані. Правите його ви, Claude рендерить уже погоджене. Так правка коштує одне повідомлення замість цілого перерендеру.</p></div>
+      <div class="win full plan">
+        <div class="ln"><span class="tc">00:00</span>хук, субтитри по словах</div>
+        <div class="ln"><span class="tc">00:03</span>зум на обличчя</div>
+        <div class="ln"><span class="tc">00:11</span>фото до/після, плашка «фотохромні лінзи»</div>
+        <div class="ln"><span class="tc">00:27</span>стрілка на оправу</div>
+        <div class="ln"><span class="tc">00:42</span>фінальна плашка «Запис — у профілі»</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">9</div><h3>Пробні кадри</h3></div>
+      <div class="body"><p>Перед повним рендером просіть 5–6 ключових кадрів <span class="mk">однією картинкою</span>. Одразу видно, чи плашка не закриває обличчя й текст.</p></div>
+      <div class="sheet full">
+        <div class="fr"><div class="tile" style="background:linear-gradient(160deg,#dce7f2,#c4d6e8)"><div class="hd"></div><div class="bd"></div><div class="sb"></div></div><span class="tcs">00:00</span></div>
+        <div class="fr"><div class="tile" style="background:linear-gradient(160deg,#faefc8,#f1dfa2)"><div class="hd" style="width:46%;left:27%;top:24%"></div><div class="bd" style="top:56%"></div><div class="sb"></div></div><span class="tcs">00:03</span></div>
+        <div class="fr"><div class="tile bad" style="background:linear-gradient(160deg,#e1efe3,#c9e2cd)"><div class="hd"></div><div class="bd"></div><div class="pl" style="top:33%;width:76%"></div><div class="sb"></div></div><span class="tcs bad">00:11 ✕</span></div>
+        <div class="fr"><div class="tile" style="background:linear-gradient(160deg,#f6e0e1,#ecc9cb)"><div class="hd"></div><div class="bd"></div><div class="pl" style="top:12%;width:62%"></div><div class="sb"></div></div><span class="tcs">00:19</span></div>
+        <div class="fr"><div class="tile" style="background:linear-gradient(160deg,#dce7f2,#c4d6e8)"><div class="hd"></div><div class="bd"></div><div class="sb"></div><div class="pl" style="top:72%;left:52%;width:30%;height:4%;background:var(--orange);border-radius:3px"></div></div><span class="tcs">00:27</span></div>
+        <div class="fr"><div class="tile" style="background:linear-gradient(160deg,#26392b,#1d2c21)"><div class="pl" style="top:40%;width:76%;height:12%"></div><div class="sb" style="background:rgba(255,255,255,.5);bottom:30%;left:24%;right:24%"></div></div><span class="tcs">00:42</span></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-h"><div class="num">10</div><h3>Готове відео з'являється в done</h3></div>
+      <div class="body"><p>Правки пишете з таймкодом, тоді Claude одразу знає, де шукати:</p></div>
+      <div class="composer full"><span class="txt">0:11 — плашка закриває обличчя, підніми вище.<br>0:30 — звук тихіше.</span><span class="send"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    </div>
+  </section>
+
+  <!-- ШАБЛОН -->
+  <section id="template">
+    <div class="sec">
+      <div class="flag"><svg width="28" height="28" viewBox="0 0 24 24"><path d="M5.5 21.5V3" stroke="#d9363e" stroke-width="2.3" stroke-linecap="round"/><path d="M5.5 3.5h12.5l-2.6 4.6 2.6 4.6H5.5z" fill="#d9363e"/></svg></div>
+      <div><h2>Шаблон</h2><div class="kicker"><i></i>Після першого вдалого відео</div></div>
+    </div>
+    <div class="step">
+      <div class="step-h"><div class="num">11</div><h3>Збережіть шаблон як скіл</h3></div>
+      <div class="body">
+        <p>Просите Claude зберегти шаблон як скіл: стиль, шрифти, звуки й усі ваші правки.</p>
+        <p>Далі наступні ролики монтуються <span class="mk">майже одним повідомленням</span>:</p>
+      </div>
+      <div class="composer full"><span class="txt">Змонтуй з raw за шаблоном</span><span class="send"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    </div>
+
+    <div class="kicker" style="margin-top:44px"><i></i>Якщо шось пішло не так</div>
+    <div class="grid2 full">
+      <div class="card w"><h4>Не скачується модель</h4><p>Claude потрібен доступ до інтернету. Перевірте мережевий доступ у налаштуваннях Claude, розділ Capabilities.</p></div>
+      <div class="card w"><h4>Claude не бачить папку</h4><p>Відкрийте чат у застосунку на комп'ютері й надішліть будь-яке повідомлення. Він попросить доступ.</p></div>
+      <div class="card w"><h4>Рендер обірвався</h4><p>Комп'ютер заснув або застосунок закрили. Ставте на зарядку й не закривайте кришку ноутбука.</p></div>
+      <div class="card w"><h4>Бренд у субтитрах кривий</h4><p>Допишіть у ТЗ, як він пишеться, і попросіть виправити.</p></div>
+    </div>
+
+    <div class="itogo">
+      <div class="big">Ітого: налаштовуєте один раз. Далі ваша робота — <span class="y2">зняти, покласти в&nbsp;папку й написати&nbsp;ТЗ))</span></div>
+      <p>Пробуйте й показуйте, що вийшло, тож чекаю))</p>
+    </div>
+  </section>
+</main>
+
+<!-- КОНТАКТИ -->
+<footer id="contacts">
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <div class="kicker"><i></i>Авторка гайду</div>
+        <div class="who2" style="margin-top:14px">Дарія Возна<br><span>Маркетинг Скаут</span></div>
+        <p>Розбори брендів виходять на YouTube і в TikTok, лонгріди на Substack, анонси в Telegram «Купи Слона». Консалтинг, навчання й виступи на сайті.</p>
+        <div class="hero-cta">
+          <a class="btn dark" href="https://digitalspirit.com.ua" target="_blank" rel="noopener">Перейти на сайт</a>
+          <button class="btn light" id="share2" type="button">Переслати гайд</button>
+        </div>
+      </div>
+      <div class="links">
+        <a class="lnk main" href="https://digitalspirit.com.ua" target="_blank" rel="noopener"><span class="ic" style="background:var(--orange)"><svg width="17" height="17" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9S14.6 18.4 12 21c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z" fill="none" stroke="#fff" stroke-width="2"/></svg></span><span>Digital Spirit<small>digitalspirit.com.ua</small></span><span class="arr">→</span></a>
+        <a class="lnk" href="https://www.youtube.com/channel/UCYyzxF8mHDjKBg2WQ1wVAvg" target="_blank" rel="noopener"><span class="ic" style="background:var(--pp)"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="#d9363e"/></svg></span><span>YouTube<small>Маркетинг Скаут</small></span><span class="arr">→</span></a>
+        <a class="lnk" href="https://www.tiktok.com/@dariia_vozna" target="_blank" rel="noopener"><span class="ic" style="background:var(--pb)"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5" fill="none" stroke="#1d1d1b" stroke-width="2.4" stroke-linecap="round"/><path d="M14 3c.6 2.8 2.4 4.4 5 4.6" fill="none" stroke="#1d1d1b" stroke-width="2.4" stroke-linecap="round"/></svg></span><span>TikTok<small>@dariia_vozna</small></span><span class="arr">→</span></a>
+        <a class="lnk" href="https://www.instagram.com/dariia_vozna" target="_blank" rel="noopener"><span class="ic" style="background:var(--py)"><svg width="16" height="16" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="#1d1d1b" stroke-width="2.2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="#1d1d1b" stroke-width="2.2"/></svg></span><span>Instagram<small>@dariia_vozna</small></span><span class="arr">→</span></a>
+        <a class="lnk" href="https://t.me/atykupyslona" target="_blank" rel="noopener"><span class="ic" style="background:var(--pg)"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M21 4L3 11l6 2 2 6 3-4 5 4z" fill="none" stroke="#26392b" stroke-width="2" stroke-linejoin="round"/></svg></span><span>Telegram<small>Купи Слона</small></span><span class="arr">→</span></a>
+        <a class="lnk" href="https://dariiavozna.substack.com" target="_blank" rel="noopener"><span class="ic" style="background:#fff;border:1.5px solid var(--line)"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M5 5h14M5 9h14M5 13h14v8l-7-4-7 4z" fill="none" stroke="#e07a35" stroke-width="2.2" stroke-linejoin="round"/></svg></span><span>Substack<small>лонгріди й розбори</small></span><span class="arr">→</span></a>
+      </div>
+    </div>
+    <div class="copy"><span>© Дарія Возна · Маркетинг Скаут</span><span>Гайд можна пересилати з посиланням на цю сторінку</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Посилання скопійовано</div>
+
+<script>
+(function(){
+  var pr = document.getElementById('pr');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    pr.style.width = (max > 0 ? (h.scrollTop / max * 100) : 0) + '%';
+  }
+  document.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  var url = 'https://dariiavozna.github.io/test/montazh/';
+  var toast = document.getElementById('toast');
+  function show(msg){ toast.textContent = msg; toast.classList.add('on'); setTimeout(function(){ toast.classList.remove('on'); }, 2000); }
+  function share(){
+    var data = { title:'Монтаж відео з Claude — гайд Дарії Возної', text:'Як монтувати відео з Claude: з телефона або через комп\'ютер', url:url };
+    try{
+      if (navigator.share){ navigator.share(data).catch(function(){}); return; }
+    }catch(e){}
+    try{
+      navigator.clipboard.writeText(url).then(function(){ show('Посилання скопійовано'); }, function(){ show(url); });
+    }catch(e){ show(url); }
+  }
+  ['share','share2'].forEach(function(id){ var b = document.getElementById(id); if (b) b.addEventListener('click', share); });
+})();
+</script>
+</body>
+</html>
