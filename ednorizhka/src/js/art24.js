@@ -31,6 +31,7 @@ function drawQuizBoard(c, q, t) {
   c.restore();
 }
 function drawAnswerCard(c, q, o, t) {
+  if (q.kind === 'sound' || q.kind === 'shadow') return drawAnswerCard29(c, q, o, t);
   const good = q.solved && o.n === q.ans, wob = q.wrongT > 0 && q.wrongTx === o.tx ? Math.sin(q.wrongT * 40) * 3 : 0;
   const x = o.tx * T + wob, y = o.ty * T;
   c.save(); c.lineJoin = 'round'; c.strokeStyle = INK; c.lineWidth = 1.4;

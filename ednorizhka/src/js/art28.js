@@ -103,6 +103,7 @@ function drawWorld28(c, t, vis) {
   if (G.seeds29) for (const s of G.seeds29) if (!s.taken && vis(s.x)) drawSeed29(c, s.x, s.y + Math.sin(t * 3 + s.x) * 2, t);
   if (G.soils) for (const s of G.soils) if (vis((s.x + s.h / 2) * T, (s.h + 2) * T)) drawSoil29(c, s, t);
   if (G.hops) for (const h of G.hops) if (vis((h.cols[0] + h.door) / 2 * T, (h.door - h.cols[0] + 2) * T)) drawHops29(c, h, t);
+  drawWorld29(c, t, vis);
 }
 
 /* ===== Гусак Шипун ===== */
@@ -121,7 +122,7 @@ function drawBlock28(c, b) {
   c.strokeStyle = INK; c.lineWidth = 1.4;
   if (b === 'cliffblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#b8a088'; c.fill(); c.stroke(); c.fillStyle = '#a08870'; ell(c, 8, 9, 5, 3); c.fill(); ell(c, 16, 16, 4, 2.6); c.fill(); c.fillStyle = '#7fd46a'; c.fillRect(1.5, 1.5, T - 3, 3); }
   else if (b === 'chalkblock') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#d8dce4'; c.fill(); c.stroke(); c.strokeStyle = ['#ff7ab8', '#7fb8ff', '#ffd23f'][0]; c.lineWidth = 1.6; c.beginPath(); c.moveTo(5, 16); c.quadraticCurveTo(12, 6, 19, 14); c.stroke(); }
-  else return false;
+  else return drawBlock29(c, b);
   return true;
 }
 
@@ -133,6 +134,7 @@ function drawDecor28(c, d, t) {
     case 'sproutS': c.strokeStyle = '#3e9a48'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - 9); c.stroke(); c.fillStyle = '#7fd46a'; c.strokeStyle = INK; c.lineWidth = 0.8; ell(c, x - 4, y - 10, 4, 2.2, -0.4); c.fill(); c.stroke(); ell(c, x + 4, y - 11, 4, 2.2, 0.4); c.fill(); c.stroke(); break;
     case 'chalkS': c.fillStyle = d.c || '#ff7ab8'; c.save(); c.translate(x, y - 2); c.rotate(0.3); rr(c, -5, -1.5, 10, 3, 1.5); c.fill(); c.stroke(); c.restore(); break;
     case 'canS': c.fillStyle = '#7fb8ff'; c.beginPath(); c.moveTo(x - 6, y - 10); c.lineTo(x + 5, y - 10); c.lineTo(x + 4, y); c.lineTo(x - 5, y); c.closePath(); c.fill(); c.stroke(); c.strokeStyle = '#7fb8ff'; c.lineWidth = 2; c.beginPath(); c.moveTo(x + 5, y - 8); c.lineTo(x + 11, y - 13); c.stroke(); break;
+    default: drawDecor29(c, d, t); break;
   }
 }
 

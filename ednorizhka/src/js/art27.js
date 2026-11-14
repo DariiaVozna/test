@@ -34,6 +34,7 @@ function drawCountPic(c, k, x, y, t, i) {
   c.restore();
 }
 function drawQuizBoard27(c, q, t) {
+  if (q.kind === 'sound' || q.kind === 'shadow') return drawQuizBoard29(c, q, t);
   const o = q.opts[1], cx = o.tx * T + 12;
   c.save(); c.lineJoin = 'round';
   if (q.kind === 'clock') {

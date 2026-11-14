@@ -23,6 +23,7 @@ function initLevel24(G, L) {
   G.seeds29 = (L.seeds29 || []).map(s => Object.assign({ taken: false }, s));
   G.soils = (L.soils || []).map(s => Object.assign({ grown: 0, growing: false, done: false, hintT: 0, gt: 0 }, s));
   G.hops = (L.hops || []).map(h => Object.assign({ next: 1, done: false, hintT: 0, okT: 0, badN: 0, badT: 0 }, h));
+  initLevel25(G, L);
 }
 
 /* ===== Чистий парк: віднеси сміття в контейнер свого кольору ===== */
@@ -118,6 +119,7 @@ function update24(dt) {
   updateTrash(dt);
   updateBeans(dt);
   updateHops(dt);
+  update25(dt);
 }
 
 /* ===== Гусак Шипун — ще один бігун: кидається пір'їнами, а потім ховає голову під крило ===== */

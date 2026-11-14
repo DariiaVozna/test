@@ -5347,6 +5347,129 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 30: Зимове свято ===== */
+  {
+    id: 'snowmanhill', theme: 'snowmanhill', name: 'Зліпи сніговика', blurb: 'Збери сніговика по частинках', w: 170,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Зліпи сніговика! Збери всі його частинки — сніжки, морквину, відерце, шарфик. Коли сніговик буде готовий, він відчинить ворота');
+      L.snowkit(20, 24, [['base', 8], ['mid', 12], ['head', 16, 7]]);
+      L.row(26, 9, 3);
+      L.enemy('snail', 33, 10);
+      L.ground(47, 92);
+      L.check(49);
+      L.snowkit(68, 72, [['base', 53], ['mid', 56], ['head', 59, 7], ['nose', 62], ['hat', 65, 7]]);
+      L.block(75, 7, 3); L.row(75, 5, 3);
+      L.enemy('frog', 82, 10);
+      L.ground(95, 136);
+      L.check(97);
+      L.snowkit(120, 124, [['base', 101], ['mid', 104, 7], ['head', 107], ['nose', 110], ['hat', 113, 7], ['scarf', 116]]);
+      L.row(127, 9, 4);
+      L.ground(139, 170);
+      L.check(141);
+      L.enemy('bee', 148, 6);
+      L.row(152, 9, 5);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'animalsounds', theme: 'animalsounds', name: 'Хто як говорить?', blurb: 'Прочитай, хто як говорить', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Хто як говорить? Подивись, хто на дошці, прочитай слова на кубиках і стукни головою знизу правильне');
+      L.row(6, 9, 3);
+      L.soundq(12, 'cat', ['dog', 'duck'], 23, 0);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.soundq(53, 'dog', ['pig', 'cat'], 64, 1);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.soundq(103, 'duck', ['hen', 'pig'], 114, 2);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.soundq(141, 'hen', ['duck', 'dog'], 152, 1);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'shadowtheater', theme: 'shadowtheater', name: 'Чия це тінь?', blurb: 'Впізнай тваринку за тінню', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Театр тіней! На дошці — чиясь тінь. Подивись на вушка, дзьобик і хвостик і стукни головою знизу кубик із тим, чия вона');
+      L.row(6, 9, 3);
+      L.shadowq(12, 'cat', ['duck', 'pig'], 23, 0);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.shadowq(53, 'duck', ['hen', 'dog'], 64, 2);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.shadowq(103, 'dog', ['cat', 'pig'], 114, 1);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.shadowq(141, 'hen', ['duck', 'cat'], 152, 0);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'winterfest', theme: 'winterfest', name: 'Зимове свято', blurb: 'Сніговик, звуки й тіні — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Зимове свято! Зліпи сніговика, вгадай, хто як говорить, і чия це тінь');
+      L.snowkit(18, 22, [['base', 8], ['mid', 11], ['head', 14, 7]]);
+      L.soundq(26, 'pig', ['cat', 'hen'], 37, 0);
+      L.enemy('snail', 40, 10);
+      L.ground(47, 94);
+      L.check(49);
+      L.shadowq(53, 'pig', ['dog', 'duck'], 64, 1);
+      L.snowkit(80, 84, [['base', 67], ['mid', 70], ['head', 73, 7], ['nose', 76]]);
+      L.enemy('frog', 88, 10);
+      L.ground(97, 136);
+      L.check(99);
+      L.soundq(103, 'duck', ['dog', 'cat'], 114, 1);
+      L.shadowq(117, 'dog', ['hen', 'cat'], 128, 2);
+      L.ground(139, 172);
+      L.check(141);
+      L.snowkit(158, 162, [['base', 145], ['mid', 148, 7], ['head', 151], ['hat', 154]]);
+      L.gate(167);
+    }
+  },
+  {
+    id: 'icepalace', theme: 'icepalace', name: 'Крижаний палац', blurb: 'Ювілейний 150-й рівень: битва зі Сніговиком Хрумком', w: 172, boss: 'bigsnowman',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Крижаний палац — ювілейний сто п’ятдесятий рівень! Зліпи сніговика, вгадай, хто як говорить, і чия це тінь');
+      L.snowkit(16, 20, [['base', 8], ['mid', 11], ['head', 13, 7]]);
+      L.soundq(24, 'cat', ['pig', 'duck'], 35, 0);
+      L.enemy('snail', 40, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.shadowq(55, 'hen', ['cat', 'dog'], 66, 0);
+      L.row(69, 9, 4);
+      L.check(76);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, 'Сніговик Хрумко! Коли він підтане на сонечку — стріляй або стрибни на нього');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -5388,6 +5511,11 @@ const DECOR = {
   hopscotch: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'chalkS', x, y, c: ['#ff7ab8', '#7fb8ff', '#ffd23f', '#9fe08a'][Math.floor(R() * 4)] } : { k: 'tuft', x, y }; },
   gardenyard: (R, x, y) => { const r = R(); return r < 0.2 ? { k: 'canS', x, y } : r < 0.45 ? { k: 'sproutS', x, y } : r < 0.7 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   goosemeadow: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : r < 0.5 ? { k: 'sproutS', x, y } : { k: 'tuft', x, y }; },
+  snowmanhill: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'firSnow', x, y } : r < 0.5 ? { k: 'sledS', x, y } : { k: 'flakeS', x, y }; },
+  animalsounds: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'firSnow', x, y } : r < 0.55 ? { k: 'fenceS', x, y } : { k: 'flakeS', x, y }; },
+  shadowtheater: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'maskS', x, y, c: ['#ffd23f', '#ff9fc4', '#9fd0ff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  winterfest: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'firSnow', x, y, lights: true } : r < 0.6 ? { k: 'sledS', x, y } : { k: 'flakeS', x, y }; },
+  icepalace: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'firSnow', x, y, lights: true } : { k: 'flakeS', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -5504,7 +5632,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -5781,6 +5909,30 @@ function buildLevel(idx) {
     soil(x, h) { L.soils.push({ x, h }); },
     // класики: числа nums на землі в клітинках x, x+2, x+4 …, двері door відчиняються, коли пройдено 1, 2, 3 … по порядку
     hops(x, nums, door) { const cols = nums.map((n, i) => x + i * 2); for (let y = 1; y < 10; y++) set(door, y, 2); L.hops.push({ nums, cols, door, top: 1 }); },
+    // частина 30: сніговик на x, частинки parts [[k, x, row], …] (base, mid, head, nose, hat, scarf), ворота door (рядки 1–9)
+    snowkit(x, door, parts) {
+      const s = { x: x * T + 12, gy: 10 * T, door, top: 1, items: parts.map(([k, tx, row]) => ({ k, tx, row, x: tx * T + 12, y: row ? row * T + 12 : 0 })) };
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      later.push(() => { s.gy = groundY(x); for (const it of s.items) if (!it.row) it.y = groundY(it.tx) - 14; });
+      L.snowkits.push(s);
+    },
+    // «Хто як говорить?»: тваринка (duck, cat, dog, hen, pig) на дошці, на кубиках — звуки; wrong — тваринки, чиї звуки на інших кубиках
+    soundq(x, animal, wrong, door, pos) {
+      const SND = { duck: 'Кря', cat: 'Мяу', dog: 'Гав', hen: 'Ко-ко', pig: 'Хрю' };
+      const nums = wrong.map(k => SND[k]); nums.splice(pos || 0, 0, SND[animal]);
+      const opts = nums.map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'sound', animal, ans: SND[animal], opts, door, top: 1 });
+    },
+    // «Чия це тінь?»: на дошці тінь тваринки ans, на кубиках — кольорові тваринки
+    shadowq(x, ans, wrong, door, pos) {
+      const nums = wrong.slice(); nums.splice(pos || 0, 0, ans);
+      const opts = nums.map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'shadow', ans, opts, door, top: 1 });
+    },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },
