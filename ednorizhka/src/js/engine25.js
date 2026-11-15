@@ -32,6 +32,7 @@ quizMsg = function (q, what) {
 /* ===== Підготовка рівня ===== */
 function initLevel25(G, L) {
   G.snowkits = (L.snowkits || []).map(s => Object.assign({ got: [], done: false, hintT: 0, wave: 0 }, s, { items: s.items.map(i => Object.assign({ taken: false }, i)) }));
+  initLevel26(G, L);
 }
 
 /* ===== Зліпи сніговика: збери всі частинки в будь-якому порядку ===== */
@@ -60,6 +61,7 @@ function updateSnowkits(dt) {
 
 function update25(dt) {
   updateSnowkits(dt);
+  update26(dt);
 }
 
 /* ===== Сніговик Хрумко — ювілейний бос: кидає сніжки, а на сонечку трохи підтає ===== */

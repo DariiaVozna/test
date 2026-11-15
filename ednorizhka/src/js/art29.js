@@ -57,6 +57,7 @@ function silhouette30(k) {
   return (SIL30[k] = cv);
 }
 function drawQuizBoard29(c, q, t) {
+  if (q.kind === 'letter' || q.kind === 'compare') return drawQuizBoard30(c, q, t);
   const o = q.opts[1], cx = o.tx * T + 12, y = 2 * T - 6, w = 96, h = 70;
   c.save(); c.lineJoin = 'round';
   c.strokeStyle = '#8a6a4a'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx - 30, y); c.lineTo(cx - 24, y - 22); c.moveTo(cx + 30, y); c.lineTo(cx + 24, y - 22); c.stroke();
@@ -102,6 +103,7 @@ function drawWorld29(c, t, vis) {
       c.save(); c.translate(s.door * T + 12, 4 * T + 8); c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 1.2; circ(c, 0, 4, 7); c.fill(); c.stroke(); circ(c, 0, -6, 5); c.fill(); c.stroke(); c.fillStyle = '#ff9a2a'; c.beginPath(); c.moveTo(0, -6); c.lineTo(6, -5); c.lineTo(0, -4); c.fill(); c.restore();
     }
   }
+  drawWorld30(c, t, vis);
 }
 
 /* ===== Сніговик Хрумко ===== */
@@ -138,7 +140,7 @@ function drawBlock29(c, b) {
   if (b === 'snowbrick30') { rr(c, 1, 1, T - 2, T - 2, 4); c.fillStyle = '#eef6ff'; c.fill(); c.stroke(); c.fillStyle = '#ffffff'; rr(c, 1.5, 1.5, T - 3, 7, 3.5); c.fill(); c.fillStyle = '#c8dcf4'; circ(c, 7, 15, 2); c.fill(); circ(c, 16, 18, 1.5); c.fill(); }
   else if (b === 'curtain30') { rr(c, 1, 1, T - 2, T - 2, 2); c.fillStyle = '#c84a5a'; c.fill(); c.stroke(); c.strokeStyle = '#a83a4a'; c.lineWidth = 1.4; for (const xx of [7, 12, 17]) { c.beginPath(); c.moveTo(xx, 2); c.quadraticCurveTo(xx + 2, 12, xx, T - 2); c.stroke(); } c.fillStyle = '#ffd23f'; c.fillRect(1.5, 1.5, T - 3, 3); }
   else if (b === 'ice30') { rr(c, 1, 1, T - 2, T - 2, 3); c.fillStyle = '#bfe4ff'; c.fill(); c.stroke(); c.fillStyle = 'rgba(255,255,255,.75)'; c.beginPath(); c.moveTo(4, 4); c.lineTo(11, 4); c.lineTo(4, 12); c.closePath(); c.fill(); c.strokeStyle = '#8ac0e8'; c.lineWidth = 1; c.beginPath(); c.moveTo(14, 14); c.lineTo(19, 19); c.stroke(); }
-  else return false;
+  else return drawBlock30(c, b);
   return true;
 }
 
@@ -151,6 +153,7 @@ function drawDecor29(c, d, t) {
     case 'sledS': c.fillStyle = '#ff6a6a'; rr(c, x - 10, y - 8, 20, 4, 2); c.fill(); c.stroke(); c.strokeStyle = '#8a5a30'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(x - 10, y - 1); c.lineTo(x + 9, y - 1); c.quadraticCurveTo(x + 13, y - 1, x + 12, y - 5); c.moveTo(x - 6, y - 4); c.lineTo(x - 6, y - 1); c.moveTo(x + 6, y - 4); c.lineTo(x + 6, y - 1); c.stroke(); break;
     case 'flakeS': c.strokeStyle = '#ffffff'; c.lineWidth = 1.2; c.save(); c.translate(x, y - 14 + Math.sin(t * 2 + x) * 2); c.rotate(t * 0.5 + x); for (let i = 0; i < 3; i++) { c.rotate(Math.PI / 3); c.beginPath(); c.moveTo(-5, 0); c.lineTo(5, 0); c.stroke(); } c.restore(); break;
     case 'maskS': c.fillStyle = d.c || '#ffd23f'; ell(c, x, y - 8, 7, 6); c.fill(); c.stroke(); c.fillStyle = INK; circ(c, x - 2.5, y - 9, 1.2); c.fill(); circ(c, x + 2.5, y - 9, 1.2); c.fill(); c.beginPath(); c.arc(x, y - 7, 3, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); c.fillStyle = '#8a5a30'; c.fillRect(x - 0.8, y - 3, 1.6, 3); break;
+    default: drawDecor30(c, d, t); break;
   }
 }
 

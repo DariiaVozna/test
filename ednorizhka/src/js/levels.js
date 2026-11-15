@@ -5470,6 +5470,133 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 31: Абетка й порядок ===== */
+  {
+    id: 'letterland', theme: 'letterland', name: 'Перша буква', blurb: 'З якої букви починається слово?', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Перша буква! Подивись на картинку й слово на дошці. З якої букви воно починається? Стукни головою знизу кубик із цією буквою');
+      L.row(6, 9, 3);
+      L.letterq(12, 'cat', ['М', 'Б'], 23, 0);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.letterq(53, 'banana', ['Я', 'С'], 64, 1);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.letterq(103, 'apple', ['А', 'Б'], 114, 2);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.letterq(141, 'milk', ['Х', 'К'], 152, 1);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'compareland', theme: 'compareland', name: 'Більше чи менше?', blurb: 'Порівняй числа знаками', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Більше чи менше? Порівняй, де більше яблучок, і стукни головою знизу знак: «<» — менше, «=» — порівну, «>» — більше');
+      L.row(6, 9, 3);
+      L.compq(12, 3, 5, 23);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.compq(53, 7, 4, 64);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.compq(103, 6, 6, 114);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.compq(141, 9, 8, 152);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'memorylane', theme: 'memorylane', name: 'Повтори за мною', blurb: 'Стукай кубики в тому порядку, що на дошці', w: 170,
+    build(L) {
+      L.ground(0, 42);
+      L.sign(3, 'Повтори за мною! На дошці намальовано, в якому порядку стукати кубики з тваринками. Помилилася — почни спочатку');
+      L.row(6, 9, 3);
+      L.seqq(12, ['dog', 'cat', 'duck'], ['cat', 'duck', 'dog'], 23);
+      L.row(25, 9, 4);
+      L.enemy('snail', 34, 10);
+      L.ground(45, 92);
+      L.check(47);
+      L.seqq(53, ['pig', 'hen', 'cat'], ['hen', 'pig', 'cat'], 64);
+      L.block(70, 7, 3); L.row(70, 5, 3);
+      L.enemy('frog', 78, 10);
+      L.row(84, 9, 4);
+      L.ground(95, 132);
+      L.check(97);
+      L.seqq(103, ['duck', 'dog', 'pig'], ['pig', 'duck', 'dog', 'pig'], 114);
+      L.row(117, 9, 5);
+      L.enemy('bee', 124, 6);
+      L.ground(135, 170);
+      L.check(137);
+      L.seqq(141, ['hen', 'cat', 'dog'], ['dog', 'hen', 'cat', 'hen'], 152);
+      L.row(155, 9, 3);
+      L.gate(164);
+    }
+  },
+  {
+    id: 'brainyard', theme: 'brainyard', name: 'Розумний двір', blurb: 'Букви, знаки й порядок — усе разом', w: 172,
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Розумний двір! Тут і перша буква, і більше чи менше, і повтори за мною');
+      L.letterq(10, 'pear', ['Б', 'К'], 21, 0);
+      L.compq(25, 2, 4, 36);
+      L.enemy('snail', 40, 10);
+      L.ground(47, 94);
+      L.check(49);
+      L.seqq(53, ['cat', 'pig', 'hen'], ['pig', 'hen', 'cat'], 64);
+      L.letterq(68, 'grapes', ['Г', 'Б'], 79, 2);
+      L.enemy('frog', 87, 10);
+      L.ground(97, 136);
+      L.check(99);
+      L.compq(103, 5, 3, 114);
+      L.seqq(117, ['duck', 'dog', 'cat'], ['dog', 'cat', 'duck'], 128);
+      L.ground(139, 172);
+      L.check(141);
+      L.letterq(145, 'dog', ['К', 'Д'], 156, 0);
+      L.row(158, 9, 3);
+      L.gate(166);
+    }
+  },
+  {
+    id: 'crocswamp', theme: 'crocswamp', name: 'Болото Буквоїда', blurb: 'Битва з Крокодильчиком Буквоїдом', w: 172, boss: 'croc',
+    build(L) {
+      L.ground(0, 46);
+      L.sign(3, 'Болото Буквоїда. Крокодильчик поїв букви й знаки! Допоможи їх повернути');
+      L.letterq(10, 'carrot', ['К', 'Б'], 21, 0);
+      L.compq(25, 8, 5, 36);
+      L.enemy('snail', 40, 10);
+      L.ground(49, 172);
+      L.check(51);
+      L.seqq(55, ['dog', 'duck', 'cat'], ['duck', 'cat', 'dog'], 66);
+      L.row(69, 9, 4);
+      L.check(76);
+      L.enemy('bee', 84, 6);
+      L.row(90, 9, 5);
+      L.check(100);
+      L.sign(119, 'Крокодильчик Буквоїд! Коли він гикатиме — стріляй або стрибни на нього');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -5516,6 +5643,11 @@ const DECOR = {
   shadowtheater: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'maskS', x, y, c: ['#ffd23f', '#ff9fc4', '#9fd0ff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   winterfest: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'firSnow', x, y, lights: true } : r < 0.6 ? { k: 'sledS', x, y } : { k: 'flakeS', x, y }; },
   icepalace: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'firSnow', x, y, lights: true } : { k: 'flakeS', x, y }; },
+  letterland: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'cubeS', x, y, ch: 'АБВГДЕЖЗИК'[Math.floor(R() * 10)], c: ['#ffd8a0', '#c8e4ff', '#ffd0e0', '#d8f4c8'][Math.floor(R() * 4)] } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  compareland: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#7fb8ff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  memorylane: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'cubeS', x, y, ch: '123456789'[Math.floor(R() * 9)], c: ['#d8c8ff', '#ffd0e0'][Math.floor(R() * 2)] } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  brainyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'cubeS', x, y, ch: 'АБВ123'[Math.floor(R() * 6)], c: ['#ffd8a0', '#c8e4ff', '#ffd0e0'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  crocswamp: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'lilyS', x, y } : r < 0.6 ? { k: 'reedS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -5632,7 +5764,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -5932,6 +6064,30 @@ function buildLevel(idx) {
       for (const o of opts) set(o.tx, o.ty, 2);
       for (let y = 1; y < 10; y++) set(door, y, 2);
       L.quizzes.push({ kind: 'shadow', ans, opts, door, top: 1 });
+    },
+    // частина 31: «Перша буква» — картинка pic (apple, banana, carrot, cheese, bread, milk, grapes, pear, cat, dog, duck, hen, pig), на кубиках — букви
+    letterq(x, pic, wrong, door, pos) {
+      const W = { apple: 'Я', banana: 'Б', carrot: 'М', cheese: 'С', bread: 'Х', milk: 'М', grapes: 'В', pear: 'Г', cat: 'К', dog: 'С', duck: 'К', hen: 'К', pig: 'С' };
+      const nums = wrong.slice(); nums.splice(pos || 0, 0, W[pic]);
+      const opts = nums.map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'letter', pic, ans: W[pic], opts, door, top: 1 });
+    },
+    // «Більше чи менше?»: на дошці a і b яблучок, на кубиках знаки <, =, > (завжди в такому порядку)
+    compq(x, a, b, door) {
+      const ans = a < b ? '<' : a > b ? '>' : '=';
+      const opts = ['<', '=', '>'].map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'compare', a, b, ans, opts, door, top: 1 });
+    },
+    // «Повтори за мною»: кубики з тваринками cards (зліва направо, на x, x+3, x+6), стукати в порядку order
+    seqq(x, cards, order, door) {
+      const cs = cards.map((k, j) => ({ tx: x + j * 3, ty: 6, k }));
+      for (const c of cs) set(c.tx, c.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.seqs.push({ cards: cs, order, door, top: 1 });
     },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
