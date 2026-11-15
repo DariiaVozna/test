@@ -4662,7 +4662,7 @@ const LEVELS = [
   },
   /* ===== Частина 25: Розумна країна ===== */
   {
-    id: 'numberland', theme: 'numberland', name: 'Країна чисел', blurb: 'Порахуй приклад і стукни правильний кубик', w: 170,
+    id: 'numberland', theme: 'numberland', name: 'Країна чисел', blurb: 'Порахуй приклад і стукни правильний кубик', w: 212,
     build(L) {
       L.ground(0, 42);
       L.sign(3, 'Країна чисел! Порахуй приклад на дошці й стукни головою знизу кубик із правильною відповіддю — двері відчиняться');
@@ -4670,56 +4670,76 @@ const LEVELS = [
       L.quiz(12, 2, '+', 1, [2, 5], 23, 1);
       L.row(12, 4, 3, 3);
       L.row(25, 9, 4);
-      L.enemy('snail', 34, 10);
+      L.enemy('ladybug', 34, 10);
       L.ground(45, 92);
       L.check(47);
       L.quiz(53, 5, '-', 2, [4, 6], 64, 0);
       L.row(53, 4, 3, 3);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('bunny', 78, 10);
       L.row(84, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.quiz(103, 3, '+', 4, [5, 6], 114, 2);
       L.row(103, 4, 3, 3);
-      L.enemy('bee', 121, 6);
+      L.enemy('butterfly', 121, 7);
       L.row(118, 9, 5);
-      L.ground(135, 170);
+      L.ground(135, 180);
       L.check(137);
       L.quiz(141, 6, '+', 2, [7, 9], 152, 1);
       L.row(141, 4, 3, 3);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(41, 7, 5, 2); L.rainbow(43, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'Заходь у вагонетку — вона перевезе через прірву!');
+      L.cart(174, 191); L.row(181, 8, 6); L.rainbow(184, 5);
+      L.ground(188, 212);
+      L.qblock(196, 6, 'star5'); L.qblock(197, 6, 'rainbow'); L.qblock(198, 6, 'wings');
+      L.enemy('ladybug', 202, 10);
+      L.gate(206);
     }
   },
   {
-    id: 'abcmeadow', theme: 'abcmeadow', name: 'Англійська галявина', blurb: 'Збирай англійські слова по літерах', w: 170,
+    id: 'abcmeadow', theme: 'abcmeadow', name: 'Англійська галявина', blurb: 'Збирай англійські слова по літерах', w: 202,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Англійська галявина! Збирай літери слова по черзі — і двері відчиняться. Зайві літери висять угорі, їх не треба');
       L.word(8, 'CAT', 22, 3, [[12, 6, 'K'], [16, 6, 'O']]);
       L.row(25, 9, 4);
-      L.enemy('snail', 35, 10);
+      L.enemy('ladybug', 35, 10);
       L.ground(47, 92);
       L.check(49);
       L.word(54, 'SUN', 68, 3, [[61, 6, 'Z']]);
       L.block(72, 7, 4); L.row(72, 5, 4);
-      L.enemy('bee', 83, 6);
+      L.enemy('butterfly', 83, 7);
       L.row(80, 9, 5);
       L.ground(95, 132);
       L.check(97);
       L.word(101, 'DOG', 115, 3, [[105, 6, 'B'], [111, 6, 'Q']]);
       L.row(118, 9, 4);
-      L.enemy('frog', 126, 10);
-      L.ground(135, 172);
+      L.enemy('bunny', 126, 10);
+      L.ground(135, 202);
       L.check(137);
       L.word(140, 'FISH', 156, 3, [[147, 6, 'W'], [153, 6, 'Y']]);
       L.row(158, 9, 3);
-      L.gate(166);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 26, 8);
+      L.sign(165, 'Колесо огляду! Застрибни на кабінку — вона підніме до веселкової зірочки');
+      L.qblock(168, 6, 'shield');
+      L.wheel(176, 4, 3.5, 4, 9);
+      L.rainbow(175, 0); L.star(172, 3); L.star(179, 3);
+      L.row(184, 9, 4);
+      L.qblock(190, 6, 'star5');
+      L.enemy('ladybug', 192, 10);
+      L.gate(196);
     }
   },
   {
-    id: 'colorlab', theme: 'colorlab', name: 'Майстерня фарб', blurb: 'Змішуй фарби й відчиняй кольорові ворота', w: 172,
+    id: 'colorlab', theme: 'colorlab', name: 'Майстерня фарб', blurb: 'Змішуй фарби й відчиняй кольорові ворота', w: 210,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Майстерня фарб! Торкнися двох відерець — фарби змішаються. Кольорові ворота відчиняє тільки фарба їхнього кольору');
@@ -4727,7 +4747,7 @@ const LEVELS = [
       L.pot(11, 'red'); L.pot(15, 'yellow');
       L.cgate(20, 'orange');
       L.row(23, 9, 4);
-      L.enemy('snail', 33, 10);
+      L.enemy('ladybug', 33, 10);
       L.ground(47, 92);
       L.check(49);
       L.pot(54, 'blue');
@@ -4735,7 +4755,7 @@ const LEVELS = [
       L.pot(63, 'yellow');
       L.cgate(68, 'green');
       L.row(70, 9, 3);
-      L.enemy('frog', 76, 10);
+      L.enemy('bunny', 76, 10);
       L.pot(81, 'red'); L.pot(85, 'blue');
       L.cgate(89, 'purple');
       L.ground(95, 132);
@@ -4744,29 +4764,39 @@ const LEVELS = [
       L.pot(104, 'red'); L.pot(108, 'yellow'); L.pot(112, 'blue');
       L.cgate(117, 'green');
       L.row(119, 9, 4);
-      L.enemy('bee', 127, 6);
-      L.ground(135, 172);
+      L.enemy('butterfly', 127, 7);
+      L.ground(135, 188);
       L.check(137);
       L.pot(141, 'blue'); L.pot(145, 'red'); L.pot(149, 'yellow');
       L.cgate(154, 'orange');
       L.row(157, 9, 3);
-      L.gate(166);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 24, 8);
+      L.sign(165, 'Бульбашка тримає недовго. Стрибай з неї далі!');
+      L.bubble(173, 7); L.star(173, 6); L.bubble(176, 5); L.star(176, 4); L.bubble(179, 3); L.star(179, 2); L.rainbow(182, 2);
+      L.bubble(191, 9);
+      L.ground(192, 210);
+      L.qblock(197, 6, 'candy'); L.qblock(198, 6, 'star5');
+      L.enemy('ladybug', 200, 10);
+      L.gate(204);
     }
   },
   {
-    id: 'smartschool', theme: 'smartschool', name: 'Розумна школа', blurb: 'Приклади, слова й фарби — усе разом', w: 172,
+    id: 'smartschool', theme: 'smartschool', name: 'Розумна школа', blurb: 'Приклади, слова й фарби — усе разом', w: 232,
     build(L) {
       L.ground(0, 40);
       L.sign(3, 'Розумна школа! Тут усе разом: приклади, англійські слова й фарби');
       L.row(6, 9, 3);
       L.quiz(11, 4, '+', 4, [6, 9], 22, 1);
       L.row(11, 4, 3, 3);
-      L.enemy('snail', 31, 10);
+      L.enemy('ladybug', 31, 10);
       L.ground(43, 90);
       L.check(45);
       L.word(48, 'BEE', 62, 3, [[55, 6, 'P']]);
       L.row(64, 9, 3);
-      L.enemy('frog', 68, 10);
+      L.enemy('bunny', 68, 10);
       L.pot(73, 'yellow');
       L.block(76, 6, 3); L.pot(77, 'red', 6); L.row(76, 4, 3);
       L.pot(81, 'blue');
@@ -4777,13 +4807,24 @@ const LEVELS = [
       L.row(99, 4, 3, 3);
       L.word(114, 'STAR', 130, 3, [[121, 6, 'X']]);
       L.row(132, 9, 3);
-      L.ground(139, 172);
+      L.ground(139, 184);
       L.check(141);
-      L.enemy('bee', 146, 6);
+      L.enemy('butterfly', 146, 7);
       L.pot(149, 'red'); L.pot(153, 'blue');
       L.cgate(158, 'purple');
       L.row(160, 9, 3);
-      L.gate(166);
+      L.arc(39, 7, 5, 2); L.rainbow(41, 4);
+      L.arc(89, 7, 5, 2); L.rainbow(91, 4);
+      L.arc(135, 7, 5, 2); L.rainbow(137, 4);
+      L.power('magnet', 37, 8);
+      L.sign(165, 'Повітряний змій! Підійди до кілочка — і він понесе тебе через яму');
+      L.kite(181, 212, 2);
+      for (let i = 0; i < 12; i++) L.star(186 + i * 2, Math.round(5 - 2.6 * Math.sin(i * 0.65)));
+      L.rainbow(197, 2);
+      L.ground(210, 232);
+      L.qblock(217, 6, 'magnet'); L.qblock(218, 6, 'rainbow');
+      L.enemy('ladybug', 222, 10);
+      L.gate(226);
     }
   },
   {
@@ -4795,7 +4836,7 @@ const LEVELS = [
       L.quiz(11, 5, '+', 5, [9, 11], 22, 1);
       L.row(11, 4, 3, 3);
       L.row(25, 9, 3);
-      L.enemy('snail', 33, 10);
+      L.enemy('ladybug', 33, 10);
       L.ground(49, 172);
       L.check(51);
       L.word(55, 'SUN', 69, 3, [[62, 6, 'M']]);
@@ -4803,9 +4844,15 @@ const LEVELS = [
       L.pot(77, 'red'); L.pot(81, 'blue');
       L.cgate(86, 'purple');
       L.check(90);
-      L.enemy('bee', 98, 6);
+      L.enemy('butterfly', 98, 7);
       L.row(100, 9, 5);
       L.check(108);
+      L.arc(45, 7, 5, 2); L.rainbow(47, 4);
+      L.power('magnet', 26, 8);
+      L.wheel(92, 4, 3.5, 4, 9); L.rainbow(91, 0); L.star(88, 3); L.star(95, 3);
+      L.bumper(104, 9); L.cloud(106, 5, 3); L.row(106, 3, 3); L.rainbow(108, 1);
+      L.qblock(110, 6, 'wings'); L.qblock(111, 6, 'star5');
+      L.enemy('butterfly', 99, 7);
       L.sign(119, 'Клякса Бризка! Коли вона висохне й застигне — стріляй або стрибни на неї');
       L.power('candy', 125, 8);
       L.arena(129, 172);
@@ -4813,39 +4860,49 @@ const LEVELS = [
     }
   },  /* ===== Частина 26: Базар і хованки ===== */
   {
-    id: 'fruitmarket', theme: 'fruitmarket', name: 'Фруктовий базар', blurb: 'Збери все зі списку покупок', w: 170,
+    id: 'fruitmarket', theme: 'fruitmarket', name: 'Фруктовий базар', blurb: 'Збери все зі списку покупок', w: 214,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Фруктовий базар! На дошці — список покупок. Збери все зі списку в будь-якому порядку, і каса відчиниться');
       L.shop(8, ['apple', 'pear', 'banana'], 25, [['apple', 12], ['carrot', 15, 6], ['pear', 17, 7], ['banana', 21]]);
       L.row(27, 9, 3);
-      L.enemy('snail', 35, 10);
+      L.enemy('ladybug', 35, 10);
       L.ground(47, 92);
       L.check(48);
       L.shop(53, ['carrot', 'cheese', 'bread'], 71, [['cheese', 57], ['grapes', 59, 6], ['carrot', 62, 7], ['milk', 65, 6], ['bread', 67]]);
       L.block(75, 7, 3); L.row(75, 5, 3);
-      L.enemy('frog', 82, 10);
+      L.enemy('bunny', 82, 10);
       L.row(86, 9, 3);
       L.ground(95, 132);
       L.check(96);
       L.shop(101, ['milk', 'grapes', 'apple', 'banana'], 121, [['banana', 105], ['milk', 108, 7], ['pear', 111, 6], ['grapes', 113], ['apple', 117, 7]]);
       L.row(123, 9, 4);
-      L.ground(135, 170);
+      L.ground(135, 188);
       L.check(136);
       L.shop(141, ['bread', 'cheese', 'pear'], 159, [['pear', 145, 7], ['bread', 148], ['banana', 151, 6], ['cheese', 154]]);
       L.row(161, 9, 3);
-      L.gate(166);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 29, 8);
+      L.sign(165, 'Стрибай на гойдалку — вона перенесе далі!');
+      L.swing(176, 1, 6, 0.6, 3.2); L.row(173, 6, 7); L.rainbow(179, 4);
+      L.swing(190, 2, 6, 0.55, 3.4);
+      L.ground(192, 214);
+      L.qblock(198, 6, 'star5'); L.qblock(199, 6, 'candy');
+      L.enemy('squirrel', 204, 10);
+      L.gate(208);
     }
   },
   {
-    id: 'hideforest', theme: 'hideforest', name: 'Ліс хованок', blurb: 'Знайди друзів, що сховалися в кущах', w: 170,
+    id: 'hideforest', theme: 'hideforest', name: 'Ліс хованок', blurb: 'Знайди друзів, що сховалися в кущах', w: 196,
     build(L) {
       L.ground(0, 46);
       L.sign(3, 'Ліс хованок! У кущах сховалися друзі. Торкнися куща — і друг піде з тобою. Будиночок друзів відчиниться, коли всі будуть разом');
       L.hide(9, 'bunny'); L.row(12, 9, 3); L.hide(17, 'hedgehog');
       L.fgate(23, 2);
       L.row(26, 9, 3);
-      L.enemy('snail', 33, 10);
+      L.enemy('squirrel', 33, 10);
       L.block(38, 8, 4, 2); L.hide(40, 'fox', 8);
       L.ground(49, 94);
       L.check(51);
@@ -4853,57 +4910,78 @@ const LEVELS = [
       L.block(60, 6, 3); L.row(60, 4, 3);
       L.hide(65, 'mouse');
       L.fgate(71, 5);
-      L.enemy('frog', 78, 10);
+      L.enemy('hedgehog', 78, 10);
       L.row(82, 9, 4);
       L.ground(97, 134);
       L.check(99);
       L.hide(103, 'duck');
       L.row(107, 9, 4);
-      L.enemy('bee', 112, 6);
+      L.enemy('bird', 112, 6);
       L.fgate(118, 6);
       L.row(121, 9, 4);
-      L.ground(137, 170);
+      L.ground(137, 196);
       L.check(139);
       L.block(144, 7, 5); L.row(144, 5, 5);
-      L.gate(164);
+      L.arc(45, 7, 5, 2); L.rainbow(47, 4);
+      L.arc(93, 7, 5, 2); L.rainbow(95, 4);
+      L.arc(133, 7, 5, 2); L.rainbow(135, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'Батут! Кожен стрибок вищий за попередній — аж до трьох разів');
+      L.batut(169, 173);
+      L.star(170, 6); L.star(171, 3); L.rainbow(171, 0);
+      L.batut(173, 177, 2);
+      L.block(177, 4, 3, 6); L.row(177, 3, 3);
+      L.qblock(184, 6, 'shield');
+      L.enemy('squirrel', 186, 10);
+      L.gate(190);
     }
   },
   {
-    id: 'shapetown', theme: 'shapetown', name: 'Містечко фігур', blurb: 'Принеси фігуру до дверей із такою діркою', w: 170,
+    id: 'shapetown', theme: 'shapetown', name: 'Містечко фігур', blurb: 'Принеси фігуру до дверей із такою діркою', w: 210,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Містечко фігур! Візьми фігуру й принеси до дверей із такою самою діркою. Нова фігура міняється з тією, що несеш');
       L.shape(10, 'circle'); L.sdoor(16, 'circle');
       L.row(18, 9, 3);
       L.shape(25, 'square'); L.shape(30, 'triangle'); L.sdoor(36, 'triangle');
-      L.enemy('snail', 39, 10);
+      L.enemy('squirrel', 39, 10);
       L.ground(47, 92);
       L.check(49);
       L.shape(53, 'star'); L.shape(57, 'heart'); L.sdoor(63, 'star');
       L.block(67, 7, 3); L.row(67, 5, 3);
-      L.enemy('frog', 75, 10);
+      L.enemy('hedgehog', 75, 10);
       L.shape(82, 'heart'); L.sdoor(88, 'heart');
       L.ground(95, 134);
       L.check(97);
       L.shape(100, 'triangle'); L.shape(104, 'circle'); L.shape(108, 'square'); L.sdoor(114, 'square');
       L.row(117, 9, 4);
-      L.enemy('bee', 126, 6);
-      L.ground(137, 170);
+      L.enemy('bird', 126, 6);
+      L.ground(137, 182);
       L.check(139);
       L.shape(143, 'circle'); L.shape(147, 'heart'); L.sdoor(152, 'circle');
       L.row(154, 9, 3);
-      L.gate(164);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(133, 7, 5, 2); L.rainbow(135, 4);
+      L.power('magnet', 20, 8);
+      L.sign(163, 'Вітер дме вгору! Стрибни в нього — і полетиш');
+      L.wind(182, 188, 4); L.arc(182, 4, 6, 2); L.rainbow(185, 1);
+      L.ground(188, 210);
+      L.spring(195); L.cloud(197, 3, 5); L.row(197, 2, 4);
+      L.qblock(204, 6, 'wings');
+      L.enemy('squirrel', 200, 10);
+      L.gate(206);
     }
   },
   {
-    id: 'bigshop', theme: 'bigshop', name: 'Великий магазин', blurb: 'Покупки, хованки й фігури — усе разом', w: 172,
+    id: 'bigshop', theme: 'bigshop', name: 'Великий магазин', blurb: 'Покупки, хованки й фігури — усе разом', w: 212,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Великий магазин! Тут треба і покупки зібрати, і друзів знайти в коробках, і фігури підібрати');
       L.shop(8, ['milk', 'bread'], 19, [['milk', 12], ['cheese', 14, 6], ['bread', 16, 7]]);
       L.hide(23, 'mouse'); L.hide(28, 'bunny');
       L.fgate(33, 2);
-      L.enemy('snail', 38, 10);
+      L.enemy('squirrel', 38, 10);
       L.ground(47, 92);
       L.check(49);
       L.shape(53, 'triangle'); L.shape(57, 'star'); L.sdoor(62, 'triangle');
@@ -4912,15 +4990,25 @@ const LEVELS = [
       L.ground(95, 136);
       L.check(97);
       L.hide(101, 'duck');
-      L.enemy('frog', 106, 10);
+      L.enemy('hedgehog', 106, 10);
       L.hide(111, 'hedgehog');
       L.fgate(116, 4);
       L.shape(120, 'heart'); L.shape(124, 'square'); L.sdoor(130, 'square');
-      L.ground(139, 172);
+      L.ground(139, 186);
       L.check(141);
-      L.enemy('bee', 146, 6);
+      L.enemy('bird', 146, 6);
       L.row(150, 9, 5);
-      L.gate(166);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(135, 7, 5, 2); L.rainbow(137, 4);
+      L.power('magnet', 89, 8);
+      L.sign(165, 'Гілочки падають, щойно на них станеш — біжи швидко!');
+      L.crumble(187, 8, 2); L.crumble(190, 7, 2);
+      L.row(187, 7, 2); L.row(190, 6, 2); L.rainbow(191, 3);
+      L.ground(193, 212);
+      L.qblock(198, 6, 'shield'); L.qblock(199, 6, 'star5');
+      L.enemy('squirrel', 202, 10);
+      L.gate(206);
     }
   },
   {
@@ -4931,15 +5019,21 @@ const LEVELS = [
       L.shop(8, ['carrot', 'apple'], 18, [['carrot', 12], ['apple', 15, 7]]);
       L.hide(23, 'squirrel');
       L.fgate(28, 1);
-      L.enemy('snail', 34, 10);
+      L.enemy('squirrel', 34, 10);
       L.ground(49, 172);
       L.check(51);
       L.shape(55, 'heart'); L.shape(59, 'circle'); L.sdoor(65, 'heart');
       L.row(68, 9, 4);
       L.check(75);
-      L.enemy('bee', 84, 6);
+      L.enemy('bird', 84, 6);
       L.row(90, 9, 5);
       L.check(100);
+      L.arc(45, 7, 5, 2); L.rainbow(47, 4);
+      L.power('magnet', 40, 8);
+      L.wheel(92, 4, 3.5, 4, 9); L.rainbow(91, 0); L.star(88, 3); L.star(95, 3);
+      L.bumper(104, 9); L.cloud(106, 5, 3); L.row(106, 3, 3); L.rainbow(108, 1);
+      L.qblock(110, 6, 'candy'); L.qblock(111, 6, 'star5');
+      L.enemy('bird', 99, 6);
       L.sign(119, "Хом'ячок Жуйко! Коли він наїсться й задрімає — стріляй або стрибни на нього");
       L.power('candy', 125, 8);
       L.arena(129, 172);
@@ -4947,103 +5041,129 @@ const LEVELS = [
     }
   },  /* ===== Частина 27: День народження ===== */
   {
-    id: 'cakehill', theme: 'cakehill', name: 'Свічки на торті', blurb: 'Запали всі свічки — і торт відчиниться', w: 170,
+    id: 'cakehill', theme: 'cakehill', name: 'Свічки на торті', blurb: 'Запали всі свічки — і торт відчиниться', w: 213,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Свічки на торті! Торкнися свічки або стрельни в неї рогом — вона засвітиться. Торт-двері відчиняться, коли засвітиш усі свічки');
       L.candle(8); L.candle(11); L.candle(14);
       L.cake(19, 3);
       L.row(21, 9, 3);
-      L.enemy('snail', 29, 10);
+      L.enemy('squirrel', 29, 10);
       L.block(34, 7, 4); L.candle(35, 7); L.candle(37, 7); L.row(34, 4, 4);
       L.ground(47, 92);
       L.check(49);
       L.candle(53); L.candle(56); L.candle(59); L.candle(62);
       L.cake(67, 7);
       L.row(69, 9, 3);
-      L.enemy('frog', 76, 10);
+      L.enemy('hedgehog', 76, 10);
       L.block(80, 6, 3); L.row(80, 4, 3);
       L.ground(95, 132);
       L.check(97);
       L.candle(101); L.candle(103); L.candle(105); L.candle(107); L.candle(109);
       L.cake(114, 12);
       L.row(117, 9, 5);
-      L.enemy('bee', 124, 6);
-      L.ground(135, 170);
+      L.enemy('bird', 124, 6);
+      L.ground(135, 185);
       L.check(137);
       L.block(141, 8, 3, 2); L.candle(142, 8);
       L.candle(147); L.candle(150);
       L.cake(155, 15);
       L.row(157, 9, 3);
-      L.gate(165);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 23, 8);
+      L.sign(164, 'Вітер дме вперед! Розбіжись і стрибай — він перенесе через яму');
+      L.breeze(178, 193); L.arc(186, 7, 6, 2); L.rainbow(188, 5);
+      L.ground(192, 213);
+      L.qblock(199, 6, 'star5'); L.qblock(203, 6, 'magnet');
+      L.enemy('mouse', 203, 10);
+      L.gate(207);
     }
   },
   {
-    id: 'giftland', theme: 'giftland', name: 'Країна подарунків', blurb: 'Знайди ключик у подарунках', w: 170,
+    id: 'giftland', theme: 'giftland', name: 'Країна подарунків', blurb: 'Знайди ключик у подарунках', w: 222,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Країна подарунків! Стукни подарунок головою знизу — він відкриється. В одному з подарунків ключик від дверей');
       L.gifts(10, 2, 21);
       L.row(10, 4, 3, 3);
       L.row(23, 9, 3);
-      L.enemy('snail', 31, 10);
+      L.enemy('mouse', 31, 10);
       L.ground(47, 92);
       L.check(49);
       L.gifts(53, 0, 64);
       L.row(53, 4, 3, 3);
       L.block(68, 7, 3); L.row(68, 5, 3);
-      L.enemy('frog', 76, 10);
+      L.enemy('bouncer', 76, 10);
       L.row(80, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.gifts(101, 1, 112);
       L.row(101, 4, 3, 3);
       L.row(114, 9, 4);
-      L.enemy('bee', 122, 6);
-      L.ground(135, 170);
+      L.enemy('parrot', 122, 6);
+      L.ground(135, 180);
       L.check(137);
       L.gifts(141, 2, 152);
       L.row(141, 4, 3, 3);
       L.row(154, 9, 3);
-      L.gate(164);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 25, 8);
+      L.sign(163, 'Кільце! Застрибни й ухопися. Розгойдуйся, а «Стрибок» — відпустити');
+      L.ring(182, 2); L.ring(187, 2); L.ring(192, 2); L.ring(197, 2);
+      L.row(184, 5, 2); L.row(189, 5, 2); L.row(194, 5, 2); L.rainbow(190, 3);
+      L.ground(201, 222);
+      L.qblock(207, 6, 'wings');
+      L.enemy('mouse', 212, 10);
+      L.gate(216);
     }
   },
   {
-    id: 'plankbridge', theme: 'plankbridge', name: 'Міст із дощечок', blurb: 'Збирай дощечки й будуй мости', w: 172,
+    id: 'plankbridge', theme: 'plankbridge', name: 'Міст із дощечок', blurb: 'Збирай дощечки й будуй мости', w: 222,
     build(L) {
       L.ground(0, 40);
       L.sign(3, 'Міст із дощечок! Збирай дощечки. Коли їх вистачить, підійди до річки — і міст збудується сам');
       L.plank(8); L.plank(12); L.plank(16); L.plank(20);
       L.block(24, 7, 3); L.plank(25, 6); L.row(24, 4, 3);
-      L.enemy('snail', 31, 10);
-      L.pbridge(40, 48);
+      L.enemy('mouse', 31, 10);
+      L.pbridge(40, 48); L.rainbow(44, 4);
       L.ground(48, 92);
       L.check(50);
       L.plank(54); L.plank(57); L.plank(60); L.plank(63); L.plank(66);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('bouncer', 78, 10);
       L.pbridge(92, 102);
       L.ground(102, 132);
       L.check(104);
       L.plank(108); L.plank(111); L.plank(114); L.plank(117);
-      L.enemy('bee', 122, 6);
-      L.pbridge(132, 140);
-      L.ground(140, 172);
+      L.enemy('parrot', 122, 6);
+      L.pbridge(132, 140); L.rainbow(136, 4);
+      L.ground(140, 194);
       L.check(142);
       L.row(146, 9, 5);
-      L.gate(166);
+      L.sign(165, 'У фіолетових колонах майже немає ваги — стрибай дуже високо!');
+      L.lowgrav(175, 184); L.block(182, 3, 2, 7); L.row(182, 2, 2); L.rainbow(179, 1);
+      L.row(189, 9, 3);
+      L.lowgrav(192, 204); L.arc(195, 5, 7, 3);
+      L.ground(202, 222);
+      L.qblock(208, 6, 'candy');
+      L.enemy('mouse', 212, 10);
+      L.gate(216);
     }
   },
   {
-    id: 'partyhall', theme: 'partyhall', name: 'Велике свято', blurb: 'Свічки, подарунки й мости — усе разом', w: 172,
+    id: 'partyhall', theme: 'partyhall', name: 'Велике свято', blurb: 'Свічки, подарунки й мости — усе разом', w: 234,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Велике свято! Запали свічки, знайди ключик у подарунках і збудуй міст із дощечок');
       L.candle(8); L.candle(10); L.candle(12);
       L.cake(16, 3);
       L.plank(20); L.plank(23); L.plank(26); L.plank(29);
-      L.enemy('snail', 34, 10);
-      L.pbridge(44, 52);
+      L.enemy('mouse', 34, 10);
+      L.pbridge(44, 52); L.rainbow(48, 4);
       L.ground(52, 98);
       L.check(54);
       L.gifts(58, 0, 69);
@@ -5051,17 +5171,24 @@ const LEVELS = [
       L.candle(73); L.candle(76);
       L.block(79, 8, 3, 2); L.candle(80, 8);
       L.cake(86, 6);
-      L.enemy('frog', 91, 10);
+      L.enemy('bouncer', 91, 10);
       L.ground(101, 140);
       L.check(103);
       L.gifts(107, 2, 118);
       L.row(107, 4, 3, 3);
       L.plank(121); L.plank(124); L.plank(127); L.plank(130);
       L.pbridge(140, 148);
-      L.ground(148, 172);
+      L.ground(148, 186);
       L.check(150);
       L.row(153, 9, 5);
-      L.gate(166);
+      L.arc(97, 7, 5, 2); L.rainbow(99, 4);
+      L.sign(165, 'Американські гірки! Застрибни у вагончик — і тримайся!');
+      L.coaster([[186, 10.75], [189, 10.75], [193, 7], [197, 4.5], [201, 8.5], [205, 5], [209, 9], [212, 10.75], [215, 10.75]]);
+      L.rainbow(198, 0.6);
+      L.ground(215, 234);
+      L.qblock(221, 6, 'shield'); L.qblock(222, 6, 'rainbow');
+      L.enemy('mouse', 224, 10);
+      L.gate(228);
     }
   },
   {
@@ -5073,14 +5200,20 @@ const LEVELS = [
       L.cake(15, 2);
       L.gifts(19, 1, 30);
       L.row(19, 4, 3, 3);
-      L.enemy('snail', 36, 10);
+      L.enemy('mouse', 36, 10);
       L.ground(49, 172);
       L.check(51);
       L.row(55, 9, 4);
       L.check(75);
-      L.enemy('bee', 84, 6);
+      L.enemy('parrot', 84, 6);
       L.row(90, 9, 5);
       L.check(100);
+      L.arc(45, 7, 5, 2); L.rainbow(47, 4);
+      L.power('magnet', 42, 8);
+      L.wheel(92, 4, 3.5, 4, 9); L.rainbow(91, 0); L.star(88, 3); L.star(95, 3);
+      L.bumper(104, 9); L.cloud(106, 5, 3); L.row(106, 3, 3); L.rainbow(108, 1);
+      L.qblock(110, 6, 'wings'); L.qblock(111, 6, 'star5');
+      L.enemy('parrot', 99, 6);
       L.sign(119, 'Єнот Шкодько! Коли він заплутається у стрічці — стріляй або стрибни на нього');
       L.power('candy', 125, 8);
       L.arena(129, 172);
@@ -5088,109 +5221,150 @@ const LEVELS = [
     }
   },  /* ===== Частина 28: Розумна ферма ===== */
   {
-    id: 'clockvillage', theme: 'clockvillage', name: 'Котра година?', blurb: 'Подивись на годинник і відчини двері', w: 170,
+    id: 'clockvillage', theme: 'clockvillage', name: 'Котра година?', blurb: 'Подивись на годинник і відчини двері', w: 200,
     build(L) {
       L.ground(0, 42);
       L.sign(3, 'Котра година? Подивись на годинник: коротка червона стрілка показує годину. Стукни головою знизу кубик із цим числом');
       L.row(6, 9, 3);
       L.clockq(12, 3, [2, 6], 23, 1);
       L.row(25, 9, 4);
-      L.enemy('snail', 34, 10);
+      L.enemy('mouse', 34, 10);
       L.ground(45, 92);
       L.check(47);
       L.clockq(53, 6, [9, 12], 64, 0);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('bouncer', 78, 10);
       L.row(84, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.clockq(103, 9, [4, 7], 114, 2);
       L.row(117, 9, 5);
-      L.enemy('bee', 124, 6);
-      L.ground(135, 170);
+      L.enemy('parrot', 124, 6);
+      L.ground(135, 200);
       L.check(137);
       L.clockq(141, 12, [1, 10], 152, 2);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(41, 7, 5, 2); L.rainbow(43, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'Колесо огляду! Застрибни на кабінку — вона підніме до веселкової зірочки');
+      L.qblock(166, 6, 'shield');
+      L.wheel(174, 4, 3.5, 4, 9);
+      L.rainbow(173, 0); L.star(170, 3); L.star(177, 3);
+      L.row(182, 9, 4);
+      L.qblock(188, 6, 'star5');
+      L.enemy('worm', 190, 10);
+      L.gate(194);
     }
   },
   {
-    id: 'countmeadow', theme: 'countmeadow', name: 'Лічильна галявина', blurb: 'Порахуй картинки на дошці', w: 170,
+    id: 'countmeadow', theme: 'countmeadow', name: 'Лічильна галявина', blurb: 'Порахуй картинки на дошці', w: 208,
     build(L) {
       L.ground(0, 42);
       L.sign(3, 'Лічильна галявина! Порахуй картинки на дошці й стукни головою знизу кубик із правильним числом');
       L.row(6, 9, 3);
       L.countq(12, 3, 'apple', [2, 4], 23, 1);
       L.row(25, 9, 4);
-      L.enemy('snail', 34, 10);
+      L.enemy('worm', 34, 10);
       L.ground(45, 92);
       L.check(47);
       L.countq(53, 5, 'butterfly', [4, 6], 64, 1);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('bunny', 78, 10);
       L.row(84, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.countq(103, 7, 'flower', [8, 9], 114, 0);
       L.row(117, 9, 5);
-      L.enemy('bee', 124, 6);
-      L.ground(135, 170);
+      L.enemy('bird', 124, 6);
+      L.ground(135, 186);
       L.check(137);
       L.countq(141, 9, 'fish', [6, 8], 152, 2);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(41, 7, 5, 2); L.rainbow(43, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'Бульбашка тримає недовго. Стрибай з неї далі!');
+      L.bubble(171, 7); L.star(171, 6); L.bubble(174, 5); L.star(174, 4); L.bubble(177, 3); L.star(177, 2); L.rainbow(180, 2);
+      L.bubble(189, 9);
+      L.ground(190, 208);
+      L.qblock(195, 6, 'candy'); L.qblock(196, 6, 'star5');
+      L.enemy('worm', 198, 10);
+      L.gate(202);
     }
   },
   {
-    id: 'mamafarm', theme: 'mamafarm', name: 'Де моя мама?', blurb: 'Допоможи малюкам знайти своїх мам', w: 170,
+    id: 'mamafarm', theme: 'mamafarm', name: 'Де моя мама?', blurb: 'Допоможи малюкам знайти своїх мам', w: 230,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Де моя мама? Візьми малюка й віднеси до його мами за хвірточкою. Новий малюк міняється з тим, якого несеш');
       L.baby(10, 'duck'); L.mom(16, 'duck');
       L.row(20, 9, 3);
       L.baby(25, 'cat'); L.baby(29, 'dog'); L.mom(35, 'dog');
-      L.enemy('snail', 40, 10);
+      L.enemy('worm', 40, 10);
       L.ground(47, 92);
       L.check(49);
       L.baby(53, 'pig'); L.baby(57, 'hen'); L.mom(63, 'pig');
       L.block(68, 7, 3); L.row(68, 5, 3);
-      L.enemy('frog', 76, 10);
+      L.enemy('bunny', 76, 10);
       L.baby(81, 'cat'); L.mom(87, 'cat');
       L.ground(95, 134);
       L.check(97);
       L.baby(100, 'hen'); L.baby(104, 'duck'); L.baby(108, 'pig'); L.mom(114, 'pig');
       L.row(118, 9, 4);
-      L.enemy('bee', 126, 6);
-      L.ground(137, 170);
+      L.enemy('bird', 126, 6);
+      L.ground(137, 182);
       L.check(139);
       L.baby(143, 'hen'); L.baby(147, 'dog'); L.mom(152, 'hen');
       L.row(156, 9, 3);
-      L.gate(164);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(133, 7, 5, 2); L.rainbow(135, 4);
+      L.sign(163, 'Повітряний змій! Підійди до кілочка — і він понесе тебе через яму');
+      L.kite(179, 210, 2);
+      for (let i = 0; i < 12; i++) L.star(184 + i * 2, Math.round(5 - 2.6 * Math.sin(i * 0.65)));
+      L.rainbow(195, 2);
+      L.ground(208, 230);
+      L.qblock(215, 6, 'magnet'); L.qblock(216, 6, 'rainbow');
+      L.enemy('worm', 220, 10);
+      L.gate(224);
     }
   },
   {
-    id: 'smartfarm', theme: 'smartfarm', name: 'Розумна ферма', blurb: 'Годинник, лічилка й малюки — усе разом', w: 172,
+    id: 'smartfarm', theme: 'smartfarm', name: 'Розумна ферма', blurb: 'Годинник, лічилка й малюки — усе разом', w: 208,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Розумна ферма! Тут і годинник, і лічилка, і малюки, що шукають маму');
       L.row(6, 9, 3);
       L.clockq(10, 4, [3, 8], 21, 1);
       L.baby(25, 'duck'); L.mom(31, 'duck');
-      L.enemy('snail', 38, 10);
+      L.enemy('worm', 38, 10);
       L.ground(47, 94);
       L.check(49);
       L.countq(53, 6, 'butterfly', [5, 8], 64, 1);
       L.baby(68, 'pig'); L.baby(72, 'cat'); L.mom(78, 'cat');
-      L.enemy('frog', 86, 10);
+      L.enemy('bunny', 86, 10);
       L.ground(97, 136);
       L.check(99);
       L.clockq(103, 2, [5, 11], 114, 0);
       L.countq(117, 8, 'apple', [7, 10], 128, 1);
-      L.ground(139, 172);
+      L.ground(139, 178);
       L.check(141);
       L.baby(145, 'dog'); L.mom(150, 'dog');
       L.row(154, 9, 5);
-      L.gate(166);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(93, 7, 5, 2); L.rainbow(95, 4);
+      L.arc(135, 7, 5, 2); L.rainbow(137, 4);
+      L.sign(165, 'Підстрибни до поручнів — вхопишся. Перебирай уперед, а «Стрибок» — щоб відпустити');
+      L.bars(176, 190, 6);
+      L.row(179, 7, 9);
+      L.ground(188, 208);
+      L.cloud(193, 7, 3); L.rainbow(194, 5);
+      L.qblock(199, 6, 'wings');
+      L.enemy('worm', 198, 10);
+      L.gate(202);
     }
   },
   {
@@ -5200,15 +5374,21 @@ const LEVELS = [
       L.sign(3, 'Гребля Тріска. Бобер перегородив річку! Визнач час, порахуй рибок і допоможи малюкові');
       L.clockq(10, 5, [3, 7], 21, 1);
       L.countq(24, 4, 'fish', [3, 5], 35, 1);
-      L.enemy('snail', 40, 10);
+      L.enemy('worm', 40, 10);
       L.ground(49, 172);
       L.check(51);
       L.baby(55, 'duck'); L.mom(61, 'duck');
       L.row(66, 9, 4);
       L.check(75);
-      L.enemy('bee', 84, 6);
+      L.enemy('bird', 84, 6);
       L.row(90, 9, 5);
       L.check(100);
+      L.arc(45, 7, 5, 2); L.rainbow(47, 4);
+      L.power('magnet', 67, 8);
+      L.wheel(92, 4, 3.5, 4, 9); L.rainbow(91, 0); L.star(88, 3); L.star(95, 3);
+      L.bumper(104, 9); L.cloud(106, 5, 3); L.row(106, 3, 3); L.rainbow(108, 1);
+      L.qblock(110, 6, 'candy'); L.qblock(111, 6, 'star5');
+      L.enemy('bird', 99, 6);
       L.sign(119, 'Бобер Тріско! Коли він засяде гризти колоду — стріляй або стрибни на нього');
       L.power('candy', 125, 8);
       L.arena(129, 172);
@@ -5216,7 +5396,7 @@ const LEVELS = [
     }
   },  /* ===== Частина 29: Сад і двір ===== */
   {
-    id: 'recyclepark', theme: 'recyclepark', name: 'Чистий парк', blurb: 'Розсортуй сміття по контейнерах', w: 170,
+    id: 'recyclepark', theme: 'recyclepark', name: 'Чистий парк', blurb: 'Розсортуй сміття по контейнерах', w: 196,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Чистий парк! Підбирай сміття й неси в контейнер свого кольору: жовтий — пластик і бляшанки, синій — папір, зелений — очистки');
@@ -5224,82 +5404,110 @@ const LEVELS = [
       L.trash(18, 'paper'); L.bin(22, 'green'); L.bin(25, 'blue');
       L.cleangate(30, 2);
       L.row(32, 9, 3);
-      L.enemy('snail', 39, 10);
+      L.enemy('worm', 39, 10);
       L.ground(47, 92);
       L.check(49);
       L.trash(53, 'peel'); L.bin(58, 'green');
       L.trash(62, 'can'); L.bin(66, 'blue'); L.bin(69, 'yellow');
       L.trash(73, 'box'); L.bin(77, 'blue');
       L.cleangate(82, 5);
-      L.enemy('frog', 87, 10);
+      L.enemy('bunny', 87, 10);
       L.ground(95, 134);
       L.check(97);
       L.trash(101, 'core'); L.bin(105, 'yellow'); L.bin(108, 'green');
       L.trash(112, 'bottle'); L.bin(116, 'yellow');
       L.trash(120, 'paper'); L.bin(124, 'blue');
       L.cleangate(129, 8);
-      L.ground(137, 170);
+      L.ground(137, 196);
       L.check(139);
       L.row(143, 9, 5);
-      L.enemy('bee', 151, 6);
-      L.gate(164);
+      L.enemy('bird', 151, 6);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(133, 7, 5, 2); L.rainbow(135, 4);
+      L.sign(163, 'Батут! Кожен стрибок вищий за попередній — аж до трьох разів');
+      L.batut(169, 173);
+      L.star(170, 6); L.star(171, 3); L.rainbow(171, 0);
+      L.batut(173, 177, 2);
+      L.block(177, 4, 3, 6); L.row(177, 3, 3);
+      L.qblock(184, 6, 'shield');
+      L.enemy('beetle', 186, 10);
+      L.gate(190);
     }
   },
   {
-    id: 'beanstalk', theme: 'beanstalk', name: 'Чарівна квасоля', blurb: 'Посади зернятко й вилізь на скелю', w: 172,
+    id: 'beanstalk', theme: 'beanstalk', name: 'Чарівна квасоля', blurb: 'Посади зернятко й вилізь на скелю', w: 210,
     build(L) {
       L.ground(0, 101);
       L.sign(3, 'Чарівна квасоля! Збери зернятко й посади в грядку біля високої скелі — виросте стебло-драбинка');
       L.seed(9); L.row(12, 9, 3);
-      L.soil(18, 5); L.block(24, 5, 6, 5); L.row(25, 3, 4);
-      L.enemy('snail', 36, 10);
+      L.soil(18, 5); L.block(24, 5, 6, 5); L.row(25, 3, 4); L.rainbow(28, 1);
+      L.enemy('beetle', 36, 10);
       L.check(40);
       L.seed(44);
       L.soil(50, 6); L.block(57, 4, 5, 6); L.row(58, 2, 3);
-      L.enemy('frog', 70, 10);
+      L.enemy('hedgehog', 70, 10);
       L.check(74);
       L.seed(78);
       L.soil(83, 5); L.block(89, 5, 5, 5); L.row(90, 3, 3);
-      L.ground(104, 172);
+      L.ground(104, 182);
       L.check(105);
       L.seed(107); L.seed(109);
       L.soil(112, 6); L.block(119, 4, 6, 6); L.row(120, 2, 4);
       L.row(127, 9, 4);
-      L.enemy('bee', 133, 6);
+      L.enemy('butterfly', 133, 7);
       L.check(138);
       L.row(145, 9, 5);
-      L.gate(164);
+      L.arc(100, 7, 5, 2); L.rainbow(102, 4);
+      L.power('magnet', 14, 8);
+      L.sign(163, 'Вітер дме вгору! Стрибни в нього — і полетиш');
+      L.wind(182, 188, 4); L.arc(182, 4, 6, 2); L.rainbow(185, 1);
+      L.ground(188, 210);
+      L.spring(195); L.cloud(197, 3, 5); L.row(197, 2, 4);
+      L.qblock(204, 6, 'wings');
+      L.enemy('beetle', 200, 10);
+      L.gate(206);
     }
   },
   {
-    id: 'hopscotch', theme: 'hopscotch', name: 'Класики', blurb: 'Пострибай по числах по порядку', w: 170,
+    id: 'hopscotch', theme: 'hopscotch', name: 'Класики', blurb: 'Пострибай по числах по порядку', w: 210,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Класики! Стань на клітинки з числами по порядку: 1, 2, 3… Числа переплутані — шукай уважно');
       L.hops(8, [1, 2, 3], 16);
       L.row(18, 9, 3);
-      L.enemy('snail', 25, 10);
+      L.enemy('beetle', 25, 10);
       L.hops(30, [2, 1, 3, 4], 40);
       L.ground(47, 92);
       L.check(49);
       L.hops(53, [3, 1, 4, 2, 5], 65);
       L.block(69, 7, 3); L.row(69, 5, 3);
-      L.enemy('frog', 77, 10);
+      L.enemy('hedgehog', 77, 10);
       L.row(83, 9, 4);
       L.ground(95, 134);
       L.check(97);
       L.hops(101, [5, 3, 1, 2, 4, 6], 115);
       L.row(118, 9, 4);
-      L.enemy('bee', 126, 6);
-      L.ground(137, 170);
+      L.enemy('butterfly', 126, 7);
+      L.ground(137, 184);
       L.check(139);
       L.hops(143, [2, 4, 1, 3], 153);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(133, 7, 5, 2); L.rainbow(135, 4);
+      L.power('magnet', 84, 8);
+      L.sign(163, 'Гілочки падають, щойно на них станеш — біжи швидко!');
+      L.crumble(185, 8, 2); L.crumble(188, 7, 2);
+      L.row(185, 7, 2); L.row(188, 6, 2); L.rainbow(189, 3);
+      L.ground(191, 210);
+      L.qblock(196, 6, 'shield'); L.qblock(197, 6, 'star5');
+      L.enemy('beetle', 200, 10);
+      L.gate(204);
     }
   },
   {
-    id: 'gardenyard', theme: 'gardenyard', name: 'Сад і двір', blurb: 'Сміття, квасоля й класики — усе разом', w: 172,
+    id: 'gardenyard', theme: 'gardenyard', name: 'Сад і двір', blurb: 'Сміття, квасоля й класики — усе разом', w: 212,
     build(L) {
       L.ground(0, 96);
       L.sign(3, 'Сад і двір! Прибери сміття, посади квасолю й пострибай у класики');
@@ -5307,13 +5515,13 @@ const LEVELS = [
       L.trash(17, 'peel'); L.bin(21, 'green');
       L.cleangate(26, 2);
       L.seed(30);
-      L.soil(35, 5); L.block(41, 5, 5, 5); L.row(42, 3, 3);
-      L.enemy('snail', 52, 10);
+      L.soil(35, 5); L.block(41, 5, 5, 5); L.row(42, 3, 3); L.rainbow(44, 1);
+      L.enemy('beetle', 52, 10);
       L.check(56);
       L.hops(60, [2, 3, 1], 68);
       L.row(70, 9, 4);
-      L.enemy('frog', 80, 10);
-      L.ground(99, 172);
+      L.enemy('hedgehog', 80, 10);
+      L.ground(99, 192);
       L.check(101);
       L.trash(105, 'box'); L.bin(109, 'green'); L.bin(112, 'blue');
       L.cleangate(117, 3);
@@ -5322,7 +5530,16 @@ const LEVELS = [
       L.check(141);
       L.hops(146, [1, 3, 2, 4], 156);
       L.row(158, 9, 3);
-      L.gate(166);
+      L.arc(95, 7, 5, 2); L.rainbow(97, 4);
+      L.power('magnet', 72, 8);
+      L.sign(165, 'Кулька-відбивач підкидає високо — дзинь! А вогники засвічуй, пробігаючи по них');
+      L.bumper(173, 9);
+      L.cloud(175, 5, 4); L.row(175, 3, 4); L.rainbow(178, 1);
+      L.lights(181, 5);
+      L.ground(195, 212);
+      L.qblock(200, 6, 'candy');
+      L.enemy('beetle', 202, 10);
+      L.gate(206);
     }
   },
   {
@@ -5333,15 +5550,21 @@ const LEVELS = [
       L.trash(8, 'bottle'); L.bin(12, 'yellow');
       L.cleangate(16, 1);
       L.hops(20, [2, 1, 3], 28);
-      L.enemy('snail', 36, 10);
+      L.enemy('beetle', 36, 10);
       L.ground(49, 172);
       L.check(51);
       L.seed(55);
       L.soil(60, 5); L.block(66, 5, 4, 5); L.row(67, 3, 2);
       L.check(76);
-      L.enemy('bee', 84, 6);
+      L.enemy('butterfly', 84, 7);
       L.row(90, 9, 5);
       L.check(100);
+      L.arc(45, 7, 5, 2); L.rainbow(47, 4);
+      L.power('magnet', 42, 8);
+      L.wheel(92, 4, 3.5, 4, 9); L.rainbow(91, 0); L.star(88, 3); L.star(95, 3);
+      L.bumper(104, 9); L.cloud(106, 5, 3); L.row(106, 3, 3); L.rainbow(108, 1);
+      L.qblock(110, 6, 'magnet'); L.qblock(111, 6, 'star5');
+      L.enemy('butterfly', 99, 7);
       L.sign(119, 'Гусак Шипун! Коли він сховає голову під крило — стріляй або стрибни на нього');
       L.power('candy', 125, 8);
       L.arena(129, 172);
@@ -5349,104 +5572,143 @@ const LEVELS = [
     }
   },  /* ===== Частина 30: Зимове свято ===== */
   {
-    id: 'snowmanhill', theme: 'snowmanhill', name: 'Зліпи сніговика', blurb: 'Збери сніговика по частинках', w: 170,
+    id: 'snowmanhill', theme: 'snowmanhill', name: 'Зліпи сніговика', blurb: 'Збери сніговика по частинках', w: 222,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Зліпи сніговика! Збери всі його частинки — сніжки, морквину, відерце, шарфик. Коли сніговик буде готовий, він відчинить ворота');
       L.snowkit(20, 24, [['base', 8], ['mid', 12], ['head', 16, 7]]);
       L.row(26, 9, 3);
-      L.enemy('snail', 33, 10);
+      L.enemy('beetle', 33, 10);
       L.ground(47, 92);
       L.check(49);
       L.snowkit(68, 72, [['base', 53], ['mid', 56], ['head', 59, 7], ['nose', 62], ['hat', 65, 7]]);
       L.block(75, 7, 3); L.row(75, 5, 3);
-      L.enemy('frog', 82, 10);
+      L.enemy('hedgehog', 82, 10);
       L.ground(95, 136);
       L.check(97);
       L.snowkit(120, 124, [['base', 101], ['mid', 104, 7], ['head', 107], ['nose', 110], ['hat', 113, 7], ['scarf', 116]]);
       L.row(127, 9, 4);
-      L.ground(139, 170);
+      L.ground(139, 180);
       L.check(141);
-      L.enemy('bee', 148, 6);
+      L.enemy('butterfly', 148, 7);
       L.row(152, 9, 5);
-      L.gate(164);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(135, 7, 5, 2); L.rainbow(137, 4);
+      L.power('magnet', 39, 8);
+      L.sign(163, 'Кільце! Застрибни й ухопися. Розгойдуйся, а «Стрибок» — відпустити');
+      L.ring(182, 2); L.ring(187, 2); L.ring(192, 2); L.ring(197, 2);
+      L.row(184, 5, 2); L.row(189, 5, 2); L.row(194, 5, 2); L.rainbow(190, 3);
+      L.ground(201, 222);
+      L.qblock(207, 6, 'wings');
+      L.enemy('penguin', 212, 10);
+      L.gate(216);
     }
   },
   {
-    id: 'animalsounds', theme: 'animalsounds', name: 'Хто як говорить?', blurb: 'Прочитай, хто як говорить', w: 170,
+    id: 'animalsounds', theme: 'animalsounds', name: 'Хто як говорить?', blurb: 'Прочитай, хто як говорить', w: 220,
     build(L) {
       L.ground(0, 42);
       L.sign(3, 'Хто як говорить? Подивись, хто на дошці, прочитай слова на кубиках і стукни головою знизу правильне');
       L.row(6, 9, 3);
       L.soundq(12, 'cat', ['dog', 'duck'], 23, 0);
       L.row(25, 9, 4);
-      L.enemy('snail', 34, 10);
+      L.enemy('penguin', 34, 10);
       L.ground(45, 92);
       L.check(47);
       L.soundq(53, 'dog', ['pig', 'cat'], 64, 1);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('seal', 78, 10);
       L.row(84, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.soundq(103, 'duck', ['hen', 'pig'], 114, 2);
       L.row(117, 9, 5);
-      L.enemy('bee', 124, 6);
-      L.ground(135, 170);
+      L.enemy('owl', 124, 4);
+      L.ground(135, 192);
       L.check(137);
       L.soundq(141, 'hen', ['duck', 'dog'], 152, 1);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(41, 7, 5, 2); L.rainbow(43, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'У фіолетових колонах майже немає ваги — стрибай дуже високо!');
+      L.lowgrav(173, 182); L.block(180, 3, 2, 7); L.row(180, 2, 2); L.rainbow(177, 1);
+      L.row(187, 9, 3);
+      L.lowgrav(190, 202); L.arc(193, 5, 7, 3);
+      L.ground(200, 220);
+      L.qblock(206, 6, 'candy');
+      L.enemy('penguin', 210, 10);
+      L.gate(214);
     }
   },
   {
-    id: 'shadowtheater', theme: 'shadowtheater', name: 'Чия це тінь?', blurb: 'Впізнай тваринку за тінню', w: 170,
+    id: 'shadowtheater', theme: 'shadowtheater', name: 'Чия це тінь?', blurb: 'Впізнай тваринку за тінню', w: 232,
     build(L) {
       L.ground(0, 42);
       L.sign(3, 'Театр тіней! На дошці — чиясь тінь. Подивись на вушка, дзьобик і хвостик і стукни головою знизу кубик із тим, чия вона');
       L.row(6, 9, 3);
       L.shadowq(12, 'cat', ['duck', 'pig'], 23, 0);
       L.row(25, 9, 4);
-      L.enemy('snail', 34, 10);
+      L.enemy('penguin', 34, 10);
       L.ground(45, 92);
       L.check(47);
       L.shadowq(53, 'duck', ['hen', 'dog'], 64, 2);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('seal', 78, 10);
       L.row(84, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.shadowq(103, 'dog', ['cat', 'pig'], 114, 1);
       L.row(117, 9, 5);
-      L.enemy('bee', 124, 6);
-      L.ground(135, 170);
+      L.enemy('owl', 124, 4);
+      L.ground(135, 184);
       L.check(137);
       L.shadowq(141, 'hen', ['duck', 'cat'], 152, 0);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(41, 7, 5, 2); L.rainbow(43, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'Американські гірки! Застрибни у вагончик — і тримайся!');
+      L.coaster([[184, 10.75], [187, 10.75], [191, 7], [195, 4.5], [199, 8.5], [203, 5], [207, 9], [210, 10.75], [213, 10.75]]);
+      L.rainbow(196, 0.6);
+      L.ground(213, 232);
+      L.qblock(219, 6, 'shield'); L.qblock(220, 6, 'rainbow');
+      L.enemy('penguin', 222, 10);
+      L.gate(226);
     }
   },
   {
-    id: 'winterfest', theme: 'winterfest', name: 'Зимове свято', blurb: 'Сніговик, звуки й тіні — усе разом', w: 172,
+    id: 'winterfest', theme: 'winterfest', name: 'Зимове свято', blurb: 'Сніговик, звуки й тіні — усе разом', w: 215,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Зимове свято! Зліпи сніговика, вгадай, хто як говорить, і чия це тінь');
       L.snowkit(18, 22, [['base', 8], ['mid', 11], ['head', 14, 7]]);
       L.soundq(26, 'pig', ['cat', 'hen'], 37, 0);
-      L.enemy('snail', 40, 10);
+      L.enemy('penguin', 40, 10);
       L.ground(47, 94);
       L.check(49);
       L.shadowq(53, 'pig', ['dog', 'duck'], 64, 1);
       L.snowkit(80, 84, [['base', 67], ['mid', 70], ['head', 73, 7], ['nose', 76]]);
-      L.enemy('frog', 88, 10);
+      L.enemy('seal', 88, 10);
       L.ground(97, 136);
       L.check(99);
       L.soundq(103, 'duck', ['dog', 'cat'], 114, 1);
       L.shadowq(117, 'dog', ['hen', 'cat'], 128, 2);
-      L.ground(139, 172);
+      L.ground(139, 183);
       L.check(141);
       L.snowkit(158, 162, [['base', 145], ['mid', 148, 7], ['head', 151], ['hat', 154]]);
-      L.gate(167);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(93, 7, 5, 2); L.rainbow(95, 4);
+      L.arc(135, 7, 5, 2); L.rainbow(137, 4);
+      L.sign(166, 'Заходь у вагонетку — вона перевезе через прірву!');
+      L.cart(177, 194); L.row(184, 8, 6); L.rainbow(187, 5);
+      L.ground(191, 215);
+      L.qblock(199, 6, 'star5'); L.qblock(200, 6, 'rainbow'); L.qblock(201, 6, 'wings');
+      L.enemy('penguin', 205, 10);
+      L.gate(209);
     }
   },
   {
@@ -5456,15 +5718,21 @@ const LEVELS = [
       L.sign(3, 'Крижаний палац — ювілейний сто п’ятдесятий рівень! Зліпи сніговика, вгадай, хто як говорить, і чия це тінь');
       L.snowkit(16, 20, [['base', 8], ['mid', 11], ['head', 13, 7]]);
       L.soundq(24, 'cat', ['pig', 'duck'], 35, 0);
-      L.enemy('snail', 40, 10);
+      L.enemy('penguin', 40, 10);
       L.ground(49, 172);
       L.check(51);
       L.shadowq(55, 'hen', ['cat', 'dog'], 66, 0);
       L.row(69, 9, 4);
       L.check(76);
-      L.enemy('bee', 84, 6);
+      L.enemy('owl', 84, 4);
       L.row(90, 9, 5);
       L.check(100);
+      L.arc(45, 7, 5, 2); L.rainbow(47, 4);
+      L.power('magnet', 70, 8);
+      L.wheel(92, 4, 3.5, 4, 9); L.rainbow(91, 0); L.star(88, 3); L.star(95, 3);
+      L.bumper(104, 9); L.cloud(106, 5, 3); L.row(106, 3, 3); L.rainbow(108, 1);
+      L.qblock(110, 6, 'shield'); L.qblock(111, 6, 'star5');
+      L.enemy('owl', 99, 4);
       L.sign(119, 'Сніговик Хрумко! Коли він підтане на сонечку — стріляй або стрибни на нього');
       L.power('candy', 125, 8);
       L.arena(129, 172);
@@ -5472,108 +5740,149 @@ const LEVELS = [
     }
   },  /* ===== Частина 31: Абетка й порядок ===== */
   {
-    id: 'letterland', theme: 'letterland', name: 'Перша буква', blurb: 'З якої букви починається слово?', w: 170,
+    id: 'letterland', theme: 'letterland', name: 'Перша буква', blurb: 'З якої букви починається слово?', w: 208,
     build(L) {
       L.ground(0, 42);
       L.sign(3, 'Перша буква! Подивись на картинку й слово на дошці. З якої букви воно починається? Стукни головою знизу кубик із цією буквою');
       L.row(6, 9, 3);
       L.letterq(12, 'cat', ['М', 'Б'], 23, 0);
       L.row(25, 9, 4);
-      L.enemy('snail', 34, 10);
+      L.enemy('penguin', 34, 10);
       L.ground(45, 92);
       L.check(47);
       L.letterq(53, 'banana', ['Я', 'С'], 64, 1);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('seal', 78, 10);
       L.row(84, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.letterq(103, 'apple', ['А', 'Б'], 114, 2);
       L.row(117, 9, 5);
-      L.enemy('bee', 124, 6);
-      L.ground(135, 170);
+      L.enemy('owl', 124, 4);
+      L.ground(135, 186);
       L.check(137);
       L.letterq(141, 'milk', ['Х', 'К'], 152, 1);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(41, 7, 5, 2); L.rainbow(43, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'Бульбашка тримає недовго. Стрибай з неї далі!');
+      L.bubble(171, 7); L.star(171, 6); L.bubble(174, 5); L.star(174, 4); L.bubble(177, 3); L.star(177, 2); L.rainbow(180, 2);
+      L.bubble(189, 9);
+      L.ground(190, 208);
+      L.qblock(195, 6, 'candy'); L.qblock(196, 6, 'star5');
+      L.enemy('ant', 198, 10);
+      L.gate(202);
     }
   },
   {
-    id: 'compareland', theme: 'compareland', name: 'Більше чи менше?', blurb: 'Порівняй числа знаками', w: 170,
+    id: 'compareland', theme: 'compareland', name: 'Більше чи менше?', blurb: 'Порівняй числа знаками', w: 230,
     build(L) {
       L.ground(0, 42);
       L.sign(3, 'Більше чи менше? Порівняй, де більше яблучок, і стукни головою знизу знак: «<» — менше, «=» — порівну, «>» — більше');
       L.row(6, 9, 3);
       L.compq(12, 3, 5, 23);
       L.row(25, 9, 4);
-      L.enemy('snail', 34, 10);
+      L.enemy('ant', 34, 10);
       L.ground(45, 92);
       L.check(47);
       L.compq(53, 7, 4, 64);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('mouse', 78, 10);
       L.row(84, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.compq(103, 6, 6, 114);
       L.row(117, 9, 5);
-      L.enemy('bee', 124, 6);
-      L.ground(135, 170);
+      L.enemy('moth', 124, 7);
+      L.ground(135, 182);
       L.check(137);
       L.compq(141, 9, 8, 152);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(41, 7, 5, 2); L.rainbow(43, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'Повітряний змій! Підійди до кілочка — і він понесе тебе через яму');
+      L.kite(179, 210, 2);
+      for (let i = 0; i < 12; i++) L.star(184 + i * 2, Math.round(5 - 2.6 * Math.sin(i * 0.65)));
+      L.rainbow(195, 2);
+      L.ground(208, 230);
+      L.qblock(215, 6, 'magnet'); L.qblock(216, 6, 'rainbow');
+      L.enemy('ant', 220, 10);
+      L.gate(224);
     }
   },
   {
-    id: 'memorylane', theme: 'memorylane', name: 'Повтори за мною', blurb: 'Стукай кубики в тому порядку, що на дошці', w: 170,
+    id: 'memorylane', theme: 'memorylane', name: 'Повтори за мною', blurb: 'Стукай кубики в тому порядку, що на дошці', w: 206,
     build(L) {
       L.ground(0, 42);
       L.sign(3, 'Повтори за мною! На дошці намальовано, в якому порядку стукати кубики з тваринками. Помилилася — почни спочатку');
       L.row(6, 9, 3);
       L.seqq(12, ['dog', 'cat', 'duck'], ['cat', 'duck', 'dog'], 23);
       L.row(25, 9, 4);
-      L.enemy('snail', 34, 10);
+      L.enemy('ant', 34, 10);
       L.ground(45, 92);
       L.check(47);
       L.seqq(53, ['pig', 'hen', 'cat'], ['hen', 'pig', 'cat'], 64);
       L.block(70, 7, 3); L.row(70, 5, 3);
-      L.enemy('frog', 78, 10);
+      L.enemy('mouse', 78, 10);
       L.row(84, 9, 4);
       L.ground(95, 132);
       L.check(97);
       L.seqq(103, ['duck', 'dog', 'pig'], ['pig', 'duck', 'dog', 'pig'], 114);
       L.row(117, 9, 5);
-      L.enemy('bee', 124, 6);
-      L.ground(135, 170);
+      L.enemy('moth', 124, 7);
+      L.ground(135, 176);
       L.check(137);
       L.seqq(141, ['hen', 'cat', 'dog'], ['dog', 'hen', 'cat', 'hen'], 152);
       L.row(155, 9, 3);
-      L.gate(164);
+      L.arc(41, 7, 5, 2); L.rainbow(43, 4);
+      L.arc(91, 7, 5, 2); L.rainbow(93, 4);
+      L.arc(131, 7, 5, 2); L.rainbow(133, 4);
+      L.power('magnet', 27, 8);
+      L.sign(163, 'Підстрибни до поручнів — вхопишся. Перебирай уперед, а «Стрибок» — щоб відпустити');
+      L.bars(174, 188, 6);
+      L.row(177, 7, 9);
+      L.ground(186, 206);
+      L.cloud(191, 7, 3); L.rainbow(192, 5);
+      L.qblock(197, 6, 'wings');
+      L.enemy('ant', 196, 10);
+      L.gate(200);
     }
   },
   {
-    id: 'brainyard', theme: 'brainyard', name: 'Розумний двір', blurb: 'Букви, знаки й порядок — усе разом', w: 172,
+    id: 'brainyard', theme: 'brainyard', name: 'Розумний двір', blurb: 'Букви, знаки й порядок — усе разом', w: 214,
     build(L) {
       L.ground(0, 44);
       L.sign(3, 'Розумний двір! Тут і перша буква, і більше чи менше, і повтори за мною');
       L.letterq(10, 'pear', ['Б', 'К'], 21, 0);
       L.compq(25, 2, 4, 36);
-      L.enemy('snail', 40, 10);
+      L.enemy('ant', 40, 10);
       L.ground(47, 94);
       L.check(49);
       L.seqq(53, ['cat', 'pig', 'hen'], ['pig', 'hen', 'cat'], 64);
       L.letterq(68, 'grapes', ['Г', 'Б'], 79, 2);
-      L.enemy('frog', 87, 10);
+      L.enemy('mouse', 87, 10);
       L.ground(97, 136);
       L.check(99);
       L.compq(103, 5, 3, 114);
       L.seqq(117, ['duck', 'dog', 'cat'], ['dog', 'cat', 'duck'], 128);
-      L.ground(139, 172);
+      L.ground(139, 188);
       L.check(141);
       L.letterq(145, 'dog', ['К', 'Д'], 156, 0);
       L.row(158, 9, 3);
-      L.gate(166);
+      L.arc(43, 7, 5, 2); L.rainbow(45, 4);
+      L.arc(93, 7, 5, 2); L.rainbow(95, 4);
+      L.arc(135, 7, 5, 2); L.rainbow(137, 4);
+      L.sign(165, 'Стрибай на гойдалку — вона перенесе далі!');
+      L.swing(176, 1, 6, 0.6, 3.2); L.row(173, 6, 7); L.rainbow(179, 4);
+      L.swing(190, 2, 6, 0.55, 3.4);
+      L.ground(192, 214);
+      L.qblock(198, 6, 'star5'); L.qblock(199, 6, 'candy');
+      L.enemy('ant', 204, 10);
+      L.gate(208);
     }
   },
   {
@@ -5583,19 +5892,227 @@ const LEVELS = [
       L.sign(3, 'Болото Буквоїда. Крокодильчик поїв букви й знаки! Допоможи їх повернути');
       L.letterq(10, 'carrot', ['К', 'Б'], 21, 0);
       L.compq(25, 8, 5, 36);
-      L.enemy('snail', 40, 10);
+      L.enemy('ant', 40, 10);
       L.ground(49, 172);
       L.check(51);
       L.seqq(55, ['dog', 'duck', 'cat'], ['duck', 'cat', 'dog'], 66);
       L.row(69, 9, 4);
       L.check(76);
-      L.enemy('bee', 84, 6);
+      L.enemy('moth', 84, 7);
       L.row(90, 9, 5);
       L.check(100);
+      L.arc(45, 7, 5, 2); L.rainbow(47, 4);
+      L.power('magnet', 70, 8);
+      L.wheel(92, 4, 3.5, 4, 9); L.rainbow(91, 0); L.star(88, 3); L.star(95, 3);
+      L.bumper(104, 9); L.cloud(106, 5, 3); L.row(106, 3, 3); L.rainbow(108, 1);
+      L.qblock(110, 6, 'shield'); L.qblock(111, 6, 'star5');
+      L.enemy('moth', 99, 7);
       L.sign(119, 'Крокодильчик Буквоїд! Коли він гикатиме — стріляй або стрибни на нього');
       L.power('candy', 125, 8);
       L.arena(129, 172);
       L.gate(168);
+    }
+  },
+  /* ===== Частина 32: Пригоди без меж ===== */
+  {
+    id: 'skyharbor', theme: 'skyharbor', name: 'Небесна гавань', blurb: 'Вітер, повітряний змій, колесо огляду й гойдалки', w: 204,
+    build(L) {
+      L.sign(3, 'Небесна гавань! Тут чекають вітер, повітряний змій, колесо огляду й гойдалки. Шукай веселкові зірочки високо вгорі');
+      L.row(5, 9, 3);
+      L.ground(0, 32);
+      L.sign(13, 'Вітер дме вгору! Стрибни в нього — і полетиш');
+      L.wind(32, 38, 4); L.arc(32, 4, 6, 2); L.rainbow(35, 1);
+      L.ground(38, 74);
+      L.spring(45); L.cloud(47, 3, 5); L.row(47, 2, 4);
+      L.qblock(54, 6, 'wings');
+      L.enemy('bird', 16, 6);
+      L.power('magnet', 16, 8);
+      L.check(53);
+      L.sign(55, 'Повітряний змій! Підійди до кілочка — і він понесе тебе через яму');
+      L.kite(71, 102, 2);
+      for (let i = 0; i < 12; i++) L.star(76 + i * 2, Math.round(5 - 2.6 * Math.sin(i * 0.65)));
+      L.rainbow(87, 2);
+      L.ground(100, 154);
+      L.qblock(107, 6, 'magnet'); L.qblock(108, 6, 'rainbow');
+      L.enemy('parrot', 58, 6);
+      L.power('wings', 53, 8);
+      L.check(115);
+      L.sign(117, 'Колесо огляду! Застрибни на кабінку — вона підніме до веселкової зірочки');
+      L.qblock(120, 6, 'candy');
+      L.wheel(128, 4, 3.5, 4, 9);
+      L.rainbow(127, 0); L.star(124, 3); L.star(131, 3);
+      L.row(136, 9, 4);
+      L.qblock(142, 6, 'star5');
+      L.ground(154, 172);
+      L.enemy('cloud', 120, 7);
+      L.check(147);
+      L.sign(149, 'Стрибай на гойдалку — вона перенесе далі!');
+      L.swing(160, 1, 6, 0.6, 3.2); L.row(157, 6, 7); L.rainbow(163, 4);
+      L.swing(174, 2, 6, 0.55, 3.4);
+      L.ground(176, 204);
+      L.qblock(182, 6, 'star5'); L.qblock(183, 6, 'shield');
+      L.enemy('bouncer', 152, 10);
+      L.row(190, 9, 4);
+      L.gate(198);
+    }
+  },
+  {
+    id: 'gemmine', theme: 'gemmine', name: 'Копальня самоцвітів', blurb: 'Вагонетка, гілочки, відбивачі й легкі колони', w: 204,
+    build(L) {
+      L.sign(3, 'Копальня самоцвітів! Покатайся у вагонетці, пробіжи по гілочках і пострибай на відбивачах');
+      L.row(5, 9, 3);
+      L.ground(0, 30);
+      L.sign(13, 'Заходь у вагонетку — вона перевезе через прірву!');
+      L.cart(24, 41); L.row(31, 8, 6); L.rainbow(34, 5);
+      L.ground(38, 78);
+      L.qblock(46, 6, 'star5'); L.qblock(47, 6, 'rainbow'); L.qblock(48, 6, 'shield');
+      L.enemy('bat', 16, 4);
+      L.power('magnet', 16, 8);
+      L.check(55);
+      L.sign(57, 'Гілочки падають, щойно на них станеш — біжи швидко!');
+      L.crumble(79, 8, 2); L.crumble(82, 7, 2);
+      L.row(79, 7, 2); L.row(82, 6, 2); L.rainbow(83, 3);
+      L.ground(85, 126);
+      L.qblock(90, 6, 'magnet'); L.qblock(91, 6, 'star5');
+      L.enemy('mole', 60, 10);
+      L.power('frost', 56, 8);
+      L.check(97);
+      L.sign(99, 'Кулька-відбивач підкидає високо — дзинь! А вогники засвічуй, пробігаючи по них');
+      L.bumper(107, 9);
+      L.cloud(109, 5, 4); L.row(109, 3, 4); L.rainbow(112, 1);
+      L.lights(115, 5);
+      L.ground(129, 170);
+      L.qblock(134, 6, 'candy');
+      L.enemy('beetle', 102, 10);
+      L.check(139);
+      L.sign(141, 'У фіолетових колонах майже немає ваги — стрибай дуже високо!');
+      L.lowgrav(151, 160); L.block(158, 3, 2, 7); L.row(158, 2, 2); L.rainbow(155, 1);
+      L.row(165, 9, 3);
+      L.lowgrav(168, 180); L.arc(171, 5, 7, 3);
+      L.ground(178, 204);
+      L.qblock(184, 6, 'wings');
+      L.enemy('ghost', 144, 6);
+      L.row(190, 9, 4);
+      L.gate(198);
+    }
+  },
+  {
+    id: 'aquapark', theme: 'aquapark', name: 'Аквапарк', blurb: 'Бульбашки, батут, попутний вітер і гірки', w: 200,
+    build(L) {
+      L.sign(3, 'Аквапарк! Бульбашки, батут, попутний вітер і американські гірки — тримайся міцніше');
+      L.row(5, 9, 3);
+      L.ground(0, 36);
+      L.sign(13, 'Бульбашка тримає недовго. Стрибай з неї далі!');
+      L.bubble(21, 7); L.star(21, 6); L.bubble(24, 5); L.star(24, 4); L.bubble(27, 3); L.star(27, 2); L.rainbow(30, 2);
+      L.bubble(39, 9);
+      L.ground(40, 86);
+      L.qblock(45, 6, 'candy'); L.qblock(46, 6, 'star5');
+      L.enemy('crab', 16, 10);
+      L.power('magnet', 16, 8);
+      L.check(51);
+      L.sign(53, 'Батут! Кожен стрибок вищий за попередній — аж до трьох разів');
+      L.batut(59, 63);
+      L.star(60, 6); L.star(61, 3); L.rainbow(61, 0);
+      L.batut(63, 67, 2);
+      L.block(67, 4, 3, 6); L.row(67, 3, 3);
+      L.qblock(74, 6, 'magnet');
+      L.ground(86, 102);
+      L.enemy('parrot', 56, 6);
+      L.power('umbrella', 51, 8);
+      L.check(79);
+      L.sign(81, 'Вітер дме вперед! Розбіжись і стрибай — він перенесе через яму');
+      L.breeze(95, 110); L.arc(103, 7, 6, 2); L.rainbow(105, 5);
+      L.ground(109, 146);
+      L.qblock(116, 6, 'star5'); L.qblock(120, 6, 'shield');
+      L.enemy('seal', 84, 10);
+      L.check(123);
+      L.sign(125, 'Американські гірки! Застрибни у вагончик — і тримайся!');
+      L.coaster([[146, 10.75], [149, 10.75], [153, 7], [157, 4.5], [161, 8.5], [165, 5], [169, 9], [172, 10.75], [175, 10.75]]);
+      L.rainbow(158, 0.6);
+      L.ground(175, 200);
+      L.qblock(181, 6, 'wings'); L.qblock(182, 6, 'rainbow');
+      L.enemy('butterfly', 128, 7);
+      L.row(186, 9, 4);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'toyworks', theme: 'toyworks', name: 'Іграшкова майстерня', blurb: 'Поручні, кільця, батут і гілочки', w: 186,
+    build(L) {
+      L.sign(3, 'Іграшкова майстерня! Хапайся за поручні й кільця, стрибай на батуті. Пісочний годинник зупиняє всіх ворогів');
+      L.row(5, 9, 3);
+      L.ground(0, 26);
+      L.sign(13, 'Підстрибни до поручнів — вхопишся. Перебирай уперед, а «Стрибок» — щоб відпустити');
+      L.bars(24, 38, 6);
+      L.row(27, 7, 9);
+      L.ground(36, 68);
+      L.cloud(41, 7, 3); L.rainbow(42, 5);
+      L.qblock(47, 6, 'magnet');
+      L.enemy('top', 16, 10);
+      L.power('magnet', 16, 8);
+      L.check(49);
+      L.sign(51, 'Кільце! Застрибни й ухопися. Розгойдуйся, а «Стрибок» — відпустити');
+      L.ring(70, 2); L.ring(75, 2); L.ring(80, 2); L.ring(85, 2);
+      L.row(72, 5, 2); L.row(77, 5, 2); L.row(82, 5, 2); L.rainbow(78, 3);
+      L.ground(89, 138);
+      L.qblock(95, 6, 'wings');
+      L.enemy('marble', 54, 10);
+      L.power('hourglass', 49, 8);
+      L.check(103);
+      L.sign(105, 'Батут! Кожен стрибок вищий за попередній — аж до трьох разів');
+      L.batut(111, 115);
+      L.star(112, 6); L.star(113, 3); L.rainbow(113, 0);
+      L.batut(115, 119, 2);
+      L.block(119, 4, 3, 6); L.row(119, 3, 3);
+      L.qblock(126, 6, 'shield');
+      L.ground(138, 154);
+      L.enemy('mouse', 108, 10);
+      L.check(131);
+      L.sign(133, 'Гілочки падають, щойно на них станеш — біжи швидко!');
+      L.crumble(155, 8, 2); L.crumble(158, 7, 2);
+      L.row(155, 7, 2); L.row(158, 6, 2); L.rainbow(159, 3);
+      L.ground(161, 186);
+      L.qblock(166, 6, 'candy'); L.qblock(167, 6, 'star5');
+      L.enemy('bird', 136, 6);
+      L.row(172, 9, 4);
+      L.gate(180);
+    }
+  },
+  {
+    id: 'stormcastle', theme: 'stormcastle', name: 'Хмарний замок', blurb: 'Битва з Хмарою Буркотухою', w: 185, boss: 'grumpcloud',
+    build(L) {
+      L.sign(3, 'Хмарний замок. Хмара Буркотуха заховала сонечко! Дістанься до неї гойдалками й кульками-відбивачами');
+      L.row(5, 9, 3);
+      L.ground(0, 36);
+      L.sign(13, 'Стрибай на гойдалку — вона перенесе далі!');
+      L.swing(24, 1, 6, 0.6, 3.2); L.row(21, 6, 7); L.rainbow(27, 4);
+      L.swing(38, 2, 6, 0.55, 3.4);
+      L.ground(40, 84);
+      L.qblock(46, 6, 'star5'); L.qblock(47, 6, 'magnet');
+      L.enemy('cloud', 16, 7);
+      L.power('magnet', 16, 8);
+      L.check(55);
+      L.sign(57, 'Кулька-відбивач підкидає високо — дзинь! А вогники засвічуй, пробігаючи по них');
+      L.bumper(65, 9);
+      L.cloud(67, 5, 4); L.row(67, 3, 4); L.rainbow(70, 1);
+      L.lights(73, 5);
+      L.ground(87, 136);
+      L.qblock(92, 6, 'shield');
+      L.enemy('bird', 60, 6);
+      L.check(97);
+      L.sign(99, 'Колесо огляду! Застрибни на кабінку — вона підніме до веселкової зірочки');
+      L.qblock(102, 6, 'candy');
+      L.wheel(110, 4, 3.5, 4, 9);
+      L.rainbow(109, 0); L.star(106, 3); L.star(113, 3);
+      L.row(118, 9, 4);
+      L.qblock(124, 6, 'star5');
+      L.ground(136, 185);
+      L.enemy('bouncer', 102, 10);
+      L.check(130);
+      L.sign(133, 'Хмара Буркотуха! Коли вона сяде на землю, загримить і задрімає — стрибни на неї або стріляй');
+      L.power('candy', 138, 8);
+      L.arena(142, 185);
+      L.gate(181);
     }
   },
 ];
@@ -5648,6 +6165,11 @@ const DECOR = {
   memorylane: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'cubeS', x, y, ch: '123456789'[Math.floor(R() * 9)], c: ['#d8c8ff', '#ffd0e0'][Math.floor(R() * 2)] } : r < 0.6 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   brainyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'cubeS', x, y, ch: 'АБВ123'[Math.floor(R() * 6)], c: ['#ffd8a0', '#c8e4ff', '#ffd0e0'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   crocswamp: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'lilyS', x, y } : r < 0.6 ? { k: 'reedS', x, y } : { k: 'tuft', x, y }; },
+  skyharbor: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'flower', x, y, c: ['#ff7ab8', '#ffd54a', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  gemmine: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'mushS', x, y } : { k: 'tuft', x, y }; },
+  aquapark: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'lilyS', x, y } : r < 0.5 ? { k: 'balloonS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
+  toyworks: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'cubeS', x, y, ch: 'АБВ123'[Math.floor(R() * 6)], c: ['#ffd8a0', '#c8e4ff', '#ffd0e0'][Math.floor(R() * 3)] } : r < 0.55 ? { k: 'presentS', x, y, c: ['#ff7ab8', '#7fb8ff', '#9fe08a'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  stormcastle: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'flakeS', x, y } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
