@@ -93,6 +93,7 @@ function drawOver28(c, P, t) {
   const cx = P.x + P.w / 2, y = (P.flip ? P.y + P.h + 40 : P.y - 40) + Math.sin(t * 4) * 1.5;
   if (P.trash) { c.save(); c.globalAlpha = 0.55; c.fillStyle = '#ffffff'; circ(c, cx, y, 13); c.fill(); c.restore(); drawTrash29(c, P.trash, cx, y, 1); }
   else if (P.seeds) { c.save(); c.globalAlpha = 0.55; c.fillStyle = '#ffffff'; rr(c, cx - 20, y - 10, 40, 20, 8); c.fill(); c.restore(); drawSeed29(c, cx - 7, y, t); txt24(c, '×' + P.seeds, cx + 10, y + 1, 11, '#4a8a3a'); }
+  drawOver32(c, P, t);
 }
 
 function drawWorld28(c, t, vis) {

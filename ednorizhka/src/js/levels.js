@@ -6114,6 +6114,232 @@ const LEVELS = [
       L.arena(142, 185);
       L.gate(181);
     }
+  },  /* ===== Частина 33: Таємниці й погоні ===== */
+  {
+    id: 'sunmoonvale', theme: 'sunmoonvale', name: 'Долина Сонця й Місяця', blurb: 'Сонячні й місячні кубики, таємний хід, гейзер і портал', w: 200,
+    build(L) {
+      L.sign(3, 'Долина Сонця й Місяця! День і ніч тут міняються дуже швидко. Жовті сонячні кубики тверді вдень, а сині місячні — уночі');
+      L.row(5, 9, 3);
+      L.ground(0, 26);
+      L.power('magnet', 11, 8);
+      L.enemy('ladybug', 16, 10);
+      L.sign(20, 'Яма! Зачекай, поки з’явиться сонячний місток, і біжи');
+      L.sunb(26, 10, 6); L.row(26, 8, 6);
+      L.ground(32, 36); L.rainbow(34, 5);
+      L.moonb(36, 10, 6); L.row(36, 8, 6);
+      L.ground(42, 112);
+      L.qblock(47, 6, 'star5'); L.qblock(48, 6, 'rainbow'); L.qblock(49, 6, 'wings');
+      L.enemy('bunny', 54, 10);
+      L.check(58);
+      L.sign(60, 'Дивний пагорб… А може, крізь нього є таємний хід?');
+      L.ground(64, 72, 6); L.row(64, 5, 8);
+      L.secret(64, 7, 8, 3); L.rainbow(66, 8); L.row(68, 9, 2); L.qblock(70, 7, 'star5');
+      L.enemy('butterfly', 77, 7);
+      L.sign(80, 'Гейзер б’є вгору по черзі. Стань у нього й зачекай!');
+      L.geyser(84, 87, 2); L.block(87, 4, 2, 6); L.row(87, 3, 2);
+      L.row(90, 9, 3);
+      L.sign(93, 'Заходь у портал — він перенесе через високу стіну');
+      L.portal(97, 105);
+      L.block(100, 0, 2, 10);
+      L.row(107, 9, 3);
+      L.ground(112, 160);
+      L.check(112);
+      L.sign(114, 'Місячна стіна стоїть уночі, а сонячна — вдень. Проходь, коли стіна зникне!');
+      L.moonb(119, 5, 1, 5);
+      L.row(121, 9, 2); L.rainbow(122, 6);
+      L.sunb(125, 5, 1, 5);
+      L.enemy('bunny', 131, 10);
+      L.qblock(134, 6, 'shield');
+      L.sign(137, 'Пісочний годинник зупиняє ворогів, а ще день і ніч!');
+      L.power('hourglass', 141, 8);
+      L.enemy('butterfly', 147, 7);
+      L.row(144, 9, 4);
+      L.moonb(160, 10, 6); L.arc(160, 7, 6, 2); L.rainbow(163, 4);
+      L.ground(166, 200);
+      L.check(168);
+      L.enemy('ladybug', 174, 10);
+      L.qblock(178, 6, 'candy'); L.qblock(179, 6, 'star5');
+      L.row(184, 9, 4);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'secretwood', theme: 'secretwood', name: 'Ліс таємних стежок', blurb: 'Таємні ходи з ключиками, кенгуру й гриб-велетень', w: 190,
+    build(L) {
+      L.sign(3, 'Ліс таємних стежок! Тут є несправжні стіни, крізь які можна пройти, і двері, що відчиняє ключик');
+      L.row(5, 9, 3);
+      L.ground(0, 50);
+      L.power('magnet', 10, 8);
+      L.enemy('hedgehog', 15, 10);
+      L.sign(18, 'Двері зачинені, а ключика не видно. Пошукай таємний хід у пагорбі!');
+      L.ground(22, 30, 6); L.row(22, 5, 8);
+      L.secret(22, 7, 8, 3); L.key(25, 9); L.rainbow(28, 8);
+      L.door(35);
+      L.row(37, 9, 3);
+      L.qblock(42, 6, 'star5'); L.qblock(43, 6, 'rainbow');
+      L.enemy('frog', 46, 10);
+      L.arc(49, 8, 5, 2);
+      L.ground(54, 84);
+      L.check(56);
+      L.sign(58, 'Кенгуру Скок! Підійди — і поскачеш верхи. Тримай «Стрибок» — і стрибнеш дуже високо');
+      L.roo(62);
+      L.row(65, 9, 3);
+      L.block(70, 5, 2, 5); L.row(70, 4, 2);
+      L.row(73, 9, 3);
+      L.enemy('echidna', 76, 10); L.enemy('echidna', 79, 10);
+      L.cloud(77, 4, 3); L.row(77, 3, 3); L.rainbow(78, 1);
+      L.arc(84, 7, 6, 3);
+      L.ground(90, 190);
+      L.rooStop(92);
+      L.check(96);
+      L.sign(97, 'Гриб-велетень! Велика єдиноріжка ламає стіни з кубиків');
+      L.power('big', 100, 9);
+      L.bricks(105, 3, 7, 2);
+      L.row(108, 9, 2);
+      L.bricks(111, 5, 5); L.bricks(112, 5, 1, 4); L.bricks(116, 5, 5); L.row(112, 8, 4); L.rainbow(114, 7);
+      L.enemy('frog', 124, 10);
+      L.qblock(127, 6, 'shield');
+      L.check(132);
+      L.sign(134, 'На пагорбі колючки! А може, знизу є таємна стежка?');
+      L.ground(138, 150, 5); L.thorns(138, 150, 5);
+      L.secret(138, 7, 12, 3); L.row(139, 9, 4); L.key(145, 9); L.rainbow(147, 8);
+      L.door(155);
+      L.enemy('owl', 160, 4);
+      L.qblock(166, 6, 'star5'); L.qblock(167, 6, 'candy');
+      L.row(172, 9, 4);
+      L.gate(182);
+    }
+  },
+  {
+    id: 'wavebeach', theme: 'wavebeach', name: 'Пляж великої хвилі', blurb: 'Хвиля наздоганяє! Біжи, стрибай і шукай таємний хід', w: 210,
+    build(L) {
+      L.sign(3, 'Пляж великої хвилі! Тут хвиля любить наздоганяти. Коли вона почнеться — біжи праворуч і не зупиняйся');
+      L.row(5, 9, 3);
+      L.ground(0, 30);
+      L.power('magnet', 12, 8);
+      L.sign(15, 'Тихо… Чуєш шум? Бери магніт — і тікай від хвилі!');
+      L.chase(20, 80, 'wave', 112);
+      L.arc(29, 8, 5, 2);
+      L.ground(33, 47);
+      L.block(38, 8, 2, 2); L.row(38, 7, 2);
+      L.enemy('crab', 44, 10);
+      L.arc(46, 8, 5, 2);
+      L.ground(50, 66);
+      L.spring(54); L.cloud(56, 5, 4); L.row(56, 4, 4); L.rainbow(59, 3);
+      L.block(62, 7, 2, 3); L.row(62, 6, 2);
+      L.arc(65, 8, 5, 2);
+      L.ground(69, 154);
+      L.row(70, 9, 6);
+      L.check(82);
+      L.sign(84, 'Фух, утекла! Хвиля відкотилася. Відпочинь і збери скарби');
+      L.qblock(88, 6, 'star5'); L.qblock(89, 6, 'rainbow'); L.qblock(90, 6, 'shield');
+      L.enemy('seal', 95, 10);
+      L.sign(98, 'Кулька-відбивач підкидає високо — дзинь! А вогники засвічуй, пробігаючи по них');
+      L.bumper(103, 9);
+      L.cloud(105, 5, 4); L.row(105, 3, 4); L.rainbow(108, 1);
+      L.lights(110, 5);
+      L.enemy('gull', 116, 6);
+      L.enemy('frog', 120, 10);
+      L.check(124);
+      L.sign(126, 'Знову хвиля! Біжи! Гілочки падають, а в пагорбі є таємний хід');
+      L.chase(130, 190, 'wave', 112);
+      L.enemy('crab', 135, 10);
+      L.ground(140, 148, 6); L.row(140, 5, 8);
+      L.secret(140, 7, 8, 3); L.row(141, 9, 6); L.rainbow(144, 8);
+      L.crumble(155, 8, 2); L.crumble(158, 7, 2);
+      L.row(155, 7, 2); L.row(158, 6, 2); L.rainbow(159, 3);
+      L.ground(161, 179);
+      L.block(168, 8, 2, 2); L.row(168, 7, 2);
+      L.enemy('crab', 174, 10);
+      L.arc(178, 8, 5, 2);
+      L.ground(182, 210);
+      L.check(192);
+      L.qblock(195, 6, 'candy'); L.qblock(196, 6, 'star5');
+      L.row(198, 9, 4);
+      L.gate(204);
+    }
+  },
+  {
+    id: 'nightfair', theme: 'nightfair', name: 'Ярмарок дня й ночі', blurb: 'Сонячні й місячні містки, кнопка, паперовий літачок і злива', w: 205,
+    build(L) {
+      L.sign(3, 'Ярмарок дня й ночі! Сонячні кубики тверді вдень, місячні — вночі. А ще тут кнопки, літачки й злива, що наздоганяє');
+      L.row(5, 9, 3);
+      L.ground(0, 22);
+      L.power('magnet', 10, 8);
+      L.enemy('mouse', 16, 10);
+      L.sunb(22, 10, 5); L.row(22, 8, 5);
+      L.ground(27, 30);
+      L.moonb(27, 6, 3); L.rainbow(28, 2);
+      L.moonb(30, 10, 5); L.row(30, 8, 5);
+      L.ground(35, 47);
+      L.qblock(37, 6, 'star5'); L.qblock(38, 6, 'shield');
+      L.sign(40, 'Кнопка! Стрибни на неї — і рожевий місток стане твердим');
+      L.button(43);
+      L.swblocks(47, 10, 8, 'pink'); L.row(48, 8, 6);
+      L.enemy('moth', 51, 7);
+      L.ground(55, 86);
+      L.check(57);
+      L.enemy('bouncer', 61, 10);
+      L.qblock(66, 6, 'rainbow'); L.qblock(67, 6, 'star5');
+      L.sign(71, 'Паперовий літачок! Застрибни на нього, а «Стрибок» підкидає його вгору');
+      L.plane(80);
+      L.block(92, 0, 2, 3); L.row(92, 5, 2);
+      L.block(100, 9, 2, 3); L.row(100, 7, 2);
+      L.hoop(105, 5); L.rainbow(105, 5);
+      L.block(110, 0, 2, 3); L.row(110, 6, 2);
+      L.block(117, 8, 2, 4); L.row(117, 6, 2);
+      L.arc(120, 6, 3, 1);
+      L.ground(124, 150);
+      L.check(126);
+      L.qblock(130, 6, 'candy');
+      L.enemy('moth', 133, 7);
+      L.sign(136, 'Ой, насувається злива! Коли вона почнеться — біжи праворуч і не зупиняйся');
+      L.chase(140, 192, 'storm', 112);
+      L.arc(149, 8, 5, 2);
+      L.ground(153, 168);
+      L.block(158, 8, 2, 2); L.row(158, 7, 2);
+      L.enemy('mouse', 164, 10);
+      L.arc(167, 8, 5, 2);
+      L.ground(171, 205);
+      L.spring(176); L.cloud(178, 5, 4); L.row(178, 4, 4); L.rainbow(181, 3);
+      L.block(185, 7, 2, 3); L.row(185, 6, 2);
+      L.row(194, 9, 3);
+      L.gate(199);
+    }
+  },
+  {
+    id: 'bamboogrove', theme: 'bamboogrove', name: 'Бамбуковий гай', blurb: 'Битва з Пандою Бамбусею', w: 175, boss: 'panda',
+    build(L) {
+      L.sign(3, 'Бамбуковий гай! Тут живе Панда Бамбуся, яка обожнює пінг-понг. Лелека перенесе тебе через колючки');
+      L.row(5, 9, 3);
+      L.ground(0, 18);
+      L.power('magnet', 9, 8);
+      L.stork([[14, 'g'], [18, 6], [26, 4], [32, 6], [38, 4], [43, 'g']]);
+      L.thorns(18, 41);
+      L.row(22, 3, 3); L.row(34, 3, 3); L.arc(29, 5, 3, 1); L.rainbow(26, 3);
+      L.ground(41, 175);
+      L.check(45);
+      L.qblock(48, 6, 'star5'); L.qblock(49, 6, 'rainbow');
+      L.enemy('parrot', 52, 6);
+      L.enemy('bunny', 55, 10);
+      L.sign(58, 'Пого-стрибунець! Скачи по бамбукових пеньках, колючки тепер не страшні');
+      L.power('pogo', 62, 9);
+      L.row(65, 9, 3);
+      L.ground(69, 75, 4); L.row(70, 3, 4);
+      L.thorns(75, 83); L.arc(76, 5, 6, 2); L.rainbow(79, 2);
+      L.ground(83, 89, 4); L.row(84, 3, 4);
+      L.check(92);
+      L.sign(94, 'Дивний бамбуковий пагорб… А може, у ньому є таємний хід?');
+      L.ground(98, 108, 6); L.row(98, 5, 10);
+      L.secret(98, 7, 10, 3); L.rainbow(102, 8); L.row(99, 9, 2); L.qblock(105, 7, 'star5');
+      L.enemy('parrot', 112, 6);
+      L.enemy('bunny', 117, 10);
+      L.row(113, 9, 3);
+      L.sign(120, 'Панда Бамбуся! Влуч рогом у її м’ячик — він полетить назад. А коли вона котиться клубочком — перестрибни');
+      L.power('candy', 125, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -6170,6 +6396,11 @@ const DECOR = {
   aquapark: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'lilyS', x, y } : r < 0.5 ? { k: 'balloonS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
   toyworks: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'cubeS', x, y, ch: 'АБВ123'[Math.floor(R() * 6)], c: ['#ffd8a0', '#c8e4ff', '#ffd0e0'][Math.floor(R() * 3)] } : r < 0.55 ? { k: 'presentS', x, y, c: ['#ff7ab8', '#7fb8ff', '#9fe08a'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
   stormcastle: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'flakeS', x, y } : { k: 'tuft', x, y }; },
+  sunmoonvale: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'moonflowerS', x, y } : r < 0.5 ? { k: 'flower', x, y, c: ['#ffd54a', '#7f8cff', '#ffffff'][Math.floor(R() * 3)] } : { k: 'tuft', x, y }; },
+  secretwood: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'mushS', x, y } : r < 0.5 ? { k: 'flower', x, y, c: '#ff9fc4' } : { k: 'tuft', x, y }; },
+  wavebeach: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'shell', x, y, c: ['#ffb3c6', '#fff4d6', '#ffd1a8'][Math.floor(R() * 3)] } : r < 0.45 ? { k: 'starfish', x, y } : { k: 'tuft', x, y }; },
+  nightfair: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.5 ? { k: 'balloonS', x, y, c: RAINBOW[Math.floor(R() * 6)] } : { k: 'tuft', x, y }; },
+  bamboogrove: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'bambooS', x, y } : r < 0.5 ? { k: 'flower', x, y, c: '#ffffff' } : { k: 'tuft', x, y }; },
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -6286,7 +6517,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -6611,6 +6842,16 @@ function buildLevel(idx) {
       for (let y = 1; y < 10; y++) set(door, y, 2);
       L.seqs.push({ cards: cs, order, door, top: 1 });
     },
+    sunb(x, row, w, h) { for (let i = 0; i < (w || 1); i++) for (let j = 0; j < (h || 1); j++) { set(x + i, row + j, 2); L.dnBlocks.push({ x: x + i, y: row + j, c: 'sun' }); } },
+    moonb(x, row, w, h) { for (let i = 0; i < (w || 1); i++) for (let j = 0; j < (h || 1); j++) { set(x + i, row + j, 2); L.dnBlocks.push({ x: x + i, y: row + j, c: 'moon' }); } },
+    secret(x, row, w, h) {
+      later.push(() => {
+        const tiles = [];
+        for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { const v = map[(row + j) * W + x + i], fake = v === 1 || v === 2 ? v : 0; tiles.push(fake); if (fake) set(x + i, row + j, 0); }
+        L.secrets.push({ x, y: row, w, h, tiles });
+      });
+    },
+    chase(x0, x1, kind, speed) { L.chases.push({ x0: x0 * T, x1: x1 * T, kind: kind || 'wave', speed: speed || 110 }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

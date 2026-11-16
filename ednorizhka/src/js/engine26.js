@@ -34,6 +34,7 @@ quizMsg = function (q, what) {
 /* ===== Підготовка рівня ===== */
 function initLevel26(G, L) {
   G.seqs = (L.seqs || []).map(s => Object.assign({ step: 0, done: false, hintT: 0, wrongT: 0, wrongTx: -1, okT: 0, okTx: -1 }, s));
+  initLevel28(G, L);
 }
 
 /* ===== Повтори за мною: стукай кубики з тваринками в тому порядку, що на дошці ===== */
@@ -59,6 +60,7 @@ function updateSeqs(dt) {
 
 function update26(dt) {
   updateSeqs(dt);
+  update28(dt);
 }
 
 /* ===== Крокодильчик Буквоїд — ще один бігун: плюється буквами, а об'ївшись, гикає ===== */

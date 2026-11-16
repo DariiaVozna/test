@@ -74,6 +74,7 @@ function drawWorld30(c, t, vis) {
     if (vis(s.cards[1].tx * T + 12, 220)) { drawSeqBoard(c, s, t); for (const card of s.cards) drawSeqCard(c, s, card, t); }
     if (vis(s.door * T + 12) && tileAt(s.door, 8) === 2) drawDoorCol(c, s.door, s.top, 'quiz', '#b89aff', t);
   }
+  drawWorld32(c, t, vis);
 }
 
 /* ===== Крокодильчик Буквоїд ===== */
@@ -131,6 +132,7 @@ function drawDecor30(c, d, t) {
   switch (d.k) {
     case 'cubeS': c.fillStyle = d.c || '#ffd8a0'; rr(c, x - 6, y - 12, 12, 12, 2); c.fill(); c.stroke(); txt24(c, d.ch || 'А', x, y - 5.5, 9, '#3b2a5a'); break;
     case 'lilyS': c.fillStyle = '#5cc05a'; ell(c, x, y - 1.5, 9, 3); c.fill(); c.stroke(); c.fillStyle = '#ff9fc4'; for (let i = 0; i < 5; i++) { const a = i * TAU / 5; ell(c, x + Math.cos(a) * 2.6, y - 6 + Math.sin(a) * 1.4, 2.4, 1.6, a); c.fill(); } c.fillStyle = '#ffd23f'; circ(c, x, y - 6, 1.4); c.fill(); break;
+    default: drawDecor32(c, d, t); break;
     case 'reedS': c.strokeStyle = '#4a8a40'; c.lineWidth = 1.4; for (const dx of [-3, 0, 3]) { c.beginPath(); c.moveTo(x + dx, y); c.quadraticCurveTo(x + dx * 2, y - 10, x + dx * 1.5, y - 18); c.stroke(); } c.fillStyle = '#8a5a30'; ell(c, x, y - 18, 2, 4); c.fill(); break;
   }
 }

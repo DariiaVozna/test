@@ -473,6 +473,7 @@ function drawBolt2(c, b) {
     case 'cakebit': drawCakeBolt(c, b); return true;
     case 'woodchip': drawChipBolt(c, b); return true;
     case 'letterbit': drawLetterBolt(c, b); return true;
+    case 'pingball': drawPingBall(c, b); return true;
   }
   return false;
 }
