@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'art27.js', 'art28.js', 'art29.js', 'art30.js', 'art31.js', 'art32.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js', 'engine23.js', 'engine24.js', 'engine25.js', 'engine26.js', 'engine27.js', 'engine28.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'art27.js', 'art28.js', 'art29.js', 'art30.js', 'art31.js', 'art32.js', 'art33.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js', 'engine23.js', 'engine24.js', 'engine25.js', 'engine26.js', 'engine27.js', 'engine28.js', 'engine29.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -372,7 +372,13 @@ function fightBoss(idx) {
         const pb = G.bolts.find(b => b.kind === 'pingball');
         if (pb) { P.dir = pb.x > pcx ? 1 : -1; fire(false); }
       }
-      if (i % 10 === 0) fire(false);
+      // кролик: стоїмо збоку, поки перемішує; потім ідемо до потрібного капелюха й стрибаємо на нього
+      if (B.kind === 'hatrabbit') {
+        In.left = In.right = false;
+        if (B.state === 'pick') { const d = B.hats[B.hat].x - pcx; if (Math.abs(d) > 4) { In.right = d > 0; In.left = d < 0; } if (Math.abs(d) < 22 && P.onGround) { In.jumpP = true; In.jump = true; } }
+        else { const home = G.arena.x0 + 5 * T; if (pcx < home - 12) In.right = true; else if (pcx > home + 12) In.left = true; }
+      }
+      if (i % 10 === 0 && B.kind !== 'hatrabbit') fire(false);
       if (!P.onGround && P.vy < 0) In.jump = true;
     } else if (!G.bossActive) In.right = true;
     else { if (G.gate.x > pcx) In.right = true; else In.left = true; }

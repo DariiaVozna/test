@@ -16,6 +16,7 @@ function initLevel28(G, L) {
   if (G.dnBlocks.length) applyDn(true);
   G.secrets = (L.secrets || []).map(s => Object.assign({ a: 1, found: false }, s)); G.secretsFound = 0;
   G.chases = (L.chases || []).map(c => Object.assign({ state: 'wait', front: 0, st: 0, rumble: 0, a: 1 }, c));
+  initLevel29(G, L);
 }
 
 /* ===== День і ніч: сонячні кубики тверді вдень, місячні — уночі ===== */
@@ -110,6 +111,7 @@ function update28(dt) {
   updateDayNight(dt);
   updateSecrets(dt);
   updateChases(dt);
+  update29(dt);
 }
 
 /* ===== Панда Бамбуся: подає м'ячик, а відбитий рогом м'ячик летить назад і приголомшує її ===== */

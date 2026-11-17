@@ -56,6 +56,7 @@ function drawDnBlock(c, b, t) {
 }
 function drawWorld32(c, t, vis) {
   if (G.dnBlocks) for (const b of G.dnBlocks) if (vis(b.x * T + 12)) drawDnBlock(c, b, t);
+  drawWorld33(c, t, vis);
 }
 // HUD: сонечко чи місяць і скільки ще триватиме
 function drawDnHud(c, x, top, H) {
@@ -210,6 +211,7 @@ function drawPandaBoss(c, B, t) {
 /* ===== Декор ===== */
 function drawDecor32(c, d, t) {
   const x = d.x, y = d.y;
+  if (d.k !== 'bambooS' && d.k !== 'moonflowerS') return drawDecor33(c, d, t);
   if (d.k === 'bambooS') {
     for (const [dx, h] of [[-4, 22], [1, 30], [5, 18]]) {
       c.fillStyle = '#7fcf5a'; c.strokeStyle = INK; c.lineWidth = 0.8; rr(c, x + dx - 1.6, y - h, 3.2, h, 1.2); c.fill(); c.stroke();

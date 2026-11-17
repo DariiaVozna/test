@@ -226,6 +226,7 @@ function renderGame(dt) {
     else if (B.kind === 'croc') drawCrocBoss(c, B, B.t);
     else if (B.kind === 'grumpcloud') drawGrumpBoss(c, B, B.t);
     else if (B.kind === 'panda') drawPandaBoss(c, B, B.t);
+    else if (B.kind === 'hatrabbit') drawHatBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -405,7 +406,7 @@ function renderPreview(p, t) {
 }
 
 /* ===== Екрани ===== */
-const screens = ['scrCreate', 'scrMap', 'scrPause', 'scrWin', 'scrLose', 'scrFinal'];
+const screens = ['scrCreate', 'scrMap', 'scrPause', 'scrWin', 'scrLose', 'scrFinal', 'scrAlbum'];
 function show(id) { for (const s of screens) $(s).hidden = s !== id; }
 function setPlayUi(on) { $('topBtns').hidden = !on; $('pad').hidden = !(on && isTouch); }
 
@@ -446,12 +447,28 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко", 'Єнот Шкодько', 'Бобер Тріско', 'Гусак Шипун', 'Сніговик Хрумко', 'Крокодильчик Буквоїд', 'Хмара Буркотуха', 'Панда Бамбуся'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко", 'Єнот Шкодько', 'Бобер Тріско', 'Гусак Шипун', 'Сніговик Хрумко', 'Крокодильчик Буквоїд', 'Хмара Буркотуха', 'Панда Бамбуся', 'Кролик Фокус-Покус'];
+function showAlbum() {
+  show('scrAlbum');
+  const n = STICKERS.filter(st => hasSticker(st.id)).length;
+  $('albumText').textContent = n ? 'Зібрано ' + n + ' з ' + STICKERS.length + '. Наліпки сховані в країнах 33-ї та 34-ї частин, часто в таємних ходах.' : 'Тут поки порожньо. Наліпки сховані в країнах 33-ї та 34-ї частин, часто в таємних ходах.';
+  const grid = $('albumGrid'); grid.innerHTML = '';
+  for (const st of STICKERS) {
+    const has = hasSticker(st.id), li = LEVELS.findIndex(l => l.id === st.id), open = li >= 0 && li + 1 <= save.unlocked;
+    const cell = document.createElement('div'); cell.className = 'album-cell' + (has ? '' : ' miss');
+    const cv = document.createElement('canvas'); cv.width = 112; cv.height = 112; const cc = cv.getContext('2d');
+    if (has) drawSticker(cc, st.k, 56, 56, 50);
+    else { cc.save(); cc.setLineDash([7, 7]); cc.strokeStyle = '#d8c4e4'; cc.lineWidth = 4; circ(cc, 56, 56, 46); cc.stroke(); cc.restore(); txt24(cc, '?', 56, 60, 40, '#c8b0d8', '#ffffff', 0); }
+    const sp = document.createElement('span'); sp.textContent = has ? st.name : open ? 'Схована в країні «' + LEVELS[li].name + '»' : 'Ще не знайдена';
+    cell.appendChild(cv); cell.appendChild(sp); grid.appendChild(cell);
+  }
+}
 function showMap() {
   mode = 'map'; Music.stop(); setPlayUi(false); show('scrMap');
   $('mapName').textContent = nameOf();
   const starSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.2 6.7.8-5 4.6 1.4 6.7L12 17.4l-6 3.4 1.4-6.7-5-4.6 6.7-.8z" fill="#ffcf2e" stroke="#c98200" stroke-width="1.5" stroke-linejoin="round"/></svg>';
   $('recordPill').innerHTML = starSvg + 'Рекорд: ' + (save.record || 0);
+  $('btnAlbum').textContent = 'Альбом наліпок ' + STICKERS.filter(st => hasSticker(st.id)).length + '/' + STICKERS.length;
   const host = $('worlds'); host.innerHTML = '';
   const cur = Math.min(LEVELS.length - 1, save.unlocked - 1), curPart = Math.floor(cur / 5), nParts = Math.ceil(LEVELS.length / 5);
   mapOpen.add(curPart); if (G) mapOpen.add(Math.floor(G.idx / 5));
@@ -543,7 +560,8 @@ function showWin() {
   if (i === 109) { $('winTitle').textContent = 'Сова Ухнюшка виспалась і повернула зірочки!'; $('winText').textContent = 'А в Місті всі чекають посилок. Тільки Цуцик Гавчик розгриз коробки, і зірочки розсипалися по всьому місту: на пошті, в пожежній частині й на будмайданчику. Треба все зібрати! Наступна країна: ' + LEVELS[110].name + '.'; }
   if (i === 144) { $('winTitle').textContent = 'Гусак Шипун перестав шипіти!'; $('winText').textContent = 'А надворі вже випав сніг! Далі — зимове свято: зліпити сніговика, вгадати, хто як говорить, і чия це тінь. А на ювілейному сотому п’ятдесятому рівні чекає Сніговик Хрумко. Наступна країна: ' + LEVELS[145].name + '.'; }
   if (i === 159) { $('winTitle').textContent = 'Хмара Буркотуха усміхнулася веселкою!'; $('winText').textContent = 'Далі — таємниці й погоні: день і ніч, що міняються щохвилинки, несправжні стіни з таємними ходами, велика хвиля й злива, що наздоганяють. А в бамбуковому гаю чекає Панда Бамбуся з ракеткою. Наступна країна: ' + LEVELS[160].name + '.'; }
-  if (i === 164 && !LEVELS[165]) { $('winTitle').textContent = 'Панда Бамбуся тепер грає по-доброму!'; $('winText').textContent = 'Ти пройшла сто шістдесят п’ять країн! Єдиноріжка пишається тобою. Далі буде ще більше пригод!'; }
+  if (i === 164) { $('winTitle').textContent = 'Панда Бамбуся тепер грає по-доброму!'; $('winText').textContent = 'Далі — перегони й тіні: зайчик Шустрик кличе наввипередки, тінь-подружка натискає чарівні кнопки, а в кожній країні схована наліпка для альбому. У цирку чекає Кролик Фокус-Покус зі своїми капелюхами. Наступна країна: ' + LEVELS[165].name + '.'; }
+  if (i === 169 && !LEVELS[170]) { $('winTitle').textContent = 'Кролик Фокус-Покус тепер показує добрі фокуси!'; $('winText').textContent = 'Ти пройшла сто сімдесят країн! Єдиноріжка пишається тобою. Далі буде ще більше пригод!'; }
   if (i === 154) { $('winTitle').textContent = 'Крокодильчик Буквоїд повернув букви!'; $('winText').textContent = 'Далі — пригоди без меж: повітряні змії, вагонетки, гірки, батути й колеса огляду, а в небі бурчить Хмара Буркотуха. Наступна країна: ' + LEVELS[155].name + '.'; }
   if (i === 149 && LEVELS[150]) { $('winTitle').textContent = 'Ура! 150 рівнів!'; $('winText').textContent = 'Сніговик Хрумко переможений, і ти пройшла аж сто п’ятдесят рівнів! А пригоди тривають: далі — абетка й порядок, а за ними ховається Крокодильчик Буквоїд. Наступна країна: ' + LEVELS[150].name + '.'; }
   else   if (i === 149) { $('winTitle').textContent = 'Ура! 150 рівнів!'; $('winText').textContent = 'Сніговик Хрумко переможений, і ти пройшла аж сто п’ятдесят рівнів! Єдиноріжка пишається тобою. Далі буде ще більше пригод!'; }
@@ -572,6 +590,9 @@ function showWin() {
   if (i === 24) { $('winTitle').textContent = 'Медуза Желейка подобрішала!'; $('winText').textContent = 'Але Робот Брязкало забирає всі зірочки на свою фабрику. Треба його зупинити! Наступна країна: ' + LEVELS[25].name + '.'; }
   if (i === 9) { $('winTitle').textContent = 'Пан Колючка тепер добрий!'; $('winText').textContent = 'Але Дракон Чхун застудився, і його «Апчхи!» розвіяло зірочки по нових країнах. Наступна країна: ' + LEVELS[10].name + '.'; }
   $('sStars').textContent = G.points; $('sRain').textContent = G.rainbows; $('sFoes').textContent = G.defeated;
+  { const st = stickerOf(LEVELS[i].id), box = $('stStick');
+    box.hidden = !st; box.parentElement.classList.toggle('four', !!st);
+    if (st) { const cv = $('sStick'), cc = cv.getContext('2d'); cc.clearRect(0, 0, 68, 68); if (hasSticker(st.id)) drawSticker(cc, st.k, 34, 34, 30); else { cc.save(); cc.setLineDash([5, 5]); cc.strokeStyle = '#c8b0d8'; cc.lineWidth = 3; circ(cc, 34, 34, 28); cc.stroke(); cc.restore(); txt24(cc, '?', 34, 36, 26, '#b49ac8', '#ffffff', 0); } } }
   show('scrWin');
 }
 function showLose() {
@@ -605,6 +626,8 @@ $('btnGo').onclick = () => {
   save.profile.name = nm; writeSave(); Snd.init(); showMap();
 };
 $('btnEdit').onclick = showCreate;
+$('btnAlbum').onclick = showAlbum;
+$('btnAlbumBack').onclick = showMap;
 $('btnPause').onclick = pauseGame;
 $('btnSound').onclick = toggleSound;
 $('btnSound2').onclick = toggleSound;

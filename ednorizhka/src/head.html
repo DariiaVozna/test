@@ -131,6 +131,15 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
 .modal p { margin: 0; font-size: 17px; line-height: 1.45; color: var(--ink-2); }
 .modal .btns { display: flex; flex-direction: column; gap: 12px; }
 .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.stats.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.stat canvas { width: 34px; height: 34px; display: block; margin: 0 auto; }
+.modal.album { max-height: 94vh; overflow-y: auto; }
+.album-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.album-cell { background: #fff4fa; border: 2px solid var(--line); border-radius: 16px; padding: 6px 4px 8px; text-align: center; }
+.album-cell canvas { width: 56px; height: 56px; display: block; margin: 0 auto 4px; }
+.album-cell span { display: block; font: 800 12px/1.2 var(--f-body); color: var(--ink); }
+.album-cell.miss span { color: #9a86b0; font-weight: 700; }
+@media (max-width: 560px) { .album-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .stat { background: #fff4fa; border: 2px solid var(--line); border-radius: 16px; padding: 10px 6px; }
 .stat b { display: block; font-size: 26px; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--ink); }
 .stat span { font-size: 12px; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); }
@@ -220,6 +229,7 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
           <div class="mh-row">
             <span class="pill" id="recordPill"></span>
             <button class="btn ghost" id="btnEdit" type="button">Змінити єдиноріжку</button>
+            <button class="btn ghost" id="btnAlbum" type="button">Альбом наліпок</button>
           </div>
         </div>
       </div>
@@ -250,6 +260,7 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
         <div class="stat"><b id="sStars">0</b><span>зірочок</span></div>
         <div class="stat"><b id="sRain">0</b><span>веселкових</span></div>
         <div class="stat"><b id="sFoes">0</b><span>переможено</span></div>
+        <div class="stat" id="stStick" hidden><b><canvas id="sStick" width="68" height="68" aria-hidden="true"></canvas></b><span>наліпка</span></div>
       </div>
       <div class="btns">
         <button class="btn big" id="btnNext" type="button">Далі</button>
@@ -270,6 +281,14 @@ body { background: var(--night); color: var(--ink); font-family: var(--f-body); 
     </div>
   </section>
 
+  <section id="scrAlbum" class="screen veil" hidden aria-label="Альбом наліпок">
+    <div class="modal card album">
+      <h2>Альбом наліпок</h2>
+      <p id="albumText"></p>
+      <div class="album-grid" id="albumGrid"></div>
+      <div class="btns"><button class="btn big" id="btnAlbumBack" type="button">До мапи</button></div>
+    </div>
+  </section>
   <section id="scrFinal" class="screen veil" hidden aria-label="Перемога">
     <div class="modal card">
       <h2>Усі країни врятовано!</h2>

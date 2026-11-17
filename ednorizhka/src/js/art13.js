@@ -176,6 +176,7 @@ function drawLetterTile(c, l, t) {
 }
 function drawHud9(c, x, top, H) {
   if (G.dnBlocks && G.dnBlocks.length) { drawDnHud(c, x, top, H); return; }
+  if (G.races && G.races.some(r => r.state === 'run')) { drawRaceHud(c, x, top, H); return; }
   if (!G.letters.length) return;
   const n = G.letters.length, cw = 22, w = n * cw + 20;
   hudPill(c, x, top, w, H, G.letters.every(l => l.got) ? 'rgba(255,246,200,.95)' : null);
