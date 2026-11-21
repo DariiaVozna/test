@@ -6443,7 +6443,7 @@ const LEVELS = [
       L.block(23, 0, 2, 4); L.row(23, 6, 2);
       L.arc(27, 5, 3, 1);
       L.block(31, 7, 2, 5); L.row(31, 5, 2);
-      L.rainbow(35, 4); L.sticker(36, 1);
+      L.rainbow(35, 4); L.sticker(30, 3);
       L.block(39, 0, 2, 3); L.block(39, 9, 2, 3); L.row(39, 6, 2);
       L.arc(43, 5, 4, 1);
       L.ground(48, 64);
@@ -6552,6 +6552,204 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 35: Костюми й бульбашки ===== */
+  {
+    id: 'catroofs', theme: 'catroofs', name: 'Котячі дахи', blurb: 'Костюм котика, високі стіни, дахи й канатна дорога', w: 200,
+    build(L) {
+      L.sign(3, 'Котячі дахи! Тут дуже високі стіни. Вдягни костюм котика — і видряпаєшся будь-куди');
+      L.row(5, 9, 3);
+      L.ground(0, 80);
+      L.power('magnet', 9, 8);
+      L.wardrobe(13, 'cat');
+      L.sign(16, 'Біля стіни тримай стрілку до неї й тисни «Стрибок» ще й ще. Котик дряпається вгору!');
+      L.block(22, 3, 2, 7); L.row(22, 2, 2); L.rainbow(26, 5);
+      L.row(27, 9, 3);
+      L.enemy('mouse', 31, 10);
+      L.block(35, 4, 3, 6); L.row(35, 3, 3);
+      L.qblock(41, 6, 'star5'); L.qblock(42, 6, 'rainbow');
+      L.enemy('bird', 46, 6);
+      L.check(49);
+      L.block(53, 2, 2, 8); L.row(53, 1, 2);
+      L.block(58, 3, 3, 1); L.row(58, 2, 3);
+      L.block(63, 3, 3, 1); L.sticker(64, 2);
+      L.enemy('mouse', 70, 10);
+      L.row(74, 9, 3);
+      L.arc(80, 7, 4, 2);
+      L.ground(84, 128);
+      L.block(84, 3, 2, 7); L.row(84, 2, 2);
+      L.check(92);
+      L.enemy('bird', 96, 5);
+      L.block(100, 5, 2, 5); L.row(100, 4, 2);
+      L.block(104, 2, 2, 8); L.row(104, 1, 2); L.rainbow(107, 4);
+      L.qblock(112, 6, 'shield'); L.qblock(113, 6, 'star5');
+      L.enemy('mouse', 117, 10);
+      L.sign(120, 'Видряпайся на вежу — звідти канатна дорога!');
+      L.block(124, 3, 6, 7);
+      L.zip(126, 146, 3, 8);
+      L.ground(143, 200, 8);
+      L.check(148);
+      L.enemy('mouse', 153, 8);
+      L.qblock(157, 4, 'candy');
+      L.block(162, 3, 2, 5); L.row(162, 2, 2); L.rainbow(165, 4);
+      L.row(170, 7, 4);
+      L.enemy('bird', 178, 4);
+      L.row(184, 7, 3);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'frogpond', theme: 'frogpond', name: 'Жаб’яче болото', blurb: 'Костюм жабки, колоди на річці й таємний хід із ключиком', w: 200,
+    build(L) {
+      L.ground(0, 26);
+      L.sign(3, 'Жаб’яче болото! Вдягни костюм жабки — і стрибатимеш дуже-дуже високо');
+      L.row(5, 9, 3);
+      L.power('magnet', 9, 8);
+      L.wardrobe(13, 'frog');
+      L.sign(16, 'Жабка стрибає майже вдвічі вище й далі! Спробуй на цих пеньках');
+      L.block(20, 4, 2, 6); L.row(20, 3, 2);
+      L.arc(26, 5, 5, 3); L.rainbow(28, 2);
+      L.ground(31, 60);
+      L.enemy('frog', 36, 10);
+      L.block(41, 3, 2, 7); L.row(41, 2, 2);
+      L.qblock(46, 6, 'star5'); L.qblock(47, 6, 'rainbow');
+      L.enemy('dragonfly', 51, 5);
+      L.check(54);
+      L.cloud(57, 3, 3); L.row(57, 2, 3);
+      L.ground(60, 64, 8);
+      L.sign(61, 'Колоди пливуть за течією. Стрибай на колоду — і катайся!');
+      L.ground(64, 94, 11); L.river(64, 94, 8, 55); L.logs(64, 94, 8, 3, 50);
+      L.row(67, 6, 4); L.arc(73, 4, 5, 2); L.row(80, 6, 4); L.row(87, 3, 3);
+      L.enemy('leaper', 77, 8); L.enemy('leaper', 90, 8);
+      L.ground(94, 104, 8);
+      L.check(96);
+      L.ground(104, 152);
+      L.sign(106, 'Двері зачинені, а ключик десь у пагорбі. Пошукай таємний хід!');
+      L.ground(110, 120, 6); L.row(110, 5, 10);
+      L.secret(110, 7, 10, 3); L.key(113, 9); L.sticker(116, 8); L.rainbow(118, 8);
+      L.door(125);
+      L.enemy('beetle', 130, 10);
+      L.qblock(134, 6, 'shield');
+      L.check(138);
+      L.block(144, 3, 2, 7); L.row(144, 2, 2);
+      L.arc(152, 5, 5, 3); L.rainbow(154, 2);
+      L.ground(157, 200);
+      L.enemy('frog', 162, 10);
+      L.block(168, 4, 3, 6); L.row(168, 3, 3);
+      L.qblock(176, 6, 'candy');
+      L.row(182, 9, 4);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'ghosthouse', theme: 'ghosthouse', name: 'Будинок привидів', blurb: 'Костюм привидки, фіолетові стіни, ліхтарики й ліана', w: 200,
+    build(L) {
+      L.sign(3, 'Будинок привидів! Фіолетові стіни тут для привидів. Вдягни костюм привидки — і пройдеш крізь них');
+      L.row(5, 9, 3);
+      L.ground(0, 200);
+      L.power('magnet', 9, 8);
+      L.wardrobe(13, 'ghost');
+      L.gwall(19, 1, 9);
+      L.row(21, 9, 3);
+      L.enemy('ghost', 26, 6);
+      L.gwall(30, 1, 9, 2);
+      L.qblock(35, 6, 'star5'); L.qblock(36, 6, 'rainbow');
+      L.block(40, 4, 8, 1); L.gwall(40, 5, 5); L.gwall(47, 5, 5); L.row(42, 9, 4); L.rainbow(44, 7);
+      L.check(52);
+      L.sign(54, 'Ліхтарики! Влуч у них рогом — і вони засвітяться');
+      L.lantern(58, 5); L.lantern(62, 4); L.lantern(66, 5); L.row(57, 9, 10);
+      L.enemy('ghost', 70, 6);
+      L.vine(74, 3); L.cloud(75, 4, 4); L.row(75, 3, 4); L.rainbow(80, 2);
+      L.enemy('mouse', 84, 10);
+      L.check(88);
+      L.sign(92, 'Шафа з костюмом котика! Перевдягнися й видряпайся на стіну');
+      L.wardrobe(96, 'cat');
+      L.block(101, 2, 2, 8); L.row(101, 1, 2); L.rainbow(104, 4);
+      L.sign(109, 'А далі знову стіни привидів. Перевдягнися назад!');
+      L.wardrobe(113, 'ghost');
+      L.gwall(118, 1, 9); L.gwall(122, 1, 9);
+      L.block(127, 4, 7, 1); L.gwall(127, 5, 5); L.gwall(133, 5, 5); L.row(128, 9, 2); L.sticker(131, 8);
+      L.enemy('ghost', 139, 6);
+      L.qblock(143, 6, 'shield'); L.qblock(144, 6, 'star5');
+      L.check(150);
+      L.gwall(156, 1, 9);
+      L.enemy('mouse', 161, 10);
+      L.gwall(166, 1, 9, 2);
+      L.row(170, 9, 4);
+      L.qblock(177, 6, 'candy');
+      L.row(183, 9, 3);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'costumeparty', theme: 'costumeparty', name: 'Костюмована вечірка', blurb: 'Три костюми підряд і перегони зі Шустриком', w: 205,
+    build(L) {
+      L.sign(3, 'Костюмована вечірка! Тут три шафи з костюмами. Перевдягайся, коли треба');
+      L.row(5, 9, 3);
+      L.ground(0, 56);
+      L.power('magnet', 9, 8);
+      L.wardrobe(13, 'cat');
+      L.block(19, 3, 2, 7); L.row(19, 2, 2);
+      L.block(25, 2, 2, 8); L.row(25, 1, 2); L.rainbow(29, 4);
+      L.enemy('mouse', 33, 10);
+      L.qblock(37, 6, 'star5'); L.qblock(38, 6, 'rainbow');
+      L.check(42);
+      L.wardrobe(45, 'frog');
+      L.block(50, 3, 2, 7); L.row(50, 2, 2);
+      L.arc(56, 5, 5, 3); L.rainbow(58, 2);
+      L.ground(61, 130);
+      L.cloud(66, 3, 3); L.sticker(68, 2);
+      L.enemy('dragonfly', 72, 5);
+      L.check(76);
+      L.wardrobe(79, 'ghost');
+      L.gwall(85, 1, 9); L.gwall(90, 1, 9, 2);
+      L.block(96, 4, 7, 1); L.gwall(96, 5, 5); L.gwall(102, 5, 5); L.row(97, 9, 2); L.rainbow(99, 8);
+      L.enemy('ghost', 107, 6);
+      L.check(110);
+      L.sign(112, 'Шустрик теж прийшов на вечірку! Наввипередки до фінішу');
+      L.race(116, 166);
+      L.block(122, 8, 2, 2); L.row(122, 7, 2);
+      L.arc(129, 8, 5, 2);
+      L.ground(133, 205);
+      L.block(140, 7, 2, 3); L.row(140, 6, 2);
+      L.row(146, 9, 4);
+      L.block(156, 8, 3, 2); L.row(156, 7, 3);
+      L.qblock(171, 6, 'candy');
+      L.enemy('bird', 176, 6);
+      L.row(182, 9, 4);
+      L.gate(196);
+    }
+  },
+  {
+    id: 'soapfactory', theme: 'soapfactory', name: 'Мильна фабрика', blurb: 'Битва з Мильним Бульбахом', w: 175, boss: 'soapy',
+    build(L) {
+      L.ground(0, 26);
+      L.sign(3, 'Мильна фабрика! Бульбашки-платформи тримають недовго — стрибай з них далі');
+      L.row(7, 9, 3);
+      L.power('magnet', 5, 8);
+      L.bubble(11, 7); L.star(11, 6); L.bubble(14, 5); L.star(14, 4); L.bubble(17, 3); L.star(17, 2); L.rainbow(20, 2);
+      L.enemy('bee', 22, 7);
+      L.bubble(29, 9);
+      L.ground(30, 175);
+      L.check(33);
+      L.wardrobe(36, 'frog');
+      L.sign(38, 'Костюм жабки! Тут стоять високі пральні машини');
+      L.block(43, 4, 2, 6); L.row(43, 3, 2);
+      L.block(49, 3, 2, 7); L.row(49, 2, 2);
+      L.qblock(54, 6, 'star5'); L.qblock(55, 6, 'rainbow');
+      L.enemy('mouse', 58, 10);
+      L.check(62);
+      L.sign(64, 'Стіна з бульбашок… А може, у ній є таємний хід?');
+      L.ground(68, 78, 5); L.secret(68, 7, 10, 3); L.row(69, 9, 3); L.sticker(73, 8); L.rainbow(76, 8);
+      L.enemy('bee', 84, 6);
+      L.bubble(90, 6); L.star(90, 5); L.rainbow(93, 3);
+      L.qblock(100, 6, 'shield');
+      L.enemy('mouse', 106, 10);
+      L.row(110, 9, 4);
+      L.sign(116, 'Мильний Бульбах! Влучай рогом у бульбашки або стрибай на них. Великі розпадаються на менші');
+      L.power('candy', 122, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -6618,6 +6816,11 @@ const DECOR = {
   balloonvalley: (R, x, y) => DECOR.kites(R, x, y),
   snowrace: (R, x, y) => DECOR.sledtrack(R, x, y),
   magicshow: (R, x, y) => DECOR.circus(R, x, y),
+  catroofs: (R, x, y) => DECOR.climbwall(R, x, y),
+  frogpond: (R, x, y) => DECOR.pond(R, x, y),
+  ghosthouse: (R, x, y) => DECOR.attic(R, x, y),
+  costumeparty: (R, x, y) => DECOR.partyhall(R, x, y),
+  soapfactory: (R, x, y) => DECOR.laundry(R, x, y),
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -6734,7 +6937,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [], races: [], twins: [], splates: [], sgates: [], stickers: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [], races: [], twins: [], splates: [], sgates: [], stickers: [], wardrobes: [], gwalls: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -7074,6 +7277,8 @@ function buildLevel(idx) {
     splate(x) { const id = (L.plateN = (L.plateN || 0) + 1) - 1; later.push(() => L.splates.push({ x, gy: groundY(x), id })); },
     sgate(x) { for (let y = 1; y < 10; y++) set(x, y, 2); L.sgates.push({ x, plate: (L.plateN || 0) - 1 }); },
     sticker(x, row) { L.stickers.push({ x: x * T + 12, y: row * T + 12 }); },
+    wardrobe(x, k) { later.push(() => L.wardrobes.push({ x, k, gy: groundY(x) })); },
+    gwall(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) { set(x + i, y, 2); L.gwalls.push({ x: x + i, y }); } },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

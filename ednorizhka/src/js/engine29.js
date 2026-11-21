@@ -35,6 +35,7 @@ function initLevel29(G, L) {
   G.sgates = (L.sgates || []).map(g => Object.assign({ open: false }, g));
   const def = G.def || {}, st = stickerOf(def.id);
   G.stickers = (L.stickers || []).map(s => ({ x: s.x, y: s.y, k: st ? st.k : 'medal', name: st ? st.name : '', got: false, had: hasSticker(def.id) }));
+  initLevel30(G, L);
 }
 
 /* ===== Перегони із зайчиком Шустриком ===== */
@@ -151,6 +152,7 @@ function update29(dt) {
   updateRaces(dt);
   updateTwin(dt); updateTwinGates0(dt);
   updateStickers(dt);
+  update30(dt);
 }
 
 /* ===== Кролик Фокус-Покус: ховається під одним із трьох капелюхів і перемішує їх ===== */

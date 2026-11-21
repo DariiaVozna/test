@@ -72,7 +72,7 @@ function drawSticker(c, k, x, y, r) {
     c.fillStyle = INK; circ(c, -2.2, -2, 1); c.fill(); circ(c, 2.2, -2, 1); c.fill();
     c.fillStyle = '#2a2438'; rr(c, -10, 4, 20, 9, 2); c.fill(); c.stroke(); rr(c, -13, 3, 26, 3, 1.5); c.fill(); c.stroke();
     c.fillStyle = '#ff4f5e'; c.fillRect(-10, 7, 20, 2.4);
-  }
+  } else drawSticker34(c, k);
   c.restore();
 }
 function drawStickerItem(c, s, t) {
@@ -190,6 +190,7 @@ function drawWorld33(c, t, vis) {
   if (G.twin) drawTwin(c, G.twin, t);
   if (G.stickers) for (const s of G.stickers) if (vis(s.x)) drawStickerItem(c, s, t);
   if (G.races) for (const r of G.races) if (vis(r.b.x)) drawRacer(c, r, t);
+  drawWorld34(c, t, vis);
 }
 
 /* ===== Кролик Фокус-Покус ===== */

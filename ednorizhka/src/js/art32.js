@@ -90,6 +90,7 @@ function drawOver32(c, P, t) {
     if (!s.found) { const k = (t * 0.9 + s.x * 0.37) % 2.2; if (k < 0.7) { const a = 1 - Math.abs(k - 0.35) / 0.35; c.save(); c.globalAlpha = a; sparkle(c, s.x * T + 5, (s.y + s.h - 0.7) * T, 3.4, '#ffffff'); sparkle(c, s.x * T + 9, (s.y + s.h - 1.6) * T, 2.2, '#ffe14d'); c.restore(); } }
   }
   if (G.chases) for (const ch of G.chases) if (ch.state !== 'wait') drawChase(c, ch, t);
+  drawOver34(c, P, t);
 }
 function waveEyes(c, x, y, t, col) {
   const bl = (t % 3.2) < 0.12;
