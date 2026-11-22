@@ -25,6 +25,7 @@ function initLevel30(G, L) {
   G.wardrobes = (L.wardrobes || []).map(w => Object.assign({ used: 0 }, w));
   G.gwalls = (L.gwalls || []).slice(); G.gwOpen = false; G.gwPending = [];
   G.P.costume = null; G.P.catCling = false; G.P.frogJ = false;
+  initLevel31(G, L);
 }
 
 /* ===== Стіни привидів: тверді для всіх, крім єдиноріжки в костюмі привидки ===== */
@@ -74,6 +75,7 @@ function updateCostumes(dt) {
 
 function update30(dt) {
   updateCostumes(dt);
+  update31(dt);
 }
 
 /* ===== Мильний Бульбах: велика бульбашка, що розпадається на менші ===== */

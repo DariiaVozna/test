@@ -6750,6 +6750,175 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  /* ===== Частина 36: Ящики й сова ===== */
+  {
+    id: 'cratefarm', theme: 'cratefarm', name: 'Ферма з ящиками', blurb: 'Ящики-сходинки, кнопка під ящик, вагонетка й маятники', w: 200,
+    build(L) {
+      L.sign(3, 'Ферма з ящиками! Ящик можна штовхати: підійди й тисни стрілку. А ще тут сховано чотири шматочки пазла');
+      L.row(5, 9, 3);
+      L.ground(0, 80);
+      L.power('magnet', 9, 8);
+      L.piece(12, 6);
+      L.sign(15, 'Високий уступ! Підсунь ящик до стінки — і залізь по ньому');
+      L.crate(18, 9, 22);
+      L.ground(23, 33, 5); L.row(24, 4, 8); L.rainbow(28, 2); L.piece(31, 3);
+      L.enemy('mouse', 37, 10);
+      L.qblock(40, 6, 'star5'); L.qblock(41, 6, 'rainbow');
+      L.check(45);
+      L.sign(47, 'Кнопка далеко від воріт. Посунь на неї ящик — і ворота не зачиняться');
+      L.crate(50, 9, 54); L.bplate(54); L.bgate(61);
+      L.row(56, 9, 3); L.piece(58, 7);
+      L.enemy('bird', 66, 6);
+      L.check(70);
+      L.sign(72, 'Заходь у вагонетку — вона перевезе через прірву!');
+      L.cart(74, 91); L.row(81, 8, 6);
+      L.ground(88, 200);
+      L.enemy('mouse', 96, 10);
+      L.crate(100, 9, 104); L.rainbow(104, 3);
+      L.pendulum(112, 0, 9.2, 0.9, 2.4); L.pendulum(118, 0, 9.2, 0.9, 2.4, 1.6);
+      L.row(111, 9, 3); L.row(117, 9, 3);
+      L.check(124);
+      L.qblock(128, 6, 'shield');
+      L.crate(132, 9, 137);
+      L.ground(138, 150, 5); L.row(139, 4, 9); L.piece(148, 3);
+      L.enemy('bunny', 156, 10);
+      L.qblock(162, 6, 'candy');
+      L.row(170, 9, 4);
+      L.enemy('bird', 178, 6);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'owlwatch', theme: 'owlwatch', name: 'Ліс Сови-сторожа', blurb: 'Сова-сторож, ліана, маятники й таємний хід', w: 200,
+    build(L) {
+      L.sign(3, 'Ліс Сови-сторожа! Поки сова спить — іди. Коли розплющує очі — завмри й не стрибай. Світлофор угорі підкаже');
+      L.row(5, 9, 3);
+      L.ground(0, 200);
+      L.power('magnet', 9, 8);
+      L.piece(12, 6);
+      L.owlwatch(16, 36); L.row(18, 9, 6); L.row(27, 9, 5);
+      L.check(39);
+      L.qblock(42, 6, 'star5'); L.qblock(43, 6, 'rainbow');
+      L.enemy('hedgehog', 47, 10);
+      L.vine(52, 3); L.cloud(53, 4, 4); L.row(53, 3, 4); L.rainbow(58, 2);
+      L.check(62);
+      L.owlwatch(66, 90); L.block(74, 8, 2, 2); L.row(74, 7, 2); L.piece(79, 8); L.block(83, 8, 2, 2); L.row(83, 7, 2);
+      L.check(93);
+      L.enemy('moth', 97, 7);
+      L.pendulum(102, 0, 9.2, 0.9, 2.4); L.pendulum(108, 0, 9.2, 0.9, 2.4, 1.6);
+      L.row(101, 9, 3); L.row(107, 9, 3);
+      L.qblock(114, 6, 'shield');
+      L.check(118);
+      L.owlwatch(122, 150); L.row(124, 9, 4);
+      L.ground(132, 140, 6); L.row(132, 5, 8); L.secret(132, 7, 8, 3); L.piece(136, 8); L.rainbow(138, 8);
+      L.row(143, 9, 4);
+      L.check(153);
+      L.enemy('frog', 158, 10);
+      L.qblock(164, 6, 'candy');
+      L.row(168, 9, 3); L.piece(172, 7);
+      L.enemy('moth', 176, 7);
+      L.rainbow(181, 5);
+      L.row(184, 9, 3);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'icecrates', theme: 'icecrates', name: 'Крижаний склад', blurb: 'Ящики ковзають по льоду, кнопка, маятники', w: 200,
+    build(L) {
+      L.sign(3, 'Крижаний склад! Тут слизько, а ящики на льоду ковзають, аж поки в щось не вдаряться');
+      L.row(5, 9, 3);
+      L.ground(0, 200);
+      L.power('magnet', 9, 8);
+      L.piece(12, 6);
+      L.crate(16, 9, 27);
+      L.ground(28, 38, 5); L.row(29, 4, 9); L.rainbow(33, 2); L.piece(37, 3);
+      L.enemy('penguin', 42, 10);
+      L.qblock(45, 6, 'star5'); L.qblock(46, 6, 'rainbow');
+      L.check(49);
+      L.sign(51, 'Кнопка! Ящик проїде по льоду й зупиниться об стовпчик — якраз на кнопці');
+      L.crate(54, 9, 60); L.bplate(60); L.block(61, 9, 1, 1); L.bgate(68);
+      L.row(63, 9, 3); L.piece(65, 7);
+      L.check(71);
+      L.enemy('seal', 76, 10);
+      L.pendulum(82, 0, 9.2, 0.9, 2.4); L.pendulum(88, 0, 9.2, 0.9, 2.4, 1.6);
+      L.row(81, 9, 3); L.row(87, 9, 3);
+      L.qblock(94, 6, 'shield');
+      L.check(98);
+      L.sign(100, 'Стіна зависока! Штовхни ящик — він доїде до неї, і стане сходинкою');
+      L.crate(104, 9, 113); L.rainbow(113, 3); L.block(114, 5, 1, 5);
+      L.row(116, 9, 3);
+      L.enemy('penguin', 122, 10);
+      L.check(128);
+      L.qblock(134, 6, 'candy');
+      L.crate(140, 9, 149);
+      L.ground(150, 160, 5); L.row(151, 4, 9); L.piece(158, 3);
+      L.enemy('seal', 166, 10);
+      L.row(172, 9, 4);
+      L.enemy('owl', 180, 4);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'nightmuseum', theme: 'nightmuseum', name: 'Нічний музей', blurb: 'Сова-сторож, ящики, кнопка й таємний хід', w: 200,
+    build(L) {
+      L.sign(3, 'Нічний музей! Сова-сторож охороняє експонати, а ящики допоможуть дістатися високих полиць');
+      L.row(5, 9, 3);
+      L.ground(0, 200);
+      L.power('magnet', 9, 8);
+      L.piece(12, 6);
+      L.owlwatch(16, 34); L.row(19, 9, 4); L.row(27, 9, 4);
+      L.check(37);
+      L.crate(41, 9, 46);
+      L.ground(47, 56, 5); L.row(48, 4, 8); L.rainbow(51, 2); L.piece(55, 3);
+      L.qblock(60, 6, 'star5'); L.qblock(61, 6, 'rainbow');
+      L.enemy('ghost', 65, 6);
+      L.check(69);
+      L.sign(71, 'Стіна музею… А може, у ній є таємний хід?');
+      L.ground(75, 85, 5); L.secret(75, 7, 10, 3); L.row(76, 9, 3); L.piece(80, 8); L.rainbow(83, 8);
+      L.enemy('mouse', 90, 10);
+      L.check(94);
+      L.owlwatch(98, 124); L.crate(104, 9, 108); L.bplate(108); L.bgate(116); L.row(110, 9, 3); L.row(118, 9, 4);
+      L.check(127);
+      L.qblock(130, 6, 'shield');
+      L.enemy('ghost', 134, 6);
+      L.pendulum(140, 0, 9.2, 0.9, 2.4); L.pendulum(146, 0, 9.2, 0.9, 2.4, 1.6);
+      L.row(139, 9, 3); L.row(145, 9, 3);
+      L.check(152);
+      L.piece(158, 6);
+      L.qblock(164, 6, 'candy');
+      L.enemy('mouse', 170, 10);
+      L.row(176, 9, 4);
+      L.gate(194);
+    }
+  },
+  {
+    id: 'robohome', theme: 'robohome', name: 'Дім пилососа', blurb: 'Битва з Роботом-пилососом Хрумчиком', w: 175, boss: 'vacuum',
+    build(L) {
+      L.ground(0, 24);
+      L.sign(3, 'Іграшковий дім! Тут живе Робот-пилосос Хрумчик. Шматочки пазла сховані по всьому дому');
+      L.row(5, 9, 3);
+      L.power('magnet', 9, 8);
+      L.piece(12, 6);
+      L.pumpBridge(16, 24, 32, 10); L.arc(25, 7, 6, 2);
+      L.ground(32, 175);
+      L.check(34);
+      L.crate(38, 9, 43);
+      L.ground(44, 52, 5); L.row(45, 4, 7); L.rainbow(48, 2); L.piece(51, 3);
+      L.enemy('mouse', 56, 10);
+      L.qblock(60, 6, 'star5'); L.qblock(61, 6, 'rainbow');
+      L.check(65);
+      L.crate(68, 9, 72); L.bplate(72); L.bgate(79); L.piece(76, 7);
+      L.enemy('bouncer', 84, 10);
+      L.sign(88, 'Стіна з кубиків… А може, у ній є таємний хід?');
+      L.ground(92, 102, 5); L.secret(92, 7, 10, 3); L.row(93, 9, 3); L.piece(97, 8); L.rainbow(100, 8);
+      L.qblock(108, 6, 'shield');
+      L.enemy('mouse', 112, 10);
+      L.row(115, 9, 4);
+      L.sign(120, 'Робот-пилосос Хрумчик! Коли він засмоктує — влуч рогом у трубу. Подавиться — стрибай на нього');
+      L.power('candy', 124, 8);
+      L.arena(129, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -6821,6 +6990,11 @@ const DECOR = {
   ghosthouse: (R, x, y) => DECOR.attic(R, x, y),
   costumeparty: (R, x, y) => DECOR.partyhall(R, x, y),
   soapfactory: (R, x, y) => DECOR.laundry(R, x, y),
+  cratefarm: (R, x, y) => DECOR.farm(R, x, y),
+  owlwatch: (R, x, y) => DECOR.owlwood(R, x, y),
+  icecrates: (R, x, y) => DECOR.ice(R, x, y),
+  nightmuseum: (R, x, y) => DECOR.observatory(R, x, y),
+  robohome: (R, x, y) => DECOR.toys(R, x, y),
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -6937,7 +7111,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [], races: [], twins: [], splates: [], sgates: [], stickers: [], wardrobes: [], gwalls: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [], races: [], twins: [], splates: [], sgates: [], stickers: [], wardrobes: [], gwalls: [], crates: [], bplates: [], bgates: [], owls: [], pieces: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -7279,6 +7453,11 @@ function buildLevel(idx) {
     sticker(x, row) { L.stickers.push({ x: x * T + 12, y: row * T + 12 }); },
     wardrobe(x, k) { later.push(() => L.wardrobes.push({ x, k, gy: groundY(x) })); },
     gwall(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) { set(x + i, y, 2); L.gwalls.push({ x: x + i, y }); } },
+    crate(x, row, goal) { set(x, row, 2); L.crates.push({ x, y: row, goal }); },
+    bplate(x) { const id = (L.bplateN = (L.bplateN || 0) + 1) - 1; later.push(() => L.bplates.push({ x, row: Math.round(groundY(x) / T), id })); },
+    bgate(x) { for (let y = 1; y < 10; y++) set(x, y, 2); L.bgates.push({ x, plate: (L.bplateN || 0) - 1 }); },
+    owlwatch(x0, x1) { later.push(() => L.owls.push({ x0, x1, gy: groundY(x0 - 1) })); },
+    piece(x, row) { L.pieces.push({ x: x * T + 12, y: row * T + 12 }); },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

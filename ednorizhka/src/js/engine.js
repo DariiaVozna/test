@@ -435,6 +435,7 @@ function updateBoss(dt) {
   if (B.kind === 'panda') return updatePandaBoss(dt);
   if (B.kind === 'hatrabbit') return updateHatBoss(dt);
   if (B.kind === 'soapy') return updateSoapBoss(dt);
+  if (B.kind === 'vacuum') return updateVacuumBoss(dt);
   if (B.kind === 'wizard') return updateWizardBoss(dt);
   if (B.kind === 'medusa') return updateMedusaBoss(dt);
   if (B.kind === 'robot') return updateRobotBoss(dt);

@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'art27.js', 'art28.js', 'art29.js', 'art30.js', 'art31.js', 'art32.js', 'art33.js', 'art34.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js', 'engine23.js', 'engine24.js', 'engine25.js', 'engine26.js', 'engine27.js', 'engine28.js', 'engine29.js', 'engine30.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'art27.js', 'art28.js', 'art29.js', 'art30.js', 'art31.js', 'art32.js', 'art33.js', 'art34.js', 'art35.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js', 'engine23.js', 'engine24.js', 'engine25.js', 'engine26.js', 'engine27.js', 'engine28.js', 'engine29.js', 'engine30.js', 'engine31.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -307,6 +307,14 @@ function runLevel(idx, maxT) {
       In.right = pcxB() < sx - 3; In.left = pcxB() > sx + 3; In.jumpP = false;
       if (P.onGround && Math.abs(pcxB() - sx) <= 3 && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.5; }
     }
+    // ящики: штовхаємо до потрібного місця й не стрибаємо на них, поки не доїдуть
+    if (G.crates.length && P.onGround) {
+      const ax = Math.floor((P.x + P.w + 1) / T), fy = Math.floor((P.y + P.h - 4) / T);
+      if (G.crates.some(c => c.goal != null && c.y === fy && c.x < c.goal && c.x * T - (P.x + P.w) > -2 && c.x * T - (P.x + P.w) < 36)) { In.right = true; In.left = false; In.jumpP = false; In.jump = false; }
+      if (G.crates.some(c => c.goal != null && c.x !== c.goal && (c.slide || c.ox) && c.x * T > P.x && c.x * T - P.x < 8 * T)) { In.right = false; In.jumpP = false; In.jump = false; }
+    }
+    // сова-сторож: коли не спить або от-от прокинеться — завмираємо
+    { const pc = P.x + P.w / 2, ow = G.owls.find(o => !o.done && pc > o.x0 * T - T && pc < o.x1 * T); if (ow && (ow.ph !== 'green' || ow.left < 0.8)) { In.left = In.right = false; In.jumpP = false; In.jump = false; } }
     // котик чіпляється за стіну — дряпаємось далі
     if (P.costume === 'cat' && P.catCling) { In.jumpP = true; In.jump = true; }
     // сонячні й місячні містки: на краю чекаємо, поки місток попереду з'явиться й простоїть, доки його перебіжимо
@@ -392,7 +400,15 @@ function fightBoss(idx) {
         else if (Math.abs(dx) > 220) { In.right = dx > 0; In.left = dx < 0; }
         if (i % 9 === 0) fire(false);
       }
-      if (i % 10 === 0 && B.kind !== 'hatrabbit' && B.kind !== 'soapy') fire(false);
+      // пилосос: у роумінгу перестрибуємо, коли засмоктує — стріляємо в трубу й не підходимо близько, коли подавився — стрибаємо на нього
+      if (B.kind === 'vacuum') {
+        In.left = In.right = false;
+        const d = B.x - pcx, ad = Math.abs(d);
+        if (B.state === 'choke') { if (ad > 8) { In.right = d > 0; In.left = d < 0; } if (ad < 46 && P.onGround) { In.jumpP = true; In.jump = true; } }
+        else if (B.state === 'suck' || B.state === 'aim') { if (ad < 120) { In.left = d > 0; In.right = d < 0; } P.dir = d > 0 ? 1 : -1; if (i % 9 === 0) fire(false); }
+        else if (ad < 85 && P.onGround) { In.jumpP = true; In.jump = true; }
+      }
+      if (i % 10 === 0 && B.kind !== 'hatrabbit' && B.kind !== 'soapy' && B.kind !== 'vacuum') fire(false);
       if (!P.onGround && P.vy < 0) In.jump = true;
     } else if (!G.bossActive) In.right = true;
     else { if (G.gate.x > pcx) In.right = true; else In.left = true; }

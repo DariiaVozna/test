@@ -50,7 +50,7 @@ function drawSticker34(c, k) {
     c.fillStyle = '#ffffff'; ell(c, -5, -5, 3, 1.8, -0.6); c.fill();
     c.fillStyle = INK; circ(c, -3, 1, 1.3); c.fill(); circ(c, 3, 1, 1.3); c.fill();
     c.strokeStyle = INK; c.lineWidth = 1; c.beginPath(); c.arc(0, 3.5, 2, 0.2, Math.PI - 0.2); c.stroke();
-  }
+  } else drawSticker35(c, k);
 }
 
 /* ===== Шафа з костюмом ===== */
@@ -89,6 +89,7 @@ function drawGhostWall(c, b, t) {
 function drawWorld34(c, t, vis) {
   if (G.gwalls) for (const b of G.gwalls) if (vis(b.x * T + 12)) drawGhostWall(c, b, t);
   if (G.wardrobes) for (const w of G.wardrobes) if (vis(w.x * T + 12)) drawWardrobe(c, w, t);
+  drawWorld35(c, t, vis);
 }
 
 /* ===== Костюм поверх єдиноріжки ===== */
