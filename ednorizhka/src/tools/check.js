@@ -416,14 +416,27 @@ function fightBoss(idx) {
   }
   return { idx, boss: B.name, done: G.done, beaten: B.dead, t: +t.toFixed(1) };
 }
+// Аргументи: номери рівнів з 1 (через кому, з діапазонами: 176-180) і/або --smoke
+const args = process.argv.slice(2), smoke = args.includes('--smoke');
+const want = args.filter(a => a !== '--smoke').join(',').split(',').filter(Boolean).flatMap(p => { const m = p.split('-').map(Number); return m.length > 1 ? Array.from({ length: m[1] - m[0] + 1 }, (_, i) => m[0] + i) : m; });
+const list = want.length ? want.map(n => n - 1) : LEVELS.map((_, i) => i);
+if (smoke) {
+  // Швидка перевірка: кожен рівень запускається на 2 секунди гри, ловимо лише помилки в коді
+  const errs = [];
+  for (const i of list) { try { startLevel(i); mode = 'play'; for (let k = 0; k < 120; k++) { In.right = true; update(STEP); } } catch (e) { errs.push((i + 1) + ': ' + e.message); } }
+  console.log(errs.length ? 'ПОМИЛКИ:\\n' + errs.join('\\n') : 'Запуск без помилок: ' + list.length + ' рівнів');
+  process.exitCode = errs.length ? 1 : 0;
+} else {
 const out = [];
-for (let i = 0; i < LEVELS.length; i++) out.push(LEVELS[i].boss ? fightBoss(i) : runLevel(i, 240));
+// перед кожним рівнем випадковість скидається, тож рівень поводиться однаково і в повному прогоні, і окремо
+for (const i of list) { reseed(); out.push(LEVELS[i].boss ? fightBoss(i) : runLevel(i, 240)); }
 console.log(out.map(r => JSON.stringify(r)).join('\\n'));
 const bad = out.filter(r => !r.done);
-console.log(bad.length ? 'НЕ ПРОЙДЕНО: ' + bad.map(r => r.idx + 1).join(', ') : 'Усі рівні пройдено');
+console.log(bad.length ? 'НЕ ПРОЙДЕНО: ' + bad.map(r => r.idx + 1).join(', ') : 'Пройдено рівнів: ' + out.length);
 process.exitCode = bad.length ? 1 : 0;
+}
 `;
 // Випадковість (вороги, бульбашки) робимо однаковою в кожному запуску, щоб результат повторювався
 const M = Object.create(Math); let seed = 12345; M.random = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x80000000; };
-const ctx = vm.createContext({ Math: M, console, Map, Set, Array, Object, JSON, Number, Int8Array, Uint8Array, process, setInterval: () => 0, clearInterval: () => 0, setTimeout: () => 0, window: {}, performance: { now: () => 0 } });
+const ctx = vm.createContext({ Math: M, reseed: () => { seed = 12345; }, console, Map, Set, Array, Object, JSON, Number, Int8Array, Uint8Array, process, setInterval: () => 0, clearInterval: () => 0, setTimeout: () => 0, window: {}, performance: { now: () => 0 } });
 vm.runInContext(src, ctx, { filename: 'game' });
