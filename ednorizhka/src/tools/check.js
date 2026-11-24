@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'art27.js', 'art28.js', 'art29.js', 'art30.js', 'art31.js', 'art32.js', 'art33.js', 'art34.js', 'art35.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js', 'engine23.js', 'engine24.js', 'engine25.js', 'engine26.js', 'engine27.js', 'engine28.js', 'engine29.js', 'engine30.js', 'engine31.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'art27.js', 'art28.js', 'art29.js', 'art30.js', 'art31.js', 'art32.js', 'art33.js', 'art34.js', 'art35.js', 'art36.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js', 'engine23.js', 'engine24.js', 'engine25.js', 'engine26.js', 'engine27.js', 'engine28.js', 'engine29.js', 'engine30.js', 'engine31.js', 'engine32.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -315,6 +315,36 @@ function runLevel(idx, maxT) {
     }
     // сова-сторож: коли не спить або от-от прокинеться — завмираємо
     { const pc = P.x + P.w / 2, ow = G.owls.find(o => !o.done && pc > o.x0 * T - T && pc < o.x1 * T); if (ow && (ow.ph !== 'green' || ow.left < 0.8)) { In.left = In.right = false; In.jumpP = false; In.jump = false; } }
+    // розфарбуй плитки: перед зачиненими фарбованими воротами йдемо до найближчої сірої плитки (позаду — повертаємося, вгорі — підстрибуємо)
+    const pg = G.pgates.find(g => !g.open && g.x * T + 12 > pcxB() - 4);
+    if (pg) {
+      const feet = P.y + P.h, rest = G.ptiles.filter(q => q.g === pg.g && !q.done && q.x * T + 12 < pcxB() + 3 * T);
+      if (rest.length) {
+        const q = rest.sort((a, b) => Math.abs(a.x * T + 12 - pcxB()) - Math.abs(b.x * T + 12 - pcxB()))[0], dx = q.x * T + 12 - pcxB(), up = feet - q.y * T;
+        if (dx < -6 || (up > 6 && Math.abs(dx) > 8)) { In.right = dx > 0; In.left = dx < 0; }
+        else if (up > 6) { In.right = In.left = false; if (P.onGround && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; } }
+        if (!P.onGround && up > 6) In.jump = P.vy < 0;
+      }
+    }
+    // віднеси річ: річ лежить позаду чи вгорі — по неї; несемо, а той, кому несемо, позаду — повертаємося
+    const dg = G.dgates.find(g => !g.open && g.x * T + 12 > pcxB() - 4);
+    if (dg && !P.hold) {
+      const q = G.carries.find(c => c.id === dg.c);
+      if (q && q.state === 'idle') {
+        const dx = q.x - pcxB(), up = (P.y + P.h) - (q.y + 10);
+        if (dx < -6) { In.right = false; In.left = true; }
+        else if (Math.abs(dx) <= 10 && up > 16) { In.right = In.left = false; if (P.onGround && cool <= 0) { In.jumpP = true; In.jump = true; cool = 0.4; } }
+      }
+    }
+    if (P.hold && P.hold.tx * T + 12 - pcxB() < -10) { In.right = false; In.left = true; }
+    // фото: звірятко попереду на нашій висоті — чекаємо, поки визирне, і стріляємо
+    const ck = G.critters.find(k => !k.shot && k.x - pcxB() > 30 && k.x - pcxB() < 6 * T && Math.abs(k.y - 10 - shY) < 18);
+    if (ck && P.onGround) {
+      if (ck.x - pcxB() < 5 * T) { In.right = false; In.left = false; In.jumpP = false; In.jump = false; P.dir = 1; }
+      if (ck.up > 0.6) { if (!In.shoot) { In.shootP = true; In.shoot = true; } else { In.shootR = true; In.shoot = false; } }
+    }
+    // ліана біля високої стіни: ліземо, поки стіна праворуч не скінчиться, а тоді зістрибуємо на неї
+    if (P.vine && solid(tileAt(Math.floor((P.vine.x + 16) / T), Math.floor((P.y + P.h + 1) / T)))) { In.left = In.right = false; In.jump = true; In.jumpP = false; }
     // котик чіпляється за стіну — дряпаємось далі
     if (P.costume === 'cat' && P.catCling) { In.jumpP = true; In.jump = true; }
     // сонячні й місячні містки: на краю чекаємо, поки місток попереду з'явиться й простоїть, доки його перебіжимо
@@ -408,7 +438,18 @@ function fightBoss(idx) {
         else if (B.state === 'suck' || B.state === 'aim') { if (ad < 120) { In.left = d > 0; In.right = d < 0; } P.dir = d > 0 ? 1 : -1; if (i % 9 === 0) fire(false); }
         else if (ad < 85 && P.onGround) { In.jumpP = true; In.jump = true; }
       }
-      if (i % 10 === 0 && B.kind !== 'hatrabbit' && B.kind !== 'soapy' && B.kind !== 'vacuum') fire(false);
+      // Пітьмик: у темряві біжимо під ручку найближчої лампи й підстрибуємо; коли світить — наздоганяємо, стріляємо й стрибаємо на нього
+      if (B.kind === 'gloom') {
+        In.left = In.right = false;
+        if (B.light > 0) { const d = B.x - pcx; P.dir = d > 0 ? 1 : -1; if (Math.abs(d) > 10) { In.right = d > 0; In.left = d < 0; } if (Math.abs(d) < 50 && P.onGround) { In.jumpP = true; In.jump = true; } if (i % 9 === 0) fire(false); }
+        else {
+          const lp = B.lamps.filter(l => l.cd <= 0).sort((a, b) => Math.abs(a.x - pcx) - Math.abs(b.x - pcx))[0];
+          if (lp) { const d = lp.x + 10 - pcx; if (Math.abs(d) > 4) { In.right = d > 0; In.left = d < 0; } if (Math.abs(d) < 12 && P.onGround && Math.abs(B.x - pcx) > 50) { In.jumpP = true; In.jump = true; } }
+          if (danger && P.onGround) { In.jumpP = true; In.jump = true; }
+          if (i % 10 === 0) { const ob = G.bolts.find(b => b.kind === 'gloomorb'); if (ob) { P.dir = ob.x > pcx ? 1 : -1; fire(false); } }
+        }
+      }
+      if (i % 10 === 0 && B.kind !== 'hatrabbit' && B.kind !== 'soapy' && B.kind !== 'vacuum' && B.kind !== 'gloom') fire(false);
       if (!P.onGround && P.vy < 0) In.jump = true;
     } else if (!G.bossActive) In.right = true;
     else { if (G.gate.x > pcx) In.right = true; else In.left = true; }

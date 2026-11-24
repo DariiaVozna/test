@@ -25,6 +25,7 @@ function initLevel31(G, L) {
   const def = G.def || {}, st = stickerOf(def.id);
   G.pieces = (L.pieces || []).map((p, i) => ({ x: p.x, y: p.y, i, got: false }));
   G.pieceHad = hasSticker(def.id); G.pieceSt = st;
+  initLevel32(G, L);
 }
 
 /* ===== Ящики: штовхаєш, коли йдеш у нього по землі; падає, якщо під ним порожньо; на льоду ковзає ===== */
@@ -152,6 +153,7 @@ function update31(dt) {
   updateBoxGates(dt);
   updateOwls(dt);
   updatePieces(dt);
+  update32(dt);
 }
 
 /* ===== Робот-пилосос Хрумчик: їздить ареною, а потім засмоктує; влучай рогом у трубу, коли він тягне ===== */

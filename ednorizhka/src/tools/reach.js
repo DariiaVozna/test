@@ -76,6 +76,8 @@ function explore(idx, opts) {
   startLevel(idx); mode = 'play';
   G.enemies = []; G.powers = G.powers.filter(p => p.k === 'mini' || p.k === 'big' || p.k === 'pogo' || p.k === 'cloud' || p.k === 'rainbow' || p.k === 'umbrella' || p.k === 'air' || p.k === 'potbig' || p.k === 'potsmall' || p.k === 'gloves'); G.ropes = [];
   for (const [i, v] of G.qContent) if (v !== 'mini' && v !== 'big' && v !== 'star' && v !== 'star5' && v !== 'rainbow') G.qContent.set(i, 'star');
+  // ворота частини 37 (розфарбуй плитки, віднеси річ) відчиняємо одразу: їх проходить бот у check.js, а тут шукаємо, куди можна дострибнути
+  for (const g of (G.pgates || []).concat(G.dgates || [])) { g.open = true; for (let y = g.top; y < 10; y++) if (G.map[y * G.Wt + g.x] === 2) G.map[y * G.Wt + g.x] = 0; }
   const limitX = G.arena ? G.arena.x0 : Infinity;
   // дати рівню «осісти»
   for (let i = 0; i < 20; i++) { G.P.inv = 99; update(STEP); }

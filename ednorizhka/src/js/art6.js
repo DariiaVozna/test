@@ -475,6 +475,7 @@ function drawBolt2(c, b) {
     case 'letterbit': drawLetterBolt(c, b); return true;
     case 'pingball': drawPingBall(c, b); return true;
     case 'dove': drawDove(c, b); return true;
+    case 'gloomorb': drawGloomOrb(c, b); return true;
   }
   return false;
 }

@@ -91,6 +91,7 @@ function drawOver32(c, P, t) {
   }
   if (G.chases) for (const ch of G.chases) if (ch.state !== 'wait') drawChase(c, ch, t);
   drawOver34(c, P, t);
+  drawOver36(c, P, t);
 }
 function waveEyes(c, x, y, t, col) {
   const bl = (t % 3.2) < 0.12;

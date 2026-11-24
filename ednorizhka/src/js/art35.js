@@ -51,7 +51,7 @@ function drawSticker35(c, k) {
     c.beginPath(); c.moveTo(0, -10); c.lineTo(0, -14); c.stroke(); c.fillStyle = '#ff4f5e'; circ(c, 0, -15, 2); c.fill();
     c.fillStyle = '#c8c4d8'; rr(c, -7, 5, 14, 9, 2); c.fill(); c.stroke();
     c.fillStyle = '#ffd23f'; circ(c, 0, 9.5, 2); c.fill();
-  }
+  } else drawSticker36(c, k);
 }
 
 /* ===== Ящик ===== */
@@ -78,6 +78,7 @@ function drawWorld35(c, t, vis) {
   if (G.crates) for (const k of G.crates) if (vis(k.x * T + 12)) drawCrate(c, k);
   if (G.owls) for (const o of G.owls) if (vis(o.x1 * T + 12) || vis(o.x1 * T - 200)) drawOwlGuard(c, o, t);
   if (G.pieces) for (const p of G.pieces) if (!p.got && vis(p.x)) drawPiece(c, p, t);
+  drawWorld36(c, t, vis);
 }
 
 /* ===== Сова-сторож ===== */
