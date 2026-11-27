@@ -272,6 +272,7 @@ function updatePlayer(dt) {
   if (P.hotair) return hotairStep(P, dt);
   if (P.plane) return planeStep(P, dt);
   if (P.hang) return hangStep(P, dt);
+  if (P.hook) return hookStep(P, dt);
   flipCheck(P);
   let ax = (In.right ? 1 : 0) - (In.left ? 1 : 0);
   if (P.sled) ax = P.sledStun > 0 ? 0 : 1;
@@ -437,6 +438,7 @@ function updateBoss(dt) {
   if (B.kind === 'soapy') return updateSoapBoss(dt);
   if (B.kind === 'vacuum') return updateVacuumBoss(dt);
   if (B.kind === 'gloom') return updateGloomBoss(dt);
+  if (B.kind === 'shark') return updateSharkBoss(dt);
   if (B.kind === 'wizard') return updateWizardBoss(dt);
   if (B.kind === 'medusa') return updateMedusaBoss(dt);
   if (B.kind === 'robot') return updateRobotBoss(dt);

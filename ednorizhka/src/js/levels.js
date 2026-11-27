@@ -7138,6 +7138,237 @@ const LEVELS = [
       L.arena(129, 172);
       L.gate(168);
     }
+  },  {
+    id: 'pearlbay', theme: 'pearlbay', name: 'Перлинна затока', blurb: 'Перлинки в мушлях і мушля-сурма, що кличе воду', w: 200,
+    build(L) {
+      L.ground(0, 41);
+      L.sign(3, 'Перлинна затока! У мушлях ховаються перлинки. Підійди, коли мушля відкриється, — і перлинка твоя');
+      L.row(6, 9, 3);
+      L.clam(11);
+      L.enemy('crab', 16, 10);
+      L.cloud(19, 6, 3); L.row(19, 5, 3);
+      L.clam(25);
+      L.qblock(28, 6, 'star5');
+      L.enemy('gull', 31, 4);
+      L.power('magnet', 33, 8);
+      L.check(34);
+      L.sign(36, 'Мушля-сурма! Доторкнися до неї — і вода в лагуні підніметься. Тоді пливи до скелі й вистрибуй нагору');
+      L.conch(39, 41, 54, 9, 4); L.ground(41, 54, 11);
+      L.row(43, 10, 4); L.row(46, 6, 3); L.rainbow(50, 2);
+      L.enemy('puffer', 48, 10);
+      L.ground(54, 72, 4);
+      L.clam(57, 4);
+      L.row(60, 3, 3);
+      L.enemy('crab', 64, 4);
+      L.sticker(68, 1);
+      L.ground(72, 90);
+      L.check(74);
+      L.qblock(77, 6, 'star'); L.qblock(78, 6, 'rainbow'); L.qblock(79, 6, 'star');
+      L.enemy('turtle', 83, 10);
+      L.clam(87);
+      L.ground(90, 106, 11); L.water(90, 106, 8); L.dolphin(90, 106, 8);
+      L.enemy('leaper', 99, 8);
+      L.arc(92, 5, 10, 2);
+      L.ground(106, 121);
+      L.check(108);
+      L.power('frost', 111, 8);
+      L.enemy('crab', 115, 10);
+      L.conch(119, 121, 133, 9, 5); L.ground(121, 133, 11);
+      L.row(123, 10, 3); L.enemy('puffer', 128, 10);
+      L.cloud(125, 3, 4); L.row(125, 2, 3); L.rainbow(128, 2);
+      L.ground(133, 143);
+      L.check(136);
+      L.clam(140);
+      L.crumble(144, 8, 2); L.crumble(147, 7, 2); L.row(144, 7, 2); L.row(147, 6, 2);
+      L.ground(150, 200);
+      L.check(152);
+      L.enemy('gull', 156, 4);
+      L.clam(160);
+      L.qblock(164, 6, 'shield');
+      L.enemy('turtle', 168, 10);
+      L.row(172, 9, 5);
+      L.clam(179);
+      L.sign(183, 'Ворота вже близько!');
+      L.gate(192);
+    }
+  },
+  {
+    id: 'piratepier', theme: 'piratepier', name: 'Піратська пристань', blurb: 'Гачок-кішка, золоті кільця й піратська гармата', w: 200,
+    build(L) {
+      L.ground(0, 19);
+      L.sign(3, 'Піратська пристань! Візьми гачок-кішку — з ним можна злетіти аж на щоглу');
+      L.row(6, 9, 2);
+      L.power('hook', 9, 9);
+      L.sign(12, 'Бачиш золоте кільце? Натисни «Ріг» — мотузка підтягне тебе до нього. А тоді «Стрибок» — і ти на палубі');
+      L.anchor(18, 2);
+      L.ground(19, 41, 4);
+      L.row(21, 3, 3);
+      L.enemy('crab', 26, 4);
+      L.clam(30, 4);
+      L.qblock(33, 1, 'star5');
+      L.power('magnet', 37, 3);
+      L.anchor(43, 2); L.anchor(48, 2); L.anchor(53, 2);
+      L.row(44, 3, 3); L.row(49, 3, 3); L.rainbow(55, 2);
+      L.ground(57, 92);
+      L.check(60);
+      L.sign(62, 'Хто живе в морі? Стукни головою знизу кубик із морською тваринкою');
+      L.seaq(66, 'fish', ['cat', 'hen'], 77, 0);
+      L.enemy('seal', 80, 10);
+      L.qblock(82, 6, 'star'); L.qblock(83, 6, 'rainbow'); L.qblock(84, 6, 'star');
+      L.clam(87);
+      L.launcher(89); L.arc(92, 4, 7, 1.4);
+      L.ground(98, 108);
+      L.check(100);
+      L.enemy('crab', 104, 10);
+      L.anchor(111, 4); L.anchor(116, 3); L.anchor(121, 4);
+      L.row(112, 5, 3); L.row(117, 4, 3);
+      L.ground(124, 134);
+      L.check(126);
+      L.qblock(129, 6, 'shield');
+      L.anchor(133, 3);
+      L.ground(134, 141, 5);
+      L.row(135, 4, 4); L.sticker(139, 2);
+      L.anchor(144, 3); L.anchor(149, 2); L.anchor(154, 3); L.anchor(158, 4);
+      L.row(145, 3, 3); L.row(150, 3, 3); L.row(155, 4, 2); L.rainbow(160, 4);
+      L.ground(161, 200);
+      L.check(163);
+      L.enemy('seal', 167, 10);
+      L.clam(171);
+      L.row(175, 9, 5);
+      L.enemy('gull', 179, 4);
+      L.sign(183, 'Ворота вже близько!');
+      L.gate(192);
+    }
+  },
+  {
+    id: 'coralreef', theme: 'coralreef', name: 'Кораловий риф', blurb: 'Хто живе в морі? Кит-фонтан і мушля-сурма', w: 200,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(3, 'Кораловий риф! Двері тут питають: хто живе в морі? Стукни головою знизу кубик із морською тваринкою');
+      L.row(5, 9, 2);
+      L.seaq(8, 'crab', ['dog', 'pig'], 19, 1);
+      L.clam(22);
+      L.enemy('crab', 26, 10);
+      L.ground(30, 48, 11); L.water(30, 48, 8);
+      L.enemy('goldfish', 33, 9);
+      L.whale(36, 8); L.star(37, 5); L.star(38, 3); L.rainbow(37, 1);
+      L.clam(43, 11);
+      L.row(44, 6, 3);
+      L.ground(48, 86);
+      L.check(50);
+      L.seaq(54, 'octopus', ['cat', 'hen'], 65, 2);
+      L.power('magnet', 67, 8);
+      L.enemy('urchin', 70, 10);
+      L.qblock(73, 6, 'star'); L.qblock(74, 6, 'rainbow'); L.qblock(75, 6, 'star');
+      L.enemy('jelly', 78, 7);
+      L.clam(81);
+      L.conch(84, 86, 98, 9, 4); L.ground(86, 98, 11);
+      L.row(88, 7, 3); L.row(92, 10, 3); L.rainbow(95, 2);
+      L.enemy('puffer', 93, 9);
+      L.ground(98, 116, 4);
+      L.clam(101, 4);
+      L.row(104, 3, 4);
+      L.sticker(110, 1);
+      L.ground(116, 200);
+      L.check(118);
+      L.seaq(122, 'starfish', ['pig', 'dog'], 133, 0);
+      L.power('hourglass', 136, 9);
+      L.enemy('crab', 139, 10);
+      L.bumper(143, 9); L.cloud(145, 4, 4); L.row(145, 3, 4); L.rainbow(148, 2);
+      L.clam(153);
+      L.enemy('gull', 157, 4);
+      L.check(160);
+      L.enemy('seal', 164, 10);
+      L.qblock(168, 6, 'shield');
+      L.row(172, 9, 5);
+      L.clam(179);
+      L.sign(183, 'Ворота вже близько!');
+      L.gate(192);
+    }
+  },
+  {
+    id: 'shipwreck', theme: 'shipwreck', name: 'Затонулий корабель', blurb: 'Гачок-кішка, мушля-сурма, перлинки й таємний хід у трюм', w: 200,
+    build(L) {
+      L.ground(0, 36);
+      L.sign(3, 'Затонулий корабель! Тут знадобиться все: гачок-кішка, мушля-сурма й перлинки');
+      L.row(5, 9, 2);
+      L.power('hook', 8, 9);
+      L.clam(12);
+      L.enemy('crab', 15, 10);
+      L.seaq(18, 'seahorse', ['cat', 'pig'], 29, 2);
+      L.check(31);
+      L.anchor(35, 3);
+      L.ground(36, 56, 5);
+      L.row(38, 4, 4);
+      L.enemy('crab', 44, 5);
+      L.clam(48, 5);
+      L.qblock(51, 2, 'star5');
+      L.ground(56, 64);
+      L.check(58);
+      L.conch(62, 64, 78, 9, 4); L.ground(64, 78, 11);
+      L.row(66, 7, 3); L.enemy('puffer', 70, 10); L.rainbow(74, 2);
+      L.ground(78, 96, 4);
+      L.clam(81, 4);
+      L.power('magnet', 84, 3);
+      L.row(86, 3, 4);
+      L.enemy('turtle', 91, 4);
+      L.ground(96, 120);
+      L.check(98);
+      L.sign(100, 'Трюм корабля! А може, у стіні є таємний хід?');
+      L.ground(104, 112, 5); L.secret(104, 7, 8, 3); L.sticker(108, 8); L.rainbow(110, 8);
+      L.clam(115);
+      L.anchor(123, 4); L.anchor(128, 3); L.anchor(133, 4);
+      L.row(124, 5, 3); L.row(129, 4, 3);
+      L.ground(137, 200);
+      L.check(139);
+      L.seaq(143, 'whale', ['dog', 'hen'], 154, 1);
+      L.enemy('seal', 157, 10);
+      L.clam(161);
+      L.qblock(164, 6, 'star'); L.qblock(165, 6, 'rainbow'); L.qblock(166, 6, 'star');
+      L.enemy('gull', 170, 4);
+      L.qblock(174, 6, 'wings');
+      L.row(177, 9, 4);
+      L.clam(182);
+      L.sign(185, 'Ворота вже близько!');
+      L.gate(193);
+    }
+  },
+  {
+    id: 'sharkreef', theme: 'sharkreef', name: 'Риф Акуленяти', blurb: 'Битва з Акуленям Зубчиком, що стрибає з басейну', w: 180, boss: 'shark',
+    build(L) {
+      L.ground(0, 44);
+      L.sign(3, 'Риф Акуленяти! Візьми гачок-кішку: попереду широка протока');
+      L.power('hook', 7, 9);
+      L.clam(11);
+      L.enemy('crab', 15, 10);
+      L.seaq(19, 'turtle', ['hen', 'dog'], 30, 0);
+      L.check(33);
+      L.power('magnet', 36, 8);
+      L.row(38, 9, 4);
+      L.anchor(47, 4); L.anchor(52, 3); L.anchor(57, 4);
+      L.row(48, 5, 3); L.row(53, 4, 3); L.rainbow(59, 4);
+      L.ground(60, 94);
+      L.check(63);
+      L.clam(67);
+      L.enemy('seal', 71, 10);
+      L.qblock(75, 6, 'star5'); L.qblock(76, 6, 'rainbow');
+      L.bumper(81, 9); L.cloud(83, 4, 4); L.row(83, 3, 4); L.rainbow(86, 2);
+      L.conch(92, 94, 106, 9, 4); L.ground(94, 106, 11);
+      L.row(96, 7, 3); L.enemy('puffer', 100, 10);
+      L.ground(106, 120, 4);
+      L.clam(109, 4);
+      L.row(112, 3, 4);
+      L.sticker(117, 1);
+      L.ground(120, 140);
+      L.check(122);
+      L.qblock(124, 6, 'shield');
+      L.sign(125, 'Акуленя Зубчик! Коли воно цілиться, тінь на піску показує, куди стрибне. Відбіжи, а тоді стріляй!');
+      L.power('candy', 128, 8);
+      L.arena(130, 175);
+      L.ground(140, 150, 11); L.water(140, 150, 8);
+      L.ground(150, 180);
+      L.gate(171);
+    }
   },
 ];
 
@@ -7219,6 +7450,11 @@ const DECOR = {
   photosafari: (R, x, y) => DECOR.savanna(R, x, y),
   colorfactory: (R, x, y) => DECOR.factory(R, x, y),
   gloomtower: (R, x, y) => DECOR.tower(R, x, y),
+  pearlbay: (R, x, y) => DECOR.lagoon(R, x, y),
+  piratepier: (R, x, y) => DECOR.pirate(R, x, y),
+  coralreef: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'weed', x, y } : r < 0.7 ? { k: 'shell', x, y, c: ['#ffb3c6', '#ffd9a8', '#fff3e0'][Math.floor(R() * 3)] } : { k: 'starfish', x, y }; },
+  shipwreck: (R, x, y) => DECOR.pirate(R, x, y),
+  sharkreef: (R, x, y) => DECOR.tide(R, x, y),
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -7335,7 +7571,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [], races: [], twins: [], splates: [], sgates: [], stickers: [], wardrobes: [], gwalls: [], crates: [], bplates: [], bgates: [], owls: [], pieces: [], ptiles: [], pgates: [], carries: [], dgates: [], critters: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [], races: [], twins: [], splates: [], sgates: [], stickers: [], wardrobes: [], gwalls: [], crates: [], bplates: [], bgates: [], owls: [], pieces: [], ptiles: [], pgates: [], carries: [], dgates: [], critters: [], clams: [], conches: [], anchors: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -7687,6 +7923,20 @@ function buildLevel(idx) {
     carry(x, row, k, tx) { const id = (L.carryN = (L.carryN || 0) + 1) - 1, q = { id, k, x0: x * T + 12, y0: row * T + 12, tx, ty: 10 }; L.carries.push(q); later.push(() => { q.ty = Math.round(groundY(tx) / T); }); },
     dgate(x, top) { top = top == null ? 1 : top; for (let y = top; y < 10; y++) set(x, y, 2); L.dgates.push({ x, top, c: (L.carryN || 0) - 1 }); },
     critter(x, k) { const q = { x: x * T + 12, y: 10 * T, k }; L.critters.push(q); later.push(() => { q.y = groundY(x); }); },
+    // частина 38: мушля з перлинкою (row — рядок, на якому стоїть, без нього — на землі)
+    clam(x, row) { const q = { x: x * T + 12, gy: row ? row * T : 10 * T }; if (!row) later.push(() => { q.gy = groundY(x); }); L.clams.push(q); },
+    // мушля-сурма на березі x і лагуна від x0 до x1: торкнешся — вода з рядка low піднімається до рядка high
+    conch(x, x0, x1, low, high) { const z = { x0: x0 * T, x1: x1 * T, y: low * T + 6, conch: { lo: low * T + 6, hi: high * T + 6 } }; L.water.push(z); const q = { x: x * T + 12, gy: 10 * T, z: L.water.length - 1 }; later.push(() => { q.gy = groundY(x); }); L.conches.push(q); },
+    // золоте кільце для гачка-кішки
+    anchor(x, row) { L.anchors.push({ x: x * T + 12, y: row * T + 12 }); },
+    // «Хто живе в морі?»: ans — морська тваринка (fish, crab, octopus, starfish, seahorse, whale, turtle, jelly), wrong — дві тваринки з суші (cat, dog, hen, pig)
+    seaq(x, ans, wrong, door, pos) {
+      const nums = wrong.slice(); nums.splice(pos || 0, 0, ans);
+      const opts = nums.map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'sea', ans, opts, door, top: 1 });
+    },
     dirt(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 39); },
     hole(x, top, h, w) { for (let i = 0; i < (w || 1); i++) for (let y = top; y < top + h; y++) set(x + i, y, 0); },
     ceiling(x0, x1, rows) { L.hasCeil = true; for (let x = x0; x < x1; x++) for (let y = 0; y < (rows || 2); y++) set(x, y, 1); },

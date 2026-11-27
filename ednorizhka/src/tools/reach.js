@@ -19,6 +19,8 @@ for (const d of [1, -1]) { ACTS.push({ jump: true, dir: d, hold: 1, dd: 0.25 });
 ACTS.push({ wait: 0.7 }); ACTS.push({ wait: 1.6 }); ACTS.push({ wait: 0.2 });
 for (const d of [1, -1, 0]) ACTS.push({ swim: true, dir: d });
 ACTS.push({ climb: true });
+// гачок-кішка: «Ріг» біля кільця — летимо до нього й чекаємо, поки повиснемо
+for (const d of [1, -1]) ACTS.push({ hook: true, dir: d });
 for (const d of [1, -1]) ACTS.push({ big: true, dir: d });
 // звичайний постріл на місці й постріл на верхівці стрибка (для дзеркалець і зір-обмінниць)
 for (const d of [1, -1]) ACTS.push({ shoot: true, dir: d });
@@ -32,7 +34,7 @@ for (const d of [1, -1, 0]) ACTS.push({ jump: true, dir: d, hold: 6, glide: true
 function act(a) {
   const P = G.P, h0 = P.hearts; let t = 0, left = false;
   const bub0 = !!P.bub, hang0 = !!P.hang, can0 = !!P.inCannon;
-  const T_MAX = a.wait || (a.swim ? 1.1 : a.climb ? 2 : a.big ? 1.1 : a.shoot ? 0.3 : a.glide ? 6 : 2.6);
+  const T_MAX = a.wait || (a.swim ? 1.1 : a.climb ? 2 : a.big ? 1.1 : a.shoot ? 0.3 : a.glide ? 6 : a.hook ? 1.6 : 2.6);
   while (t < T_MAX) {
     In.left = In.right = In.jumpP = In.shootP = In.shootR = In.shoot = false; In.jump = false;
     let d = a.dir || 0; if (a.dd && t < a.dd) d = 0; if (a.back && t > a.back) d = -d;
@@ -40,6 +42,7 @@ function act(a) {
     if (a.jump) { In.jump = t < a.hold; In.jumpP = t === 0; }
     if (a.swim) { In.jump = true; In.jumpP = Math.floor(t / STEP) % 15 === 0; }
     if (a.climb) In.jump = true;
+    if (a.hook) { In.left = In.right = false; P.dir = a.dir; if (t === 0) { In.shootP = true; In.shoot = true; } else if (t < STEP * 1.5) In.shootR = true; }
     if (a.shoot) { In.left = In.right = false; P.dir = a.dir; if (t === 0) { In.shootP = true; In.shoot = true; } else if (t < STEP * 1.5) In.shootR = true; }
     if (a.shootAt != null) { if (Math.abs(t - a.shootAt) < STEP / 2) { In.shootP = true; In.shoot = true; } else if (Math.abs(t - a.shootAt - STEP) < STEP / 2) In.shootR = true; }
     if (a.big) { In.left = In.right = false; P.dir = a.dir; if (t === 0) { In.shootP = true; In.shoot = true; } else if (t < 0.65) In.shoot = true; else if (t < 0.65 + STEP * 1.5) In.shootR = true; }
@@ -49,6 +52,7 @@ function act(a) {
     if (G.done) return true;
     if (!P.onGround) left = true;
     if (a.walk) { if (t >= a.walk) break; }
+    else if (a.hook) { if (t > 0.05 && (!P.hook || P.hook.phase === 'hang')) break; }
     else if ((a.jump) && left && P.onGround && t > 0.1) break;
     if (a.jump && P.cling && t > 0.05) break;
     // сіли в бульбашку чи гармату або вхопилися за поручні — зупиняємося, щоб далі вибирати нову дію
@@ -69,15 +73,19 @@ function keyOf(TB) {
   if (G._sc == null) G._sc = G.map.some(v => v === 17 || v === 18 || v === 23 || v === 24 || v === 39);
   let st = ''; if (G._sc) for (let i = 0; i < G.map.length; i++) if (G.map[i] === 17 || G.map[i] === 18 || G.map[i] === 23 || G.map[i] === 24 || G.map[i] === 39) st += i + (G.map[i] === 18 ? 'c' : '') + ';';
   let mv8 = ''; for (const m of G.movers) { if (m.ball) mv8 += Math.round(m.x / 12) + 'b;'; else if (m.coaster) mv8 += m.state[0] + Math.round(m.cx / 48) + ';'; }
-  return [Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0, P.big ? Math.ceil(P.bigT / 3) : 0, mv8, G.season || '', P.mount ? 1 : 0, P.swing ? G.rings.indexOf(P.swing) + ':' + Math.round(P.swing.th * 4) + ':' + Math.round(P.swing.om) : '', P.cling || 0, G.crystals.map(c => Math.ceil(c.t / 2)).join(''), G.movers.filter(m => m.pulley && m.lead).map(m => Math.round(m.y / 8)).join('.'), Math.ceil((G.timeStop || 0) / 2), P.bub ? 'b' + G.soaps.indexOf(P.bub) : '', G.soaps.map(q => q.state === 'idle' ? 1 : 0).join(''), P.hang ? 'h' : '', G.nutWheels.map(w => Math.round(w.p * 8) + (w.full ? 'f' + Math.ceil(w.hold) : '')).join('.'), P.inCannon && P.inCannon.swc ? Math.round(P.inCannon.ang * 12) : '', P.tramp + (P.trampT > 0 ? 't' : ''), G.balls12.map(b => Math.round(b.x / 12) + ':' + Math.round(b.y / 12)).join('.'), G.goals.map(g => g.scored ? 1 : 0).join(''), G.mirrors.map(m => m.d > 0 ? 1 : 0).join(''), G.suns.map(q => q.on ? 1 : 0).join(''), G.swappers.map(w => Math.round(w.x / 12) + ':' + Math.round(w.y / 12)).join('.'), G.movers.filter(m => m.sailboat).map(m => Math.round(m.x / 12) + ':' + Math.round(m.vx / 50)).join('.'), G.foods.map(f => f.state[0]).join(''), G.animals.map(a => (a.fed ? 1 : 0) + (a.m ? (a.m.hippo ? a.m.state[0] : Math.round(a.m.y / 12)) : '')).join('.'), G.padSets.map(q => q.solved ? 's' : q.prog).join(''), P.hotair ? 'H' + Math.round(P.hotair.vy / 30) : '', G.movers.filter(m => m.hotair).map(m => m.state[0] + Math.round(m.x / 8) + ':' + Math.round(m.y / 8)).join('.'), G.movers.filter(m => m.snowball).map(m => Math.round(m.cx / 8) + ':' + Math.round(m.r / 3)).join('.'), G.runners.map(r => r.state === 'caught' ? 'c' : Math.round(r.x / 12)).join('.'), P.sled ? 'S' + Math.round(P.sledStun * 4) : '', G.sleds.map(q => q.state[0]).join(''), Math.ceil((P.pogoT || 0) / 2), P.cloudN || 0, G.movers.filter(m => m.pump).map(m => m.level).join(''), G.bridges19.map(b => b.on ? Math.ceil(b.t / 2) : 0).join(''), G.movers.filter(m => m.lift19 || m.stork).map(m => (m.state || '')[0] + Math.round(m.x / 8) + ':' + Math.round(m.y / 8) + (m.level || '')).join('.'), G.movers.filter(m => m.tmpCloud && m.state !== 'gone').map(m => Math.round(m.x / 8) + ':' + Math.round(m.y / 8) + ':' + Math.ceil(m.life)).join('.'), P.plane ? 'P' + Math.round(P.plane.vy / 20) + ':' + P.plane.puffs : '', G.movers.filter(m => m.plane).map(m => m.state[0] + Math.round(m.x / 8) + ':' + Math.round(m.y / 8)).join('.'), G.planeRings.map(r => r.got ? 1 : 0).join(''), G.movers.filter(m => m.scoop && Math.abs(m.x - P.x) < 8 * T).map(m => m.state[0] + Math.round(m.life * 3) + (m.state === 'gone' ? Math.ceil(m.t) : '')).join(''), Math.ceil((P.rainbowT || 0) / 2), P.rainbowT > 0 && P.rbY != null ? Math.round(P.rbY / 12) : '', (P.onMover && P.onMover.rbSeg ? 'R' + Math.ceil(P.onMover.life) : ''), G.powers.filter(p => p.k === 'rainbow').map(p => p.got ? 1 : 0).join(''), P.seahorse ? 'SH' : '', G.seahorses.map(q => q.state[0] + Math.round(q.hx / 24) + ':' + Math.round(q.hy / 24)).join('.'), G.sadClouds.map(q => q.happy ? 1 : 0).join(''), G.tickles.map(f => f.happy ? 1 : 0).join(''), G.movers.filter(m => m.mood).map(m => m.state[0] + Math.round(m.y / 8)).join('.'), Math.ceil((P.umbT || 0) / 5), Math.ceil((P.airT || 0) / 3), P.airT > 0 && P.airY != null ? Math.round(P.airY / 12) : '', G.rockets.map(r => r.state[0]).join(''), Math.ceil((P.gloveT || 0) / 5)].join(',');
+  // рівень води в лагуні з мушлею-сурмою важить лише тоді, коли єдиноріжка біля цієї лагуни
+  const pcx = P.x + P.w / 2, cs = G.conches.map(c => pcx > c.x - 4 * T && pcx < c.zone.x1 + 2 * T ? c.state[0] + (c.state === 'high' ? Math.floor(c.st / 3) : '') : '').join('');
+  return [cs, P.hook ? 'k' + P.hook.phase[0] : '', P.hookPow ? 1 : 0, Math.round(P.x / 7), Math.round(P.y / 7), mv, P.vine ? 1 : 0, P.mini ? 1 : 0, wz ? 1 : 0, G.keysHeld, G.sw ? 1 : 0, TB ? Math.floor(G.t / TB) % 8 : 0, G.paint || '', (G.doorOpen || []).map(Number).join(''), st, P.boostT > 0 ? 1 : 0, P.big ? Math.ceil(P.bigT / 3) : 0, mv8, G.season || '', P.mount ? 1 : 0, P.swing ? G.rings.indexOf(P.swing) + ':' + Math.round(P.swing.th * 4) + ':' + Math.round(P.swing.om) : '', P.cling || 0, G.crystals.map(c => Math.ceil(c.t / 2)).join(''), G.movers.filter(m => m.pulley && m.lead).map(m => Math.round(m.y / 8)).join('.'), Math.ceil((G.timeStop || 0) / 2), P.bub ? 'b' + G.soaps.indexOf(P.bub) : '', G.soaps.map(q => q.state === 'idle' ? 1 : 0).join(''), P.hang ? 'h' : '', G.nutWheels.map(w => Math.round(w.p * 8) + (w.full ? 'f' + Math.ceil(w.hold) : '')).join('.'), P.inCannon && P.inCannon.swc ? Math.round(P.inCannon.ang * 12) : '', P.tramp + (P.trampT > 0 ? 't' : ''), G.balls12.map(b => Math.round(b.x / 12) + ':' + Math.round(b.y / 12)).join('.'), G.goals.map(g => g.scored ? 1 : 0).join(''), G.mirrors.map(m => m.d > 0 ? 1 : 0).join(''), G.suns.map(q => q.on ? 1 : 0).join(''), G.swappers.map(w => Math.round(w.x / 12) + ':' + Math.round(w.y / 12)).join('.'), G.movers.filter(m => m.sailboat).map(m => Math.round(m.x / 12) + ':' + Math.round(m.vx / 50)).join('.'), G.foods.map(f => f.state[0]).join(''), G.animals.map(a => (a.fed ? 1 : 0) + (a.m ? (a.m.hippo ? a.m.state[0] : Math.round(a.m.y / 12)) : '')).join('.'), G.padSets.map(q => q.solved ? 's' : q.prog).join(''), P.hotair ? 'H' + Math.round(P.hotair.vy / 30) : '', G.movers.filter(m => m.hotair).map(m => m.state[0] + Math.round(m.x / 8) + ':' + Math.round(m.y / 8)).join('.'), G.movers.filter(m => m.snowball).map(m => Math.round(m.cx / 8) + ':' + Math.round(m.r / 3)).join('.'), G.runners.map(r => r.state === 'caught' ? 'c' : Math.round(r.x / 12)).join('.'), P.sled ? 'S' + Math.round(P.sledStun * 4) : '', G.sleds.map(q => q.state[0]).join(''), Math.ceil((P.pogoT || 0) / 2), P.cloudN || 0, G.movers.filter(m => m.pump).map(m => m.level).join(''), G.bridges19.map(b => b.on ? Math.ceil(b.t / 2) : 0).join(''), G.movers.filter(m => m.lift19 || m.stork).map(m => (m.state || '')[0] + Math.round(m.x / 8) + ':' + Math.round(m.y / 8) + (m.level || '')).join('.'), G.movers.filter(m => m.tmpCloud && m.state !== 'gone').map(m => Math.round(m.x / 8) + ':' + Math.round(m.y / 8) + ':' + Math.ceil(m.life)).join('.'), P.plane ? 'P' + Math.round(P.plane.vy / 20) + ':' + P.plane.puffs : '', G.movers.filter(m => m.plane).map(m => m.state[0] + Math.round(m.x / 8) + ':' + Math.round(m.y / 8)).join('.'), G.planeRings.map(r => r.got ? 1 : 0).join(''), G.movers.filter(m => m.scoop && Math.abs(m.x - P.x) < 8 * T).map(m => m.state[0] + Math.round(m.life * 3) + (m.state === 'gone' ? Math.ceil(m.t) : '')).join(''), Math.ceil((P.rainbowT || 0) / 2), P.rainbowT > 0 && P.rbY != null ? Math.round(P.rbY / 12) : '', (P.onMover && P.onMover.rbSeg ? 'R' + Math.ceil(P.onMover.life) : ''), G.powers.filter(p => p.k === 'rainbow').map(p => p.got ? 1 : 0).join(''), P.seahorse ? 'SH' : '', G.seahorses.map(q => q.state[0] + Math.round(q.hx / 24) + ':' + Math.round(q.hy / 24)).join('.'), G.sadClouds.map(q => q.happy ? 1 : 0).join(''), G.tickles.map(f => f.happy ? 1 : 0).join(''), G.movers.filter(m => m.mood).map(m => m.state[0] + Math.round(m.y / 8)).join('.'), Math.ceil((P.umbT || 0) / 5), Math.ceil((P.airT || 0) / 3), P.airT > 0 && P.airY != null ? Math.round(P.airY / 12) : '', G.rockets.map(r => r.state[0]).join(''), Math.ceil((P.gloveT || 0) / 5)].join(',');
 }
 function explore(idx, opts) {
   opts = opts || {};
   startLevel(idx); mode = 'play';
-  G.enemies = []; G.powers = G.powers.filter(p => p.k === 'mini' || p.k === 'big' || p.k === 'pogo' || p.k === 'cloud' || p.k === 'rainbow' || p.k === 'umbrella' || p.k === 'air' || p.k === 'potbig' || p.k === 'potsmall' || p.k === 'gloves'); G.ropes = [];
+  G.enemies = []; G.powers = G.powers.filter(p => p.k === 'mini' || p.k === 'big' || p.k === 'pogo' || p.k === 'cloud' || p.k === 'rainbow' || p.k === 'umbrella' || p.k === 'air' || p.k === 'potbig' || p.k === 'potsmall' || p.k === 'gloves' || p.k === 'hook'); G.ropes = [];
   for (const [i, v] of G.qContent) if (v !== 'mini' && v !== 'big' && v !== 'star' && v !== 'star5' && v !== 'rainbow') G.qContent.set(i, 'star');
   // ворота частини 37 (розфарбуй плитки, віднеси річ) відчиняємо одразу: їх проходить бот у check.js, а тут шукаємо, куди можна дострибнути
   for (const g of (G.pgates || []).concat(G.dgates || [])) { g.open = true; for (let y = g.top; y < 10; y++) if (G.map[y * G.Wt + g.x] === 2) G.map[y * G.Wt + g.x] = 0; }
+  // двері «Хто живе в морі?» (частина 38) теж: правильний кубик стукає бот у check.js
+  for (const q of (G.quizzes || [])) if (q.kind === 'sea') { q.solved = true; for (let y = q.top; y < 10; y++) if (G.map[y * G.Wt + q.door] === 2) G.map[y * G.Wt + q.door] = 0; }
   const limitX = G.arena ? G.arena.x0 : Infinity;
   // дати рівню «осісти»
   for (let i = 0; i < 20; i++) { G.P.inv = 99; update(STEP); }
@@ -91,6 +99,7 @@ function explore(idx, opts) {
     for (const a of ACTS) {
       if (a.swim && !waterAt(s.P.x + s.P.w / 2, s.P.y + s.P.h / 2)) continue;
       if (a.climb && !s.vines.length) continue;
+      if (a.hook && !(s.P.hookPow && s.anchors.length)) continue;
       const sail = s.movers.some(m => m.sailboat);
       if (a.big && s.map.indexOf(18) < 0 && !s.crystals.length && !s.mirrors.length && !s.swappers.length) continue;
       const cl = s.P.cloudN > 0;
@@ -99,7 +108,7 @@ function explore(idx, opts) {
       if (a.air && !air) continue;
       if (a.glide && !(s.P.umbT > 0) && !(s.P.gloveT > 0)) continue;
       if ((a.shoot || a.shootAt != null) && !s.mirrors.length && !s.swappers.length && !(sail && s.P.onMover && s.P.onMover.sailboat) && !cl && !air && !sad && !s.rockets.some(r => r.state === 'idle')) continue;
-      if ((a.wait) && !(s.movers.length || s.hasDirt || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0 || s.P.swing || s.P.inCannon || s.P.bub || s.P.hang || s.nutWheels.some(w => w.p > 0) || s.soaps.some(q => q.state === 'gone') || s.balls12.some(b => !b.done && (Math.abs(b.vx) > 1 || !b.onGround)))) continue;
+      if ((a.wait) && !(s.movers.length || s.hasDirt || s.water.some(z => z.tide) || s.storms.length || s.map.indexOf(13) >= 0 || s.P.swing || s.P.inCannon || s.P.bub || s.P.hang || s.nutWheels.some(w => w.p > 0) || s.soaps.some(q => q.state === 'gone') || s.balls12.some(b => !b.done && (Math.abs(b.vx) > 1 || !b.onGround)) || s.conches.some(c => c.state !== 'low'))) continue;
       G = structuredClone(Object.assign({}, s, { L: null, def: null })); G.L = s.L; G.def = s.def;
       if (!act(a)) continue;
       G.stars.forEach((st, i) => { if (st.got) got[i] = 1; });

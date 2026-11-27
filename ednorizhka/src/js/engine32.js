@@ -27,6 +27,7 @@ function initLevel32(G, L) {
   G.dgates = (L.dgates || []).map(g => Object.assign({ open: false, hintT: 0 }, g));
   G.critters = (L.critters || []).map((k, i) => Object.assign({ up: 0, t: 1 + i * 0.7, show: false, shot: false, i }, k));
   G.photoDone = false; G.lastHearts = G.P.hearts; G.P.hold = null;
+  initLevel33(G, L);
 }
 
 /* ===== Розфарбуй плитки: стань на кожну — і ворота відчиняться ===== */
@@ -126,6 +127,7 @@ function update32(dt) {
   updatePaint(dt);
   updateCarry(dt);
   updateCritters(dt);
+  update33(dt);
 }
 
 /* ===== Пітьмик: у темряві його не взяти, а від світла лампи він злякано меншає ===== */
