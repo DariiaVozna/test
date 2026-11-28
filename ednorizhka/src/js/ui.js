@@ -232,6 +232,7 @@ function renderGame(dt) {
     else if (B.kind === 'vacuum') drawVacuumBoss(c, B, B.t);
     else if (B.kind === 'gloom') drawGloomBoss(c, B, B.t);
     else if (B.kind === 'shark') drawSharkBoss(c, B, B.t);
+    else if (B.kind === 'gnome') drawGnomeBoss(c, B, B.t);
     else if (B.kind === 'wizard') {
       for (const cl of B.clones) if (!cl.dead) drawWizard(c, cl.x, cl.fy, B.t + 1.3, B.state === 'cast' ? 'laugh' : B.state, B.st, B.dir, cl.alpha, false, false);
       drawWizard(c, B.x, B.fy, B.t, B.state, B.st, B.dir, B.alpha, B.flash > 0, true);
@@ -351,7 +352,7 @@ function drawHud(c) {
   drawHud9(c, x2 + w2 + 10, top, H);
   // бонуси з таймером
   let px = left, py = top + H + 8;
-  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME], ['hourglass', P.stopT || 0, STOP_TIME], ['pogo', P.pogoT || 0, 25], ['cloud', P.cloudN || 0, 3], ['rainbow', P.rainbowT || 0, 10], ['umbrella', P.umbT || 0, UMB_TIME], ['air', P.airT || 0, AIR_TIME], ['heart', P.heartPow ? 1 : 0, 1], ['gloves', P.gloveT || 0, GLOVE_TIME], ['hose', P.hose ? 1 : 0, 1], ['helmet', P.helmet ? 1 : 0, 1], ['jetpack', P.jetT || 0, JET_TIME], ['glasses', P.glassT || 0, GLASS_TIME], ['hook', P.hookPow ? 1 : 0, 1]]) {
+  for (const [k, v, max] of [['wings', P.wingsT, 10], ['candy', P.candyT, 15], ['magnet', P.magnetT, 12], ['mini', P.mini ? P.miniT : 0, 14], ['frost', P.frostT || 0, 15], ['big', P.big ? P.bigT : 0, BIG_TIME], ['hourglass', P.stopT || 0, STOP_TIME], ['pogo', P.pogoT || 0, 25], ['cloud', P.cloudN || 0, 3], ['rainbow', P.rainbowT || 0, 10], ['umbrella', P.umbT || 0, UMB_TIME], ['air', P.airT || 0, AIR_TIME], ['heart', P.heartPow ? 1 : 0, 1], ['gloves', P.gloveT || 0, GLOVE_TIME], ['hose', P.hose ? 1 : 0, 1], ['helmet', P.helmet ? 1 : 0, 1], ['jetpack', P.jetT || 0, JET_TIME], ['glasses', P.glassT || 0, GLASS_TIME], ['hook', P.hookPow ? 1 : 0, 1], ['dash', P.dashPow ? (P.dashUsed ? 0.35 : 1) : 0, 1]]) {
     if (v <= 0) continue;
     c.fillStyle = 'rgba(255,255,255,.9)'; circ(c, px + 17, py + 17, 17); c.fill();
     c.strokeStyle = '#ff4fa3'; c.lineWidth = 3.5; c.beginPath(); c.arc(px + 17, py + 17, 15, -Math.PI / 2, -Math.PI / 2 + TAU * (v / max)); c.stroke();
@@ -452,7 +453,7 @@ function showCreate() {
   mode = 'create'; Music.stop(); setPlayUi(false); show('scrCreate');
   $('inName').value = save.profile.name || ''; refreshCreate(); requestAnimationFrame(sizePreviews);
 }
-const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко", 'Єнот Шкодько', 'Бобер Тріско', 'Гусак Шипун', 'Сніговик Хрумко', 'Крокодильчик Буквоїд', 'Хмара Буркотуха', 'Панда Бамбуся', 'Кролик Фокус-Покус', 'Мильний Бульбах', 'Робот-пилосос Хрумчик', 'Пітьмик', 'Акуленя Зубчик'];
+const PARTS = ['Король Похмурої Хмари', 'Пан Колючка', 'Дракон Чхун', 'Чарівник Плутанко', 'Медуза Желейка', 'Робот Брязкало', 'Король Кротів Копайло', 'Будильник Дзеленчик', 'Восьминіжка Ласунка', 'Сорока Блискітка', 'Хамелеон Барвик', 'Кіт Мурко', 'Кубик Кидайло', 'Ведмідь Бурмило', 'Лис Хитрик', 'Павич Пишнохвіст', 'Мавпочка Шкода', 'Пінгвін Ковзанчик', 'Гусениця Ненажерка', 'Жабка Квакуша', 'Сумний Смайлик', 'Сова Ухнюшка', 'Цуцик Гавчик', 'Мишеня Клацик', 'Клякса Бризка', "Хом'ячок Жуйко", 'Єнот Шкодько', 'Бобер Тріско', 'Гусак Шипун', 'Сніговик Хрумко', 'Крокодильчик Буквоїд', 'Хмара Буркотуха', 'Панда Бамбуся', 'Кролик Фокус-Покус', 'Мильний Бульбах', 'Робот-пилосос Хрумчик', 'Пітьмик', 'Акуленя Зубчик', 'Гном Бурчик'];
 function showAlbum() {
   show('scrAlbum');
   const n = STICKERS.filter(st => hasSticker(st.id)).length;
@@ -570,7 +571,8 @@ function showWin() {
   if (i === 174) { $('winTitle').textContent = 'Мильний Бульбах лопнув від сміху!'; $('winText').textContent = 'Далі — ящики й сова! Ящики можна штовхати й ставити на кнопки, Сова-сторож ловить усіх, хто рухається, поки вона дивиться, а наліпки треба складати з шматочків пазла. В іграшковому домі чекає Робот-пилосос Хрумчик. Наступна країна: ' + LEVELS[175].name + '.'; }
   if (i === 179) { $('winTitle').textContent = 'Хрумчик тепер прибирає тільки крихти!'; $('winText').textContent = 'Далі — фарби, гніздечка й фото! Розфарбуй сірі плитки, віднеси яєчко мамі-пташці, а кісточку цуцикові, і сфотографуй звірят, що визирають із кущиків. А у вежі вимкнув світло Пітьмик. Наступна країна: ' + LEVELS[180].name + '.'; }
   if (i === 184 && LEVELS[185]) { $('winTitle').textContent = 'Пітьмик більше не боїться світла!'; $('winText').textContent = 'Далі — морські пригоди! У мушлях ховаються перлинки, мушля-сурма кличе воду в лагуну, гачок-кішка підтягує до золотих кілець, а двері питають, хто живе в морі. На рифі хлюпається Акуленя Зубчик. Наступна країна: ' + LEVELS[185].name + '.'; }
-  if (i === 189 && !LEVELS[190]) { $('winTitle').textContent = 'Акуленя Зубчик тепер катає малят!'; $('winText').textContent = 'Ти пройшла сто дев’яносто країн! Єдиноріжка пишається тобою. Далі буде ще більше пригод!'; }
+  if (i === 189 && LEVELS[190]) { $('winTitle').textContent = 'Акуленя Зубчик тепер катає малят!'; $('winText').textContent = 'Наближається свято Миколая! Але Гном Бурчик сховав подарунки. Оленятко позичить тобі чарівні підкови для ривка, бурульки стануть крижаними сходинками, а двері спитають, що буває взимку. Наступна країна: ' + LEVELS[190].name + '.'; }
+  if (i === 194 && !LEVELS[195]) { $('winTitle').textContent = 'Подарунки Миколая знайшлися!'; $('winText').textContent = 'Ти пройшла сто дев’яносто п’ять країн! Єдиноріжка пишається тобою. Далі буде ще більше пригод!'; }
   if (i === 154) { $('winTitle').textContent = 'Крокодильчик Буквоїд повернув букви!'; $('winText').textContent = 'Далі — пригоди без меж: повітряні змії, вагонетки, гірки, батути й колеса огляду, а в небі бурчить Хмара Буркотуха. Наступна країна: ' + LEVELS[155].name + '.'; }
   if (i === 149 && LEVELS[150]) { $('winTitle').textContent = 'Ура! 150 рівнів!'; $('winText').textContent = 'Сніговик Хрумко переможений, і ти пройшла аж сто п’ятдесят рівнів! А пригоди тривають: далі — абетка й порядок, а за ними ховається Крокодильчик Буквоїд. Наступна країна: ' + LEVELS[150].name + '.'; }
   else   if (i === 149) { $('winTitle').textContent = 'Ура! 150 рівнів!'; $('winText').textContent = 'Сніговик Хрумко переможений, і ти пройшла аж сто п’ятдесят рівнів! Єдиноріжка пишається тобою. Далі буде ще більше пригод!'; }

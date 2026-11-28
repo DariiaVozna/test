@@ -25,6 +25,7 @@ function initLevel33(G, L) {
   G.conches = (L.conches || []).map(c => Object.assign({ state: 'low', st: 0, zone: G.water[c.z], warned: false, hintT: 0 }, c));
   G.anchors = (L.anchors || []).map(a => Object.assign({}, a));
   G.P.hookPow = false; G.P.hook = null; G.P.hookCd = 0;
+  initLevel34(G, L);
 }
 
 /* ===== Мушлі з перлинками: мушля то відкривається, то закривається ===== */
@@ -151,6 +152,7 @@ function update33(dt) {
   updateClams(dt);
   updateConches(dt);
   updateHook(dt);
+  update34(dt);
 }
 
 /* ===== Бонус «Гачок-кішка» ===== */

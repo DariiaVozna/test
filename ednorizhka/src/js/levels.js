@@ -7369,6 +7369,209 @@ const LEVELS = [
       L.ground(150, 180);
       L.gate(171);
     }
+  },  {
+    id: 'gingertown', theme: 'gingertown', name: 'Пряникове містечко', blurb: 'Підкови Оленятка: ривок над широкими ямами', w: 200,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(3, 'Пряникове містечко! Скоро свято Миколая. Візьми Підкови Оленятка');
+      L.row(6, 9, 2);
+      L.power('dash', 9, 9);
+      L.sign(12, 'Стрибни, а в повітрі натисни «Ріг» — підкови зроблять ривок уперед. Так перелетиш широку яму');
+      L.enemy('ginger', 18, 10);
+      L.row(22, 7, 4);
+      L.row(32, 5, 4);
+      L.ground(37, 70);
+      L.check(39);
+      L.winterq(43, 'snowman', ['watermelon', 'sunflower'], 54, 0);
+      L.power('magnet', 57, 8);
+      L.enemy('penguin', 60, 10);
+      L.qblock(63, 6, 'star'); L.qblock(64, 6, 'rainbow'); L.qblock(65, 6, 'star');
+      L.row(72, 5, 3); L.rainbow(75, 4);
+      L.ground(78, 120);
+      L.check(80);
+      L.enemy('bunny', 84, 10);
+      L.cloud(88, 6, 3); L.row(88, 5, 3);
+      L.enemy('sparrow', 93, 5);
+      L.winterq(100, 'sled', ['butterfly', 'sunhat'], 111, 2);
+      L.qblock(114, 6, 'star5');
+      L.row(122, 5, 4);
+      L.ground(128, 172);
+      L.check(130);
+      L.bumper(134, 9); L.cloud(136, 4, 4); L.row(136, 3, 3); L.sticker(138, 1);
+      L.enemy('soldier', 145, 10);
+      L.qblock(150, 6, 'shield');
+      L.row(154, 9, 4);
+      L.enemy('ginger', 162, 10);
+      L.row(166, 7, 3);
+      L.row(173, 5, 2); L.rainbow(176, 4);
+      L.ground(180, 200);
+      L.sign(183, 'Ворота вже близько!');
+      L.gate(192);
+    }
+  },
+  {
+    id: 'deerpath', theme: 'deerpath', name: 'Оленяча стежка', blurb: 'Бурульки, що стають крижаними сходинками', w: 200,
+    build(L) {
+      L.ground(0, 34);
+      L.sign(3, 'Оленяча стежка! Підкови Оленятка знову з тобою');
+      L.power('dash', 7, 9);
+      L.row(10, 9, 3);
+      L.enemy('bunny', 15, 10);
+      L.sign(19, 'Бурульки! Підійдеш — затремтять і впадуть. Де встромляться в сніг, там буде крижана сходинка');
+      L.icicle(24, 6); L.icicle(27, 6);
+      L.icicle(32, 5);
+      L.ground(34, 52, 5);
+      L.row(36, 4, 3);
+      L.enemy('penguin', 42, 5);
+      L.qblock(46, 2, 'star5');
+      L.ground(52, 62);
+      L.check(54);
+      L.qblock(57, 6, 'star'); L.qblock(58, 6, 'rainbow'); L.qblock(59, 6, 'star');
+      L.row(64, 5, 4);
+      L.ground(70, 100);
+      L.check(72);
+      L.power('magnet', 74, 8);
+      L.enemy('sparrow', 78, 5);
+      L.icicle(82, 6); L.icicle(85, 6); L.icicle(88, 6); L.row(81, 8, 9);
+      L.enemy('penguin', 93, 10);
+      L.icicle(98, 5);
+      L.ground(100, 118, 5);
+      L.row(102, 4, 3);
+      L.sticker(110, 1);
+      L.ground(118, 140);
+      L.check(120);
+      L.winterq(124, 'mittens', ['watermelon', 'butterfly'], 135, 1);
+      L.row(142, 5, 3); L.rainbow(146, 4);
+      L.ground(148, 200);
+      L.check(150);
+      L.enemy('bunny', 154, 10);
+      L.qblock(158, 6, 'shield');
+      L.cloud(162, 6, 3); L.row(162, 5, 3); L.rainbow(164, 3);
+      L.icicle(170, 6);
+      L.enemy('soldier', 175, 10);
+      L.row(178, 9, 4);
+      L.sign(184, 'Ворота вже близько!');
+      L.gate(193);
+    }
+  },
+  {
+    id: 'iciclecave', theme: 'iciclecave', name: 'Крижана печера', blurb: 'Бурулька відростає — і виходить висока сходинка', w: 200,
+    build(L) {
+      L.ground(0, 26);
+      L.sign(3, 'Крижана печера! Бурульку можна збити рогом: стрельни в неї — і вона впаде');
+      L.row(6, 9, 3);
+      L.icicle(12, 8);
+      L.enemy('penguin', 16, 10);
+      L.sign(19, 'Стіна зависока? Постій біля неї: бурулька впаде, відросте й упаде ще раз — вийде висока сходинка');
+      L.icicle(24, 5, 2);
+      L.ground(26, 44, 4);
+      L.row(28, 3, 3);
+      L.qblock(32, 1, 'star5');
+      L.power('dash', 36, 3);
+      L.ground(44, 66);
+      L.check(46);
+      L.winterq(49, 'firtree', ['sunflower', 'sunhat'], 60, 1);
+      L.enemy('bunny', 63, 10);
+      L.row(68, 5, 4);
+      L.ground(74, 98);
+      L.check(76);
+      L.power('magnet', 78, 8);
+      L.icicle(82, 6); L.icicle(85, 6); L.icicle(88, 6); L.row(81, 8, 9);
+      L.qblock(90, 6, 'star'); L.qblock(91, 6, 'rainbow'); L.qblock(92, 6, 'star');
+      L.enemy('snowman', 95, 10);
+      L.icicle(98, 5);
+      L.ground(98, 100);
+      L.ground(100, 118, 5);
+      L.row(104, 4, 3);
+      L.sticker(112, 1);
+      L.ground(118, 150);
+      L.check(120);
+      L.enemy('penguin', 124, 10);
+      L.cloud(128, 6, 3); L.row(128, 5, 3); L.rainbow(130, 3);
+      L.row(152, 5, 3); L.rainbow(156, 4);
+      L.ground(158, 200);
+      L.check(160);
+      L.qblock(163, 6, 'shield');
+      L.enemy('soldier', 168, 10);
+      L.icicle(174, 6); L.row(172, 9, 5);
+      L.sign(184, 'Ворота вже близько!');
+      L.gate(193);
+    }
+  },
+  {
+    id: 'nicholasfair', theme: 'nicholasfair', name: 'Ярмарок Миколая', blurb: 'Ривки, бурульки, зимові загадки й таємний хід', w: 200,
+    build(L) {
+      L.ground(0, 30);
+      L.sign(3, 'Ярмарок Миколая! Тут знадобиться все: підкови, бурульки й зимові загадки');
+      L.power('dash', 7, 9);
+      L.row(10, 9, 3);
+      L.enemy('top', 15, 10);
+      L.winterq(18, 'sled', ['watermelon', 'sunhat'], 29, 0);
+      L.row(32, 5, 4);
+      L.ground(38, 48);
+      L.check(40);
+      L.icicle(46, 5);
+      L.ground(48, 64, 5);
+      L.row(50, 4, 3);
+      L.qblock(54, 2, 'star5');
+      L.power('magnet', 58, 4);
+      L.ground(64, 96);
+      L.check(66);
+      L.enemy('ginger', 70, 10);
+      L.ground(74, 82, 5); L.secret(74, 7, 8, 3); L.sticker(78, 8); L.rainbow(80, 8);
+      L.qblock(86, 6, 'star'); L.qblock(87, 6, 'rainbow'); L.qblock(88, 6, 'star');
+      L.enemy('sparrow', 91, 5);
+      L.row(98, 5, 4);
+      L.ground(104, 136);
+      L.check(106);
+      L.winterq(110, 'mittens', ['sunflower', 'butterfly'], 121, 2);
+      L.icicle(125, 6); L.icicle(128, 6);
+      L.icicle(134, 5, 2);
+      L.ground(136, 150, 4);
+      L.row(138, 3, 4); L.rainbow(146, 1);
+      L.ground(150, 200);
+      L.check(152);
+      L.enemy('soldier', 156, 10);
+      L.qblock(160, 6, 'wings');
+      L.cloud(165, 6, 3); L.row(165, 5, 3);
+      L.enemy('top', 172, 10);
+      L.row(176, 9, 4);
+      L.sign(184, 'Ворота вже близько!');
+      L.gate(193);
+    }
+  },
+  {
+    id: 'gnomeattic', theme: 'gnomeattic', name: 'Горище Гнома Бурчика', blurb: 'Битва з Гномом Бурчиком, що ховається в коробках', w: 180, boss: 'gnome',
+    build(L) {
+      L.ground(0, 40);
+      L.sign(3, 'Горище Гнома Бурчика! Він сховав подарунки Миколая. Візьми підкови — і вперед');
+      L.power('dash', 7, 9);
+      L.row(10, 9, 3);
+      L.enemy('soldier', 15, 10);
+      L.winterq(19, 'snowman', ['butterfly', 'watermelon'], 30, 1);
+      L.check(33);
+      L.power('magnet', 36, 8);
+      L.row(42, 5, 3); L.rainbow(46, 4);
+      L.ground(48, 58);
+      L.check(50);
+      L.icicle(56, 5);
+      L.ground(58, 72, 5);
+      L.row(60, 4, 3);
+      L.sticker(68, 1);
+      L.ground(72, 100);
+      L.check(74);
+      L.qblock(78, 6, 'star5'); L.qblock(79, 6, 'rainbow');
+      L.enemy('ginger', 84, 10);
+      L.bumper(88, 9); L.cloud(90, 4, 4); L.row(90, 3, 4); L.rainbow(93, 2);
+      L.row(102, 5, 3);
+      L.ground(108, 180);
+      L.check(118);
+      L.qblock(121, 6, 'shield');
+      L.sign(124, 'Гном Бурчик ховається в одній із трьох коробок і тасує їх. Стеж, у яку він стрибнув, а тоді стрельни в неї або стрибни зверху!');
+      L.power('candy', 128, 8);
+      L.arena(130, 172);
+      L.gate(168);
+    }
   },
 ];
 
@@ -7455,6 +7658,11 @@ const DECOR = {
   coralreef: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'weed', x, y } : r < 0.7 ? { k: 'shell', x, y, c: ['#ffb3c6', '#ffd9a8', '#fff3e0'][Math.floor(R() * 3)] } : { k: 'starfish', x, y }; },
   shipwreck: (R, x, y) => DECOR.pirate(R, x, y),
   sharkreef: (R, x, y) => DECOR.tide(R, x, y),
+  gingertown: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'presentS', x, y, c: ['#ff7ab8', '#7fb8ff', '#ffd23f'][Math.floor(R() * 3)] } : DECOR.winterfest(R, x, y); },
+  deerpath: (R, x, y) => DECOR.snowvalley(R, x, y),
+  iciclecave: (R, x, y) => DECOR.icepalace(R, x, y),
+  nicholasfair: (R, x, y) => DECOR.winterfest(R, x, y),
+  gnomeattic: (R, x, y) => DECOR.giftland(R, x, y),
   inkwell: (R, x, y) => { const r = R(); return r < 0.35 ? { k: 'inkS', x, y } : r < 0.6 ? { k: 'bookS', x, y } : { k: 'tuft', x, y }; },
   schoolyard: (R, x, y) => { const r = R(); return r < 0.3 ? { k: 'hopS', x, y, n: 1 + Math.floor(R() * 3) } : r < 0.55 ? { k: 'ballS', x, y, c: ['#ff5c7a', '#4cb6ff', '#ffd23f'][Math.floor(R() * 3)] } : r < 0.8 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffffff' }; },
   fireworks: (R, x, y) => { const r = R(); return r < 0.4 ? { k: 'lanternS', x, y, c: ['#ffd23f', '#ff7ab8', '#8fd0ff'][Math.floor(R() * 3)] } : r < 0.7 ? { k: 'tuft', x, y } : { k: 'flower', x, y, c: '#ffd23f' }; },
@@ -7571,7 +7779,7 @@ const DECOR = {
 function buildLevel(idx) {
   const def = LEVELS[idx], W = def.w, map = new Uint8Array(W * ROWS);
   const set = (x, y, v) => { if (x >= 0 && x < W && y >= 0 && y < ROWS) map[y * W + x] = v; };
-  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [], races: [], twins: [], splates: [], sgates: [], stickers: [], wardrobes: [], gwalls: [], crates: [], bplates: [], bgates: [], owls: [], pieces: [], ptiles: [], pgates: [], carries: [], dgates: [], critters: [], clams: [], conches: [], anchors: [] };
+  const L = { def, W, map, stars: [], powers: [], enemies: [], movers: [], checks: [], signs: [], springs: [], water: [], winds: [], belts: [], beltDir: new Int8Array(W * ROWS), qContent: new Map(), portals: [], buttons: [], keys: [], hasDoors: false, gate: null, arena: null, decor: [], vines: [], launchers: [], wheels: [], beans: [], lanterns: [], rails: [], zips: [], breezes: [], storms: [], lowgravs: [], kites: [], bumpers: [], lightSets: [], flips: [], buckets: [], plates: [], boosts: [], stones: [], chicks: [], coops: [], duckSets: [], roos: [], totems: [], rings: [], dominoes: [], letterSpots: [], crystals: [], pendulums: [], soaps: [], nutWheels: [], swCannons: [], tramps: [], balls12: [], goals: [], mirrors: [], lamps: [], suns: [], swappers: [], foods: [], animals: [], padSets: [], runners: [], sleds: [], bridges19: [], planeRings: [], seahorses: [], sadClouds: [], tickles: [], mcol: new Map(), ropes: [], rockets: [], parcels: [], lockers: [], pdoors: [], fires: [], switches: [], swBlocks: [], ghosts: [], quizzes: [], words25: [], pots: [], cgates: [], shops26: [], hiders: [], fgates: [], shapes26: [], sdoors: [], candles: [], cakes: [], gifts: [], kdoors: [], planks: [], pbridges: [], babies: [], moms: [], trashes: [], bins: [], cleangates: [], seeds29: [], soils: [], hops: [], snowkits: [], seqs: [], dnBlocks: [], secrets: [], chases: [], races: [], twins: [], splates: [], sgates: [], stickers: [], wardrobes: [], gwalls: [], crates: [], bplates: [], bgates: [], owls: [], pieces: [], ptiles: [], pgates: [], carries: [], dgates: [], critters: [], clams: [], conches: [], anchors: [], icicles: [] };
   const later = [];
   const api = {
     ground(x0, x1, top) { top = top == null ? 10 : top; for (let x = x0; x < x1; x++) for (let y = top; y < ROWS; y++) set(x, y, 1); },
@@ -7929,6 +8137,17 @@ function buildLevel(idx) {
     conch(x, x0, x1, low, high) { const z = { x0: x0 * T, x1: x1 * T, y: low * T + 6, conch: { lo: low * T + 6, hi: high * T + 6 } }; L.water.push(z); const q = { x: x * T + 12, gy: 10 * T, z: L.water.length - 1 }; later.push(() => { q.gy = groundY(x); }); L.conches.push(q); },
     // золоте кільце для гачка-кішки
     anchor(x, row) { L.anchors.push({ x: x * T + 12, y: row * T + 12 }); },
+    // частина 39: бурулька висить у стовпчику x під рядком row; падає й стає крижаною сходинкою
+    // n — скільки разів вона відросте й упаде (2 — сходинка у дві крижинки)
+    icicle(x, row, n) { L.icicles.push({ col: x, row, n: n || 1 }); },
+    // «Що буває взимку?»: ans — зимова річ (snowman, sled, mittens, firtree), wrong — дві літні (watermelon, sunflower, butterfly, sunhat)
+    winterq(x, ans, wrong, door, pos) {
+      const nums = wrong.slice(); nums.splice(pos || 0, 0, ans);
+      const opts = nums.map((n, j) => ({ tx: x + j * 3, ty: 6, n }));
+      for (const o of opts) set(o.tx, o.ty, 2);
+      for (let y = 1; y < 10; y++) set(door, y, 2);
+      L.quizzes.push({ kind: 'winter', ans, opts, door, top: 1 });
+    },
     // «Хто живе в морі?»: ans — морська тваринка (fish, crab, octopus, starfish, seahorse, whale, turtle, jelly), wrong — дві тваринки з суші (cat, dog, hen, pig)
     seaq(x, ans, wrong, door, pos) {
       const nums = wrong.slice(); nums.splice(pos || 0, 0, ans);

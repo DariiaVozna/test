@@ -4,7 +4,7 @@
 'use strict';
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const dir = path.join(__dirname, '..', 'js');
-const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'art27.js', 'art28.js', 'art29.js', 'art30.js', 'art31.js', 'art32.js', 'art33.js', 'art34.js', 'art35.js', 'art36.js', 'art37.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js', 'engine23.js', 'engine24.js', 'engine25.js', 'engine26.js', 'engine27.js', 'engine28.js', 'engine29.js', 'engine30.js', 'engine31.js', 'engine32.js', 'engine33.js'].filter(f => fs.existsSync(path.join(dir, f)));
+const order = ['art.js', 'world.js', 'art2.js', 'art3.js', 'art4.js', 'art5.js', 'art6.js', 'art7.js', 'art8.js', 'art9.js', 'art10.js', 'art11.js', 'art12.js', 'art13.js', 'art14.js', 'art15.js', 'art16.js', 'art17.js', 'art18.js', 'art19.js', 'art20.js', 'art21.js', 'art22.js', 'art23.js', 'art24.js', 'art25.js', 'art26.js', 'art27.js', 'art28.js', 'art29.js', 'art30.js', 'art31.js', 'art32.js', 'art33.js', 'art34.js', 'art35.js', 'art36.js', 'art37.js', 'art38.js', 'levels.js', 'engine.js', 'engine2.js', 'engine3.js', 'engine4.js', 'engine5.js', 'engine6.js', 'engine7.js', 'engine8.js', 'engine9.js', 'engine10.js', 'engine11.js', 'engine12.js', 'engine13.js', 'engine14.js', 'engine15.js', 'engine16.js', 'engine17.js', 'engine18.js', 'engine19.js', 'engine20.js', 'engine21.js', 'engine22.js', 'engine23.js', 'engine24.js', 'engine25.js', 'engine26.js', 'engine27.js', 'engine28.js', 'engine29.js', 'engine30.js', 'engine31.js', 'engine32.js', 'engine33.js', 'engine34.js'].filter(f => fs.existsSync(path.join(dir, f)));
 let src = order.map(f => fs.readFileSync(path.join(dir, f), 'utf8').replace(/^'use strict';$/m, '')).join('\n');
 src += `
 var save = { profile: { name: 'Тест', body: 'white', mane: 'rainbow', acc: [], friend: 'cat', easy: true }, unlocked: 99, best: {}, bestR: {}, bestF: {}, record: 0 };
@@ -366,6 +366,26 @@ function runLevel(idx, maxT) {
         if (a && a.x > pcxB() - T) { In.jumpP = false; In.jump = false; In.shootP = true; In.shoot = true; In.shootR = false; }
       }
     }
+    // Підкови Оленятка: у стрибку над ямою, коли попереду немає куди приземлитися, — ривок
+    if (P.dashPow && !P.onGround && !P.dashUsed && !(P.dashT > 0) && P.vy > -160 && !waterAt(pcxB(), P.y + P.h / 2)) {
+      let land = false;
+      for (let k = 1; k <= 4 && !land; k++) { const cx = Math.floor((pcxB() + k * T) / T); for (let r = Math.floor((P.y + P.h) / T); r < ROWS; r++) if (solid(tileAt(cx, r))) { land = true; break; } }
+      if (!land) { P.dir = 1; In.shootP = true; In.shoot = true; In.shootR = false; }
+    }
+    // бурульки: біля зависокої стіни чекаємо, поки бурулька впаде (і відросте), а тоді вилазимо на крижану сходинку
+    if (G.icicles.length) {
+      const pc = Math.floor(pcxB() / T), under = G.iceBlocks.find(b => b.col === Math.floor(pcxB() / T) && Math.abs(b.row * T - (P.y + P.h)) < 3);
+      const ic = G.icicles.find(q => q.col >= pc - 3 && q.col < pc && q.n && P.onGround && wall);
+      if (under && P.onGround) { let w2 = false; for (let k = 1; k <= 2; k++) for (let r = Math.floor(P.y / T); r <= Math.floor((P.y + P.h - 2) / T); r++) if (solid(tileAt(under.col + k, r)) && !G.iceBlocks.some(b => b.col === under.col + k && b.row === r)) w2 = true; if (w2) { In.right = true; In.left = false; In.jumpP = true; In.jump = true; } }
+      else if (ic && !under && ic.state !== 'done') { In.right = In.left = false; In.jumpP = false; In.jump = false; }
+      else if (ic && !under) G.botIce = ic.col;
+      // ціль — верхня крижинка: підстрибуємо й у повітрі підрулюємо до її середини
+      if (G.botIce != null && !under) {
+        const col = G.botIce, top = Math.min(...G.iceBlocks.filter(b => b.col === col).map(b => b.row)), d = col * T + 12 - pcxB();
+        In.right = d > 3; In.left = d < -3; In.jump = !P.onGround && P.y + P.h > top * T - 6;
+        if (P.onGround && top * T < P.y + P.h - 4 && Math.abs(d) < 34) { In.jumpP = true; In.jump = true; } else In.jumpP = false;
+      } else if (under) G.botIce = null;
+    }
     // лагуна з мушлею-сурмою: вода спала, а ми ще в лагуні — повертаємося до мушлі
     if (G.conches.length) { const cz = G.conches.find(c => c.state === 'low' && pcxB() > c.zone.x0 && pcxB() < c.zone.x1 && waterAt(pcxB(), P.y + P.h / 2) && solid(tileAt(Math.floor((c.zone.x1 + 4) / T), Math.floor(c.zone.conch.hi / T) + 1))); if (cz) { In.right = false; In.left = true; } }
     if (typeof checkHooks === 'function') checkHooks(t);
@@ -483,7 +503,24 @@ function fightBoss(idx) {
         if (!wz && In.right && side === lb && pcx > side[1] - 4) In.right = false;
         if (!wz && In.left && side === rb && pcx < side[0] + 4) In.left = false;
       }
-      if (i % 10 === 0 && B.kind !== 'hatrabbit' && B.kind !== 'soapy' && B.kind !== 'vacuum' && B.kind !== 'gloom' && B.kind !== 'shark') fire(false);
+      // Гном Бурчик: стрибаємо на коробку, в яку він сховався; запаморочений — стріляємо й стрибаємо на нього; решту часу збиваємо кульки
+      if (B.kind === 'gnome') {
+        In.left = In.right = false;
+        if (B.state === 'guess') {
+          const bx = B.boxes[B.box].x, d = bx - pcx; P.dir = d > 0 ? 1 : -1;
+          if (Math.abs(d) > 6) { In.right = d > 0; In.left = d < 0; }
+          if (Math.abs(d) < 14 && P.onGround) { In.jumpP = true; In.jump = true; } else if (!P.onGround) In.jump = true;
+        } else if (B.state === 'dizzy') {
+          const d = B.x - pcx; P.dir = d > 0 ? 1 : -1;
+          if (Math.abs(d) > 26) { In.right = d > 0; In.left = d < 0; }
+          if (Math.abs(d) < 40 && P.onGround) { In.jumpP = true; In.jump = true; }
+          if (i % 9 === 0) fire(false);
+        } else {
+          const home = G.arena.x0 + 4 * T, d = home - pcx; if (Math.abs(d) > 16) { In.right = d > 0; In.left = d < 0; }
+          const bb = G.bolts.find(b => b.kind === 'bauble'); if (bb && i % 8 === 0) { P.dir = bb.x > pcx ? 1 : -1; fire(false); }
+        }
+      }
+      if (i % 10 === 0 && B.kind !== 'hatrabbit' && B.kind !== 'soapy' && B.kind !== 'vacuum' && B.kind !== 'gloom' && B.kind !== 'shark' && B.kind !== 'gnome') fire(false);
       if (!P.onGround && P.vy < 0) In.jump = true;
     } else if (!G.bossActive) In.right = true;
     else { if (G.gate.x > pcx) In.right = true; else In.left = true; if (waterAt(pcx, P.y + P.h / 2)) { In.jump = true; if (i % 12 === 0) In.jumpP = true; } }
